@@ -17,12 +17,12 @@ import utils.StringUtils;
  * @author baumann
  *
  */
-public class Record {
+public class MusicRecord {
 
 	private TreeMap<String, LinkedHashSet<String>> data =
 		new TreeMap<String, LinkedHashSet<String>>();
 
-	public Record(final String recordS) {
+	public MusicRecord(final String recordS) {
 		List<String> linesList = makeList(recordS);
 
 		for (String line : linesList) {
@@ -47,7 +47,7 @@ public class Record {
 		return linesList;
 	}
 
-	public Record() {
+	public MusicRecord() {
 	}
 
 	public final void addAll(List<String> lineList) {
@@ -98,24 +98,39 @@ public class Record {
 	public static String normalize(String record) {
 		if (record == null || record.trim() == "")
 			throw new IllegalArgumentException();
-		return new Record(record).normalized();
+		return new MusicRecord(record).normalized();
 	}
-	
+
 	public static boolean isNormIdentical(String record1, String reocord2) {
 		return normalize(record1).equals(normalize(reocord2));
 	}
 
 	/**
 	 * Normalisiert Musikstrings:
-	 * - entfernt "$vR:Maschinelle Umsetzung GND"
-	 * - entfernt 667 MmV-LF
-	 * - trimt.
+	 * - entfernt die standardisierten Kommentare
+	 * - entfernt 667 <Aufarbeitung>\n
+	 * - trimmt.
 	 * @return	Normalisierten Datensatz als String.
 	 */
 	public String normalized() {
 		String norm = this.toString();
-		norm = norm.replaceAll("\\$vR:Maschinelle Umsetzung GND", "");
-		norm = norm.replaceAll("667 MmV\n", "");
+		norm = norm.replaceAll("\\$v" + TransformRecord.KOM_NACH_2003, "");
+		norm = norm.replaceAll("\\$v" + TransformRecord.KOM_VOR_2003, "");
+		norm = norm.replaceAll("\\$v" + TransformRecord.KOM_MASCHINELL, "");
+		norm =
+			norm.replaceAll("\\$v" + TransformRecord.KOM_MASCHINELL_NACH_2003,
+					"");
+		norm =
+			norm.replaceAll("\\$v" + TransformRecord.KOM_MASCHINELL_VOR_2003,
+					"");
+		norm =
+			norm.replaceAll("667 " + TransformRecord.VORZ_BEN_AUFGEARB + "\n",
+					"");
+		norm = norm.replaceAll("667 " + TransformRecord.SATZ_AUFG + "\n", "");
+		norm = norm.replaceAll("667 " + TransformRecord.MASCH_AUFG + "\n", "");
+		norm = norm.replaceAll("667 " + TransformRecord.GEW_INTELL + "\n", "");
+		norm = norm.replaceAll("667 " + TransformRecord.GEW_MASCH + "\n", "");
+		norm = norm.replaceAll("667 " + TransformRecord.VERL_MASCH + "\n", "");
 		norm = norm.trim();
 
 		return norm;
@@ -125,13 +140,16 @@ public class Record {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String old = args[0];
-		String news = normalize(old);
-		
-		System.err.println(isNormIdentical(old, news));
-		
-		System.err.println(news);
+		String oldR =
+			"\n008 wim" + "\n065 14.4p"
+				+ "\n130 aaa$vR:Umsetzung GND aus RAK-M 2003" + "\n913 qwer";
+
+		String newR =
+			"008 wim" + "\n065 14.4p"
+				+ "\n130 aaa$vR:Maschinelle Umsetzung GND" + "\n667 MmV"
+				+ "\n913 qwer";
+
+		System.err.println(isNormIdentical(oldR, newR));
 
 	}
-
 }

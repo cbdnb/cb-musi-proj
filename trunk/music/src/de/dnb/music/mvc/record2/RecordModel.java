@@ -1,6 +1,5 @@
 package de.dnb.music.mvc.record2;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
@@ -16,7 +15,7 @@ import utils.TitleUtils;
 import de.dnb.music.additionalInformation.Composer;
 import de.dnb.music.genre.Genre;
 import de.dnb.music.mediumOfPerformance.Instrument;
-import de.dnb.music.publicInterface.Record;
+import de.dnb.music.publicInterface.MusicRecord;
 import de.dnb.music.publicInterface.TransformRecord;
 import de.dnb.music.publicInterface.TransformRecord.TransformMode;
 
@@ -102,7 +101,7 @@ public class RecordModel extends Observable {
 
 	public void removeExpansion() {
 		newRecord = StringUtils.removeExpansion(newRecord);
-		newRecord = new Record(newRecord).toString(); // doppelte entfernen
+		newRecord = new MusicRecord(newRecord).toString(); // doppelte entfernen
 		refresh();
 	}
 
@@ -128,7 +127,7 @@ public class RecordModel extends Observable {
 	}
 
 	public void addComposer(Composer composer, String code) {
-		Record rec = new Record(newRecord);
+		MusicRecord rec = new MusicRecord(newRecord);
 		rec.add("500", "!" + composer.idn + "!" + composer.name + "$4" + code);
 		rec.add("670", composer.sourceAbb);
 		rec.add("043",  composer.countrCode);
@@ -138,14 +137,14 @@ public class RecordModel extends Observable {
 	}
 
 	public void addInstrument(Instrument ins) {
-		Record rec = new Record(newRecord);
+		MusicRecord rec = new MusicRecord(newRecord);
 		rec.addAll(TitleUtils.getGND3XX(ins, true, true));
 		newRecord = rec.toString();
 		refresh();
 	}
 
 	public void addGenre(Genre genre) {
-		Record rec = new Record(newRecord);
+		MusicRecord rec = new MusicRecord(newRecord);
 		rec.addAll(TitleUtils.getGND3XX(genre, true, true));
 		newRecord = rec.toString();
 		refresh();		

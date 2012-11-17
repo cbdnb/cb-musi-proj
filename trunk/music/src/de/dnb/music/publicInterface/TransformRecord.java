@@ -124,7 +124,7 @@ public final class TransformRecord {
 
 	private static List<String> sOldLines;
 	
-	private static Record sNewRecord;
+	private static MusicRecord sNewRecord;
 
 	private static String sTitleStr;
 
@@ -300,7 +300,7 @@ public final class TransformRecord {
 		sRules = getSetOfRules();
 
 		sOldLines = StringUtils.record2Lines(sOldRecordStr);
-		sNewRecord = new Record();
+		sNewRecord = new MusicRecord();
 
 		enrichRecord();
 

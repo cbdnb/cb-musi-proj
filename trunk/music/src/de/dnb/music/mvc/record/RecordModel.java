@@ -50,7 +50,6 @@ public class RecordModel extends Observable {
 
 	}
 
-
 	/**
 	 * @return the creationDate
 	 */
@@ -95,17 +94,17 @@ public class RecordModel extends Observable {
 		return creationDate;
 	}
 
-	public void setNewRecord(String newRecord2) {
+	public final void setNewRecord(final String newRecord2) {
 		newRecord = newRecord2;
 	}
 
-	public void removeExpansion() {
+	public final void removeExpansion() {
 		newRecord = StringUtils.removeExpansion(newRecord);
 		newRecord = new MusicRecord(newRecord).toString(); // doppelte entfernen
 		refresh();
 	}
 
-	public void analyze() {
+	public final void analyze() {
 		if (oldRecord != null) {
 
 			try {
@@ -126,28 +125,28 @@ public class RecordModel extends Observable {
 
 	}
 
-	public void addComposer(Composer composer, String code) {
+	public final void addComposer(final Composer composer, final String code) {
 		MusicRecord rec = new MusicRecord(newRecord);
 		rec.add("500", "!" + composer.idn + "!" + composer.name + "$4" + code);
 		rec.add("670", composer.sourceAbb);
-		rec.add("043",  composer.countrCode);
-		
+		rec.add("043", composer.countrCode);
+
 		newRecord = rec.toString();
 		refresh();
 	}
 
-	public void addInstrument(Instrument ins) {
+	public final void addInstrument(final Instrument ins) {
 		MusicRecord rec = new MusicRecord(newRecord);
 		rec.addAll(TitleUtils.getGND3XX(ins, true, true));
 		newRecord = rec.toString();
 		refresh();
 	}
 
-	public void addGenre(Genre genre) {
+	public final void addGenre(final Genre genre) {
 		MusicRecord rec = new MusicRecord(newRecord);
 		rec.addAll(TitleUtils.getGND3XX(genre, true, true));
 		newRecord = rec.toString();
-		refresh();		
+		refresh();
 	}
 
 }

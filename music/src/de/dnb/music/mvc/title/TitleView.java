@@ -1,4 +1,4 @@
-package de.dnb.music.mvc;
+package de.dnb.music.mvc.title;
 
 import java.awt.Component;
 import java.awt.event.ActionListener;

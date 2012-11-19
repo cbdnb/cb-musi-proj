@@ -1,6 +1,5 @@
-package de.dnb.music.mvc;
+package de.dnb.music.mvc.record;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
@@ -12,6 +11,11 @@ import java.util.zip.ZipEntry;
 import javax.swing.JOptionPane;
 
 import utils.StringUtils;
+import utils.TitleUtils;
+import de.dnb.music.additionalInformation.Composer;
+import de.dnb.music.genre.Genre;
+import de.dnb.music.mediumOfPerformance.Instrument;
+import de.dnb.music.publicInterface.MusicRecord;
 import de.dnb.music.publicInterface.TransformRecord;
 import de.dnb.music.publicInterface.TransformRecord.TransformMode;
 
@@ -19,11 +23,9 @@ public class RecordModel extends Observable {
 
 	private String oldRecord;
 
-	private String newRecord;
+	private String newRecord = "";
 
 	private TransformMode transformMode = TransformMode.INTELLECT;
-
-	private boolean isPicaMode = false;
 
 	private String stackTrace = "";
 
@@ -42,41 +44,12 @@ public class RecordModel extends Observable {
 	}
 
 	public final void refresh() {
-		if (oldRecord != null) {
 
-			try {
-				newRecord = TransformRecord.transform(oldRecord, transformMode);
-			} catch (final Exception e) {
-				StringWriter sw = new StringWriter();
-				PrintWriter pw = new PrintWriter(sw);
-				e.printStackTrace(pw);
-
-				stackTrace =
-					oldRecord + "\n\n----------------\n\n" + sw.toString();
-				JOptionPane.showMessageDialog(null, e.getMessage(),
-						"Fehler im Datensatz", JOptionPane.OK_CANCEL_OPTION);
-
-			}
-			if (isPicaMode) {
-				newRecord = StringUtils.gnd2Pica(newRecord);
-			}
-			setChanged();
-			notifyObservers(null);
-		}
-	}
-
-	public final void setPicaMode(final boolean picaMode) {
-		isPicaMode = picaMode;
-	}
-
-	public final void setScriptMode(final boolean scriptMode) {
-		if (scriptMode) {
-			transformMode = TransformMode.MACHINE;
-		} else {
-			transformMode = TransformMode.INTELLECT;
-		}
+		setChanged();
+		notifyObservers(null);
 
 	}
+
 
 	/**
 	 * @return the creationDate
@@ -115,12 +88,66 @@ public class RecordModel extends Observable {
 
 				stackTrace = sw.toString();
 				JOptionPane.showMessageDialog(null, e.getMessage(),
-						"Fehler beim Datum",
-						JOptionPane.OK_CANCEL_OPTION);
+						"Fehler beim Datum", JOptionPane.OK_CANCEL_OPTION);
 			}
 
 		}
 		return creationDate;
+	}
+
+	public void setNewRecord(String newRecord2) {
+		newRecord = newRecord2;
+	}
+
+	public void removeExpansion() {
+		newRecord = StringUtils.removeExpansion(newRecord);
+		newRecord = new MusicRecord(newRecord).toString(); // doppelte entfernen
+		refresh();
+	}
+
+	public void analyze() {
+		if (oldRecord != null) {
+
+			try {
+				newRecord = TransformRecord.transform(oldRecord, transformMode);
+			} catch (final Exception e) {
+				StringWriter sw = new StringWriter();
+				PrintWriter pw = new PrintWriter(sw);
+				e.printStackTrace(pw);
+
+				stackTrace =
+					oldRecord + "\n\n----------------\n\n" + sw.toString();
+				JOptionPane.showMessageDialog(null, e.getMessage(),
+						"Fehler im Datensatz", JOptionPane.OK_CANCEL_OPTION);
+
+			}
+			refresh();
+		}
+
+	}
+
+	public void addComposer(Composer composer, String code) {
+		MusicRecord rec = new MusicRecord(newRecord);
+		rec.add("500", "!" + composer.idn + "!" + composer.name + "$4" + code);
+		rec.add("670", composer.sourceAbb);
+		rec.add("043",  composer.countrCode);
+		
+		newRecord = rec.toString();
+		refresh();
+	}
+
+	public void addInstrument(Instrument ins) {
+		MusicRecord rec = new MusicRecord(newRecord);
+		rec.addAll(TitleUtils.getGND3XX(ins, true, true));
+		newRecord = rec.toString();
+		refresh();
+	}
+
+	public void addGenre(Genre genre) {
+		MusicRecord rec = new MusicRecord(newRecord);
+		rec.addAll(TitleUtils.getGND3XX(genre, true, true));
+		newRecord = rec.toString();
+		refresh();		
 	}
 
 }

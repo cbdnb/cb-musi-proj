@@ -1,4 +1,4 @@
-package de.dnb.music.mvc.record2;
+package de.dnb.music.mvc.record;
 
 import java.awt.Component;
 import java.awt.event.ActionListener;
@@ -9,7 +9,7 @@ import java.util.Observer;
 import de.dnb.music.additionalInformation.Composer;
 import de.dnb.music.genre.Genre;
 import de.dnb.music.mediumOfPerformance.Instrument;
-import de.dnb.music.mvc.record2.RecordController.InfoListener;
+import de.dnb.music.mvc.record.RecordController.InfoListener;
 
 public class RecordView implements Observer {
 

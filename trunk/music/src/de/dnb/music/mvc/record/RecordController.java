@@ -1,4 +1,4 @@
-package de.dnb.music.mvc.record2;
+package de.dnb.music.mvc.record;
 
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;

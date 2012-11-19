@@ -133,7 +133,7 @@
 			         excludes="**/*Test.class, **/Test*.class" />
 			<manifest>
 				<attribute name="Main-Class"
-				           value="de.dnb.music.mvc.TitleController" />
+				           value="de.dnb.music.mvc.title.TitleController" />
 			</manifest>
 		</jar>
 		<jar destfile="${release.dir.local}/MusiktitelAnalysator.jar">
@@ -141,7 +141,7 @@
 					         excludes="**/*Test.class, **/Test*.class" />
 					<manifest>
 						<attribute name="Main-Class"
-						           value="de.dnb.music.mvc.TitleController" />
+						           value="de.dnb.music.mvc.title.TitleController" />
 					</manifest>
 				</jar>
 		<jar destfile="${release.dir}/BearbeiteDatensatz.jar">

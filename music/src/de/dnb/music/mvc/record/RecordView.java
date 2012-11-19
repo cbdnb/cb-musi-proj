@@ -22,46 +22,45 @@ public class RecordView implements Observer {
 		gui.setVisible(true);
 	}
 
-	public void addAnalyzeListener(final ActionListener al) {
+	public final void addAnalyzeListener(final ActionListener al) {
 		gui.btnAnalysieren.addActionListener(al);
 	}
 
-
-	public void addErrorListener(final ActionListener al) {
+	public final void addErrorListener(final ActionListener al) {
 		gui.mntmZeigeFehler.addActionListener(al);
 	}
 
-	public void addInfoListener(final InfoListener infoListener) {
+	public final void addInfoListener(final InfoListener infoListener) {
 		gui.mntmInfo.addActionListener(infoListener);
 	}
 
-	public void addGenreListener(final ActionListener al) {
+	public final void addGenreListener(final ActionListener al) {
 		gui.btnGenre.addActionListener(al);
 	}
 
-	public void addInstrListener(final ActionListener al) {
+	public final void addInstrListener(final ActionListener al) {
 		gui.btnInstrument.addActionListener(al);
 	}
 
-	public void addCompListener(final ActionListener al) {
+	public final void addCompListener(final ActionListener al) {
 		gui.btnComp.addActionListener(al);
 	}
-	
-	public void addRemoveListener(final ActionListener al) {
+
+	public final void addRemoveListener(final ActionListener al) {
 		gui.btnExpansionEntfernen.addActionListener(al);
 	}
 
-	public void addGenre(final Genre genre) {
+	public final void addGenre(final Genre genre) {
 		gui.comboBoxGenre.addItem(genre);
 	}
-	
+
 	public final void addGenres(final Collection<Genre> genres) {
 		for (Genre genre : genres) {
 			addGenre(genre);
 		}
 	}
 
-	public void addInstrument(final Instrument instrument) {
+	public final void addInstrument(final Instrument instrument) {
 		gui.comboBoxInstru.addItem(instrument);
 	}
 
@@ -71,7 +70,7 @@ public class RecordView implements Observer {
 		}
 	}
 
-	public void addComposer(final Composer composer) {
+	public final void addComposer(final Composer composer) {
 		gui.comboBoxComp.addItem(composer);
 	}
 
@@ -81,48 +80,50 @@ public class RecordView implements Observer {
 		}
 	}
 
-	public Genre getGenre() {
+	public final Genre getGenre() {
 		return (Genre) gui.comboBoxGenre.getSelectedItem();
 	}
 
-	public Instrument getInstrument() {
+	public final Instrument getInstrument() {
 		return (Instrument) gui.comboBoxInstru.getSelectedItem();
 	}
-	
-	public void addCount(int c) {
+
+	@SuppressWarnings("boxing")
+	public final void addCount(final int c) {
 		gui.comboBoxCount.addItem(c);
 	}
-	
-	public int getCount() {
+
+	@SuppressWarnings("boxing")
+	public final int getCount() {
 		return (Integer) gui.comboBoxCount.getSelectedItem();
 	}
 
-	public Composer getComposer() {
+	public final Composer getComposer() {
 		return (Composer) gui.comboBoxComp.getSelectedItem();
 	}
-	
-	public String getCode() {
+
+	public final String getCode() {
 		return gui.txtCode.getText();
 	}
 
 	@Override
-	public void update(final Observable obs, final Object message) {
+	public final void update(final Observable obs, final Object message) {
 		gui.textAreaNew.setText(model.getNewRecord());
 	}
 
-	public String getOldRecord() {
+	public final String getOldRecord() {
 		return gui.textAreaOld.getText();
 	}
-	
-	public String getNewRecord() {
+
+	public final String getNewRecord() {
 		return gui.textAreaNew.getText();
 	}
 
-	public final void setNewRecord(String text) {
+	public final void setNewRecord(final String text) {
 		gui.textAreaNew.setText(text);
 	}
 
-	public Component getGui() {
+	public final Component getGui() {
 		return gui;
 	}
 

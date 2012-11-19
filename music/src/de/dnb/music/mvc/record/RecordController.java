@@ -4,7 +4,6 @@ import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -41,7 +40,6 @@ public class RecordController {
 
 	}
 
-
 	class RemoveListener implements ActionListener {
 
 		@Override
@@ -62,7 +60,7 @@ public class RecordController {
 		}
 
 	}
-	
+
 	class InstrumentListener implements ActionListener {
 
 		@Override
@@ -74,12 +72,12 @@ public class RecordController {
 		}
 
 	}
-	
+
 	class GenreListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			
+
 			model.addGenre(view.getGenre());
 
 		}
@@ -183,14 +181,13 @@ public class RecordController {
 		view.addInstrListener(new InstrumentListener());
 		view.addGenreListener(new GenreListener());
 		view.addRemoveListener(new RemoveListener());
-		
-		
+
 		view.addComposers(ThematicIndexDB.getAllComposers());
 		view.addGenres(GenreDB.getAllGenres());
 		view.addInstruments(InstrumentDB.getAllInstruments());
-		for(int i=1;i<10;i++)
+		for (int i = 1; i < 10; i++)
 			view.addCount(i);
-		
+
 		view.addErrorListener(new ShowErrorListener());
 		view.addInfoListener(new InfoListener());
 	}

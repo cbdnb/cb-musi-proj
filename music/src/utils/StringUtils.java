@@ -29,19 +29,66 @@ public final class StringUtils {
 	}
 
 	public static String removeExpansion(String oldRecord) {
-		/*
-		 *  !<idn>!<expansion>, <expansion> enthält kein "$" und keinen
-		 *  Zeilenumbruch:
-		 */
-		Pattern exclP = Pattern.compile("(!\\d+.?!)[^\\$\\n\\r]+");
-		Matcher m = exclP.matcher(oldRecord);
-		StringBuffer output = new StringBuffer();
-		while (m.find()) {
-			m.appendReplacement(output, "$1");
+		if (oldRecord == null)
+			throw new IllegalArgumentException();
+		
+		String newRecord;
+		final String idPat = "!\\d+.?!";
+		// 5XX !..!<expansion>$4<rest>
+		newRecord = filter(oldRecord, "5\\d\\d " + idPat + "(.+)\\$4");
+		
+		// 380 !..!<expansion>[\n\r]
+		newRecord = filter(newRecord, "380 " + idPat + "([^\\n\\r]+)");
+		
+		// 382 !..!<expansion>($[npsv])?.*[\n\r]
+		String newRecord382 = "";
+		Matcher m382;
+		// liefert die Zeile, in der 382 steht:
+		final Pattern pat382 = Pattern.compile("382 " + idPat + "([^\\n\\r]+)");
+		m382 = pat382.matcher(newRecord);
+		int realTextStart = 0;
+		while (m382.find()) {
+			int realTextEnd = m382.start(1); // das ist ok, da zweites "!"
+			newRecord382 += newRecord.substring(realTextStart, realTextEnd);
+			String restOfLine = m382.group(1);
+			final Pattern allowedDollar = Pattern.compile("\\$[npsv]");
+			Matcher mAllowed = allowedDollar.matcher(restOfLine);
+			if (mAllowed.find()) {
+				// Erlaubt ist alles ab der Fundstelle:
+				realTextStart = realTextEnd + mAllowed.start();
+			} else
+				realTextStart = m382.end(1);
 		}
-		m.appendTail(output);
-		return output.toString().trim(); //Remove trailing spaces
+		// letztes Teil geht bis zum Ende:
+		newRecord382 += newRecord.substring(realTextStart);
 
+		return newRecord382.toString().trim();
+
+	}
+
+	/**
+	 * Filtert aus einem alten Record einen neuen, indem alle Vorkommen in der
+	 * ersten Klammer von filterStr entfernt werden.
+	 * 
+	 * @param oldRecord
+	 * @param filterStr
+	 * @return
+	 */
+	private static
+			String
+			filter(final String oldRecord, final String filterStr) {
+		String newRecord = "";
+		Matcher m;
+		Pattern filterPat = Pattern.compile(filterStr);
+		m = filterPat.matcher(oldRecord);
+		int realTextStart = 0;
+		while (m.find()) {
+			int realTextEnd = m.start(1);
+			newRecord += oldRecord.substring(realTextStart, realTextEnd);
+			realTextStart = m.end(1);
+		}
+		newRecord += oldRecord.substring(realTextStart);
+		return newRecord;
 	}
 
 	/**
@@ -548,12 +595,8 @@ public final class StringUtils {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-		String s =
-			"130 Air and simple gifts\r\n" + "382 !040197913!Violine\r\n"
-				+ "382 !040635848!Violoncello\r\n"
-				+ "382 !04030938X!Klarinette\r\n" + "382 !040309827!Klavier\r\n"
-				+ "382 $s4";
-		System.err.println(removeExpansion(s));
+		String s = args[0];
+		System.out.println(removeExpansion(s));
 	}
 
 	/**

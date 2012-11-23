@@ -12,7 +12,7 @@ public class VersionDB {
 		"Frühe Fassung", "Ordentliche Fassung", "Franz. Fassung",
 		"Ital. Fassung", "Konzertfassung", "Kurzfassung", "Alternativfassung",
 		"Neufassung", "Erstfassung", "Ballettfassung", "Urfassung",
-		"Frühfassung" };
+		"Frühfassung", "Vokalfassung" };
 
 	/**
 	 * 

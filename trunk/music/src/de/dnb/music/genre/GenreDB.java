@@ -336,6 +336,7 @@ public final class GenreDB {
 			{ "Tientos", "Tiento", "4208531-7", "042085314", "Tiento" },
 			{ "Themen", "Thema", "4185064-6", "041850645", "Thema <Musik>" },
 			{ "Tokkaten", "Tokkata", "4185619-3", "041856198", "Tokkata" },
+			{ "Toccaten", "Toccata", "4185619-3", "041856198", "Tokkata" },
 
 			{ "Tricinien", "Tricinium", "4271969-0", "042719690", "Tricinium" },
 			{ "Trios", "Trio", "4186188-7", "041861884", "Trio" },

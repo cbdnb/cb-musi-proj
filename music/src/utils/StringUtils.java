@@ -1,8 +1,5 @@
 package utils;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
@@ -28,42 +25,62 @@ public final class StringUtils {
 
 	}
 
+	private final static String idPatStr = "!\\d+X?!";
+
 	public static String removeExpansion(String oldRecord) {
 		if (oldRecord == null)
 			throw new IllegalArgumentException();
-		
+
 		String newRecord;
-		final String idPat = "!\\d+.?!";
+
 		// 5XX !..!<expansion>$4<rest>
-		newRecord = filter(oldRecord, "5\\d\\d " + idPat + "(.+)\\$4");
-		
+		newRecord = filter(oldRecord, "5\\d\\d " + idPatStr + "(.+)\\$4");
+
 		// 380 !..!<expansion>[\n\r]
-		newRecord = filter(newRecord, "380 " + idPat + "([^\\n\\r]+)");
+//		newRecord = filter(newRecord, "380 " + idPatStr + "([^\\n\\r]+)");
 		
-		// 382 !..!<expansion>($[npsv])?.*[\n\r]
-		String newRecord382 = "";
-		Matcher m382;
-		// liefert die Zeile, in der 382 steht:
-		final Pattern pat382 = Pattern.compile("382 " + idPat + "([^\\n\\r]+)");
-		m382 = pat382.matcher(newRecord);
+		newRecord = filter(newRecord, "380", "!"); // kein $i erlaubt
+		newRecord = filter(newRecord, "382", "npsv");
+		
+		newRecord = filter(newRecord, "169", "!"); // kein $i erlaubt
+		newRecord = filter(newRecord, "260", "v");
+		newRecord = filter(newRecord, "372", "wZv");
+		newRecord = filter(newRecord, "682", "v");
+		newRecord = filter(newRecord, "689", "v");
+
+		return newRecord.toString().trim();
+
+	}
+
+	private static String filter(
+			String recordStr,
+			String tag,
+			String allowedSubs) {
+		// <tag> !..!<expansion>($[<allowed>])?.*[\n\r]
+		String newRecord = "";
+		// liefert die Zeile(n), in denen tag steht:
+		final Pattern linePat =
+			Pattern.compile(tag + " " + idPatStr + "([^\\n\\r]+)");
+		Matcher lineMatcher;
+		lineMatcher = linePat.matcher(recordStr);
 		int realTextStart = 0;
-		while (m382.find()) {
-			int realTextEnd = m382.start(1); // das ist ok, da zweites "!"
-			newRecord382 += newRecord.substring(realTextStart, realTextEnd);
-			String restOfLine = m382.group(1);
-			final Pattern allowedDollar = Pattern.compile("\\$[npsv]");
+		while (lineMatcher.find()) {
+			int realTextEnd = lineMatcher.start(1); // das ist ok, da zweites "!"
+			newRecord += recordStr.substring(realTextStart, realTextEnd);
+			String restOfLine = lineMatcher.group(1);
+
+			final Pattern allowedDollar =
+				Pattern.compile("\\$[" + allowedSubs + "]");
 			Matcher mAllowed = allowedDollar.matcher(restOfLine);
 			if (mAllowed.find()) {
 				// Erlaubt ist alles ab der Fundstelle:
 				realTextStart = realTextEnd + mAllowed.start();
 			} else
-				realTextStart = m382.end(1);
+				realTextStart = lineMatcher.end(1);
 		}
 		// letztes Teil geht bis zum Ende:
-		newRecord382 += newRecord.substring(realTextStart);
-
-		return newRecord382.toString().trim();
-
+		newRecord += recordStr.substring(realTextStart);
+		return newRecord;
 	}
 
 	/**

@@ -32,19 +32,20 @@ public final class StringUtils {
 			throw new IllegalArgumentException();
 
 		String newRecord;
-
-		// 5XX !..!<expansion>$4<rest>
-		newRecord = filter(oldRecord, "5\\d\\d " + idPatStr + "(.+)\\$4");
-
-		// 380 !..!<expansion>[\n\r]
-//		newRecord = filter(newRecord, "380 " + idPatStr + "([^\\n\\r]+)");
 		
-		newRecord = filter(newRecord, "380", "!"); // kein $i erlaubt
-		newRecord = filter(newRecord, "382", "npsv");
-		
-		newRecord = filter(newRecord, "169", "!"); // kein $i erlaubt
+		/*
+		 * "!" ist ein Trick, da gar kein nachfolgendes Unterfeld 
+		 * erlaubt ist. ($! gibt es nicht):
+		 */
+		newRecord = filter(oldRecord, "169", "!"); 
 		newRecord = filter(newRecord, "260", "v");
-		newRecord = filter(newRecord, "372", "wZv");
+		newRecord = filter(newRecord, "372", "wZv");		
+		
+		newRecord = filter(newRecord, "380", "!"); 
+		newRecord = filter(newRecord, "382", "npsv");
+
+		newRecord = filter(newRecord, "5\\d\\d", "vXYZ45");
+		
 		newRecord = filter(newRecord, "682", "v");
 		newRecord = filter(newRecord, "689", "v");
 
@@ -58,9 +59,14 @@ public final class StringUtils {
 			String allowedSubs) {
 		// <tag> !..!<expansion>($[<allowed>])?.*[\n\r]
 		String newRecord = "";
-		// liefert die Zeile(n), in denen tag steht:
+		/*
+		 *  liefert die Zeile(n), in denen tag steht, die id kann auch
+		 *  später kommen
+		 */
+
 		final Pattern linePat =
-			Pattern.compile(tag + " " + idPatStr + "([^\\n\\r]+)");
+			Pattern.compile(tag + " " + "[^\\n\\r]*" + idPatStr
+				+ "([^\\n\\r]+)");
 		Matcher lineMatcher;
 		lineMatcher = linePat.matcher(recordStr);
 		int realTextStart = 0;

@@ -24,33 +24,26 @@ public class StringUtilsTest {
 				+ "\n530 !300189591!Beethoven, Ludwig$cvan$aBundeslied$4werk"
 				+ "\n680 MGG\n";
 		String newRecord = StringUtils.removeExpansion(oldRecord);
-		String expected = "130 Humoresken$mVl 1 2$mVa$mVc$f2012"
-				+ "\n380 !042974747!"
+		String expected =
+			"130 Humoresken$mVl 1 2$mVa$mVc$f2012" + "\n380 !042974747!"
 				+ "\n382 !040197913!$n2" + "\n382 !041883640!"
-				+ "\n382 !041847180!"
-				+ "\n382 !041847180!$pAlt"
-				+ "\n500 !118508288!$4kom1"
-				+ "\n500 !118524895!$4kom1"
-				+ "\n530 !300189591!$4werk"
-				+ "\n680 MGG";
+				+ "\n382 !041847180!" + "\n382 !041847180!$pAlt"
+				+ "\n500 !118508288!$4kom1" + "\n500 !118524895!$4kom1"
+				+ "\n530 !300189591!$4werk" + "\n680 MGG";
 		assertEquals(expected, newRecord);
-		oldRecord = "\n130 Humoresken$mVl 1 2$mVa$mVc$f2012"
-				+ "\n380 Humoreske$gMusik"
-				+ "\n382 Violine$n2" + "\n382 Viola"
-				+ "\n382 Tenor$gStimmlage"
+		oldRecord =
+			"\n130 Humoresken$mVl 1 2$mVa$mVc$f2012" + "\n380 Humoreske$gMusik"
+				+ "\n382 Violine$n2" + "\n382 Viola" + "\n382 Tenor$gStimmlage"
 				+ "\n382 Tenor$gStimmlage$pAlt"
 				+ "\n500 Beethoven, Ludwig$cvan$4kom1"
-				+ "\n500 Josquin$lDesprez$4kom1"
-				+ "\n680 MGG\n";
+				+ "\n500 Josquin$lDesprez$4kom1" + "\n680 MGG\n";
 		newRecord = StringUtils.removeExpansion(oldRecord);
-		expected = "130 Humoresken$mVl 1 2$mVa$mVc$f2012"
-				+ "\n380 Humoreske$gMusik"
-				+ "\n382 Violine$n2" + "\n382 Viola"
-				+ "\n382 Tenor$gStimmlage"
+		expected =
+			"130 Humoresken$mVl 1 2$mVa$mVc$f2012" + "\n380 Humoreske$gMusik"
+				+ "\n382 Violine$n2" + "\n382 Viola" + "\n382 Tenor$gStimmlage"
 				+ "\n382 Tenor$gStimmlage$pAlt"
 				+ "\n500 Beethoven, Ludwig$cvan$4kom1"
-				+ "\n500 Josquin$lDesprez$4kom1"
-				+ "\n680 MGG";
+				+ "\n500 Josquin$lDesprez$4kom1" + "\n680 MGG";
 		assertEquals(expected, newRecord);
 		oldRecord = "382 !041847180!Tenor$gStimmlage$vkom";
 		newRecord = StringUtils.removeExpansion(oldRecord);
@@ -74,7 +67,27 @@ public class StringUtilsTest {
 		} catch (IllegalArgumentException e) {
 			// nix
 		}
-		
+
+		oldRecord =
+			"\n260 !041818199!Sonne$gMotiv"
+				+ "\n260 !952737345!Aufgang$gAstronomie, Motiv"
+				+ "\n550 !040403602!Motiv$4obin$X1";
+		expected =
+			"260 !041818199!" + "\n260 !952737345!"
+				+ "\n550 !040403602!$4obin$X1";
+		;
+		newRecord = StringUtils.removeExpansion(oldRecord);
+		assertEquals(expected, newRecord);
+
+		oldRecord =
+			"169 $aGND3$bP$x 0.000!1001618564!Ordine dei Medici del Cantone Ticino";
+
+		expected =
+			"169 $aGND3$bP$x 0.000!1001618564!"
+		;
+		newRecord = StringUtils.removeExpansion(oldRecord);
+		assertEquals(expected, newRecord);
+
 	}
 
 	@Test

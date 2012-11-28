@@ -75,16 +75,34 @@ public class StringUtilsTest {
 		expected =
 			"260 !041818199!" + "\n260 !952737345!"
 				+ "\n550 !040403602!$4obin$X1";
-		;
 		newRecord = StringUtils.removeExpansion(oldRecord);
 		assertEquals(expected, newRecord);
 
 		oldRecord =
-			"169 $aGND3$bP$x 0.000!1001618564!Ordine dei Medici del Cantone Ticino";
+			"169 $aGND3$bP$x 0.000"
+				+ "!1001618564!Ordine dei Medici del Cantone Ticino";
+		expected = "169 $aGND3$bP$x 0.000!1001618564!";
+		newRecord = StringUtils.removeExpansion(oldRecord);
+		assertEquals(expected, newRecord);
 
-		expected =
-			"169 $aGND3$bP$x 0.000!1001618564!"
-		;
+		oldRecord = "169 $aGND3$bP$x33.333!04027408X!";
+		expected = "169 $aGND3$bP$x33.333!04027408X!";
+		newRecord = StringUtils.removeExpansion(oldRecord);
+		assertEquals(expected, newRecord);
+
+		oldRecord = "682 !050835602!Ost-West-Begegnungskongreß$d1990$cBerlin";
+		expected = "682 !050835602!";
+		newRecord = StringUtils.removeExpansion(oldRecord);
+		assertEquals(expected, newRecord);
+
+		oldRecord = "682 !1026091551!Kid Kopphausen";
+		expected = "682 !1026091551!";
+		newRecord = StringUtils.removeExpansion(oldRecord);
+		assertEquals(expected, newRecord);
+
+		oldRecord =
+			"682 !97491567X!Paulus$lApostel$aKorintherbrief$gII. 9,6-15";
+		expected = "682 !97491567X!";
 		newRecord = StringUtils.removeExpansion(oldRecord);
 		assertEquals(expected, newRecord);
 

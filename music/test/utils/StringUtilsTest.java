@@ -114,8 +114,6 @@ public class StringUtilsTest {
 		String[][] data = { { "1", "2", "1" }, { "12", "13", "14" } };
 		Pair<String, String[]> slp =
 			StringUtils.findLongestPrefix(parseString, data, 0);
-		String[] line = slp.second;
-
 		String[] vektor = { "a", "ab", "" };
 		String prefix = StringUtils.findLongestPrefix("", vektor);
 		assertNull(prefix);

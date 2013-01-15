@@ -123,7 +123,7 @@ public final class TransformRecord {
 	private static SetOfRules sRules;
 
 	private static List<String> sOldLines;
-	
+
 	private static MusicRecord sNewRecord;
 
 	private static String sTitleStr;
@@ -241,11 +241,13 @@ public final class TransformRecord {
 		}
 
 		// GND-Systematik
-		final Pattern patGNDClass =
-			Pattern.compile("^(065 |042A \\$a)", Pattern.MULTILINE);
-		matcherCC = patGNDClass.matcher(sOldRecordStr);
-		if (!matcherCC.find()) {
-			sNewRecord.add("065 14.4p");
+		if (getSetOfRules() != SetOfRules.RAK) {
+			final Pattern patGNDClass =
+				Pattern.compile("^(065 |042A \\$a)", Pattern.MULTILINE);
+			matcherCC = patGNDClass.matcher(sOldRecordStr);
+			if (!matcherCC.find()) {
+				sNewRecord.add("065 14.4p");
+			}
 		}
 		// Redaktionelle Bemerkung
 		switch (sTransformMode) {
@@ -302,7 +304,8 @@ public final class TransformRecord {
 		sOldLines = StringUtils.record2Lines(sOldRecordStr);
 		sNewRecord = new MusicRecord();
 
-		enrichRecord();
+		if (getSetOfRules() != SetOfRules.RAK)
+			enrichRecord();
 
 		for (String oldLine : sOldLines) {
 			Pair<String, String> pair = StringUtils.getTagAndcontent(oldLine);
@@ -341,7 +344,7 @@ public final class TransformRecord {
 			}
 
 		}
-		
+
 		return sNewRecord.toString();
 
 	}
@@ -468,7 +471,8 @@ public final class TransformRecord {
 				}
 
 			} else { // GND
-				newLine += TitleUtils.getGND130Or430(sMusicTitle);;
+				newLine += TitleUtils.getGND130Or430(sMusicTitle);
+				;
 				newComment = sCommentStr;
 			}
 		} else {

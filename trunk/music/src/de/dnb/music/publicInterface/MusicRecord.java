@@ -101,8 +101,8 @@ public class MusicRecord {
 		return new MusicRecord(record).normalized();
 	}
 
-	public static boolean isNormIdentical(String record1, String reocord2) {
-		return normalize(record1).equals(normalize(reocord2));
+	public static boolean isNormIdentical(String record1, String record2) {
+		return normalize(record1).equals(normalize(record2));
 	}
 
 	/**
@@ -116,13 +116,14 @@ public class MusicRecord {
 		String norm = this.toString();
 		norm = norm.replaceAll("\\$v" + TransformRecord.KOM_NACH_2003, "");
 		norm = norm.replaceAll("\\$v" + TransformRecord.KOM_VOR_2003, "");
-		norm = norm.replaceAll("\\$v" + TransformRecord.KOM_MASCHINELL, "");
+		
 		norm =
 			norm.replaceAll("\\$v" + TransformRecord.KOM_MASCHINELL_NACH_2003,
 					"");
 		norm =
 			norm.replaceAll("\\$v" + TransformRecord.KOM_MASCHINELL_VOR_2003,
 					"");
+		norm = norm.replaceAll("\\$v" + TransformRecord.KOM_MASCHINELL, "");
 		norm =
 			norm.replaceAll("667 " + TransformRecord.VORZ_BEN_AUFGEARB + "\n",
 					"");
@@ -141,15 +142,40 @@ public class MusicRecord {
 	 */
 	public static void main(String[] args) {
 		String oldR =
-			"\n008 wim" + "\n065 14.4p"
-				+ "\n130 aaa$vR:Umsetzung GND aus RAK-M 2003" + "\n913 qwer";
+			"005 Tu1"
+				+ "\n006 http://d-nb.info/gnd/301034354"
+				+ "\n008 wim"
+				+ "\n011 m"
+				+ "\n012 m"
+				+ "\n035 gnd/301034354"
+				+ "\n039 dma/301034354$vzg"
+				+ "\n130 Praxis pietatis melica ...$vR:Umsetzung GND aus RAK-M 2003"
+				+ "\n500 !118834967!$4kom1"
+				+ "\n680 - MGG 2 +, kein Nachweis in RISM. Ist die 5. veränd. Aufl. 1653 von \"Newes vollkömliches Gesangbuch ...\". Kirchenliederbuch.; Ansetzung nach den RAK-M 2003."
+				+ "\n903 $eDE-101c"
+				+ "\n903 $rDE-101c"
+				+ "\n913 $Sest$ipt$aCrüger, Johann: Praxis pietatis melica ...$0301034354";
 
 		String newR =
-			"008 wim" + "\n065 14.4p"
-				+ "\n130 aaa$vR:Maschinelle Umsetzung GND" + "\n667 MmV"
-				+ "\n913 qwer";
+			"005 Tu1"
+				+ "\n006 http://d-nb.info/gnd/301034354"
+				+ "\n008 wim"
+				+ "\n011 m"
+				+ "\n012 m"
+				+ "\n035 gnd/301034354"
+				+ "\n039 dma/301034354$vzg"
+				+ "\n130 Praxis pietatis melica ...$vR:Maschinelle Umsetzung GND aus RAK-M 2003"
+				+ "\n500 !118834967!$4kom1"
+				+ "\n680 - MGG 2 +, kein Nachweis in RISM. Ist die 5. veränd. Aufl. 1653 von \"Newes vollkömliches Gesangbuch ...\". Kirchenliederbuch.; Ansetzung nach den RAK-M 2003."
+				
+				+ "\n903 $eDE-101c"
+				+ "\n903 $rDE-101c"
+				+ "\n913 $Sest$ipt$aCrüger, Johann: Praxis pietatis melica ...$0301034354";
 
 		System.err.println(isNormIdentical(oldR, newR));
+		System.err.println(normalize(newR));
+		System.err.println();
+		System.err.println(normalize(oldR));
 
 	}
 }

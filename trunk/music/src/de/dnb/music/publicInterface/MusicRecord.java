@@ -34,7 +34,7 @@ public class MusicRecord {
 	 * @param recordS
 	 * @return
 	 */
-	public List<String> makeList(final String recordS) {
+	public static List<String> makeList(final String recordS) {
 		String[] linesArr = recordS.split("\n");
 		List<String> linesList = new LinkedList<String>();
 

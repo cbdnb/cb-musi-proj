@@ -47,21 +47,6 @@ public final class TransformRecord {
 		RAK, RSWK, GND
 	}
 
-	/**
-	 * Nur zum Experimentieren.
-	 * 
-	 * @param args	nicht benötigt.
-	 */
-	public static void main(final String[] args) {
-		String oldRecord =
-			"130 Mazurken, Klavier op. 41"
-
-			+ "\n913 $Sswd$ipt$aGabrieli, Andrea: "
-				+ "Mazurken, Klavier op. 41" + "$0300899831";
-		System.err.println(transform(oldRecord, TransformMode.INTELLECT));
-
-	}
-
 	//------- Mögliche Kommentarzeilen in 130
 
 	public static final String KOM_VOR_2003 =
@@ -656,5 +641,20 @@ public final class TransformRecord {
 
 			}
 		}
+	}
+	
+	/**
+	 * Nur zum Experimentieren.
+	 * 
+	 * @param args	nicht benötigt.
+	 */
+	public static void main(final String[] args) {
+		String oldRecord =
+			"130 Mazurken, Klavier op. 41"
+
+			+ "\n913 $Sswd$ipt$aGabrieli, Andrea: "
+				+ "Mazurken, Klavier op. 41" + "$0300899831";
+		System.err.println(transform(oldRecord, TransformMode.INTELLECT));
+
 	}
 }

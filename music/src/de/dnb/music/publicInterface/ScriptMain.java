@@ -82,13 +82,6 @@ public final class ScriptMain {
 		} else
 			titleStrOld = args[0];
 
-		//@formatter:off
-		List<String> unmodifiables = Arrays.asList(
-				"006", "003U", 
-				"035", "007K", 
-				"039", "007N",
-				// 913 kann überschrieben werden?
-				"913", "047C");
 		//@formatter:on
 		TransformRecord.setUnmodifiables(null);
 

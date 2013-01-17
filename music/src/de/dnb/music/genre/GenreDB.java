@@ -329,6 +329,7 @@ public final class GenreDB {
 			{ "Stücke", "Stück", "7727983-9", "1009010409", "Instrumentalstück" },
 			{ "Suiten", "Suite", "4184006-9", "041840062", "Suite" },
 			{ "Tänze", "Tanz", "4059028-8", "040590283", "Tanz" },
+			{ "Tänzchen", "Tänzchen", "4059028-8", "040590283", "Tanz" },
 			{ "Tantum ergo", "Tantum ergo", "4391295-3", "946021554",
 				"Tantum ergo sacramentum" },
 			{ "Tarantellen", "Tarantella", "4367603-0", "943629136",

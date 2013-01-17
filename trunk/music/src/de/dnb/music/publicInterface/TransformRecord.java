@@ -436,6 +436,7 @@ public final class TransformRecord {
 						else
 							newLine430 += titleFrom913;
 						newLine430 += "$v" + KOM_PORTAL_430;
+						newLine430 = newLine430.replaceAll("\\{", "");
 						sNewRecord.add(newLine430);
 					}
 
@@ -485,6 +486,7 @@ public final class TransformRecord {
 		}
 		if (newComment != null)
 			newLine += "$v" + newComment;
+		newLine = newLine.replace("{", "");
 		sNewRecord.add(newLine);
 
 	}

@@ -6,13 +6,14 @@ public class VersionDB {
 
 	private static String[] phrasenStrings = { "Fassung", "Kurze Fassung",
 		"Korrigierte Fassung", "Rev. Fassung", "Umgearb. Fassung",
-		"überarb. Fassung", "Kleine Fassung", "Erw. Fassung", "Grosse Fassung",
-		"Vereinfachte Fassung", "Konzertante Fassung", "Dt. Fassung",
-		"Gekürzte Fassung", "Reduzierte Fassung", "Engl. Fassung",
-		"Frühe Fassung", "Ordentliche Fassung", "Franz. Fassung",
-		"Ital. Fassung", "Konzertfassung", "Kurzfassung", "Alternativfassung",
-		"Neufassung", "Erstfassung", "Ballettfassung", "Urfassung",
-		"Frühfassung", "Vokalfassung" };
+		"überarb. Fassung", "Überarb. Fassung", "Kleine Fassung",
+		"Erw. Fassung", "Grosse Fassung", "Vereinfachte Fassung",
+		"Konzertante Fassung", "Dt. Fassung", "Gekürzte Fassung",
+		"Reduzierte Fassung", "Engl. Fassung", "Frühe Fassung",
+		"Ordentliche Fassung", "Franz. Fassung", "Ital. Fassung",
+		"Konzertfassung", "Kurzfassung", "Alternativfassung", "Neufassung",
+		"Erstfassung", "Ballettfassung", "Urfassung", "Frühfassung",
+		"Vokalfassung", "Fragments" };
 
 	/**
 	 * 

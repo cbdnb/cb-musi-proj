@@ -14,7 +14,7 @@ public class OpusNumber extends AdditionalInformation {
 	 */
 	String zaehlung = null;
 
-	public static final String[] OPERA = { "op.", "Op." };
+	public static final String[] OPERA = { "op.", "Op.", "WoO" };
 
 	@Override
 	public void accept(Visitor visitor) {

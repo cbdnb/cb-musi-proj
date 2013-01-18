@@ -386,11 +386,11 @@ public final class ThematicIndexDB {
 				"Irmen, Hans-Josef: Thematisch-systematisches Verzeichnis der musikalischen Werke Engelbert Humperdincks. - Zülpich : Prisca-Verl., 2005",
 				"Humperdinck Irmen", "11855476X", "XA-DE" },
 
-//			{
-//				"Janáÿécek, Leoÿés",
-//				"JW",
-//				"Simeone, Nigel: Janáček’s works : a catalogue of the music and writings of Leoš Janáček / Nigel Simeone ; John Tyrrell ; Alena Němcová. - Oxford : Clarendon Press, 1997",
-//				"JanáčekWV", "118556878", "XA-CZ" },
+			//			{
+			//				"Janáÿécek, Leoÿés",
+			//				"JW",
+			//				"Simeone, Nigel: Janáček’s works : a catalogue of the music and writings of Leoš Janáček / Nigel Simeone ; John Tyrrell ; Alena Němcová. - Oxford : Clarendon Press, 1997",
+			//				"JanáčekWV", "118556878", "XA-CZ" },
 			{
 				"Janáček, Leoš",
 				"JW",
@@ -412,11 +412,11 @@ public final class ThematicIndexDB {
 				"P",
 				"Poštolka, Milan: Leopold Koželuh : život a dílo / Milan Poštolka. - 1. vyd. - Praha : Státní Hudební Vydavatelství, 1964. - 387 S. : Ill., Noten ; 24 cm\nIDN 974252859",
 				"KoželuchWV", "11635190X", "XA-CZ" },
-//			{
-//				"Koÿézeluch, Leopold",
-//				"P",
-//				"Poštolka, Milan: Leopold Koželuh : život a dílo / Milan Poštolka. - 1. vyd. - Praha : Státní Hudební Vydavatelství, 1964. - 387 S. : Ill., Noten ; 24 cm\nIDN 974252859",
-//				"KoželuchWV", "11635190X", "XA-CZ" },
+			//			{
+			//				"Koÿézeluch, Leopold",
+			//				"P",
+			//				"Poštolka, Milan: Leopold Koželuh : život a dílo / Milan Poštolka. - 1. vyd. - Praha : Státní Hudební Vydavatelství, 1964. - 387 S. : Ill., Noten ; 24 cm\nIDN 974252859",
+			//				"KoželuchWV", "11635190X", "XA-CZ" },
 			{
 				"Kraus, Joseph Martin",
 				"VB",
@@ -432,6 +432,11 @@ public final class ThematicIndexDB {
 				"KWV",
 				"Brecht, Karl-Peter: Conradin Kreutzer : Biographie und Werkverzeichnis / Karl-Peter Brecht. Mit e. Einf. von Eberhard Stiefel. - Messkirch : Verl. der Stadt, 1980. - 306 S., Ill. - 21 cm\nIDN 820142468",
 				"KWV", "11871600X", "XA-DE;XA-AT" },
+			{
+				"Krebs, Johann Ludwig",
+				"KrebsWV",
+				"Friedrich,  Felix:  Krebs-Werkeverzeichnis  (Krebs-WV)  :thematisch-systematisches Verzeichnis der musikalischen Werke  von  Johann  Ludwig  Krebs  /  Felix  Friedrich.  - Altenburg : Kamprad, 2009",
+				"KrebsWV", "123281954", "XA-DE" },
 			{ // alt
 				"Kreutzer, Conradin",
 				"B",
@@ -581,6 +586,11 @@ public final class ThematicIndexDB {
 				"op.",
 				"Schäfer, Albert: Chronologisch-systematisches Verzeichnis der Werke Joachim Raffs mit Einschluss der verloren gegangenen, unveröffentlichten und nachgelassenen Kompositionen dieses Meisters : unter genauer Angabe d. Beschaffenheit, der Umarbeitungen u. Übertr. bearb., sowie mit histor. Anm. versehen / von Albert Schäfer. - Unveränd. Nachdr. der Ausg. von 1888. - Tutzing : Schneider, 1974. - 164 S. - 22 cm\nISBN 3-7952-0134-9\nIDN 740364839",
 				"RaffWV", "118597779", "XA-DE;XA-CH" },
+			{
+				"Rameau, Jean-Philippe",
+				"RCT",
+				"Bouissou,   Sylvie:   Jean-Philippe   Rameau   :   catalogue thématique  des  oeuvres  musicales  /  Sylvie  Bouissou  et Denis Herlin ... - Paris : CNRS Ed., [u.a.]. - (Collection Sciences de la musique : série références) T. 1. Musique instrumentale, musique vocale religieuse et profane. - 2007 T. 2. Livrets. - 2003",
+				"RCT", "118598090", "XA-FR" },
 			{
 				"Reger, Max",
 				"op./WoO",
@@ -754,11 +764,11 @@ public final class ThematicIndexDB {
 				"G",
 				"Giegling, Franz: Giuseppe Torelli : ein Beitrag z. Entwicklungsgeschichte d. italienischen Konzerts / Franz Giegling. - Kassel [u.a.] : Bärenreiter, 1949. - 88, 36 S., [Mit Notenbeil.]\nIDN 451542029",
 				"TorelliWV", "118802550", "XA-IT" },
-//			{
-//				"Vanhal, Jan Krtitel",
-//				"W",
-//				"Themen-Verzeichnis der Kompositionen von Johann Baptiste Wanhal / hrsg. von Alexander Weinmann. -Wien : Krenn, [1987]. - (Wiener Archivstudien ; Bd. 11)Teil 1.Teil 2.",
-//				"VanhalWV", "118855034", "XA-CZ;XA-AT" },
+			//			{
+			//				"Vanhal, Jan Krtitel",
+			//				"W",
+			//				"Themen-Verzeichnis der Kompositionen von Johann Baptiste Wanhal / hrsg. von Alexander Weinmann. -Wien : Krenn, [1987]. - (Wiener Archivstudien ; Bd. 11)Teil 1.Teil 2.",
+			//				"VanhalWV", "118855034", "XA-CZ;XA-AT" },
 			//			{
 			//				"Vaÿénhal, Jan Kÿértitel",
 			//				"W",
@@ -978,7 +988,7 @@ public final class ThematicIndexDB {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 }

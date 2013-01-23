@@ -207,7 +207,7 @@ public final class ParseAdditionalInformation {
 		return null;
 	}
 
-	private static final int MINDEST_JAHR = 800;
+	private static final int MINDEST_JAHR = 1200;
 
 	private static final int HOECHST_JAHR = 2100;
 

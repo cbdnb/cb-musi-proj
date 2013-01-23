@@ -542,6 +542,11 @@ public final class ThematicIndexDB {
 				"Fog, Dan: Carl Nielsen kompositioner : en bibliograf / ved Dan Fog / i samarbejde med Torben Schousboe. - Köbenhavn : Nyt Nordisk Forlag, 1965. - 65 S. - 24 cm\nIDN 974772976",
 				"NielsenWV", "118786180", "XA-DK" },
 			{
+				"Pachelbel, Johann",
+				"P",
+				"Perreault,  Jean  M.:  The  thematic  catalogue  of  musical works  of  Johann  Pachelbel.  -  Lanham   [u.a.]  :  The Scarecrow Press, 2004 ",
+				"PachelbelWV", "119456613", "XA-DE" },
+			{
 				"Paganini, Niccolò",
 				"M.S.",
 				"Moretti, Maria Rosa: Catalogo tematico delle musiche di Niccoló Paganini / a cura di Maria Rosa Moretti e Anna Sorrento. - Genova : Comune di Genova, 1982. - XXVI, 422 S. - 27 cm\nIDN 974769541",

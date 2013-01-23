@@ -9,6 +9,8 @@ import de.dnb.music.genre.GenreList;
 import de.dnb.music.genre.ParseGenre;
 import de.dnb.music.mediumOfPerformance.InstrumentationList;
 import de.dnb.music.mediumOfPerformance.ParseInstrumentation;
+import de.dnb.music.title.MusicTitle;
+import de.dnb.music.title.ParseMusicTitle;
 
 public final class ParseVersion {
 
@@ -16,9 +18,8 @@ public final class ParseVersion {
 	}
 
 	public static void main(final String[] args) {
-		String s = "Vl Viola";
-		Version f = new Version("bla");
-		//				parse("", s);
+		MusicTitle title = ParseMusicTitle.parse(null, "a. Adagio");
+		Version f = title.getVersion();
 		System.out.println(f.fallgruppeParagraphM511);
 		System.out.println(f.untergruppe);
 		System.out.println(f.getMatch());

@@ -240,7 +240,7 @@ public final class TransformRecord {
 			sNewRecord.add("667 " + SATZ_AUFG);
 			break;
 		case MACHINE:
-			sNewRecord.add("667 " + MASCH_AUFG);
+//			sNewRecord.add("667 " + MASCH_AUFG);
 			break;
 
 		default:

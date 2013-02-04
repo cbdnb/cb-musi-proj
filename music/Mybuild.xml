@@ -137,19 +137,19 @@
 			</manifest>
 		</jar>
 		<jar destfile="${release.dir.local}/MusiktitelAnalysator.jar">
-					<fileset dir="${build.dir}"
-					         excludes="**/*Test.class, **/Test*.class" />
-					<manifest>
-						<attribute name="Main-Class"
-						           value="de.dnb.music.mvc.title.TitleController" />
-					</manifest>
-				</jar>
+			<fileset dir="${build.dir}"
+			         excludes="**/*Test.class, **/Test*.class" />
+			<manifest>
+				<attribute name="Main-Class"
+				           value="de.dnb.music.mvc.title.TitleController" />
+			</manifest>
+		</jar>
 		<jar destfile="${release.dir}/BearbeiteDatensatz.jar">
 			<fileset dir="${build.dir}"
 			         excludes="**/*Test.class, **/Test*.class" />
 			<manifest>
 				<attribute name="Main-Class"
-				           value="de.dnb.music.mvc.record2.RecordController" />
+				           value="de.dnb.music.mvc.record.RecordController" />
 			</manifest>
 		</jar>
 		<jar destfile="${release.dir.local}/BearbeiteDatensatz.jar">
@@ -157,7 +157,7 @@
 			         excludes="**/*Test.class, **/Test*.class" />
 			<manifest>
 				<attribute name="Main-Class"
-				           value="de.dnb.music.mvc.record2.RecordController" />
+				           value="de.dnb.music.mvc.record.RecordController" />
 			</manifest>
 		</jar>
 		<jar destfile="${release.dir}/130.jar">

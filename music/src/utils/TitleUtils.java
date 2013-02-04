@@ -1,5 +1,6 @@
 package utils;
 
+import de.dnb.music.publicInterface.TransformRecord;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
 import de.dnb.music.visitor.AdditionalDataIn3XXVisitor;
@@ -119,6 +120,7 @@ public final class TitleUtils {
 		return getGND3XX(element, expansion, forceTotalCount);
 	}
 
+	@Deprecated
 	public static String getDNBPortal4XX(final TitleElement element) {
 		final DNBPortal430Visitor vis = new DNBPortal430Visitor();
 		element.accept(vis);
@@ -150,7 +152,9 @@ public final class TitleUtils {
 			getGND1XXPlusTag(musicTitle) + "\n"
 				+ getGND3XX(musicTitle, expansion, forceTotalCount);
 		if (musicTitle.containsParts())
-			s += "\n" + getDNBPortal4XX(musicTitle);
+			s +=
+				"\n" + getRAK(musicTitle) + "$v"
+					+ TransformRecord.KOM_PORTAL_430;
 		s += "\n" + getGND530(musicTitle, true);
 		return s;
 	}

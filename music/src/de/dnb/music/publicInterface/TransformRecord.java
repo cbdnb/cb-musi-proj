@@ -240,7 +240,7 @@ public final class TransformRecord {
 			sNewRecord.add("667 " + SATZ_AUFG);
 			break;
 		case MACHINE:
-//			sNewRecord.add("667 " + MASCH_AUFG);
+			//			sNewRecord.add("667 " + MASCH_AUFG);
 			break;
 
 		default:
@@ -479,8 +479,14 @@ public final class TransformRecord {
 				}
 			} else { // GND
 				// GND, 430:  ---------------------------------
-				newLine += TitleUtils.getGND130Or430(sMusicTitle);
-				newComment = sCommentStr;
+				if (KOM_VOR_2003_430.equals(sCommentStr)) {
+					// irgenwoher ein altes RAK:
+					newLine += transformOldRAK(sContent);
+					newComment = sCommentStr;
+				} else {
+					newLine += TitleUtils.getGND130Or430(sMusicTitle);
+					newComment = sCommentStr;
+				}
 			}
 
 		}
@@ -644,7 +650,7 @@ public final class TransformRecord {
 			}
 		}
 	}
-	
+
 	/**
 	 * Nur zum Experimentieren.
 	 * 

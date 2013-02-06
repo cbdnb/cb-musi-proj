@@ -45,10 +45,29 @@ public class RecordView implements Observer {
 	public final void addCompListener(final ActionListener al) {
 		gui.btnComp.addActionListener(al);
 	}
+	
+	
 
 	public final void addRemoveListener(final ActionListener al) {
 		gui.btnExpansionEntfernen.addActionListener(al);
 	}
+	
+	public final void addTitleListener(final ActionListener al) {
+		gui.btnTitle.addActionListener(al);
+		gui.textFieldTitle.addActionListener(al);
+	}
+	
+	public final void addFieldNumber(final String number) {
+		gui.comboBoxFieldNumber.addItem(number);
+	}
+	
+	public final void addFieldNumbers(final Collection<String> numbers) {
+		for (String number : numbers) {
+			addFieldNumber(number);
+		}
+	}
+	
+	
 
 	public final void addGenre(final Genre genre) {
 		gui.comboBoxGenre.addItem(genre);
@@ -86,6 +105,14 @@ public class RecordView implements Observer {
 
 	public final Instrument getInstrument() {
 		return (Instrument) gui.comboBoxInstru.getSelectedItem();
+	}
+	
+	public final String getFieldNumber() {
+		return (String) gui.comboBoxFieldNumber.getSelectedItem();
+	}
+	
+	public final String getTitleString() {
+		return gui.textFieldTitle.getText();
 	}
 
 	@SuppressWarnings("boxing")

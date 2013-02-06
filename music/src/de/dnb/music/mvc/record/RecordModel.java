@@ -18,6 +18,8 @@ import de.dnb.music.mediumOfPerformance.Instrument;
 import de.dnb.music.publicInterface.MusicRecord;
 import de.dnb.music.publicInterface.TransformRecord;
 import de.dnb.music.publicInterface.TransformRecord.TransformMode;
+import de.dnb.music.title.MusicTitle;
+import de.dnb.music.title.ParseMusicTitle;
 
 public class RecordModel extends Observable {
 
@@ -145,6 +147,31 @@ public class RecordModel extends Observable {
 	public final void addGenre(final Genre genre) {
 		MusicRecord rec = new MusicRecord(newRecord);
 		rec.addAll(TitleUtils.getGND3XX(genre, true, true));
+		newRecord = rec.toString();
+		refresh();
+	}
+
+	public final void addTitle(final String number, final String titleStr) {
+		MusicRecord rec = new MusicRecord(newRecord);
+		MusicTitle title = ParseMusicTitle.parse(null, titleStr);
+		final boolean expansion = true;
+		final boolean forceTotalCount = true;
+		String s;
+		try {
+			s = number + " " + TitleUtils.getGND130Or430(title) + "\n"
+				+ TitleUtils.getGND3XX(title, expansion, forceTotalCount);
+		} catch (Exception e) {
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			e.printStackTrace(pw);
+
+			stackTrace =
+				oldRecord + "\n\n----------------\n\n" + sw.toString();
+			JOptionPane.showMessageDialog(null, e.getMessage(),
+					"Fehler bei der Eingabe", JOptionPane.OK_CANCEL_OPTION);
+			return;
+		}
+		rec.addAll(s);
 		newRecord = rec.toString();
 		refresh();
 	}

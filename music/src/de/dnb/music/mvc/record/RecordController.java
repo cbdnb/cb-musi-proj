@@ -101,6 +101,17 @@ public class RecordController {
 		}
 
 	}
+	
+	class TitleListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(final ActionEvent e) {
+			String number = view.getFieldNumber();
+			String titleStr = view.getTitleString();
+			model.addTitle(number, titleStr);
+		}
+
+	}
 
 	/**
 	 * @return the help text
@@ -190,6 +201,9 @@ public class RecordController {
 
 		view.addErrorListener(new ShowErrorListener());
 		view.addInfoListener(new InfoListener());
+		view.addTitleListener(new TitleListener());
+		view.addFieldNumber("130");
+		view.addFieldNumber("430");
 	}
 
 	/**

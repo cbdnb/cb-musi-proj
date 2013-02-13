@@ -153,7 +153,7 @@ public final class TitleUtils {
 				+ getGND3XX(musicTitle, expansion, forceTotalCount);
 		if (musicTitle.containsParts())
 			s +=
-				"\n" + getRAK(musicTitle) + "$v"
+				"\n430 " + getRAK(musicTitle) + "$v"
 					+ TransformRecord.KOM_PORTAL_430;
 		s += "\n" + getGND530(musicTitle, true);
 		return s;

@@ -111,7 +111,8 @@
 		       debuglevel="${debuglevel}"
 		       destdir="${build.dir}"
 		       source="${source}"
-		       target="${target}">
+		       target="${target}"
+		       encoding="UTF-8">
 			<src path="${source.dir}" />
 			<classpath refid="music.classpath" />
 		</javac>
@@ -119,7 +120,8 @@
 		       debuglevel="${debuglevel}"
 		       destdir="${build.dir}"
 		       source="${source}"
-		       target="${target}">
+		       target="${target}"
+		       encoding="UTF-8">
 			<src path="${testsource.dir}" />
 			<classpath refid="music.classpath" />
 		</javac>

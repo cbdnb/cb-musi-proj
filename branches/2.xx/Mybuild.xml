@@ -1,0 +1,227 @@
+<?eclipse.ant.import?>
+
+<project basedir="." default="build" name="music">
+
+	<!-- Properties -->
+	<property environment="env" />
+	<property name="ECLIPSE_HOME" value="../../" />
+
+	<property name="junit.output.dir" value="junit" />
+	<property name="source.dir" location="src" />
+	<property name="testsource.dir" location="test" />
+	<property name="build.dir" location="bin" />
+	<property name="release.dir" location="V:/DMA/Anwendungen/dist" />
+	<property name="release.dir.local" location="dist" />
+
+	<property name="debuglevel" value="source,lines,vars" />
+	<property name="target" value="1.6" />
+	<property name="source" value="1.6" />
+
+	<!-- Pfade -->
+	<path id="JUnit 4.libraryclasspath">
+		<pathelement location="${ECLIPSE_HOME}/plugins/org.junit_4.8.2.v4_8_2_v20110321-1705/junit.jar" />
+		<pathelement location="${ECLIPSE_HOME}/plugins/org.hamcrest.core_1.1.0.v20090501071000.jar" />
+	</path>
+
+	<path id="music.classpath">
+		<pathelement location="${build.dir}" />
+		<path refid="JUnit 4.libraryclasspath" />
+	</path>
+
+	<!-- Targets -->
+	<target name="init">
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${release.dir}" />
+		<copy includeemptydirs="false" todir="${build.dir}">
+			<fileset dir="${source.dir}">
+				<exclude name="**/*.uad" />
+				<exclude name="**/*.ucd" />
+				<exclude name="**/*.uld" />
+				<exclude name="**/*.upd" />
+				<exclude name="**/*.cop" />
+				<exclude name="**/*.udd" />
+				<exclude name="**/*.uod" />
+				<exclude name="**/*.usd" />
+				<exclude name="**/*.utd" />
+				<exclude name="**/*.uud" />
+				<exclude name="**/*.ame" />
+				<exclude name="**/*.odd" />
+				<exclude name="**/*.ead" />
+				<exclude name="**/*.ecd" />
+				<exclude name="**/*.eld" />
+				<exclude name="**/*.epd" />
+				<exclude name="**/*.edd" />
+				<exclude name="**/*.eod" />
+				<exclude name="**/*.esd" />
+				<exclude name="**/*.etd" />
+				<exclude name="**/*.eud" />
+				<exclude name="**/*.eame" />
+				<exclude name="**/*.urd*.uml" />
+				<exclude name="**/*.ecore" />
+				<exclude name="**/*.urd" />
+				<exclude name="**/*.uml" />
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+		<copy includeemptydirs="false" todir="${build.dir}">
+			<fileset dir="${testsource.dir}">
+				<exclude name="**/*.uad" />
+				<exclude name="**/*.ucd" />
+				<exclude name="**/*.uld" />
+				<exclude name="**/*.upd" />
+				<exclude name="**/*.cop" />
+				<exclude name="**/*.udd" />
+				<exclude name="**/*.uod" />
+				<exclude name="**/*.usd" />
+				<exclude name="**/*.utd" />
+				<exclude name="**/*.uud" />
+				<exclude name="**/*.ame" />
+				<exclude name="**/*.odd" />
+				<exclude name="**/*.ead" />
+				<exclude name="**/*.ecd" />
+				<exclude name="**/*.eld" />
+				<exclude name="**/*.epd" />
+				<exclude name="**/*.edd" />
+				<exclude name="**/*.eod" />
+				<exclude name="**/*.esd" />
+				<exclude name="**/*.etd" />
+				<exclude name="**/*.eud" />
+				<exclude name="**/*.eame" />
+				<exclude name="**/*.urd*.uml" />
+				<exclude name="**/*.ecore" />
+				<exclude name="**/*.urd" />
+				<exclude name="**/*.uml" />
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="clean">
+		<delete dir="${build.dir}" />
+		<delete dir="${release.dir}" />
+	</target>
+
+	<target name="cleanall" depends="clean" />
+
+	<target name="build" depends="build-project" />
+
+	<target name="build-project" depends="init">
+		<echo message="${ant.project.name}: ${ant.file}" />
+		<javac debug="true"
+		       debuglevel="${debuglevel}"
+		       destdir="${build.dir}"
+		       source="${source}"
+		       target="${target}">
+			<src path="${source.dir}" />
+			<classpath refid="music.classpath" />
+		</javac>
+		<javac debug="true"
+		       debuglevel="${debuglevel}"
+		       destdir="${build.dir}"
+		       source="${source}"
+		       target="${target}">
+			<src path="${testsource.dir}" />
+			<classpath refid="music.classpath" />
+		</javac>
+	</target>
+
+	<target name="dist"
+	        depends="build"
+	        description="Verpackt alles in Anwendungen">
+		<jar destfile="${release.dir}/MusiktitelAnalysator.jar">
+			<fileset dir="${build.dir}"
+			         excludes="**/*Test.class, **/Test*.class" />
+			<manifest>
+				<attribute name="Main-Class"
+				           value="de.dnb.music.mvc.title.TitleController" />
+			</manifest>
+		</jar>
+		<jar destfile="${release.dir.local}/MusiktitelAnalysator.jar">
+			<fileset dir="${build.dir}"
+			         excludes="**/*Test.class, **/Test*.class" />
+			<manifest>
+				<attribute name="Main-Class"
+				           value="de.dnb.music.mvc.title.TitleController" />
+			</manifest>
+		</jar>
+		<jar destfile="${release.dir}/BearbeiteDatensatz.jar">
+			<fileset dir="${build.dir}"
+			         excludes="**/*Test.class, **/Test*.class" />
+			<manifest>
+				<attribute name="Main-Class"
+				           value="de.dnb.music.mvc.record.RecordController" />
+			</manifest>
+		</jar>
+		<jar destfile="${release.dir.local}/BearbeiteDatensatz.jar">
+			<fileset dir="${build.dir}"
+			         excludes="**/*Test.class, **/Test*.class" />
+			<manifest>
+				<attribute name="Main-Class"
+				           value="de.dnb.music.mvc.record.RecordController" />
+			</manifest>
+		</jar>
+		<jar destfile="${release.dir}/130.jar">
+			<fileset dir="${build.dir}"
+			         excludes="**/*Test.class, **/Test*.class" />
+			<manifest>
+				<attribute name="Main-Class"
+				           value="de.dnb.music.publicInterface.Transform130" />
+			</manifest>
+		</jar>
+		<jar destfile="${release.dir}/RAK_Portal.jar">
+			<fileset dir="${build.dir}"
+			         excludes="**/*Test.class, **/Test*.class" />
+			<manifest>
+				<attribute name="Main-Class"
+				           value="de.dnb.music.publicInterface.Transform2RAK" />
+			</manifest>
+		</jar>
+		<jar destfile="${release.dir}/TransformRecord.jar">
+			<fileset dir="${build.dir}"
+			         excludes="**/*Test.class, **/Test*.class" />
+			<manifest>
+				<attribute name="Main-Class"
+				           value="de.dnb.music.publicInterface.ScriptMain" />
+			</manifest>
+		</jar>
+		<jar destfile="${release.dir}/SaveTransform.jar">
+			<fileset dir="${build.dir}"
+			         excludes="**/*Test.class, **/Test*.class" />
+			<manifest>
+				<attribute name="Main-Class"
+				           value="de.dnb.music.publicInterface.SaveTransform" />
+			</manifest>
+		</jar>
+		<copy tofile="${release.dir}/violin.ico"
+		      file="${source.dir}/resources/Violin.ico" />
+	</target>
+
+	<target name="-allTests" depends="build">
+		<mkdir dir="${junit.output.dir}" />
+		<junit fork="yes" printsummary="withOutAndErr">
+			<formatter type="xml" />
+			<test name="de.dnb.music.AllTests" todir="${junit.output.dir}" />
+			<classpath refid="music.classpath" />
+		</junit>
+	</target>
+
+	<target name="junitreport" depends="-allTests">
+		<junitreport todir="${junit.output.dir}">
+			<fileset dir="${junit.output.dir}">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report format="frames" todir="${junit.output.dir}" />
+		</junitreport>
+	</target>
+
+	<target name="test" depends="build">
+		<junit>
+			<classpath refid="music.classpath" />
+			<formatter type="brief" usefile="false" />
+			<batchtest>
+				<fileset dir="${build.dir}" includes="**/*Test.class" />
+			</batchtest>
+		</junit>
+	</target>
+
+</project>

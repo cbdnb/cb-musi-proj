@@ -87,6 +87,9 @@ public final class ScriptMain {
 
 		System.out.println(TransformRecord.transform(titleStrOld,
 				TransformMode.MACHINE));
+		System.err.println("\n------------");
+		System.err.println(TransformRecord.getRejectionCause());
+		
 
 	}
 }

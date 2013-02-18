@@ -25,9 +25,6 @@ import de.dnb.music.version.Version;
  */
 public final class TransformRecord {
 
-	private TransformRecord() {
-	}
-
 	/**
 	 * Aufzählung der verwendeten Modi.
 	 * @author baumann
@@ -118,6 +115,18 @@ public final class TransformRecord {
 	private static MusicTitle sMusicTitle;
 
 	private static String sContent;
+
+	private static String rejectionCause;
+
+	/**
+	 * @return the rejectionCause
+	 */
+	public static String getRejectionCause() {
+		return rejectionCause;
+	}
+
+	private TransformRecord() {
+	}
 
 	//@formatter:off
 	private static List<String> sUnmodifiables = Arrays.asList(
@@ -289,6 +298,8 @@ public final class TransformRecord {
 		sOldLines = StringUtils.record2Lines(sOldRecordStr);
 		sNewRecord = new MusicRecord();
 
+		rejectionCause = "";
+
 		if (getSetOfRules() != SetOfRules.RAK)
 			enrichRecord();
 
@@ -381,6 +392,7 @@ public final class TransformRecord {
 					newComment = null;
 
 			} else if (sRules == SetOfRules.RAK) {
+
 				coincidence =
 					TitleUtils.getRAK(titleFrom913).equals(titleFrom913);
 				if (KOM_NACH_2003.equals(sCommentStr)
@@ -392,8 +404,15 @@ public final class TransformRecord {
 					 */
 					if (coincidence)
 						newLine += TitleUtils.getGND130Or430(sMusicTitle);
-					else
+					else {
 						newLine += sTitleStr;
+						rejectionCause +=
+							"\n130 nicht verwendet wegen "
+								+ "Differenz zu 913, daher alte 130:\n"
+								+ "130 neu:"
+								+ TitleUtils.getGND130Or430(sMusicTitle)
+								+ "\n130 alt:" + sTitleStr + "\n";
+					}
 					sMusicTitle.setComment(null);
 
 					// Absprache mit DMA, VC vom 2.11.2012:
@@ -405,8 +424,14 @@ public final class TransformRecord {
 						 */
 						if (coincidence)
 							newLine430 += TitleUtils.getRAK(sMusicTitle);
-						else
+						else {
 							newLine430 += titleFrom913;
+							rejectionCause +=
+								"\nerzeugte Portal-430 nicht verwendet wegen "
+									+ "Differenz zu 913:\n" + "430:"
+									+ TitleUtils.getRAK(sMusicTitle) + "\n913:"
+									+ titleFrom913 + "\n";
+						}
 						newLine430 += "$v" + KOM_PORTAL_430;
 						sNewRecord.add(newLine430);
 					}
@@ -420,8 +445,15 @@ public final class TransformRecord {
 					 */
 					if (coincidence)
 						newLine += TitleUtils.getGND130Or430(sMusicTitle);
-					else
+					else {
 						newLine += sTitleStr;
+						rejectionCause +=
+							"\n130 nicht verwendet wegen "
+								+ "Differenz zu 913, daher alte 130:\n"
+								+ "130 neu:"
+								+ TitleUtils.getGND130Or430(sMusicTitle)
+								+ "\n130 alt:" + sTitleStr + "\n";
+					}
 					sMusicTitle.setComment(null);
 
 					// Absprache mit DMA, VC vom 2.11.2012:
@@ -433,8 +465,14 @@ public final class TransformRecord {
 						 */
 						if (coincidence)
 							newLine430 += TitleUtils.getRAK(sMusicTitle);
-						else
+						else {
 							newLine430 += titleFrom913;
+							rejectionCause +=
+								"\nerzeugte Portal-430 nicht verwendet wegen "
+									+ "Differenz zu 913:\n" + "430:"
+									+ TitleUtils.getRAK(sMusicTitle) + "\n913:"
+									+ titleFrom913 + "\n";
+						}
 						newLine430 += "$v" + KOM_PORTAL_430;
 						newLine430 = newLine430.replaceAll("\\{", "");
 						sNewRecord.add(newLine430);
@@ -658,11 +696,11 @@ public final class TransformRecord {
 	 */
 	public static void main(final String[] args) {
 		String oldRecord =
-			"130 Mazurken, Klavier op. 41"
-
-			+ "\n913 $Sswd$ipt$aGabrieli, Andrea: "
-				+ "Mazurken, Klavier op. 41" + "$0300899831";
-		System.err.println(transform(oldRecord, TransformMode.INTELLECT));
+			"130 Sacrae cantiones ... , liber 4$pIn principio erat verbum"
+				+ "\n913 $Sest$ipt$aLasso, Orlando /di: "
+				+ "Sacrae cantiones ... , liber 4 <In principio erat verbum>"
+				+ "$0300941358";
+		System.err.println(transform(oldRecord, TransformMode.MACHINE));
 
 	}
 }

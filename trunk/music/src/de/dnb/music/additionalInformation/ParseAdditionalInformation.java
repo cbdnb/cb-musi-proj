@@ -118,6 +118,9 @@ public final class ParseAdditionalInformation {
 			op.op = prefix;
 			// trim wg. mehrfacher Blanks (selten)
 			op.zaehlung = s.substring(prefix.length()).trim();
+			// ohne Inhalt absurd:
+			if (op.zaehlung.length() == 0)
+				return null;
 			return op;
 		}
 		//		for (String opus : OpusNumber.OPERA) {

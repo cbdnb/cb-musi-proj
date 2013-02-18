@@ -904,6 +904,9 @@ public final class ThematicIndexDB {
 			/* .trim() für den unwahrscheinlichen Fall, dass die wv-Zählung
 			 * leer sein sollte:	 */
 			thIdxNumber.number = addInfoStr.substring(pos).trim();
+			// ohne WV-Nummer ziemlich absurd:
+			if (thIdxNumber.number.length() == 0)
+				return null;
 			return thIdxNumber;
 		}
 		return null;

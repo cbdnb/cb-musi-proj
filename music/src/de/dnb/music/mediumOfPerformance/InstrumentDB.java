@@ -125,8 +125,8 @@ public final class InstrumentDB {
 			{ "Md", "Mandoline", "4232939-5", "042329396", "Mandoline", "",
 				"mand" },
 			{ "Ob", "Oboe", "4139391-0", "041393910", "Oboe", "", "" },
-			{ "Ob d'amore", "Oboe d'amore", "4172323-5", "041723236",
-				"Oboe d'amore", "", "" },
+			{ "Oboe d'amore", "Oboe d'amore", "4172323-5", "041723236",
+				"Ob d'amore", "", "" },
 			{ "Orch", "Orchester", "4172708-3", "041727088", "Orchester", "",
 				"" },
 			{ "Org", "Orgel", "4043844-2", "040438449", "Orgel", "", "org" },
@@ -245,8 +245,8 @@ public final class InstrumentDB {
 			{ "Bandoneon", "Bandoneon", "4197338-0", "041973380", "Bandoneon",
 				"Bandonion", "" },
 			{ "Baryton", "Baryton", "4144084-5", "041440846", "Baryton", "", "" },
-			{ "Bassetthr", "Bassetthorn", "4391544-9", "946033757",
-				"Bassetthorn", "", "" },
+			{ "Bassetthorn", "Bassetthorn", "4391544-9", "946033757",
+				"Bassetthr", "", "" },
 			{ "Bassklar", "Bassklarinette", "4414463-5", "947894136",
 				"Bassklarinette", "", "" },
 			{ "Buk", "Buk", "7744549-1", "1011504286", "Buk <Trommel>", "", "" },
@@ -254,6 +254,8 @@ public final class InstrumentDB {
 				"", "" },
 			{ "Chalumeau", "Chalumeau", "4231682-0", "042316820", "Chalumeau",
 				"", "" },
+			{ "Chitarrone", "Chitarrone", "4147736-4", "041477367",
+				"Chitarrone", "", "" },
 			{ "Chromonika", "Chromonika", "4520998-4", "954957113",
 				"Chromatische Mundharmonika", "", "" },
 			{ "Clarinhorn", "Clarinhorn", "7744553-3", "1011504545",
@@ -278,14 +280,14 @@ public final class InstrumentDB {
 				"", "" },
 			{ "Flautino", "Flautino", "7744555-7", "1011504871", "Flautino",
 				"", "" },
-			{ "Flügelhr", "Flügelhorn", "4649777-8", "962344753", "Flügelhorn",
-				"", "" },
+			{ "Flügelhorn", "Flügelhorn", "4649777-8", "962344753",
+				"Flügelhorn", "Flügelhr", "" },
 			{ "Geisha-Glocke", "Geisha-Glocke", "4507643-1", "954015436",
 				"Handglocke", "", "" },
-			{ "Glashf", "Glasharfe", "4756294-8", "969357362", "Glasharfe", "",
-				"" },
-			{ "Glashmk", "Glasharmonika", "4603491-2", "959699961",
-				"Glasharmonika", "", "" },
+			{ "Glasharfe", "Glasharfe", "4756294-8", "969357362", "Glasharfe",
+				"Glashf", "" },
+			{ "Glasharmonika", "Glasharmonika", "4603491-2", "959699961",
+				"Glasharmonika", "Glashmk", "" },
 			{ "Glockenspiel", "Glockenspiel", "4021295-6", "040212955",
 				"Glockenspiel", "", "" },
 			{ "Hackbrett", "Hackbrett", "4158657-8", "041586573", "Hackbrett",
@@ -311,13 +313,16 @@ public final class InstrumentDB {
 				"" },
 			{ "Metallophon", "Metallophon", "7744556-9", "1011505215",
 				"Metallophon", "", "" },
-			{ "Hmk", "Mundharmonika", "4123805-9", "041238052",
+			{ "Mundharmonika", "Mundharmonika", "4123805-9", "041238052",
+				"Mundharmonika", "Hmk", "harm" },
+			{ "Mundharmonika", "Mundharmonika", "4123805-9", "041238052",
 				"Mundharmonika", "Mundhmk", "harm" },
 			{ "Musette", "Musette", "4178853-9", "041788532", "Sackpfeife", "",
 				"" },
 			{ "Ondes Martenot", "Ondes Martenot", "4447637-1", "950031860",
 				"Ondes Martenot", "", "" },
-			{ "Panfl", "Panflöte", "4044462-4", "040444627", "Panflöte", "", "" },
+			{ "Panflöte", "Panflöte", "4044462-4", "040444627", "Panflöte",
+				"Panfl", "" },
 			{ "Pipa", "Pipa", "4315916-3", "043159168", "Pipa", "", "" },
 			{ "Psalterium", "Psalterium", "4197387-2", "041973879",
 				"Psalterium", "", "" },
@@ -442,8 +447,8 @@ public final class InstrumentDB {
 	public static void setRegnognizePopularMusic(final boolean musikErkennen) {
 		uMusikErkennen = musikErkennen;
 	}
-	
-	public static Set<Instrument> getAllInstruments(){
+
+	public static Set<Instrument> getAllInstruments() {
 		Set<Instrument> insSet = new TreeSet<Instrument>();
 		for (String[] instrumentS : DATA) {
 			insSet.add(buildInstrument(instrumentS));
@@ -452,9 +457,9 @@ public final class InstrumentDB {
 	}
 
 	public static void main(String[] args) {
-		for (String[] stringA : DATA) {
-			System.err.println(getAllInstruments());
-
+		for (String[] instrumentS : DATA) {
+			System.out.println(instrumentS[ABBR] + '\t'
+				+ instrumentS[RAK_E_ALT]);
 		}
 	}
 

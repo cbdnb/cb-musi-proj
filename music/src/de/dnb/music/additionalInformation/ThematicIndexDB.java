@@ -544,7 +544,7 @@ public final class ThematicIndexDB {
 			{
 				"Pachelbel, Johann",
 				"P",
-				"Perreault,  Jean  M.:  The  thematic  catalogue  of  musical works  of  Johann  Pachelbel.  -  Lanham   [u.a.]  :  The Scarecrow Press, 2004 ",
+				"Perreault,  Jean  M.:  The  thematic  catalogue  of  musical works  of  Johann  Pachelbel.  -  Lanham   [u.a.]  :  The Scarecrow Press, 2004",
 				"PachelbelWV", "119456613", "XA-DE" },
 			{
 				"Paganini, Niccolò",

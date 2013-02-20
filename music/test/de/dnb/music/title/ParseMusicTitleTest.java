@@ -143,7 +143,7 @@ public class ParseMusicTitleTest {
 				TitleUtils.getGND1XXPlusTag(mt));
 
 		mt = ParseMusicTitle.parseGND(null, "Elegien$mBassetthr$mKl$f1965");
-		assertEquals("130 Elegien$mBassetthr$mKl$f1965",
+		assertEquals("130 Elegien$mBassetthorn$mKl$f1965",
 				TitleUtils.getGND1XXPlusTag(mt));
 
 		mt =
@@ -261,7 +261,7 @@ public class ParseMusicTitleTest {
 		mt =
 			ParseMusicTitle.parseWithoutVersion(null,
 					"Elegien, Bassetthr Kl (1965)");
-		assertEquals("130 Elegien$mBassetthr$mKl$f1965",
+		assertEquals("130 Elegien$mBassetthorn$mKl$f1965",
 				TitleUtils.getGND1XXPlusTag(mt));
 
 		mt =

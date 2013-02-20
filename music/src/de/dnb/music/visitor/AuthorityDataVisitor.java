@@ -78,10 +78,11 @@ public class AuthorityDataVisitor extends Visitor {
 
 	@Override
 	public final void visit(final Genre genre) {
-		if (genre.getIdn().length() > 0)
-			genreIn380 +=
-				"\n380 !" + genre.getIdn() + "!"
-					+ (expansion ? genre.getSwd() : "");
+		if (!"Werke".equals(genre.asPlural()))
+			if (genre.getIdn().length() > 0)
+				genreIn380 +=
+					"\n380 !" + genre.getIdn() + "!"
+						+ (expansion ? genre.getSwd() : "");
 
 	}
 

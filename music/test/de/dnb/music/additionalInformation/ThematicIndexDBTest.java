@@ -37,9 +37,11 @@ public class ThematicIndexDBTest {
 
 			//			assertTrue(line[ThematicIndexDB.SOURCE].length() != 0);
 
-			assertTrue(line[ThematicIndexDB.SOURCE].trim().equals(
-					line[ThematicIndexDB.SOURCE]));
-			
+			assertTrue(
+					line[ThematicIndexDB.SOURCE],
+					line[ThematicIndexDB.SOURCE].trim().equals(
+							line[ThematicIndexDB.SOURCE]));
+
 			assertTrue(line[ThematicIndexDB.SOURCE_ABB].length() != 0);
 
 		}

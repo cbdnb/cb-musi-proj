@@ -45,8 +45,8 @@ public final class GenreDB {
 		{
 
 			//	Plural		Singular	nid		idn	     SWD	
-			//			{ "Werke", "Werk", "4117633-9", "041176332", "Werk" },
-			{ "Werke", "Werk", "", "", "Werk" },
+			{ "Werke", "Werk", "4117633-9", "041176332", "Werk" },
+			//			{ "Werke", "Werk", "", "", "Werk" },
 			{ "Vivace", "Vivace", "7744010-9", "1011387441", "Vivace" },
 			{ "Allegro vivace", "Allegro vivace", "7744010-9", "1011387441",
 				"Vivace" },

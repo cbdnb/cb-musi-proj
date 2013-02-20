@@ -151,9 +151,9 @@ public class InstrumentDBTest {
 		assertEquals("Singst.", i.abbreviated);
 
 		i = InstrumentDB.matchInstrument("Hmk");
-		assertEquals("Hmk", i.abbreviated);
+		assertEquals("Mundharmonika", i.abbreviated);
 		i = InstrumentDB.matchInstrument("Mundhmk");
-		assertEquals("Hmk", i.abbreviated);
+		assertEquals("Mundharmonika", i.abbreviated);
 
 	}
 
@@ -204,7 +204,7 @@ public class InstrumentDBTest {
 		i = InstrumentDB.matchInstrument("Ob e");
 		assertEquals("Ob", i.abbreviated);
 		i = InstrumentDB.matchInstrument("Ob d'amore");
-		assertEquals("Ob d'amore", i.abbreviated);
+		assertEquals("Oboe d'amore", i.abbreviated);
 
 		i = InstrumentDB.matchInstrument("Oboe");
 		assertEquals("Oboe", i.writtenOut);

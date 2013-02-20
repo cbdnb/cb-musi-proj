@@ -150,28 +150,23 @@ public class GenreDBTest {
 	@Test
 	public void testDatabaseConsistency() {
 		for (String[] line : GenreDB.DATA) {
-			
-			assertTrue(line[GenreDB.IDN].length() != 0);
-			assertTrue(line[GenreDB.IDN].trim().equals(
-					line[GenreDB.IDN]));
-			
+
+			assertTrue(line[GenreDB.SWD], line[GenreDB.IDN].length() != 0);
+			assertTrue(line[GenreDB.IDN].trim().equals(line[GenreDB.IDN]));
+
 			assertTrue(line[GenreDB.NID].length() != 0);
-			assertTrue(line[GenreDB.NID].trim().equals(
-					line[GenreDB.NID]));
-			
+			assertTrue(line[GenreDB.NID].trim().equals(line[GenreDB.NID]));
+
 			assertTrue(line[GenreDB.SWD].length() != 0);
-			
+
 			assertTrue(line[GenreDB.SING].length() != 0);
-			assertTrue(line[GenreDB.SING].trim().equals(
-					line[GenreDB.SING]));
-			
+			assertTrue(line[GenreDB.SING].trim().equals(line[GenreDB.SING]));
+
 			assertTrue(line[GenreDB.PLUR].length() != 0);
-			assertTrue(line[GenreDB.PLUR].trim().equals(
-					line[GenreDB.PLUR]));
-			
+			assertTrue(line[GenreDB.PLUR].trim().equals(line[GenreDB.PLUR]));
+
 			assertFalse(line[GenreDB.IDN].contains("-"));
 			assertTrue(line[GenreDB.NID].contains("-"));
 		}
 	}
-
 }

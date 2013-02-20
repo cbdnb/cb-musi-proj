@@ -126,7 +126,7 @@ public final class InstrumentDB {
 				"mand" },
 			{ "Ob", "Oboe", "4139391-0", "041393910", "Oboe", "", "" },
 			{ "Oboe d'amore", "Oboe d'amore", "4172323-5", "041723236",
-				"Ob d'amore", "", "" },
+				"Oboe d'amore", "Ob d'amore", "" },
 			{ "Orch", "Orchester", "4172708-3", "041727088", "Orchester", "",
 				"" },
 			{ "Org", "Orgel", "4043844-2", "040438449", "Orgel", "", "org" },
@@ -238,6 +238,7 @@ public final class InstrumentDB {
 				"Gesangsstimme", "Singst", "voc" },
 			{ "Singst.", "Singstimme", "4156941-6", "041569415",
 				"Gesangsstimme", "Gesangstimme", "voc" },
+			// Nicht in Liste Anh. 4
 			{ "Alphorn", "Alphorn", "4142016-0", "041420160", "Alphorn", "", "" },
 			{ "Bajan", "Bajan", "4432494-7", "949180157", "Bajan", "", "" },
 			{ "Balalaika", "Balalaika", "4143930-2", "041439309", "Balalaika",
@@ -246,9 +247,11 @@ public final class InstrumentDB {
 				"Bandonion", "" },
 			{ "Baryton", "Baryton", "4144084-5", "041440846", "Baryton", "", "" },
 			{ "Bassetthorn", "Bassetthorn", "4391544-9", "946033757",
-				"Bassetthr", "", "" },
-			{ "Bassklar", "Bassklarinette", "4414463-5", "947894136",
-				"Bassklarinette", "", "" },
+				"Bassetthorn", "Bassetthr", "" },
+			{ "Bassklarinette", "Bassklarinette", "4414463-5", "947894136",
+				"Bassklarinette", "Bassklar", "" },
+			{ "Bassklarinette", "Bassklarinette", "4414463-5", "947894136",
+				"Bassklarinette", "Bass-Klar", "" },
 			{ "Buk", "Buk", "7744549-1", "1011504286", "Buk <Trommel>", "", "" },
 			{ "Calchedon", "Calchedon", "7662012-8", "994721102", "Calchedon",
 				"", "" },
@@ -375,7 +378,9 @@ public final class InstrumentDB {
 			{ "Bandleader", "Bandleader", "7628944-8", "990720039",
 				"Bandleader", "", "ld" },
 			{ "Washboard", "Washboard", "7694575-3", "100080996X", "Washboard",
-				"", "wbd" }
+				"", "wbd" },
+			{ "Zink", "Zink", "4190840-5", "041908406", "Zink <Musikinstrument>",
+				"", "" }
 
 		};
 
@@ -457,10 +462,8 @@ public final class InstrumentDB {
 	}
 
 	public static void main(String[] args) {
-		for (String[] instrumentS : DATA) {
-			System.out.println(instrumentS[ABBR] + '\t'
-				+ instrumentS[RAK_E_ALT]);
-		}
+		Instrument i = InstrumentDB.matchInstrument("Ob d'amore");
+		System.err.println(i);
 	}
 
 }

@@ -246,7 +246,7 @@ public class ZusatzangabeTest {
 
 		mt = ParseMusicTitle.parseTitlePlusVersion(null, "Lieder WoO 22");
 		zus = mt.getAdditionalInformation();
-		assertTrue(TitleUtils.getGND3XX(zus).contains("383 $cWoO 22"));
+		assertTrue(TitleUtils.getGND3XX(zus).contains("383 $bWoO 22"));
 
 		mt =
 			ParseMusicTitle.parseTitlePlusVersion(null,

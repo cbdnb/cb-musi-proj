@@ -35,6 +35,11 @@ public final class ThematicIndexDB {
 				"De Catanzaro, Christine D. : Anton Cajetan Adlgasser : (1729 - 1777) ; a thematic catalogue of his works / by Christine D. De Catanzaro and Werner Rainer. - Hillsdale, NY : Pendragon Press, 2000. - XL, 311 S., Ill., Noten. - 26 cm (Thematic catalogues ; 22). - (Thematic catalogues series ; no. 22)\nISBN 1-945193-78-5\nIDN 963677136",
 				"AdlgasserWV", "119024586", "XA-AT;XA-DE" },
 			{
+				"Albéniz, Isaac",
+				"T",
+				"Torres, Jacinto: Catálogo sistemático descriptivo de las obras musicales de Isaac Albéniz. - Madrid : Instituto de Bibliografía Musical, 2001.",
+				"AlbenizWV", "119183366", "XA-ES" },
+			{
 				"Albrechtsberger, Johann Georg",
 				"S",
 				"Schröder, Dorothea: Die geistlichen Vokalkompositionen Johann Georg Albrechtsbergers / Dorothea Schröder. - Hamburg : Verl. der Musikalienhandlung Wagner. - 21 cm. -\nZugl.: Hamburg, Univ., Diss., 1986\nIDN 551317426\n(Hamburger Beiträge zur Musikwissenschaft ; 34)\n2. Thematischer Katalog. - 1987. - VIII, 370 S., Noten\nISBN 3-88979-026-7\nIDN 871097729",
@@ -289,6 +294,11 @@ public final class ThematicIndexDB {
 				"op./WoO",
 				"Fog, Dan: N. W. Gade-Katalog : en fortegnelse over Niels W. Gades trykte kompositioner : Verzeichnis der im Druck erschienenen Kompositionen von Niels W. Gade / Dan Fog. - Köbenhavn : Fog, 1986. - 96 S. - 21 cm. - Text dt. und dän.\nISBN 87-87099-29-2\nIDN 974773018",
 				"GadeWV", "119057077", "XA-DK" },
+			{
+				"Genzmer, Harald",
+				"GeWV",
+				"Harald Genzmer, Werkverzeichnis / hrsg. von Markus Faul. - Mainz [u.a.] : Schott, 2011",
+				"GeWV", "118538500", "XA-DE" },
 			{
 				"Giuliani, Mauro",
 				"op.",
@@ -649,6 +659,11 @@ public final class ThematicIndexDB {
 				"K",
 				"Kirkpatrick, Ralph: Domenico Scarlatti / Ralph Kirkpatrick. [Das Werk wurde vom Verf. f. d. dt. Erstausg. erw. u. von Horst Leuchtmann aus d. Amerikan. Übertr.]. - München : Ellermann. - 26 cm\nISBN 3-7707-7630-5\nIDN 540079146\nBd. 2. Anhang, Dokumente und Werkverzeichnis. - 1972",
 				"DScarlattiWV", "118804952", "XA-IT" },
+			{
+				"Schaffrath, Christoph",
+				"CSWV",
+				"Oestreich, Reinhard: Verzeichnis der Werke Christoph Schaffraths : (CSWV). - Beeskow : Ortus-Musikverlag, 2012. - (Ortus-Studien ; 7)",
+				"CSWV", "129014893", "XA-DE" },
 
 			{
 				"Scheidt, Samuel",
@@ -825,6 +840,11 @@ public final class ThematicIndexDB {
 				"J",
 				"Jähns, Friedrich Wilhelm: Carl Maria von Weber in seinen Werken : chronologisch-thematisches Verzeichnis seiner sämmtlichen Compositionen nebst Angabe d. unvollst., verloren gegangenen, zweifelhaften u. untergeschobenen mit ... Berlin 1871 / Friedr. Wilh. Jähns. - Unveränd. Neuaufl. - Berlin : Lienau, 1967. - 476 S., 4 Bl. Faks.\nIDN 457087277",
 				"WeberWV", "118629662", "XA-DE" },
+			{
+				"Wolf, Hugo",
+				"HWW",
+				"Jestremski, Margret: Hugo-Wolf-Werkverzeichnis : (HWW) ; thematisch-chronologisches Verzeichnis der musikalischen Werke Hugo Wolfs. - Kassel [u.a.] : Bärenreiter, 2011",
+				"HWW", "118634712", "XA-AT" },
 			{
 				"Zachow, Friedrich Wilhelm",
 				"LV",

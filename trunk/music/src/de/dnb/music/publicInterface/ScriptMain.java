@@ -1,11 +1,7 @@
 package de.dnb.music.publicInterface;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.List;
-
+import utils.InOut;
+import utils.StringUtils;
 import de.dnb.music.publicInterface.TransformRecord.TransformMode;
 
 public final class ScriptMain {
@@ -17,42 +13,31 @@ public final class ScriptMain {
 
 	/**
 	 * Soll nicht mehr verändert werden, da für den Austausch mit WinIBW
-	 * zuständig.
+	 * zuständig. Der Austausch geht über die Zwischenablage.
 	 * 
 	 * Skript:
 	 * 
 	Sub aaaTest()
 
+	' Schickt den Datensatz zum Transformator und überschreibt mit den neuen Daten
 	application.activeWindow.copyTitle
-	Application.ActiveWindow.Command "k", False	
-	application.activeWindow.title.selectAll		
-
-	volltext = application.activeWindow.clipboard	
-	
-	'  " durch \" ersetzen, um Text mit Anfuehrungszeichen korrekt zu _
-	uebergeben:
-	volltext = Replace(volltext , CStr(Chr(34)),"\"&Chr(34)) 		
-	' in Anführungszeichen einschliessen, um an Applikation zu _
-	uebergeben								
-	volltext = Chr(34) & volltext & Chr(34) 
-	'msgbox volltext
+	Application.ActiveWindow.Command "k", False		
 		
 	set WshShell = CreateObject("Wscript.shell")
-		Set oExec = WshShell.Exec("javaw -jar _
-		V:\DMA\Anwendungen\dist\TransformRecord.jar " & volltext)
-	set rein = oExec.StdOut
-	inhaltNeu = rein.readall
-	'msgbox inhaltNeu 
+	Set oExec = WshShell.Exec("javaw -jar V:\DMA\Anwendungen\dist\TransformRecord.jar")
+	msgbox "Daten übernehmen"
+	
+	inhaltNeu = application.activeWindow.clipboard
 	
 	if inhaltNeu = "" then 
-		Application.ActiveWindow.SimulateIBWKey "FE" 'mit ESCAPE-Taste _
-		Korrekturmodus verlassen
+		Application.ActiveWindow.SimulateIBWKey "FE" 'mit ESCAPE-Taste Korrekturmodus verlassen
 		exit sub	
-	end if
+	end if	
 	
 	application.activeWindow.title.insertText inhaltNeu
-	
-	msgbox "Alter Datensatz:" & vbcrlf & volltext
+	application.activeWindow.title.insertText vbcrlf
+	application.activeWindow.title.insertText "------------" & vbcrlf
+	application.activeWindow.title.insertText "ALT:" & vbcrlf
 
 	End Sub
 
@@ -63,33 +48,23 @@ public final class ScriptMain {
 		String titleStrOld = "";
 
 		if (args == null || args.length != 1) {
-
-			try {
-				BufferedReader reader =
-					new BufferedReader(new InputStreamReader(System.in));
-
-				String read;
-
-				while ((read = reader.readLine()) != null) {
-					titleStrOld += read + "\n";
-				}
-
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
+			titleStrOld = InOut.readClipboard();
 		} else
 			titleStrOld = args[0];
 
+		if (titleStrOld == null)
+			return;
 		//@formatter:on
-		TransformRecord.setUnmodifiables(null);
 
-		System.out.println(TransformRecord.transform(titleStrOld,
-				TransformMode.MACHINE));
-		System.err.println("\n------------");
-		System.err.println(TransformRecord.getRejectionCause());
-		
-
+		String s =
+			TransformRecord.transform(titleStrOld, TransformMode.INTELLECT);
+		s = StringUtils.removeExpansion(s);
+		String cause = TransformRecord.getRejectionCause();
+		if (!"".equals(cause)) {
+			s += "\n------------";
+			s += cause;
+		}
+		InOut.write2Clipboard(s);
+		System.exit(0);
 	}
 }

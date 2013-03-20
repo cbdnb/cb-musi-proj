@@ -96,7 +96,7 @@ public class MusicRecord {
 	}
 
 	public static String normalize(String record) {
-		if (record == null || record.trim() == "")
+		if (record == null || record.trim().length() == 0)
 			throw new IllegalArgumentException();
 		return new MusicRecord(record).normalized();
 	}

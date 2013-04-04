@@ -34,6 +34,10 @@ public final class ParseMusicTitle {
 	public static final Tag TAG_130 = TagDB.findTag("130");
 	
 	public static final Tag TAG_430 = TagDB.findTag("430");
+	
+	public static final Tag TAG_530 = TagDB.findTag("530");
+	
+	public static final Tag TAG_730 = TagDB.findTag("730");
 
 	public static final Indicator DOLLAR_A = TAG_130.getIndicator('a', false);
 

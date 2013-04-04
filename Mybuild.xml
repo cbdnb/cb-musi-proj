@@ -8,9 +8,9 @@
 
 	<property name="junit.output.dir" value="junit" />
 	<property name="source.dir" location="src" />
+	<property name="lib.dir" location="lib" />
 	<property name="testsource.dir" location="test" />
 	<property name="build.dir" location="bin" />
-	<property name="release.dir" location="V:/DMA/Anwendungen/dist" />
 	<property name="release.dir.local" location="dist" />
 
 	<property name="debuglevel" value="source,lines,vars" />
@@ -31,7 +31,6 @@
 	<!-- Targets -->
 	<target name="init">
 		<mkdir dir="${build.dir}" />
-		<mkdir dir="${release.dir}" />
 		<copy includeemptydirs="false" todir="${build.dir}">
 			<fileset dir="${source.dir}">
 				<exclude name="**/*.uad" />
@@ -98,7 +97,6 @@
 
 	<target name="clean">
 		<delete dir="${build.dir}" />
-		<delete dir="${release.dir}" />
 	</target>
 
 	<target name="cleanall" depends="clean" />
@@ -130,72 +128,30 @@
 	<target name="dist"
 	        depends="build"
 	        description="Verpackt alles in Anwendungen">
-		<jar destfile="${release.dir}/MusiktitelAnalysator.jar">
-			<fileset dir="${build.dir}"
-			         excludes="**/*Test.class, **/Test*.class" />
-			<manifest>
-				<attribute name="Main-Class"
-				           value="de.dnb.music.mvc.title.TitleController" />
-			</manifest>
-		</jar>
+
 		<jar destfile="${release.dir.local}/MusiktitelAnalysator.jar">
 			<fileset dir="${build.dir}"
 			         excludes="**/*Test.class, **/Test*.class" />
+			<!-- Alle jar.-Dateien in /lib entpacken und gleich
+											wieder verpacken: -->
+			<zipgroupfileset dir="${lib.dir}" includes="*.jar" />
 			<manifest>
 				<attribute name="Main-Class"
 				           value="de.dnb.music.mvc.title.TitleController" />
 			</manifest>
 		</jar>
-		<jar destfile="${release.dir}/BearbeiteDatensatz.jar">
-			<fileset dir="${build.dir}"
-			         excludes="**/*Test.class, **/Test*.class" />
-			<manifest>
-				<attribute name="Main-Class"
-				           value="de.dnb.music.mvc.record.RecordController" />
-			</manifest>
-		</jar>
+
 		<jar destfile="${release.dir.local}/BearbeiteDatensatz.jar">
 			<fileset dir="${build.dir}"
 			         excludes="**/*Test.class, **/Test*.class" />
+			<!-- Alle jar.-Dateien in /lib entpacken und gleich
+														wieder verpacken: -->
+			<zipgroupfileset dir="${lib.dir}" includes="*.jar" />
 			<manifest>
 				<attribute name="Main-Class"
 				           value="de.dnb.music.mvc.record.RecordController" />
 			</manifest>
 		</jar>
-		<jar destfile="${release.dir}/130.jar">
-			<fileset dir="${build.dir}"
-			         excludes="**/*Test.class, **/Test*.class" />
-			<manifest>
-				<attribute name="Main-Class"
-				           value="de.dnb.music.publicInterface.Transform130" />
-			</manifest>
-		</jar>
-		<jar destfile="${release.dir}/RAK_Portal.jar">
-			<fileset dir="${build.dir}"
-			         excludes="**/*Test.class, **/Test*.class" />
-			<manifest>
-				<attribute name="Main-Class"
-				           value="de.dnb.music.publicInterface.Transform2RAK" />
-			</manifest>
-		</jar>
-		<jar destfile="${release.dir}/TransformRecord.jar">
-			<fileset dir="${build.dir}"
-			         excludes="**/*Test.class, **/Test*.class" />
-			<manifest>
-				<attribute name="Main-Class"
-				           value="de.dnb.music.publicInterface.ScriptMain" />
-			</manifest>
-		</jar>
-		<jar destfile="${release.dir}/SaveTransform.jar">
-			<fileset dir="${build.dir}"
-			         excludes="**/*Test.class, **/Test*.class" />
-			<manifest>
-				<attribute name="Main-Class"
-				           value="de.dnb.music.publicInterface.SaveTransform" />
-			</manifest>
-		</jar>
-		<copy tofile="${release.dir}/violin.ico"
-		      file="${source.dir}/resources/Violin.ico" />
 	</target>
 
 	<target name="-allTests" depends="build">

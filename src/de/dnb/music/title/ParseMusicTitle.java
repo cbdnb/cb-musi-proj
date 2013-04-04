@@ -11,6 +11,9 @@ import utils.Pair;
 import utils.StringUtils;
 import utils.TitleUtils;
 
+import de.dnb.gnd.parser.Indicator;
+import de.dnb.gnd.parser.Tag;
+import de.dnb.gnd.parser.TagDB;
 import de.dnb.music.additionalInformation.AdditionalInformation;
 import de.dnb.music.additionalInformation.Key;
 import de.dnb.music.additionalInformation.ParseAdditionalInformation;
@@ -27,6 +30,26 @@ import de.dnb.music.version.Version;
  *
  */
 public final class ParseMusicTitle {
+
+	public static final Tag TAG_130 = TagDB.findTag("130");
+	
+	public static final Tag TAG_430 = TagDB.findTag("430");
+
+	public static final Indicator DOLLAR_A = TAG_130.getIndicator('a', false);
+
+	public static final Indicator DOLLAR_F = TAG_130.getIndicator('a', false);
+
+	public static final Indicator DOLLAR_N = TAG_130.getIndicator('a', false);
+
+	public static final Indicator DOLLAR_O = TAG_130.getIndicator('a', false);
+
+	public static final Indicator DOLLAR_P = TAG_130.getIndicator('a', false);
+
+	public static final Indicator DOLLAR_R = TAG_130.getIndicator('a', false);
+
+	public static final Indicator DOLLAR_S = TAG_130.getIndicator('a', false);
+
+	public static final Indicator DOLLAR_G = TAG_130.getIndicator('a', false);
 
 	private ParseMusicTitle() {
 	}

@@ -7,11 +7,15 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import applikationsbausteine.RangeCheckUtils;
+
+import utils.GNDConstants;
 import utils.Pair;
 import utils.StringUtils;
 import utils.TitleUtils;
 
 import de.dnb.gnd.parser.Indicator;
+import de.dnb.gnd.parser.Subfield;
 import de.dnb.gnd.parser.Tag;
 import de.dnb.gnd.parser.TagDB;
 import de.dnb.music.additionalInformation.AdditionalInformation;
@@ -31,7 +35,6 @@ import de.dnb.music.version.Version;
  */
 public final class ParseMusicTitle {
 
-	
 	private ParseMusicTitle() {
 	}
 
@@ -256,6 +259,140 @@ public final class ParseMusicTitle {
 	 */
 	public static void setRegnognizeKeyName(final boolean recognize) {
 		Key.setRegnognizeKeyName(recognize);
+	}
+
+	/**
+	 * Baut aus GND-Unterfeldliste eine Baumstruktur auf.
+	 * 
+	 * Dabei können mehrere Möglichkeiten auftreten:
+	 * 	- Altdaten mit $p und $s. Diese stammen vom DMA.
+	 * 	- Altdaten mit mehreren $p. Diese stammen aus der SWD.
+	 * 	- Altdaten mit einem $p. Diese können aus der SWD oder dem DMA stammen.
+	 * 	All diese Fälle werden durch die besondere Behandlung von $p 
+	 * 	aufgefangen. (s. case-Anweisung)
+	 *  - Altdaten mit $g. Diese können nur aus der SWD stammen. 
+	 *  	Die Altdaten enthalten keine Unterfelder $f,$m,$n ..
+	 *  	Daher kann das $g nur Bestandteil eines $a- oder $p-Feldes sein.
+	 *  	In das Aufteilen durch breakUpIntoSubfields() wird das $g nicht
+	 *  	einbezogen. Daher wird $g (in case 'a': oder evtl. case 'p')
+	 *  	entweder als Jahreszahl erkannt und in $f umgewandelt oder	
+	 *  	aber so, wie es ist, belassen. In diesem zweiten Fall wird 
+	 *  	aber der Titel ($a oder $p) als Individualtitel angesehen. 
+	 *  - Maschinell modifizierte Altdaten. Diese enthalten nur ein $g, wenn
+	 *  	ein Individualtitel vorliegt.
+	 *  - Neudaten enthalten nur dann ein $g, wenn ein Individualsachtitel
+	 *  	vorliegt. Das ist vor allem bei anonymen Werken der Fall. 
+	 *  	In Formalsachtiteln der Neudaten hat ein $g nichts zu suchen, 
+	 *  	insbesondere sind Bildungen wie $aAdagio$mVl$g1234 unsinnig.
+	 *  	Die Behandlung der case-Anweisung bei $m würde hier das $g-Feld 
+	 *  	vernachlässigen, da ParseInstrumentation das $g-Feld ignoriert.
+	 *  	Das ist nach dem zuvor Gesagten hinnehmbar.
+	 * 
+	 * @param composer Komponist
+	 * @param subfields	Liste von Unterfeldern, die mit $<Indikator> beginnen.
+	 * @return	gültigen Musiktitel oder null
+	 * 
+	 */
+	@SuppressWarnings("null")
+	// wegen partOfWork.addPartOfWork() in case 'p':
+	//@formatter:on
+			public static
+			MusicTitle
+			parseGNDNew(final String composer, final List<Subfield> subfields) {
+		RangeCheckUtils.assertCollectionParamNotNullOrEmpty("value", subfields);
+
+		MusicTitle mTitle = null;
+		/*
+		 *  Zeigt auf das Werk, das gerade mit Unterfeldern aufgefüllt wird.
+		 *  Das kann das übergeordnete Werk, aber auch der Werkteil sein. 
+		 *  Im case-Fall $p wird dieser Zeiger weitergerückt. 
+		 */
+		MusicTitle actualPartTitle = null;
+		PartOfWork partOfWork = null;
+
+		for (Subfield subfield : subfields) {
+			final Indicator indicator = subfield.getIndicator();
+			final String contentOfSubfield = subfield.getContent();
+
+			if (indicator == GNDConstants.DOLLAR_A) {
+				/*
+				 * Das ist (garantiert) immer das erste Unterfeld und damit
+				 * der erste behandelte Fall in der Schleife. Sollten
+				 * Altdaten vorliegen, kann höchstens eine Fassung in diesem
+				 * Feld vorkommen. Daher parseTitlePlusVersion():
+				 */
+				mTitle = ParseMusicTitle.parse(composer, contentOfSubfield);
+				actualPartTitle = mTitle;
+			} else if (indicator == GNDConstants.DOLLAR_M) {
+
+				final InstrumentationList iList =
+					ParseInstrumentation.parse(contentOfSubfield);
+				if (!actualPartTitle.containsInstrumentation()) {
+					actualPartTitle.setInstrumentationList(iList);
+				} else {
+					actualPartTitle.getInstrumentationList().addAll(iList);
+				}
+			} else if (indicator == GNDConstants.DOLLAR_F
+				|| indicator == GNDConstants.DOLLAR_N
+				|| indicator == GNDConstants.DOLLAR_R) {
+				/*
+				 * Auch hier können wir wieder so tun, als wäre ein
+				 * Komma erkannt, da ja nicht (gegenbenenfalls) ein
+				 * $n mit einer Einzelzahl aufgebaut worden wäre.
+				 */
+				final boolean comma = true;
+				final AdditionalInformation ai =
+					ParseAdditionalInformation.parse(composer,
+							contentOfSubfield, comma);
+				actualPartTitle.setAdditionalInformation(ai);
+			} else if (indicator == GNDConstants.DOLLAR_P) {
+
+				if (!mTitle.containsParts()) {
+					/*
+					 *  neue Werkteilstrukur anlegen, dabei davon ausgehen,
+					 *  dass auch vollkommen Unstrukturiertes (Altdaten?) in
+					 *  $p steht, also auch Teile von Teilen. Daher wird der
+					 *  Konstruktor PartOfWork(String) aufgerufen:
+					 */
+					partOfWork = new PartOfWork(contentOfSubfield);
+					mTitle.setPartOfWork(partOfWork);
+					final List<MusicTitle> tList = partOfWork.getPartsOfWork();
+					final int partsSize = tList.size();
+					actualPartTitle = tList.get(partsSize - 1);
+				} else {
+					/*
+					 * Dann gibt es zwei Möglichkeiten:
+					 * 	1. Es liegen Altdaten aus SWD-Zeiten vor, die
+					 * 		auch schon damals Teile von Teilen enthalten
+					 * 		konnten.
+					 * 	2. Es liegen neue oder aufgearbeitete Daten vor.
+					 * 
+					 * In beiden Fällen enthalten das 2. und alle folgenden
+					 * $p-Felder einen und nur einen Musiktitel.
+					 */
+					actualPartTitle =
+						ParseMusicTitle.parseWithoutVersion(composer,
+								contentOfSubfield);
+					partOfWork.addPartOfWork(actualPartTitle);
+				}
+
+			} else if (indicator == GNDConstants.DOLLAR_S) {
+				Version version =
+					ParseVersion.parse(composer, contentOfSubfield);
+				// Notbremse für unbekannten Inhalt von $s:
+				if (version == null) {
+					version = new Version(contentOfSubfield);
+				}
+				mTitle.setVersion(version);
+			} else if (indicator == GNDConstants.DOLLAR_O) {
+				mTitle.setArrangement(new Arrangement(contentOfSubfield));
+			} else if (indicator == TagDB.dollarvR) {
+
+				mTitle.setComment(new Comment(contentOfSubfield));
+			}
+
+		}
+		return mTitle;
 	}
 
 	/**

@@ -3,29 +3,34 @@ package de.dnb.music.title;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import applikationsbausteine.RangeCheckUtils;
 
 import utils.GNDConstants;
 import utils.Pair;
 import utils.StringUtils;
 import utils.TitleUtils;
-
+import applikationsbausteine.RangeCheckUtils;
+import de.dnb.gnd.exceptions.IllFormattedLineException;
 import de.dnb.gnd.parser.Indicator;
 import de.dnb.gnd.parser.Subfield;
 import de.dnb.gnd.parser.Tag;
 import de.dnb.gnd.parser.TagDB;
+import de.dnb.gnd.parser.line.Line;
+import de.dnb.gnd.parser.line.LineParser;
 import de.dnb.music.additionalInformation.AdditionalInformation;
 import de.dnb.music.additionalInformation.Key;
 import de.dnb.music.additionalInformation.ParseAdditionalInformation;
+import de.dnb.music.additionalInformation.Qualifier;
 import de.dnb.music.mediumOfPerformance.InstrumentDB;
 import de.dnb.music.mediumOfPerformance.InstrumentationList;
 import de.dnb.music.mediumOfPerformance.ParseInstrumentation;
 import de.dnb.music.version.ParseVersion;
 import de.dnb.music.version.Version;
+import filtering.FilterUtils;
+import filtering.IPredicate;
 
 /**
  * Zentrale Parserklasse. Verschiedene statische Dienstfunktionen werden
@@ -261,6 +266,22 @@ public final class ParseMusicTitle {
 		Key.setRegnognizeKeyName(recognize);
 	}
 
+	public static
+			MusicTitle
+			parseGNDNew(final String composer, final Line line) {
+		RangeCheckUtils.assertReferenceParamNotNull("line", line);
+		Tag tag = line.getTag();
+		boolean tagOK = (tag == GNDConstants.TAG_130);
+		tagOK |= tag == GNDConstants.TAG_430;
+		tagOK |= tag == GNDConstants.TAG_530;
+		tagOK |= tag == GNDConstants.TAG_730;
+		if (!tagOK)
+			throw new IllegalArgumentException("tag von line gehört nicht"
+				+ "zu einem Titel");
+		List<Subfield> subfields = line.getSubfields();
+		return parseGNDNew(composer, subfields);
+	}
+
 	/**
 	 * Baut aus GND-Unterfeldliste eine Baumstruktur auf.
 	 * 
@@ -300,6 +321,14 @@ public final class ParseMusicTitle {
 			MusicTitle
 			parseGNDNew(final String composer, final List<Subfield> subfields) {
 		RangeCheckUtils.assertCollectionParamNotNullOrEmpty("value", subfields);
+		final IPredicate<Subfield> dollarGPred = new IPredicate<Subfield>() {
+			@Override
+			public boolean accept(final Subfield element) {
+				return element.getIndicator() == TagDB.dollarg;
+			}
+		};
+		final boolean containsG =
+			FilterUtils.find(subfields, dollarGPred) != null;
 
 		MusicTitle mTitle = null;
 		/*
@@ -334,7 +363,8 @@ public final class ParseMusicTitle {
 				}
 			} else if (indicator == GNDConstants.DOLLAR_F
 				|| indicator == GNDConstants.DOLLAR_N
-				|| indicator == GNDConstants.DOLLAR_R) {
+				|| indicator == GNDConstants.DOLLAR_R
+				|| indicator == TagDB.dollarg) {
 				/*
 				 * Auch hier können wir wieder so tun, als wäre ein
 				 * Komma erkannt, da ja nicht (gegenbenenfalls) ein
@@ -344,7 +374,12 @@ public final class ParseMusicTitle {
 				final AdditionalInformation ai =
 					ParseAdditionalInformation.parse(composer,
 							contentOfSubfield, comma);
-				actualPartTitle.setAdditionalInformation(ai);
+				// Ist das $g ein maskiertes $f, $n oder $r?
+				if (ai != null)
+					actualPartTitle.setAdditionalInformation(ai);
+				else
+					actualPartTitle.setAdditionalInformation(new Qualifier(
+							contentOfSubfield));
 			} else if (indicator == GNDConstants.DOLLAR_P) {
 
 				if (!mTitle.containsParts()) {
@@ -354,11 +389,22 @@ public final class ParseMusicTitle {
 					 *  $p steht, also auch Teile von Teilen. Daher wird der
 					 *  Konstruktor PartOfWork(String) aufgerufen:
 					 */
-					partOfWork = new PartOfWork(contentOfSubfield);
+					if (containsG) {
+						/*
+						 * RSWK-Daten, enthalten mehrere $p, wenn notwendig:
+						 */
+						actualPartTitle =
+							parseWithoutVersion(composer, contentOfSubfield);
+						partOfWork = new PartOfWork(actualPartTitle);
+					} else {
+						partOfWork = new PartOfWork(contentOfSubfield);
+						final List<MusicTitle> tList =
+							partOfWork.getPartsOfWork();
+						final int partsSize = tList.size();
+						actualPartTitle = tList.get(partsSize - 1);
+					}
 					mTitle.setPartOfWork(partOfWork);
-					final List<MusicTitle> tList = partOfWork.getPartsOfWork();
-					final int partsSize = tList.size();
-					actualPartTitle = tList.get(partsSize - 1);
+
 				} else {
 					/*
 					 * Dann gibt es zwei Möglichkeiten:
@@ -568,13 +614,18 @@ public final class ParseMusicTitle {
 	/**
 	 * @param args nichts.
 	 * @throws IOException 
+	 * @throws IllFormattedLineException 
 	 */
-	public static void main(final String[] args) throws IOException {
+	public static void main(final String[] args)
+			throws IOException,
+			IllFormattedLineException {
 		final BufferedReader br =
 			new BufferedReader(new InputStreamReader(System.in));
 		System.out.println("Titel bitte eingeben");
 		System.out.println();
-		final MusicTitle mt = ParseMusicTitle.parse("", br.readLine());
+		Line line = LineParser.parse(br.readLine());
+		System.err.println(line);
+		final MusicTitle mt = ParseMusicTitle.parseGNDNew(null, line);
 		System.out.println((TitleUtils.getStructured(mt)));
 	}
 

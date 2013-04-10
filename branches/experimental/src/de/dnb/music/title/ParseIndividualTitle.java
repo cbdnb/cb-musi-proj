@@ -30,17 +30,14 @@ public final class ParseIndividualTitle {
 	 */
 
 //@formatter:off
-	// Whitespace oder Kommas oder $g
+	// Whitespace oder Kommas
 	private static Pattern trennPat = 
 			Pattern.compile("\\s*,\\s*" 
 							+ 
 							"|" 
 							+
 							"\\s+" 
-							+
-							"|" 
-							+
-							"\\$g")							
+							)							
 							;
 	//                    =  \s*|\s*,\s+|\$g		\s = Whitespace
 //@formatter:on

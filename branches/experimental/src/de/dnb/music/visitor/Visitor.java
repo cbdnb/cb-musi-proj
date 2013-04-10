@@ -3,6 +3,7 @@ package de.dnb.music.visitor;
 import de.dnb.music.additionalInformation.DateOfComposition;
 import de.dnb.music.additionalInformation.Key;
 import de.dnb.music.additionalInformation.OpusNumber;
+import de.dnb.music.additionalInformation.Qualifier;
 import de.dnb.music.additionalInformation.SerialNumber;
 import de.dnb.music.additionalInformation.ThematicIndexNumber;
 import de.dnb.music.genre.Genre;
@@ -117,8 +118,11 @@ public abstract class Visitor {
 	}
 
 	public void visit(Comment comment) {
-		// TODO Auto-generated method stub
-		
+		// default		
+	}
+
+	public void visit(Qualifier qualifier) {
+		// default		
 	}
 
 }

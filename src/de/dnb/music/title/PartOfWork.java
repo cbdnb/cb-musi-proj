@@ -1,7 +1,5 @@
 package de.dnb.music.title;
 
-import static java.lang.System.out;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -9,22 +7,22 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import utils.StringUtils;
-import utils.TitleUtils;
+import applikationsbausteine.RangeCheckUtils;
 
+import utils.StringUtils;
 import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.Visitor;
 
 public class PartOfWork implements TitleElement {
 
 	private final List<MusicTitle> partsOfWork;
-	private LinkedList<String> vermuteteTeile;
+	private LinkedList<String> assumedParts;
 
 	public final List<MusicTitle> getPartsOfWork() {
 		return Collections.unmodifiableList(partsOfWork);
 	}
 
-	public final void addPartOfWork(MusicTitle mt) {
+	public final void addPartOfWork(final MusicTitle mt) {
 		if (mt == null)
 			throw new IllegalArgumentException(
 					"addPartOfWork(): übergebener MusicTitle ist null");
@@ -35,11 +33,17 @@ public class PartOfWork implements TitleElement {
 	 * @param titleList StringListe der Werkteile.
 	 */
 	public PartOfWork(final List<MusicTitle> titleList) {
-		if (titleList == null || titleList.size() == 0)
-			throw new IllegalArgumentException(
-					"Liste der Werkteile muss mindestens "
-						+ "ein Element enthalten");
+		RangeCheckUtils.assertCollectionParamNotNullOrEmpty("titleList",
+				titleList);
 		this.partsOfWork = titleList;
+	}
+
+	/**
+	 * @param titleList StringListe der Werkteile.
+	 */
+	public PartOfWork(MusicTitle... titles) {
+		this(
+				Arrays.asList(titles));
 	}
 
 	/**
@@ -51,7 +55,7 @@ public class PartOfWork implements TitleElement {
 	private FormalTitle findLongestMatchingFT() {
 		FormalTitle fTitle = null;
 		String ft = "";
-		for (Iterator<String> iterator = vermuteteTeile.iterator(); iterator
+		for (Iterator<String> iterator = assumedParts.iterator(); iterator
 				.hasNext();) {
 			String possiblePart = iterator.next();
 			ft += possiblePart;
@@ -109,7 +113,7 @@ public class PartOfWork implements TitleElement {
 	public PartOfWork(final String werkteilString) {
 		if (werkteilString == null)
 			throw new IllegalArgumentException("Leerer Werkteilstring");
-		vermuteteTeile = StringUtils.splitPartsOfWork(werkteilString);
+		assumedParts = StringUtils.splitPartsOfWork(werkteilString);
 		partsOfWork = new LinkedList<MusicTitle>();
 		FormalTitle formalT = findLongestMatchingFT();
 		while (formalT != null) {
@@ -118,7 +122,7 @@ public class PartOfWork implements TitleElement {
 		}
 		// Rest als Individualtitel auffassen
 		String indivString = "";
-		for (Iterator<String> iterator = vermuteteTeile.iterator(); iterator
+		for (Iterator<String> iterator = assumedParts.iterator(); iterator
 				.hasNext();) {
 			indivString += iterator.next();
 			if (iterator.hasNext()) {

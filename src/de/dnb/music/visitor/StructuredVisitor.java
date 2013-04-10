@@ -4,6 +4,7 @@ import utils.StringUtils;
 import de.dnb.music.additionalInformation.DateOfComposition;
 import de.dnb.music.additionalInformation.Key;
 import de.dnb.music.additionalInformation.OpusNumber;
+import de.dnb.music.additionalInformation.Qualifier;
 import de.dnb.music.additionalInformation.SerialNumber;
 import de.dnb.music.additionalInformation.ThematicIndexNumber;
 import de.dnb.music.genre.Genre;
@@ -142,14 +143,16 @@ public class StructuredVisitor extends Visitor {
 		structured +=
 			indentation + "Sonst. Z: " + serialNumber.getPhrase()
 				+ serialNumber.getSerialNumber();
+	}
 
+	public void visit(Qualifier qualifier) {
+		structured += indentation + "Homonymzusatz: " + qualifier.toString();
 	}
 
 	public void visit(ThematicIndexNumber thematicIndexNumber) {
 		structured +=
-			indentation + "Werkverz: "
-				+ thematicIndexNumber.getAbbreviation() + " " +
-				thematicIndexNumber.getNumber();
+			indentation + "Werkverz: " + thematicIndexNumber.getAbbreviation()
+				+ " " + thematicIndexNumber.getNumber();
 	}
 
 	public boolean visit(GenreList genreList) {
@@ -178,8 +181,7 @@ public class StructuredVisitor extends Visitor {
 
 	public void visit(Instrument instrument) {
 		structured +=
-			indentation + instrument.getCount() + "-mal "
-				+ instrument.getSwd();
+			indentation + instrument.getCount() + "-mal " + instrument.getSwd();
 	}
 
 	public void visit(Arrangement arrangement) {
@@ -187,11 +189,9 @@ public class StructuredVisitor extends Visitor {
 			'\n' + indentation + "Bearbeitungsvermerk: "
 				+ arrangement.toString();
 	}
-	
+
 	public void visit(Comment comment) {
-		structured +=
-			'\n' + indentation + "Kommentar: "
-				+ comment.toString();
+		structured += '\n' + indentation + "Kommentar: " + comment.toString();
 	}
 
 	public boolean visit(PartOfWork partOfWork) {

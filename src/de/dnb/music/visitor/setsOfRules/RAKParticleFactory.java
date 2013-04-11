@@ -63,6 +63,10 @@ public class RAKParticleFactory extends AbstractParticleFactory {
 		preArrgmt = " / ";
 		
 		preComment = "; nicht definierter Kommentar: ";
+		
+		preQualifier = "; nicht definierter Zusatz: ";
+		
+		postQualifier = "";
 
 	}
 }

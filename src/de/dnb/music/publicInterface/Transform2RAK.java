@@ -76,7 +76,7 @@ public final class Transform2RAK {
 		inhalt130 = inhalt130.replace("$g", "$p");
 		//		System.err.println(inhalt430);
 
-		MusicTitle mt = ParseMusicTitle.parse(null, inhalt130);
+		MusicTitle mt = ParseMusicTitle.parseFullRAK(null, inhalt130);
 		String comment = "R:Ansetzung nach RAK-Musik";
 		mt.setComment(null);
 

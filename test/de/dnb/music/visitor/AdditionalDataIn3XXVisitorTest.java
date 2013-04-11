@@ -22,7 +22,7 @@ public class AdditionalDataIn3XXVisitorTest {
 	@Test
 	public final void testAll() {
 		mt =
-			ParseMusicTitle.parse(null,
+			ParseMusicTitle.parseFullRAK(null,
 					"Adagio und Fuge, Vl 1 2 Va 1 2, C-Dur"
 						+ "<aa Nr. 2>. Op. 2");
 		mt.accept(vis);
@@ -34,7 +34,7 @@ public class AdditionalDataIn3XXVisitorTest {
 	@Test
 	public final void testVisitDoubleDateOfComposition() {
 		mt =
-			ParseMusicTitle.parse(null, "Stücke, Tb Kl, 1966. Fassung 2008");
+			ParseMusicTitle.parseFullRAK(null, "Stücke, Tb Kl, 1966. Fassung 2008");
 		mt.accept(vis);
 		assertFalse(vis.toString().contains("548 $c1966$4dats"));
 		assertTrue(vis.toString().contains("548 $c2008$4dats"));
@@ -52,7 +52,7 @@ public class AdditionalDataIn3XXVisitorTest {
 	@Test
 	public final void testVisitDoubleKey() {
 		mt =
-			ParseMusicTitle.parse(null,
+			ParseMusicTitle.parseFullRAK(null,
 					"Sonaten, Fl 1 2 Bc, B-Dur <aa, C-Dur>");
 		mt.accept(vis);
 		assertTrue(vis.toString().contains("384 C-Dur"));

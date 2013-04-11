@@ -126,7 +126,7 @@ public class ExampleVisitor extends Visitor {
 	 */
 	public static void main(String[] args) {
 		MusicTitle mt =
-			ParseMusicTitle.parse(null, "Adaagio und Fuge, Vl 1 2 Va 1 2"
+			ParseMusicTitle.parseFullRAK(null, "Adaagio und Fuge, Vl 1 2 Va 1 2"
 				+ "<Fuge KV 5a, Durchführung 1>. Fassung Vl, Kl");
 		ExampleVisitor vis = new ExampleVisitor();
 		mt.accept(vis);

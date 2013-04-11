@@ -22,44 +22,37 @@ public class ParseMusicTitleTest {
 		titleStr = "aa$gbb";
 		mt = ParseMusicTitle.parseGND(null, titleStr);
 		assertEquals(titleStr, TitleUtils.getGND130Or430(mt));		
-		mt = ParseMusicTitle.parse(null, titleStr);
+		mt = ParseMusicTitle.parseFullRAK(null, titleStr);
 		assertEquals(titleStr, TitleUtils.getGND130Or430(mt));
 		
 		titleStr = "aa$gNr. 1";
 		mt = ParseMusicTitle.parseGND(null, titleStr);
 		assertEquals("aa$nNr. 1", TitleUtils.getGND130Or430(mt));		
-		mt = ParseMusicTitle.parse(null, titleStr);
+		mt = ParseMusicTitle.parseFullRAK(null, titleStr);
 		assertEquals("aa$nNr. 1", TitleUtils.getGND130Or430(mt));
 		
 		titleStr = "aa$g1234";
 		mt = ParseMusicTitle.parseGND(null, titleStr);
 		assertEquals("aa$f1234", TitleUtils.getGND130Or430(mt));
-		mt = ParseMusicTitle.parse(null, titleStr);
+		mt = ParseMusicTitle.parseFullRAK(null, titleStr);
 		assertEquals("aa$f1234", TitleUtils.getGND130Or430(mt));
 		
 		titleStr = "Adagio, Violine$g1234";
 		mt = ParseMusicTitle.parseGND(null, titleStr);
 		assertEquals("Adagio$mVl$f1234", TitleUtils.getGND130Or430(mt));
-		mt = ParseMusicTitle.parse(null, titleStr);
+		mt = ParseMusicTitle.parseFullRAK(null, titleStr);
 		assertEquals("Adagio$mVl$f1234", TitleUtils.getGND130Or430(mt));
-		
-		// $g nach $m muss nicht erkannt werden, da Mix aus Alt und Neu:
-		titleStr = "Adagio$mVl$g1234";
-		mt = ParseMusicTitle.parseGND(null, titleStr);
-		assertEquals("Adagio$mVl", TitleUtils.getGND130Or430(mt));
-		mt = ParseMusicTitle.parse(null, titleStr);
-		assertEquals("Adagio$mVl", TitleUtils.getGND130Or430(mt));
 		
 		titleStr = "Adagio$g1234";
 		mt = ParseMusicTitle.parseGND(null, titleStr);
 		assertEquals("Adagio$f1234", TitleUtils.getGND130Or430(mt));
-		mt = ParseMusicTitle.parse(null, titleStr);
+		mt = ParseMusicTitle.parseFullRAK(null, titleStr);
 		assertEquals("Adagio$f1234", TitleUtils.getGND130Or430(mt));
 		
 		titleStr = "Adagio$g1";
 		mt = ParseMusicTitle.parseGND(null, titleStr);
 		assertEquals("Adagio$n1", TitleUtils.getGND130Or430(mt));
-		mt = ParseMusicTitle.parse(null, titleStr);
+		mt = ParseMusicTitle.parseFullRAK(null, titleStr);
 		assertEquals("Adagio$n1", TitleUtils.getGND130Or430(mt));
 		mt = ParseFormalTitle.parse(null, titleStr);
 		assertEquals("Adagio$n1", TitleUtils.getGND130Or430(mt));
@@ -67,7 +60,7 @@ public class ParseMusicTitleTest {
 		titleStr = "Adagio$gNr. 1";
 		mt = ParseMusicTitle.parseGND(null, titleStr);
 		assertEquals("Adagio$nNr. 1", TitleUtils.getGND130Or430(mt));
-		mt = ParseMusicTitle.parse(null, titleStr);
+		mt = ParseMusicTitle.parseFullRAK(null, titleStr);
 		assertEquals("Adagio$nNr. 1", TitleUtils.getGND130Or430(mt));
 		mt = ParseFormalTitle.parse(null, titleStr);
 		assertEquals("Adagio$nNr. 1", TitleUtils.getGND130Or430(mt));
@@ -75,7 +68,7 @@ public class ParseMusicTitleTest {
 		titleStr = "aa$g1";
 		mt = ParseMusicTitle.parseGND(null, titleStr);
 		assertEquals("aa$n1", TitleUtils.getGND130Or430(mt));
-		mt = ParseMusicTitle.parse(null, titleStr);
+		mt = ParseMusicTitle.parseFullRAK(null, titleStr);
 		assertEquals("aa$n1", TitleUtils.getGND130Or430(mt));
 	}
 
@@ -183,7 +176,7 @@ public class ParseMusicTitleTest {
 
 	@Test
 	public void testParseMitOrdnungshilfeUndGruppe() {
-		mt = ParseMusicTitle.parse(null, "Stücke, Vl Kl, op. 50 <Bauerntanz>");
+		mt = ParseMusicTitle.parseFullRAK(null, "Stücke, Vl Kl, op. 50 <Bauerntanz>");
 		assertEquals("130 Stücke$mVl$mKl$nop. 50$pBauerntanz",
 				TitleUtils.getGND1XXPlusTag(mt));
 		assertEquals("530 Stücke$mVl$mKl$nop. 50$4obpa",
@@ -191,14 +184,14 @@ public class ParseMusicTitleTest {
 
 		mt =
 			ParseMusicTitle
-					.parse(null, "Das @befreite Deutschland <Ouvertüre>");
+					.parseFullRAK(null, "Das @befreite Deutschland <Ouvertüre>");
 		assertEquals("130 Das @befreite Deutschland$pOuvertüre",
 				TitleUtils.getGND1XXPlusTag(mt));
 		assertEquals("530 Das @befreite Deutschland$4obpa",
 				TitleUtils.getGND530(mt, true));
 
 		mt =
-			ParseMusicTitle.parse(null,
+			ParseMusicTitle.parseFullRAK(null,
 					"Sonaten, Vl Bc, 1716 <Sonate Nr. 9, 1. Satz>");
 		assertEquals("130 Sonaten$mVl$mBc$f1716$pSonate$nNr. 9$p1. Satz",
 				TitleUtils.getGND1XXPlusTag(mt));
@@ -206,7 +199,7 @@ public class ParseMusicTitleTest {
 				TitleUtils.getGND530(mt, true));
 
 		mt =
-			ParseMusicTitle.parse(null,
+			ParseMusicTitle.parseFullRAK(null,
 					"Sonaten, Kl, Hob 16,35 - 39 <Sonate Hob 16,35>");
 		assertEquals("130 Sonaten$mKl$nHob 16,35 - 39$pSonate$nHob 16,35",
 				TitleUtils.getGND1XXPlusTag(mt));
@@ -214,7 +207,7 @@ public class ParseMusicTitleTest {
 				TitleUtils.getGND530(mt, true));
 
 		mt =
-			ParseMusicTitle.parse(null, "Das @wohltemperierte Klavier, Teil 1 "
+			ParseMusicTitle.parseFullRAK(null, "Das @wohltemperierte Klavier, Teil 1 "
 				+ "<Präludium und Fuge BWV 861, Fuge>");
 		assertEquals("130 Das @wohltemperierte Klavier$nTeil 1"
 			+ "$pPräludium und Fuge$nBWV 861$pFuge",
@@ -224,7 +217,7 @@ public class ParseMusicTitleTest {
 				TitleUtils.getGND530(mt, true));
 
 		mt =
-			ParseMusicTitle.parse(null,
+			ParseMusicTitle.parseFullRAK(null,
 					"Sonaten, Org, BWV 525 - 530 <Sonate BWV 528, 2. Satz>");
 		assertEquals(
 				"130 Sonaten$mOrg$nBWV 525 - 530$pSonate$nBWV 528$p2. Satz",
@@ -232,14 +225,14 @@ public class ParseMusicTitleTest {
 		assertEquals("530 Sonaten$mOrg$nBWV 525 - 530$pSonate$nBWV 528$4obpa",
 				TitleUtils.getGND530(mt, true));
 
-		mt = ParseMusicTitle.parse(null, "Kantaten, BWV 35 <Sinfonia 1>");
+		mt = ParseMusicTitle.parseFullRAK(null, "Kantaten, BWV 35 <Sinfonia 1>");
 		assertEquals("130 Kantaten$nBWV 35$pSinfonia 1",
 				TitleUtils.getGND1XXPlusTag(mt));
 		assertEquals("530 Kantaten$nBWV 35$4obpa",
 				TitleUtils.getGND530(mt, true));
 
 		mt =
-			ParseMusicTitle.parse(null,
+			ParseMusicTitle.parseFullRAK(null,
 					"Kwasi & Kwame <Your eyes, so big and sparkling>");
 
 		assertEquals("130 Kwasi & Kwame$pYour eyes, so big and sparkling",
@@ -248,7 +241,7 @@ public class ParseMusicTitleTest {
 
 		mt =
 			ParseMusicTitle
-					.parse(null, "Walzer, Kl 4hdg., op. 39 / Ausw. Arr.");
+					.parseFullRAK(null, "Walzer, Kl 4hdg., op. 39 / Ausw. Arr.");
 
 		assertEquals("130 Walzer$mKl 4hdg.$nop. 39$oAusw. Arr.",
 				TitleUtils.getGND1XXPlusTag(mt));
@@ -259,19 +252,19 @@ public class ParseMusicTitleTest {
 	@Test
 	public void testParseOhneFassung() {
 		mt =
-			ParseMusicTitle.parseWithoutVersion(null,
+			ParseMusicTitle.parseSimpleTitle(null,
 					"Elegien, Bassetthr Kl (1965)");
 		assertEquals("130 Elegien$mBassetthorn$mKl$f1965",
 				TitleUtils.getGND1XXPlusTag(mt));
 
 		mt =
-			ParseMusicTitle.parseWithoutVersion(null,
+			ParseMusicTitle.parseSimpleTitle(null,
 					"Konzertante Trios, Vl Vc Kl conatum 14");
 		assertEquals("130 Konzertante Trios$mVl$mVc$mKl$nconatum 14",
 				TitleUtils.getGND1XXPlusTag(mt));
 
 		mt =
-			ParseMusicTitle.parseWithoutVersion(null,
+			ParseMusicTitle.parseSimpleTitle(null,
 					"Konzertante Trios, Vl Vc Kl conatum 14");
 		assertEquals("130 Konzertante Trios$mVl$mVc$mKl$nconatum 14",
 				TitleUtils.getGND1XXPlusTag(mt));
@@ -279,37 +272,37 @@ public class ParseMusicTitleTest {
 		assertTrue(TitleUtils.getGND3XX(mt).contains("383 conatum 14"));
 
 		mt =
-			ParseMusicTitle.parseWithoutVersion(null,
+			ParseMusicTitle.parseSimpleTitle(null,
 					"East Eleventh Street New York 10003");
 		assertEquals("130 East Eleventh Street New York 10003",
 				TitleUtils.getGND1XXPlusTag(mt));
 
 		mt =
-			ParseMusicTitle.parseWithoutVersion(null,
+			ParseMusicTitle.parseSimpleTitle(null,
 					"Etüden, Akk linke Hd (1979)");
 		// "linke Hand" ist die Vorzugsbenennung in RAK-M 2003
 		assertEquals("130 Etüden$mAkk linke Hand$f1979",
 				TitleUtils.getGND1XXPlusTag(mt));
 
 		mt =
-			ParseMusicTitle.parseWithoutVersion(null,
+			ParseMusicTitle.parseSimpleTitle(null,
 					"Konzerte, Va d'amore Orch, RV 397");
 		assertEquals("130 Konzerte$mVa d'amore$mOrch$nRV 397",
 				TitleUtils.getGND1XXPlusTag(mt));
 
 		mt =
-			ParseMusicTitle.parseWithoutVersion(null,
+			ParseMusicTitle.parseSimpleTitle(null,
 					"Fantasien, Sopr-Instr. Ten-Instr. Bass-Instr.");
 		assertEquals("130 Fantasien$mSopr-Instr.$mTen-Instr.$mBass-Instr.",
 				TitleUtils.getGND1XXPlusTag(mt));
 
 		mt =
-			ParseMusicTitle.parseWithoutVersion(null,
+			ParseMusicTitle.parseSimpleTitle(null,
 					"Fantasien, Sopr-Instr. Ten-Instr. Bass-Instr.");
 		assertEquals("130 Fantasien$mSopr-Instr.$mTen-Instr.$mBass-Instr.",
 				TitleUtils.getGND1XXPlusTag(mt));
 
-		mt = ParseMusicTitle.parseWithoutVersion(null, "Werke, Kl");
+		mt = ParseMusicTitle.parseSimpleTitle(null, "Werke, Kl");
 		assertEquals("130 Werke$mKl", TitleUtils.getGND1XXPlusTag(mt));
 		assertEquals("Werke, Kl", TitleUtils.getRAK(mt));
 		assertTrue(mt instanceof FormalTitle);

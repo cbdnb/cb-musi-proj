@@ -3,6 +3,7 @@ package de.dnb.music.visitor.setsOfRules;
 import de.dnb.music.additionalInformation.DateOfComposition;
 import de.dnb.music.additionalInformation.Key;
 import de.dnb.music.additionalInformation.OpusNumber;
+import de.dnb.music.additionalInformation.Qualifier;
 import de.dnb.music.additionalInformation.SerialNumber;
 import de.dnb.music.additionalInformation.ThematicIndexNumber;
 import de.dnb.music.genre.GenreList;
@@ -182,6 +183,12 @@ public class WorkTitleVisitor extends Visitor {
 	}
 
 	@Override
+	public void visit(Qualifier qualifier) {
+		lastComponent +=
+			factory.getPreQualifier() + qualifier + factory.getPostQualifier();
+	}
+
+	@Override
 	public void visit(Key key) {
 		switch (state) {
 		case FIRST_PART:
@@ -196,7 +203,7 @@ public class WorkTitleVisitor extends Visitor {
 		default:
 			break;
 		}
-		
+
 	}
 
 	@Override
@@ -214,7 +221,7 @@ public class WorkTitleVisitor extends Visitor {
 		default:
 			break;
 		}
-		
+
 	}
 
 	@Override
@@ -232,7 +239,7 @@ public class WorkTitleVisitor extends Visitor {
 		default:
 			break;
 		}
-		
+
 	}
 
 	@Override
@@ -250,7 +257,7 @@ public class WorkTitleVisitor extends Visitor {
 		default:
 			break;
 		}
-		
+
 	}
 
 	@Override
@@ -280,7 +287,7 @@ public class WorkTitleVisitor extends Visitor {
 		firstComponents += lastComponent;
 		lastComponent = factory.getPreArrgmt() + arrangement;
 	}
-	
+
 	@Override
 	public void visit(Comment comment) {
 		lastComponent += factory.getPreComment() + comment;
@@ -291,7 +298,7 @@ public class WorkTitleVisitor extends Visitor {
 	 */
 	public static void main(final String[] args) {
 		MusicTitle mt =
-			ParseMusicTitle.parse(null, "Quartette <Quartett 1234, aa>");
+			ParseMusicTitle.parseFullRAK(null, "Quartette <Quartett 1234, aa>");
 		WorkTitleVisitor vis = new WorkTitleVisitor(new RAKParticleFactory());
 		mt.accept(vis);
 

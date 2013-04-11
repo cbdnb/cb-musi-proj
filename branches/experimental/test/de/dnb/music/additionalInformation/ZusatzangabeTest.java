@@ -45,7 +45,7 @@ public class ZusatzangabeTest {
 		assertEquals("130 Groovy accordion suite$nno. 1",
 				TitleUtils.getGND1XXPlusTag(mt));
 
-		mt = ParseMusicTitle.parse(null, "Motetten, Buch 5 <Exsultate Deo>");
+		mt = ParseMusicTitle.parseFullRAK(null, "Motetten, Buch 5 <Exsultate Deo>");
 		assertTrue(TitleUtils.getGND1XXPlusTag(mt).startsWith(
 				"130 Motetten$nBuch 5"));
 
@@ -77,7 +77,7 @@ public class ZusatzangabeTest {
 		mt = ParseMusicTitle.parseTitlePlusVersion(null, "Te Deum, 1711");
 		assertEquals("130 Te Deum$f1711", TitleUtils.getGND1XXPlusTag(mt));
 
-		mt = ParseMusicTitle.parse(null, "Stücke, Tb Kl, 1966. Fassung 2008");
+		mt = ParseMusicTitle.parseFullRAK(null, "Stücke, Tb Kl, 1966. Fassung 2008");
 		assertTrue(TitleUtils.getGND1XXPlusTag(mt).contains("$f1966"));
 
 		mt =
@@ -158,7 +158,7 @@ public class ZusatzangabeTest {
 		zus = mt.getAdditionalInformation();
 		assertTrue(TitleUtils.getGND3XX(zus).contains("383 no. 1"));
 
-		mt = ParseMusicTitle.parse(null, "Motetten, Buch 5 <Exsultate Deo>");
+		mt = ParseMusicTitle.parseFullRAK(null, "Motetten, Buch 5 <Exsultate Deo>");
 		zus = mt.getAdditionalInformation();
 		assertTrue(TitleUtils.getGND3XX(zus).contains("383 Buch 5"));
 
@@ -184,7 +184,7 @@ public class ZusatzangabeTest {
 		//		zus = mt.getZusatzangabe();
 		//		assertEquals("383 1 - 3", zus.getGND3XX());
 
-		mt = ParseMusicTitle.parse(null, "... prisme/incidences ..., 2");
+		mt = ParseMusicTitle.parseFullRAK(null, "... prisme/incidences ..., 2");
 		zus = mt.getAdditionalInformation();
 		assertTrue(TitleUtils.getGND3XX(zus).contains("383 2"));
 
@@ -192,7 +192,7 @@ public class ZusatzangabeTest {
 		zus = mt.getAdditionalInformation();
 		assertTrue(TitleUtils.getGND3XX(zus).contains("548 $c1711$4dats"));
 
-		mt = ParseMusicTitle.parse(null, "Stücke, Tb Kl, 1966. Fassung 2008");
+		mt = ParseMusicTitle.parseFullRAK(null, "Stücke, Tb Kl, 1966. Fassung 2008");
 		zus = mt.getAdditionalInformation();
 		assertTrue(TitleUtils.getGND3XX(zus).contains("548 $c1966$4dats"));
 

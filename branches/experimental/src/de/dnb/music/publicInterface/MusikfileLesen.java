@@ -36,7 +36,7 @@ public final class MusikfileLesen {
 			new PrintStream("D:/analysen/temp/mus_strukt1.txt");
 		String s = br.readLine();
 		while (s != null) {
-			MusicTitle tit = ParseMusicTitle.parse("", s);
+			MusicTitle tit = ParseMusicTitle.parseFullRAK("", s);
 
 			String gnd = Transform130.transform2DNB(s);
 			// überzählige Leerzeilen entfernen

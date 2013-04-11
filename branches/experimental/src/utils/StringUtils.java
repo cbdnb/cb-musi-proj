@@ -11,6 +11,8 @@ import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import applikationsbausteine.RangeCheckUtils;
+
 public final class StringUtils {
 
 	private StringUtils() {
@@ -32,20 +34,20 @@ public final class StringUtils {
 			throw new IllegalArgumentException();
 
 		String newRecord;
-		
+
 		/*
 		 * "!" ist ein Trick, da gar kein nachfolgendes Unterfeld 
 		 * erlaubt ist. ($! gibt es nicht):
 		 */
-		newRecord = filter(oldRecord, "169", "!"); 
+		newRecord = filter(oldRecord, "169", "!");
 		newRecord = filter(newRecord, "260", "v");
-		newRecord = filter(newRecord, "372", "wZv");		
-		
-		newRecord = filter(newRecord, "380", "!"); 
+		newRecord = filter(newRecord, "372", "wZv");
+
+		newRecord = filter(newRecord, "380", "!");
 		newRecord = filter(newRecord, "382", "npsv");
 
 		newRecord = filter(newRecord, "5\\d\\d", "vXYZ45");
-		
+
 		newRecord = filter(newRecord, "682", "v");
 		newRecord = filter(newRecord, "689", "v");
 
@@ -296,7 +298,7 @@ public final class StringUtils {
 					"Null-String an containsOrdnungshilfe()übergeben");
 		index1 = s.lastIndexOf('<');
 		if (index1 == -1) {
-			ansetzung = ordnungshilfe = null;
+			ansetzung = ordnungshilfe = fassung = null;
 			return false;
 		}
 
@@ -479,11 +481,10 @@ public final class StringUtils {
 	 * @return
 	 */
 	public static boolean containsSubfields(String contentOfField) {
-		if (contentOfField == null)
-			throw new IllegalArgumentException(
-					"Null-String an containsSubfields()übergeben");
-		final Matcher m = patDollar.matcher(contentOfField);
-		return m.find();
+		RangeCheckUtils.assertStringParamNotNullOrWhitespace("contentOfField",
+				contentOfField);
+		return contentOfField.contains("$")||contentOfField.contains("ƒ");
+		
 	}
 
 	/**

@@ -54,6 +54,10 @@ public class RSWKParticleFactory extends AbstractParticleFactory {
 		preYear = " <";
 
 		postYear = ">";
+		
+		preQualifier = " <";
+
+		postQualifier = ">";
 
 		preParts = "";
 

@@ -153,7 +153,7 @@ public class RecordModel extends Observable {
 
 	public final void addTitle(final String number, final String titleStr) {
 		MusicRecord rec = new MusicRecord(newRecord);
-		MusicTitle title = ParseMusicTitle.parse(null, titleStr);
+		MusicTitle title = ParseMusicTitle.parseFullRAK(null, titleStr);
 		final boolean expansion = true;
 		final boolean forceTotalCount = true;
 		String s;

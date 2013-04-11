@@ -36,6 +36,8 @@ import de.dnb.music.mediumOfPerformance.Instrument;
  *	preKeyParts				" "			"$r" 		" "
  *	preYear					", "		"$f"		" <" 
  *	postYear				""						">"
+ *	preQualifier			?			"$g"		" <"
+ *	postQualifier			?			""			">"
  *	preParts				" <"		""			""
  *	postParts				">"			""			""
  *	preVersion				". "		"$s"		?
@@ -100,6 +102,10 @@ public abstract class AbstractParticleFactory {
 	protected String preYear;
 
 	protected String postYear;
+	
+	protected String preQualifier;
+
+	protected String postQualifier;
 
 	protected String preParts;
 
@@ -185,6 +191,20 @@ public abstract class AbstractParticleFactory {
 
 	public String getPostYear() {
 		return postYear;
+	}
+
+	/**
+	 * @return the preQualifier
+	 */
+	public String getPreQualifier() {
+		return preQualifier;
+	}
+
+	/**
+	 * @return the postQualifier
+	 */
+	public String getPostQualifier() {
+		return postQualifier;
 	}
 
 	public String getPreParts() {

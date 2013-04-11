@@ -209,7 +209,7 @@ public class StructuredVisitor extends Visitor {
 	 */
 	public static void main(String[] args) {
 		MusicTitle mt =
-			ParseMusicTitle.parse(null,
+			ParseMusicTitle.parseFullRAK(null,
 					"Adagio und Fuge, Vl, 1234 <Adagio Vl, aa, dio>. "
 						+ "Fuge, 1234" + " / Arr.");
 		StructuredVisitor vis = new StructuredVisitor();

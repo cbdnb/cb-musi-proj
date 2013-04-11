@@ -54,6 +54,10 @@ public class GNDParticleFactory extends AbstractParticleFactory {
 		preYear = "$f";
 
 		postYear = "";
+		
+		preQualifier = "$g";
+		
+		postQualifier = "";
 
 		preParts = "";
 

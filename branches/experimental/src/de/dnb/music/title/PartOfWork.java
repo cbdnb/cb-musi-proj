@@ -147,7 +147,7 @@ public class PartOfWork implements TitleElement {
 		LinkedList<MusicTitle> titleList = new LinkedList<MusicTitle>();
 		for (String titleString : titleStringList) {
 			titleList.add(ParseMusicTitle
-					.parseWithoutVersion(null, titleString));
+					.parseSimpleTitle(null, titleString));
 		}
 		this.partsOfWork = titleList;
 	}

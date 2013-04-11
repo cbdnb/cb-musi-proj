@@ -37,7 +37,7 @@ public class DNBPortal430Visitor extends WorkTitleVisitor {
 	 */
 	public static void main(final String[] args) {
 		MusicTitle mt =
-			ParseMusicTitle.parse(null,
+			ParseMusicTitle.parseFullRAK(null,
 					"Quartette op. 5 <Quartett op. 5, aa>. Fassung");
 		DNBPortal430Visitor vis = new DNBPortal430Visitor();
 		mt.accept(vis);

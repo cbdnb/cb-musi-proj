@@ -1,5 +1,13 @@
 package utils;
 
+import applikationsbausteine.RangeCheckUtils;
+import de.dnb.gnd.exceptions.IllFormattedLineException;
+import de.dnb.gnd.parser.Format;
+import de.dnb.gnd.parser.Tag;
+import de.dnb.gnd.parser.TagDB;
+import de.dnb.gnd.parser.line.Line;
+import de.dnb.gnd.parser.line.LineParser;
+import de.dnb.music.publicInterface.Constants;
 import de.dnb.music.publicInterface.TransformRecord;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
@@ -154,7 +162,7 @@ public final class TitleUtils {
 		if (musicTitle.containsParts())
 			s +=
 				"\n430 " + getRAK(musicTitle) + "$v"
-					+ TransformRecord.KOM_PORTAL_430;
+					+ Constants.KOM_PORTAL_430;
 		s += "\n" + getGND530(musicTitle, true);
 		return s;
 	}
@@ -183,6 +191,16 @@ public final class TitleUtils {
 			throw new IllegalArgumentException("übergebener Titel ist null");
 		MusicTitle mt = ParseMusicTitle.parseFullRAK(null, titleStr);
 		return getGND130Or430(mt);
+	}
+
+	public static Line getGND(final Tag tag, final String titleStr)
+			throws IllFormattedLineException {
+		RangeCheckUtils.assertReferenceParamNotNull("tag", tag);
+		RangeCheckUtils.assertStringParamNotNullOrWhitespace("titleStr",
+				titleStr);
+		String gnd = getGND(titleStr);
+		Line line = LineParser.parse(tag, Format.PICA3, gnd);
+		return line;
 	}
 
 	/**
@@ -244,9 +262,14 @@ public final class TitleUtils {
 
 	/**
 	 * @param args
+	 * @throws IllFormattedLineException 
 	 */
-	public static void main(String[] args) {
-		System.err.println(isGND(" "));
+	public static void main(String[] args) throws IllFormattedLineException {
+		Tag tag = GNDConstants.TAG_130;
+		Line line =
+			getGND(tag,
+					"Adagio und Fuge Vl 1 2 Va KV 5 " +
+					"<Fuge KV 5a, Durchführung 1>. Fassung Kl / Arr.");
+		System.out.println(line);
 	}
-
 }

@@ -29,12 +29,14 @@ public class AdditionalDataIn3XXVisitorTest {
 		assertTrue(vis.toString().contains("383 $bOp. 2"));
 		assertTrue(vis.toString().contains("383 Nr. 2"));
 		assertTrue(vis.toString().contains("384 C-Dur"));
+
 	}
 
 	@Test
 	public final void testVisitDoubleDateOfComposition() {
 		mt =
-			ParseMusicTitle.parseFullRAK(null, "Stücke, Tb Kl, 1966. Fassung 2008");
+			ParseMusicTitle.parseFullRAK(null,
+					"Stücke, Tb Kl, 1966. Fassung 2008");
 		mt.accept(vis);
 		assertFalse(vis.toString().contains("548 $c1966$4dats"));
 		assertTrue(vis.toString().contains("548 $c2008$4dats"));
@@ -61,8 +63,7 @@ public class AdditionalDataIn3XXVisitorTest {
 
 	@Test
 	public final void testVisitOpusNumber() {
-		mt =
-			ParseMusicTitle.parseTitlePlusVersion(null, "Ave Maria, op. 24");
+		mt = ParseMusicTitle.parseTitlePlusVersion(null, "Ave Maria, op. 24");
 		mt.accept(vis);
 		assertTrue(vis.toString().contains("383 $bop. 24"));
 	}

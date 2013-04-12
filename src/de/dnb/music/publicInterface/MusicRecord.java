@@ -4,6 +4,7 @@
 package de.dnb.music.publicInterface;
 
 import java.util.LinkedHashSet;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -11,6 +12,7 @@ import java.util.TreeMap;
 
 import utils.Pair;
 import utils.StringUtils;
+import static de.dnb.music.publicInterface.Constants.*;
 
 /**
  * 
@@ -114,24 +116,24 @@ public class MusicRecord {
 	 */
 	public String normalized() {
 		String norm = this.toString();
-		norm = norm.replaceAll("\\$v" + TransformRecord.KOM_NACH_2003, "");
-		norm = norm.replaceAll("\\$v" + TransformRecord.KOM_VOR_2003, "");
+		norm = norm.replaceAll("\\$v" + KOM_NACH_2003, "");
+		norm = norm.replaceAll("\\$v" + KOM_VOR_2003, "");
 		
 		norm =
-			norm.replaceAll("\\$v" + TransformRecord.KOM_MASCHINELL_NACH_2003,
+			norm.replaceAll("\\$v" + KOM_MASCHINELL_NACH_2003,
 					"");
 		norm =
-			norm.replaceAll("\\$v" + TransformRecord.KOM_MASCHINELL_VOR_2003,
+			norm.replaceAll("\\$v" + KOM_MASCHINELL_VOR_2003,
 					"");
-		norm = norm.replaceAll("\\$v" + TransformRecord.KOM_MASCHINELL, "");
+		norm = norm.replaceAll("\\$v" + KOM_MASCHINELL, "");
 		norm =
-			norm.replaceAll("667 " + TransformRecord.VORZ_BEN_AUFGEARB + "\n",
+			norm.replaceAll("667 " + VORZ_BEN_AUFGEARB + "\n",
 					"");
-		norm = norm.replaceAll("667 " + TransformRecord.SATZ_AUFG + "\n", "");
-		norm = norm.replaceAll("667 " + TransformRecord.MASCH_AUFG + "\n", "");
-		norm = norm.replaceAll("667 " + TransformRecord.GEW_INTELL + "\n", "");
-		norm = norm.replaceAll("667 " + TransformRecord.GEW_MASCH + "\n", "");
-		norm = norm.replaceAll("667 " + TransformRecord.VERL_MASCH + "\n", "");
+		norm = norm.replaceAll("667 " + SATZ_AUFG + "\n", "");
+		norm = norm.replaceAll("667 " + MASCH_AUFG + "\n", "");
+		norm = norm.replaceAll("667 " + GEW_INTELL + "\n", "");
+		norm = norm.replaceAll("667 " + GEW_MASCH + "\n", "");
+		norm = norm.replaceAll("667 " + VERL_MASCH + "\n", "");
 		norm = norm.trim();
 
 		return norm;

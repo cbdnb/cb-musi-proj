@@ -15,8 +15,6 @@ import de.dnb.music.genre.GenreListTest;
 import de.dnb.music.genre.ParseGenreTest;
 import de.dnb.music.mediumOfPerformance.InstrumentDBTest;
 import de.dnb.music.mediumOfPerformance.ParseInstrumentationTest;
-import de.dnb.music.publicInterface.Transform130Test;
-import de.dnb.music.publicInterface.TransformRecord;
 import de.dnb.music.publicInterface.TransformRecordTest;
 import de.dnb.music.title.ParseMusicTitleTest;
 import de.dnb.music.title.PartOfWorkTest;
@@ -29,11 +27,10 @@ import de.dnb.music.visitor.AuthorityDataIn3XXVisitorTest;
 @SuiteClasses({ InstrumentDBTest.class, ParseInstrumentationTest.class,
 	GenreDBTest.class, ParseGenreTest.class, TonartTest.class,
 	ZusatzangabeTest.class, ParseGenreTest.class, ParseMusicTitleTest.class,
-	ParseVersionTest.class, VersionTest.class, Transform130Test.class,
-	StringUtilsTest.class, GenreListTest.class, PartOfWorkTest.class,
+	ParseVersionTest.class, VersionTest.class, StringUtilsTest.class,
+	GenreListTest.class, PartOfWorkTest.class,
 	AuthorityDataIn3XXVisitorTest.class, AdditionalDataIn3XXVisitorTest.class,
-	ThematicIndexDBTest.class, TransformRecordTest.class, 
-	TitleUtilsTest.class })
+	ThematicIndexDBTest.class, TransformRecordTest.class, TitleUtilsTest.class })
 public class AllTests {
 	// Body nicht nötig
 }

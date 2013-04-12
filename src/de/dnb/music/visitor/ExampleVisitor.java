@@ -3,6 +3,7 @@ package de.dnb.music.visitor;
 import de.dnb.music.additionalInformation.DateOfComposition;
 import de.dnb.music.additionalInformation.Key;
 import de.dnb.music.additionalInformation.OpusNumber;
+import de.dnb.music.additionalInformation.Qualifier;
 import de.dnb.music.additionalInformation.SerialNumber;
 import de.dnb.music.additionalInformation.ThematicIndexNumber;
 import de.dnb.music.genre.Genre;
@@ -74,6 +75,12 @@ public class ExampleVisitor extends Visitor {
 				.println("de.dnb.music.visitor.ExampleVisitor.visit(ThematicIndexNumber)");
 	}
 
+	@Override
+	public void visit(Qualifier qualifier) {
+		System.out
+				.println("de.dnb.music.visitor.ExampleVisitor.visit(Qualifier)");
+	}
+
 	public boolean visit(GenreList genreList) {
 		System.out
 				.println("de.dnb.music.visitor.ExampleVisitor.visit(GenreList)");
@@ -126,8 +133,9 @@ public class ExampleVisitor extends Visitor {
 	 */
 	public static void main(String[] args) {
 		MusicTitle mt =
-			ParseMusicTitle.parseFullRAK(null, "Adaagio und Fuge, Vl 1 2 Va 1 2"
-				+ "<Fuge KV 5a, Durchführung 1>. Fassung Vl, Kl");
+			ParseMusicTitle.parseFullRAK(null,
+					"Adaagio und Fuge, Vl 1 2 Va 1 2"
+						+ "<Fuge KV 5a, Durchführung 1>. Fassung Vl, Kl");
 		ExampleVisitor vis = new ExampleVisitor();
 		mt.accept(vis);
 

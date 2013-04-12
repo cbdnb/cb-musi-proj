@@ -15,9 +15,9 @@ import utils.TitleUtils;
 import de.dnb.music.additionalInformation.Composer;
 import de.dnb.music.genre.Genre;
 import de.dnb.music.mediumOfPerformance.Instrument;
+import de.dnb.music.publicInterface.Constants.TransformMode;
 import de.dnb.music.publicInterface.MusicRecord;
 import de.dnb.music.publicInterface.TransformRecord;
-import de.dnb.music.publicInterface.TransformRecord.TransformMode;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
 

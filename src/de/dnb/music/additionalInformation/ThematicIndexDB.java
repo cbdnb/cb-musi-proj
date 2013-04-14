@@ -8,8 +8,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 
-import de.dnb.music.genre.Genre;
-
 import utils.StringUtils;
 
 public final class ThematicIndexDB {

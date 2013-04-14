@@ -10,6 +10,8 @@ import java.util.zip.ZipEntry;
 
 import javax.swing.JOptionPane;
 
+import applikationsbausteine.FileUtils;
+
 import utils.StringUtils;
 import utils.TitleUtils;
 
@@ -118,9 +120,9 @@ public class TitleModel extends Observable {
 			/*
 			 * fileStr enthält nun nur noch den Pfad der eigenen jar-Datei
 			 */
-
+			JarFile jarFile = null;
 			try {
-				JarFile jarFile = new JarFile(fileStr);
+				jarFile = new JarFile(fileStr);
 				ZipEntry zEnt = jarFile.getEntry("META-INF/MANIFEST.MF");
 				creationDate = new Date(zEnt.getTime());
 			} catch (Exception e) {
@@ -130,6 +132,8 @@ public class TitleModel extends Observable {
 
 				JOptionPane.showMessageDialog(null, e.getMessage(),
 						"Fehler beim Datum", JOptionPane.OK_CANCEL_OPTION);
+			} finally {
+				FileUtils.safeClose(jarFile);
 			}
 
 		}

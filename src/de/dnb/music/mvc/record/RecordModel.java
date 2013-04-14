@@ -10,6 +10,8 @@ import java.util.zip.ZipEntry;
 
 import javax.swing.JOptionPane;
 
+import applikationsbausteine.FileUtils;
+
 import utils.StringUtils;
 import utils.TitleUtils;
 import de.dnb.music.additionalInformation.Composer;
@@ -77,9 +79,9 @@ public class RecordModel extends Observable {
 			/*
 			 * fileStr enthält nun nur noch den Pfad der eigenen jar-Datei
 			 */
-
+			JarFile jarFile = null;
 			try {
-				JarFile jarFile = new JarFile(fileStr);
+				jarFile = new JarFile(fileStr);
 				ZipEntry zEnt = jarFile.getEntry("META-INF/MANIFEST.MF");
 				creationDate = new Date(zEnt.getTime());
 			} catch (Exception e) {
@@ -90,6 +92,8 @@ public class RecordModel extends Observable {
 				stackTrace = sw.toString();
 				JOptionPane.showMessageDialog(null, e.getMessage(),
 						"Fehler beim Datum", JOptionPane.OK_CANCEL_OPTION);
+			} finally {
+				FileUtils.safeClose(jarFile);
 			}
 
 		}
@@ -158,15 +162,15 @@ public class RecordModel extends Observable {
 		final boolean forceTotalCount = true;
 		String s;
 		try {
-			s = number + " " + TitleUtils.getGND130Or430(title) + "\n"
-				+ TitleUtils.getGND3XX(title, expansion, forceTotalCount);
+			s =
+				number + " " + TitleUtils.getGND130Or430(title) + "\n"
+					+ TitleUtils.getGND3XX(title, expansion, forceTotalCount);
 		} catch (Exception e) {
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
 			e.printStackTrace(pw);
 
-			stackTrace =
-				oldRecord + "\n\n----------------\n\n" + sw.toString();
+			stackTrace = oldRecord + "\n\n----------------\n\n" + sw.toString();
 			JOptionPane.showMessageDialog(null, e.getMessage(),
 					"Fehler bei der Eingabe", JOptionPane.OK_CANCEL_OPTION);
 			return;

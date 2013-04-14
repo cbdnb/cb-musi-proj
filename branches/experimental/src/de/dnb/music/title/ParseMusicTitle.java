@@ -3,7 +3,6 @@ package de.dnb.music.title;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -312,19 +311,18 @@ public final class ParseMusicTitle {
 	 * @return	gültigen Musiktitel oder null
 	 * 
 	 */
-	@SuppressWarnings("null")
-	// wegen partOfWork.addPartOfWork() in case 'p':
-	//@formatter:on
-			public static
-			MusicTitle
-			parseGND(final String composer, final List<Subfield> subfields) {
+	public static MusicTitle parseGND(
+			final String composer,
+			final List<Subfield> subfields) {
 		RangeCheckUtils.assertCollectionParamNotNullOrEmpty("value", subfields);
+
 		final IPredicate<Subfield> dollarGPred = new IPredicate<Subfield>() {
 			@Override
 			public boolean accept(final Subfield element) {
 				return element.getIndicator() == TagDB.dollarg;
 			}
 		};
+		
 		final boolean containsG =
 			FilterUtils.find(subfields, dollarGPred) != null;
 

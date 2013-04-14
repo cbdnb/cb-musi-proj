@@ -4,11 +4,9 @@ import applikationsbausteine.RangeCheckUtils;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
 import de.dnb.gnd.parser.Format;
 import de.dnb.gnd.parser.Tag;
-import de.dnb.gnd.parser.TagDB;
 import de.dnb.gnd.parser.line.Line;
 import de.dnb.gnd.parser.line.LineParser;
 import de.dnb.music.publicInterface.Constants;
-import de.dnb.music.publicInterface.TransformRecord;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
 import de.dnb.music.visitor.AdditionalDataIn3XXVisitor;
@@ -161,8 +159,7 @@ public final class TitleUtils {
 				+ getGND3XX(musicTitle, expansion, forceTotalCount);
 		if (musicTitle.containsParts())
 			s +=
-				"\n430 " + getRAK(musicTitle) + "$v"
-					+ Constants.KOM_PORTAL_430;
+				"\n430 " + getRAK(musicTitle) + "$v" + Constants.KOM_PORTAL_430;
 		s += "\n" + getGND530(musicTitle, true);
 		return s;
 	}
@@ -208,7 +205,7 @@ public final class TitleUtils {
 	 * @param titleStr Titel nicht null.
 	 * @return	true, wenn titleStr nach GND-Regeln gebildet ist, false sonst.
 	 */
-	public static boolean isGND(String titleStr) {
+	public static boolean isGND(final String titleStr) {
 		if (titleStr == null)
 			throw new IllegalArgumentException("übergebener Titel ist null");
 		return isConformToRules(titleStr, new GNDParticleFactory());
@@ -267,9 +264,8 @@ public final class TitleUtils {
 	public static void main(String[] args) throws IllFormattedLineException {
 		Tag tag = GNDConstants.TAG_130;
 		Line line =
-			getGND(tag,
-					"Adagio und Fuge Vl 1 2 Va KV 5 " +
-					"<Fuge KV 5a, Durchführung 1>. Fassung Kl / Arr.");
+			getGND(tag, "Adagio und Fuge Vl 1 2 Va KV 5 "
+				+ "<Fuge KV 5a, Durchführung 1>. Fassung Kl / Arr.");
 		System.out.println(line);
 	}
 }

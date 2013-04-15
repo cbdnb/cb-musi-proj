@@ -10,7 +10,6 @@ import de.dnb.music.genre.GenreList;
 import de.dnb.music.mediumOfPerformance.Instrument;
 import de.dnb.music.mediumOfPerformance.InstrumentationList;
 import de.dnb.music.title.Arrangement;
-import de.dnb.music.title.Comment;
 import de.dnb.music.title.FormalTitle;
 import de.dnb.music.title.IndividualTitle;
 import de.dnb.music.title.MusicTitle;
@@ -286,11 +285,6 @@ public class WorkTitleVisitor extends Visitor {
 		state = States.ARRANGEMENT;
 		firstComponents += lastComponent;
 		lastComponent = factory.getPreArrgmt() + arrangement;
-	}
-
-	@Override
-	public void visit(Comment comment) {
-		lastComponent += factory.getPreComment() + comment;
 	}
 
 	/**

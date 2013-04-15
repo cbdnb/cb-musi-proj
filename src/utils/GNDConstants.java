@@ -14,20 +14,20 @@ public class GNDConstants {
 
 	public static final Tag TAG_730 = TagDB.findTag("730");
 
-	public static final Indicator DOLLAR_A = TAG_130.getIndicator('a', false);
+	public static final Indicator DOLLAR_a = TAG_130.getIndicator('a', false);
 
-	public static final Indicator DOLLAR_F = TAG_130.getIndicator('f', false);
+	public static final Indicator DOLLAR_f = TAG_130.getIndicator('f', false);
 	
-	public static final Indicator DOLLAR_M = TAG_130.getIndicator('m', false);
+	public static final Indicator DOLLAR_m = TAG_130.getIndicator('m', false);
 
-	public static final Indicator DOLLAR_N = TAG_130.getIndicator('n', false);
+	public static final Indicator DOLLAR_n = TAG_130.getIndicator('n', false);
 
-	public static final Indicator DOLLAR_O = TAG_130.getIndicator('o', false);
+	public static final Indicator DOLLAR_o = TAG_130.getIndicator('o', false);
 
-	public static final Indicator DOLLAR_P = TAG_130.getIndicator('p', false);
+	public static final Indicator DOLLAR_p = TAG_130.getIndicator('p', false);
 
-	public static final Indicator DOLLAR_R = TAG_130.getIndicator('r', false);
+	public static final Indicator DOLLAR_r = TAG_130.getIndicator('r', false);
 
-	public static final Indicator DOLLAR_S = TAG_130.getIndicator('s', false);
+	public static final Indicator DOLLAR_s = TAG_130.getIndicator('s', false);
 
 }

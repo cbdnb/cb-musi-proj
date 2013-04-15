@@ -3,8 +3,8 @@ package de.dnb.music.genre;
 import java.util.Set;
 import java.util.TreeSet;
 
+import de.dnb.gnd.utils.Pair;
 import de.dnb.music.mediumOfPerformance.Instrument;
-import utils.Pair;
 import utils.StringUtils;
 
 /**

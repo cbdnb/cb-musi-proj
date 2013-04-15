@@ -3,7 +3,7 @@ package de.dnb.music.mediumOfPerformance;
 import java.util.Set;
 import java.util.TreeSet;
 
-import utils.Pair;
+import de.dnb.gnd.utils.Pair;
 import utils.StringUtils;
 
 /**

@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-import utils.Pair;
+import de.dnb.gnd.utils.Pair;
+
 import utils.StringUtils;
 import static de.dnb.music.publicInterface.Constants.*;
 

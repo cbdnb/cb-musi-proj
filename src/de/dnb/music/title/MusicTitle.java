@@ -30,8 +30,6 @@ public abstract class MusicTitle implements TitleElement {
 	//	In der Form: " / Arr."
 	protected Arrangement arrangement = null;
 
-	protected Comment comment = null;
-
 	//----------------------------------------------
 
 	public final GenreList getGenreList() {
@@ -102,26 +100,6 @@ public abstract class MusicTitle implements TitleElement {
 		return arrangement != null;
 	}
 
-	public final Comment getComment() {
-		return comment;
-	}
-
-	/**
-	 * Setzt den Kommentar.
-	 * 
-	 * @param comment	Kommentar.
-	 * 
-	 * Die Methode muss öffentlich sein, da sie im Laufe des 
-	 * Transformationsprozesses aufgerufen wird.
-	 */
-	public final void setComment(final Comment comment) {
-		this.comment = comment;
-	}
-
-	public boolean containsCommment() {
-		return comment != null;
-	}
-
 	public final void visitChildren(final Visitor visitor) {
 		if (containsGenre())
 			genreList.accept(visitor);
@@ -135,10 +113,9 @@ public abstract class MusicTitle implements TitleElement {
 			version.accept(visitor);
 		if (containsArrangement())
 			arrangement.accept(visitor);
-		if (containsCommment())
-			comment.accept(visitor);
+
 	}
-	
+
 	public abstract MusicTitle clone();
 
 }

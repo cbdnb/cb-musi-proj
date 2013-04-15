@@ -4,12 +4,12 @@ import javax.naming.OperationNotSupportedException;
 
 import applikationsbausteine.RangeCheckUtils;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
-import de.dnb.gnd.parser.Field;
 import de.dnb.gnd.parser.Record;
 import de.dnb.gnd.parser.Subfield;
 import de.dnb.gnd.parser.line.Line;
 import de.dnb.gnd.parser.line.LineParser;
 import de.dnb.gnd.utils.GNDUtils;
+import de.dnb.gnd.utils.Pair;
 import de.dnb.music.publicInterface.Constants.SetOfRules;
 
 /**
@@ -39,16 +39,15 @@ public class RecordTransformer {
 	/**
 	 * Liefert das Regelwerk, unter dem oldRecord angesetzt wurde.
 	 * Dieses steht im Feld 913
+	 * @param record TODO
 	 * 
 	 * @return	RAK, RSWK, oder GND.
 	 */
-	protected SetOfRules getRules() {
-		Field field913 = GNDUtils.getField(oldRecord, "913");
-		if (field913 == null)
+	protected SetOfRules getRules(Record record) {
+		Pair<Line, Integer> pair = GNDUtils.getFirstLine(record, "913");
+		if (pair.second != 1)
 			return SetOfRules.GND;
-		if (field913.size() != 1)
-			return SetOfRules.GND;
-		Line line913 = field913.iterator().next();
+		Line line913 = pair.first;
 		Subfield subS = GNDUtils.getSubfield(line913, 'S');
 		if (subS == null)
 			return SetOfRules.GND;
@@ -72,11 +71,15 @@ public class RecordTransformer {
 			OperationNotSupportedException {
 		Line line =
 			LineParser.parse("913 $Sswd$ipt$aBerg, Alban: Wozzeck$04112712-2");
+
 		Record record = new Record(null);
 //		record.add(line);
+		line =
+			LineParser.parse("913 $Sest$ipt$aBerg, Alban: Wozzeck$04112712-2");
+		record.add(line);
 		RecordTransformer transformer = new RecordTransformer();
-		transformer.oldRecord = record;
-		System.err.println(transformer.getRules());
+
+		System.err.println(transformer.getRules(record));
 
 	}
 

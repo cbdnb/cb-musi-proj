@@ -5,14 +5,15 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import utils.Pair;
 import utils.StringUtils;
 import utils.TitleUtils;
+import de.dnb.gnd.utils.Pair;
 import de.dnb.music.additionalInformation.ThematicIndexDB;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
 import de.dnb.music.version.Version;
 import static de.dnb.music.publicInterface.Constants.*;
+
 /**
  * Hauptklasse zur Bearbeitung alter Datensätze. Enthält alle wichtigen 
  * Stringkonstanten und die öffentliche Methode transform().
@@ -23,7 +24,7 @@ import static de.dnb.music.publicInterface.Constants.*;
  * @author baumann
  *
  */
-public final class TransformRecord {	
+public final class TransformRecord {
 
 	// ---- Zum Transformieren als globale Variable benutzt
 	private static String sTag;
@@ -343,7 +344,6 @@ public final class TransformRecord {
 								+ TitleUtils.getGND130Or430(sMusicTitle)
 								+ "\n130 alt:" + sTitleStr + "\n";
 					}
-					sMusicTitle.setComment(null);
 
 					// Absprache mit DMA, VC vom 2.11.2012:
 					if (sMusicTitle.containsParts()) {
@@ -384,7 +384,6 @@ public final class TransformRecord {
 								+ TitleUtils.getGND130Or430(sMusicTitle)
 								+ "\n130 alt:" + sTitleStr + "\n";
 					}
-					sMusicTitle.setComment(null);
 
 					// Absprache mit DMA, VC vom 2.11.2012:
 					if (sMusicTitle.containsParts()) {

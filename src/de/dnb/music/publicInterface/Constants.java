@@ -1,6 +1,14 @@
 package de.dnb.music.publicInterface;
 
-public class Constants {
+import java.util.Arrays;
+import java.util.List;
+
+public final class Constants {
+
+	private Constants() {
+		//
+	}
+
 	/**
 	 * Aufzählung der verwendeten Modi.
 	 * @author baumann
@@ -70,4 +78,11 @@ public class Constants {
 	public static final String GEW_MASCH = "MMm";
 
 	public static final String VERL_MASCH = "MMv";
+
+	// redaktionelle Bemerkungen:
+	public static final List<String> GENERAL_NOTES = Arrays.asList(GEW_INTELL,
+			GEW_MASCH, SATZ_AUFG, VERL_MASCH, MASCH_AUFG, VORZ_BEN_AUFGEARB);
+
+	public static final List<String> COMMENT_MACHINE = Arrays.asList(
+			KOM_MASCHINELL, KOM_MASCHINELL_NACH_2003, KOM_MASCHINELL_VOR_2003);
 }

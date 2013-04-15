@@ -1,5 +1,6 @@
 package de.dnb.music.mvc.title;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
@@ -133,7 +134,12 @@ public class TitleModel extends Observable {
 				JOptionPane.showMessageDialog(null, e.getMessage(),
 						"Fehler beim Datum", JOptionPane.OK_CANCEL_OPTION);
 			} finally {
-				FileUtils.safeClose(jarFile);
+				if (jarFile != null)
+					try {
+						jarFile.close();
+					} catch (IOException e) {
+						// nix
+					}
 			}
 
 		}

@@ -3,12 +3,13 @@ package de.dnb.music.title;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import utils.GNDConstants;
-import utils.Pair;
+
 import utils.StringUtils;
 import utils.TitleUtils;
 import applikationsbausteine.RangeCheckUtils;
@@ -20,6 +21,7 @@ import de.dnb.gnd.parser.TagDB;
 import de.dnb.gnd.parser.line.Line;
 import de.dnb.gnd.parser.line.LineFactory;
 import de.dnb.gnd.parser.line.LineParser;
+import de.dnb.gnd.utils.Pair;
 import de.dnb.music.additionalInformation.AdditionalInformation;
 import de.dnb.music.additionalInformation.Key;
 import de.dnb.music.additionalInformation.ParseAdditionalInformation;
@@ -265,7 +267,17 @@ public final class ParseMusicTitle {
 		Key.setRegnognizeKeyName(recognize);
 	}
 
-	public static MusicTitle parseGND(final String composer, final Line line) {
+	/**
+	 * Parst eine Zeile.
+	 * 
+	 * @param composer	egal
+	 * @param line		nicht null, korrekter Tag
+	 * @return			Paar aus Musiktitel und nicht verwendeten
+	 * 					Unterfeldern.
+	 */
+	public static Pair<MusicTitle, List<Subfield>> parseGND(
+			final String composer,
+			final Line line) {
 		RangeCheckUtils.assertReferenceParamNotNull("line", line);
 		Tag tag = line.getTag();
 		boolean tagOK = (tag == GNDConstants.TAG_130);
@@ -280,7 +292,9 @@ public final class ParseMusicTitle {
 	}
 
 	/**
-	 * Baut aus GND-Unterfeldliste eine Baumstruktur auf.
+	 * Baut aus GND-Unterfeldliste eine Baumstruktur auf. Die
+	 * nicht erkannten Felder werden als zweiter Bestandteil
+	 * zurückgegeben.
 	 * 
 	 * Dabei können mehrere Möglichkeiten auftreten:
 	 * 	- Altdaten mit $p und $s. Diese stammen vom DMA.
@@ -308,13 +322,14 @@ public final class ParseMusicTitle {
 	 * 
 	 * @param composer Komponist
 	 * @param subfields	Liste von Unterfeldern, die mit $<Indikator> beginnen.
-	 * @return	gültigen Musiktitel oder null
+	 * @return	gültigen Musiktitel oder null, 
 	 * 
 	 */
-	public static MusicTitle parseGND(
+	public static Pair<MusicTitle, List<Subfield>> parseGND(
 			final String composer,
 			final List<Subfield> subfields) {
 		RangeCheckUtils.assertCollectionParamNotNullOrEmpty("value", subfields);
+		List<Subfield> unused = new LinkedList<Subfield>();
 
 		final IPredicate<Subfield> dollarGPred = new IPredicate<Subfield>() {
 			@Override
@@ -322,9 +337,9 @@ public final class ParseMusicTitle {
 				return element.getIndicator() == TagDB.dollarg;
 			}
 		};
-		
+
 		final boolean containsG =
-			FilterUtils.find(subfields, dollarGPred) != null;
+			(FilterUtils.find(subfields, dollarGPred) != null);
 
 		MusicTitle mTitle = null;
 		/*
@@ -339,7 +354,7 @@ public final class ParseMusicTitle {
 			final Indicator indicator = subfield.getIndicator();
 			final String contentOfSubfield = subfield.getContent();
 
-			if (indicator == GNDConstants.DOLLAR_A) {
+			if (indicator == GNDConstants.DOLLAR_a) {
 				/*
 				 * Das ist (garantiert) immer das erste Unterfeld und damit
 				 * der erste behandelte Fall in der Schleife. Sollten
@@ -349,7 +364,7 @@ public final class ParseMusicTitle {
 				mTitle =
 					ParseMusicTitle.parseFullRAK(composer, contentOfSubfield);
 				actualPartTitle = mTitle;
-			} else if (indicator == GNDConstants.DOLLAR_M) {
+			} else if (indicator == GNDConstants.DOLLAR_m) {
 
 				final InstrumentationList iList =
 					ParseInstrumentation.parse(contentOfSubfield);
@@ -358,9 +373,9 @@ public final class ParseMusicTitle {
 				} else {
 					actualPartTitle.getInstrumentationList().addAll(iList);
 				}
-			} else if (indicator == GNDConstants.DOLLAR_F
-				|| indicator == GNDConstants.DOLLAR_N
-				|| indicator == GNDConstants.DOLLAR_R
+			} else if (indicator == GNDConstants.DOLLAR_f
+				|| indicator == GNDConstants.DOLLAR_n
+				|| indicator == GNDConstants.DOLLAR_r
 				|| indicator == TagDB.dollarg) {
 				/*
 				 * Auch hier können wir wieder so tun, als wäre ein
@@ -377,7 +392,7 @@ public final class ParseMusicTitle {
 				else
 					actualPartTitle.setAdditionalInformation(new Qualifier(
 							contentOfSubfield));
-			} else if (indicator == GNDConstants.DOLLAR_P) {
+			} else if (indicator == GNDConstants.DOLLAR_p) {
 
 				if (!mTitle.containsParts()) {
 					/*
@@ -419,7 +434,7 @@ public final class ParseMusicTitle {
 					partOfWork.addPartOfWork(actualPartTitle);
 				}
 
-			} else if (indicator == GNDConstants.DOLLAR_S) {
+			} else if (indicator == GNDConstants.DOLLAR_s) {
 				Version version =
 					ParseVersion.parse(composer, contentOfSubfield);
 				// Notbremse für unbekannten Inhalt von $s:
@@ -427,18 +442,18 @@ public final class ParseMusicTitle {
 					version = new Version(contentOfSubfield);
 				}
 				mTitle.setVersion(version);
-			} else if (indicator == GNDConstants.DOLLAR_O) {
+			} else if (indicator == GNDConstants.DOLLAR_o) {
 				mTitle.setArrangement(new Arrangement(contentOfSubfield));
-			} else if (indicator == TagDB.dollarvR) {
-
-				mTitle.setComment(new Comment(contentOfSubfield));
+			} else {
+				unused.add(subfield);
 			}
 
 		}
-		return mTitle;
+		return new Pair<MusicTitle, List<Subfield>>(mTitle, unused);
 	}
 
-	private static LineFactory factory130 = LineParser.getFactory("130");
+	// reichhaltigste:
+	private static LineFactory factory730 = LineParser.getFactory("730");
 
 	/**
 	 * Parst GND. Die Zeile oder ihr Inhalt wird als String übergeben.
@@ -447,7 +462,7 @@ public final class ParseMusicTitle {
 	 * 						korrekten Tag (130, 430, 530, 730) oder auch
 	 * 						nur der Inhalt der Zeile. 
 	 * @param composer	Komponist oder null 
-	 * @return	gültigen Musiktitel oder null
+	 * @return	gültigen Musiktitel oder null.
 	 */
 	public static MusicTitle parseGND(
 			final String composer,
@@ -462,14 +477,14 @@ public final class ParseMusicTitle {
 		}
 		if (line == null) {
 			try {
-				factory130.load(parseString);
-				line = factory130.createLine();
+				factory730.load(parseString);
+				line = factory730.createLine();
 			} catch (IllFormattedLineException e) {
 				return null;
 			}
 		}
 
-		final MusicTitle mt = ParseMusicTitle.parseGND(null, line);
+		final MusicTitle mt = ParseMusicTitle.parseGND(null, line).first;
 		return mt;
 
 	}
@@ -487,9 +502,10 @@ public final class ParseMusicTitle {
 		System.out.println("Titel bitte eingeben");
 		System.out.println();
 		String string = br.readLine();
-
-		final MusicTitle mt = ParseMusicTitle.parseFullRAK(null, string);
-		System.out.println((TitleUtils.getStructured(mt)));
+		Line line = LineParser.parse(string);
+		Pair<MusicTitle, List<Subfield>> pair = parseGND(null, line);
+		System.out.println((TitleUtils.getStructured(pair.first)));
+		System.out.println(pair.second);
 	}
 
 }

@@ -11,7 +11,6 @@ import de.dnb.music.genre.GenreList;
 import de.dnb.music.mediumOfPerformance.Instrument;
 import de.dnb.music.mediumOfPerformance.InstrumentationList;
 import de.dnb.music.title.Arrangement;
-import de.dnb.music.title.Comment;
 import de.dnb.music.title.FormalTitle;
 import de.dnb.music.title.IndividualTitle;
 import de.dnb.music.title.PartOfWork;
@@ -44,7 +43,7 @@ public abstract class Visitor {
 	public void leave(IndividualTitle individualTitle) {
 		// default
 	}
-	
+
 	public void visit(FormalTitle formalTitle) {
 		// default		
 	}
@@ -54,7 +53,7 @@ public abstract class Visitor {
 	}
 
 	public boolean visit(Version version) {
-		return true;		
+		return true;
 	}
 
 	public void leave(Version version) {
@@ -82,7 +81,7 @@ public abstract class Visitor {
 	}
 
 	public boolean visit(GenreList genreList) {
-		return true;		
+		return true;
 	}
 
 	public void leave(GenreList genreList) {
@@ -115,10 +114,6 @@ public abstract class Visitor {
 
 	public void leave(PartOfWork partOfWork) {
 		// default
-	}
-
-	public void visit(Comment comment) {
-		// default		
 	}
 
 	public void visit(Qualifier qualifier) {

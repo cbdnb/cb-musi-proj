@@ -12,7 +12,6 @@ import de.dnb.music.genre.GenreList;
 import de.dnb.music.mediumOfPerformance.Instrument;
 import de.dnb.music.mediumOfPerformance.InstrumentationList;
 import de.dnb.music.title.Arrangement;
-import de.dnb.music.title.Comment;
 import de.dnb.music.title.FormalTitle;
 import de.dnb.music.title.IndividualTitle;
 import de.dnb.music.title.MusicTitle;
@@ -188,10 +187,6 @@ public class StructuredVisitor extends Visitor {
 		structured +=
 			'\n' + indentation + "Bearbeitungsvermerk: "
 				+ arrangement.toString();
-	}
-
-	public void visit(Comment comment) {
-		structured += '\n' + indentation + "Kommentar: " + comment.toString();
 	}
 
 	public boolean visit(PartOfWork partOfWork) {

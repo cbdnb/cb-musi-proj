@@ -1,6 +1,5 @@
 package de.dnb.music.visitor.setsOfRules;
 
-import de.dnb.music.title.Comment;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
 import de.dnb.music.title.PartOfWork;
@@ -25,11 +24,6 @@ public class DNBPortal430Visitor extends WorkTitleVisitor {
 	@Override
 	public final void leave(final PartOfWork partOfWork) {
 		factory = new GNDParticleFactory();
-	}
-	
-	@Override
-	public void visit(final Comment comment) {
-		// tue nichts.
 	}
 
 	/**

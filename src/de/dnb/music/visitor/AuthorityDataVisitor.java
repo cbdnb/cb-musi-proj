@@ -21,9 +21,7 @@ import de.dnb.music.version.Version;
 public class AuthorityDataVisitor extends Visitor {
 
 	public AuthorityDataVisitor(
-			final boolean expansion,
 			final boolean forceTotalCount) {
-		this.expansion = expansion;
 		this.forceTotalCount = forceTotalCount;
 	}
 
@@ -37,8 +35,6 @@ public class AuthorityDataVisitor extends Visitor {
 	private LinkedHashSet<Line> obins = new LinkedHashSet<Line>();
 
 	private int totalCount = 0; // Gesamtzahl aller Instrumente
-
-	private boolean expansion = false;
 
 	private boolean forceTotalCount = false;
 
@@ -70,7 +66,6 @@ public class AuthorityDataVisitor extends Visitor {
 	 * @param expansion
 	 */
 	public final void setExpansion(final boolean expansion) {
-		this.expansion = expansion;
 	}
 
 	public final Collection<Line> getLines() {
@@ -83,7 +78,7 @@ public class AuthorityDataVisitor extends Visitor {
 
 	@Override
 	public final String toString() {
-		return GNDUtils.lines2Pica(getLines(), Format.PICA3, expansion);
+		return GNDUtils.lines2Pica(getLines(), Format.PICA3, true);
 //		return GNDUtils.lines2Pica3Expanded(getLines());
 	}
 

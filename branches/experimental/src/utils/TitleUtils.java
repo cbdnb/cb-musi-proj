@@ -1,11 +1,14 @@
 package utils;
 
+import java.util.Collection;
+
 import applikationsbausteine.RangeCheckUtils;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
 import de.dnb.gnd.parser.Format;
 import de.dnb.gnd.parser.Tag;
 import de.dnb.gnd.parser.line.Line;
 import de.dnb.gnd.parser.line.LineParser;
+import de.dnb.gnd.utils.GNDUtils;
 import de.dnb.music.publicInterface.Constants;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
@@ -99,7 +102,7 @@ public final class TitleUtils {
 	}
 
 	/**
-	 * Liefert die 3XX-Felder.
+	 * Liefert die 3XX-Felder als String.
 	 * 
 	 * @param element	TitleElement
 	 * @param expansion		Normdaten expandiert
@@ -111,12 +114,37 @@ public final class TitleUtils {
 			final boolean expansion,
 			final boolean forceTotalCount) {
 		final AuthorityDataVisitor auvis =
-			new AuthorityDataVisitor(expansion, forceTotalCount);
+			new AuthorityDataVisitor(forceTotalCount);
 		final AdditionalDataIn3XXVisitor advis =
 			new AdditionalDataIn3XXVisitor();
 		element.accept(auvis);
 		element.accept(advis);
-		return auvis.toString() + advis.toString();
+		String s =
+			GNDUtils.lines2Pica(auvis.getLines(), Format.PICA3, expansion);
+		return s + advis.toString();
+
+	}
+
+	/**
+	 * Liefert die 3XX-Felder.
+	 * 
+	 * @param element	TitleElement
+	 * @param forceTotalCount	Gesamtzahl bei Instrumenten erzwingen
+	 * @return 3XX-Felder der GND inclusive 548 (Zeitangabe)
+	 */
+	public static Collection<Line> get3XXLines(
+			final TitleElement element,
+			final boolean forceTotalCount) {
+		RangeCheckUtils.assertReferenceParamNotNull("element", element);
+		final AuthorityDataVisitor auvis =
+			new AuthorityDataVisitor(forceTotalCount);
+		final AdditionalDataIn3XXVisitor advis =
+			new AdditionalDataIn3XXVisitor();
+		element.accept(auvis);
+		element.accept(advis);
+		Collection<Line> lines = auvis.getLines();
+		lines.addAll(advis.getLines());
+		return lines;
 
 	}
 

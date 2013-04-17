@@ -5,7 +5,6 @@ import java.util.List;
 import javax.naming.OperationNotSupportedException;
 
 import utils.TitleUtils;
-
 import applikationsbausteine.RangeCheckUtils;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
 import de.dnb.gnd.parser.Field;
@@ -15,11 +14,9 @@ import de.dnb.gnd.parser.line.Line;
 import de.dnb.gnd.parser.line.LineParser;
 import de.dnb.gnd.utils.GNDUtils;
 import de.dnb.gnd.utils.Pair;
+import de.dnb.gnd.utils.WorkUtils;
 import de.dnb.music.publicInterface.Constants.SetOfRules;
 import de.dnb.music.title.MusicTitle;
-import de.dnb.music.title.ParseMusicTitle;
-import de.dnb.music.visitor.AuthorityDataVisitor;
-import filtering.FilterUtils;
 
 /**
  * Template-Klasse. Die Unterklassen überschreiben div. Methoden, um an das
@@ -86,7 +83,7 @@ public class RecordTransformer {
 		return new Pair<List<Subfield>, String>(subfields, comment);
 	}
 
-	protected final String getComposerID() {
+	protected final String getComposerIDOld() {
 		Field field500 = GNDUtils.getField(oldRecord, "500");
 		if (field500 == null)
 			return null;
@@ -110,7 +107,7 @@ public class RecordTransformer {
 	 * Fügt 3XX und 548 hinzu.
 	 * @param title		nicht null.
 	 */
-	protected void enrich3XX(MusicTitle title) {
+	protected void enrich3XX(final MusicTitle title) {
 		RangeCheckUtils.assertReferenceParamNotNull("title", title);
 		try {
 			boolean forceTotalCount = true;
@@ -130,14 +127,14 @@ public class RecordTransformer {
 			throws IllFormattedLineException,
 			OperationNotSupportedException {
 		Record record = new Record(null);
-		Line line = LineParser.parse("500 erg, Alban$4kom1");
+		Line line = LineParser.parse("500 erg, Alban$4koma");
 		record.add(line);
-		line = LineParser.parse("500 !118509321!Zwerg, Alban$4koma");
+		line = LineParser.parse("500 !118509321!Zwerg, Alban$4kom1");
 		record.add(line);
 		RecordTransformer transformer = new RecordTransformer();
 		transformer.transform(record);
 
-		System.err.println(transformer.getComposerID());
+		System.err.println(WorkUtils.getAuthor(record).getIdnRelated());
 
 	}
 }

@@ -79,10 +79,18 @@ public final class Constants {
 
 	public static final String VERL_MASCH = "MMv";
 
-	// redaktionelle Bemerkungen:
+	/**
+	 *  redaktionelle Bemerkungen, die anzeigen, dass (partiell) aufgearbeitet.
+	 */
 	public static final List<String> GENERAL_NOTES = Arrays.asList(GEW_INTELL,
 			GEW_MASCH, SATZ_AUFG, VERL_MASCH, MASCH_AUFG, VORZ_BEN_AUFGEARB);
 
+	/**
+	 * Zeigen in der 130 an, dass maschinell verändert.
+	 */
 	public static final List<String> COMMENT_MACHINE = Arrays.asList(
 			KOM_MASCHINELL, KOM_MASCHINELL_NACH_2003, KOM_MASCHINELL_VOR_2003);
+
+	public static final List<String> COMMENT_OLD_RAK = Arrays.asList(
+			KOM_VOR_2003, KOM_VOR_2003_430);
 }

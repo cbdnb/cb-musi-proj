@@ -34,7 +34,7 @@ public class AdditionalDataIn3XXVisitor extends Visitor {
 
 	@Override
 	public final String toString() {
-		return GNDUtils.lines2Pica3Expanded(getLines());
+		return GNDUtils.toPica3Expanded(getLines());
 	};
 
 	/**

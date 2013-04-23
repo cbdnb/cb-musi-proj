@@ -78,8 +78,7 @@ public class AuthorityDataVisitor extends Visitor {
 
 	@Override
 	public final String toString() {
-		return GNDUtils.lines2Pica(getLines(), Format.PICA3, true);
-//		return GNDUtils.lines2Pica3Expanded(getLines());
+		return GNDUtils.toPica(getLines(), Format.PICA3, true);
 	}
 
 	@Override

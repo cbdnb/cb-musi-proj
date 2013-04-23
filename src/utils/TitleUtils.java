@@ -120,7 +120,7 @@ public final class TitleUtils {
 		element.accept(auvis);
 		element.accept(advis);
 		String s =
-			GNDUtils.lines2Pica(auvis.getLines(), Format.PICA3, expansion);
+			GNDUtils.toPica(auvis.getLines(), Format.PICA3, expansion);
 		return s + advis.toString();
 
 	}

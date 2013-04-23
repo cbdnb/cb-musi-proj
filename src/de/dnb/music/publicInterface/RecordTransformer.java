@@ -1,5 +1,7 @@
 package de.dnb.music.publicInterface;
 
+import static de.dnb.music.publicInterface.Constants.SATZ_AUFG;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -19,6 +21,8 @@ import de.dnb.gnd.parser.Field;
 import de.dnb.gnd.parser.Record;
 import de.dnb.gnd.parser.RecordParser;
 import de.dnb.gnd.parser.Subfield;
+import de.dnb.gnd.parser.Tag;
+import de.dnb.gnd.parser.TagDB;
 import de.dnb.gnd.parser.line.Line;
 import de.dnb.gnd.parser.line.LineFactory;
 import de.dnb.gnd.parser.line.LineParser;
@@ -26,7 +30,9 @@ import de.dnb.gnd.utils.GNDUtils;
 import de.dnb.gnd.utils.GNDUtils2;
 import de.dnb.gnd.utils.Pair;
 import de.dnb.gnd.utils.WorkUtils;
+import de.dnb.music.additionalInformation.ThematicIndexDB;
 import de.dnb.music.publicInterface.Constants.SetOfRules;
+import de.dnb.music.publicInterface.Constants.TransformMode;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
 import de.dnb.music.version.Version;
@@ -55,9 +61,19 @@ public class RecordTransformer {
 		this.oldRecord = record;
 		newRecord = oldRecord.clone();
 		if (isPermitted(oldRecord)) {
-
+			addComposerData();
+			addGeneralNote();
+			addGNDClassification();
+			removeTitles();
 		}
 		return newRecord;
+	}
+
+	protected void removeTitles() {
+		Collection<Tag> tags1xx = TagDB.getTag1XX();
+		GNDUtils.removeTags(newRecord, tags1xx);
+		Collection<Tag> tags4xx = TagDB.getTag4XX();
+		GNDUtils.removeTags(newRecord, tags4xx);
 	}
 
 	protected boolean isPermitted(Record record) {
@@ -81,7 +97,7 @@ public class RecordTransformer {
 			}
 		};
 		Collection<Line> lines667 =
-			GNDUtils.getLines(record, predicate667, "667");
+			GNDUtils.getLinesTagsGivenAsString(record, predicate667, "667");
 		return lines667.isEmpty();
 	}
 
@@ -188,6 +204,63 @@ public class RecordTransformer {
 	}
 
 	/**
+	 * Fügt aus altem Datensatz gewonnene Komponistendaten dem
+	 * neuen Datensatz hinzu.
+	 */
+	protected void addComposerData() {
+		String idn = WorkUtils.getAuthorID(oldRecord);
+		if (idn == null)
+			return;
+		String cc = ThematicIndexDB.getCountryCode(idn);
+		// bisher kein Ländercode:
+		if (cc != null) {
+			Line line;
+			try {
+				line = LineParser.parse("043 " + cc);
+				newRecord.add(line);
+				String sourceAbb = ThematicIndexDB.getSourceAbb(idn);
+				line = LineParser.parse("670 " + sourceAbb);
+				newRecord.add(line);
+			} catch (IllFormattedLineException e) {
+				//nix
+			} catch (OperationNotSupportedException e) {
+				//nix
+			}
+
+		}
+	}
+
+	/**
+	 * Fügt 14.4p hinzu.
+	 */
+	protected void addGNDClassification() {
+		Line line;
+		try {
+			line = LineParser.parse("065 14.4p");
+			newRecord.add(line);
+		} catch (IllFormattedLineException e) {
+			//nix
+		} catch (OperationNotSupportedException e) {
+			//nix
+		}
+	}
+
+	/**
+	 * Redaktionelle Bemerkung.
+	 */
+	protected void addGeneralNote() {
+		Line line;
+		try {
+			line = LineParser.parse("667 " + SATZ_AUFG);
+			newRecord.add(line);
+		} catch (IllFormattedLineException e) {
+			//nix
+		} catch (OperationNotSupportedException e) {
+			//nix
+		}
+	}
+
+	/**
 	 * Die 913 enthält in der Regel eine Boilerplate
 	 * 	"913 $Sswd$ipt$a". 
 	 * Dann folgt der eventuelle Komponist, gefolgt von
@@ -245,6 +318,6 @@ public class RecordTransformer {
 			new BufferedReader(new InputStreamReader(System.in));
 		RecordParser parser = new RecordParser(reader);
 		Record record = parser.getNextRecord();
-		System.out.println(transformer.getOriginalTitles(record));
+		System.out.println(transformer.transform(record));
 	}
 }

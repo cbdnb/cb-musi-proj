@@ -88,7 +88,7 @@ public final class Constants {
 	/**
 	 * Zeigen in der 130 an, dass maschinell verändert.
 	 */
-	public static final List<String> COMMENT_MACHINE = Arrays.asList(
+	public static final List<String> COMMENTS_MACHINE = Arrays.asList(
 			KOM_MASCHINELL, KOM_MASCHINELL_NACH_2003, KOM_MASCHINELL_VOR_2003);
 
 	public static final List<String> COMMENT_OLD_RAK = Arrays.asList(

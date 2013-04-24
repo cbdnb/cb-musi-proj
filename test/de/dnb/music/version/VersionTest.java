@@ -77,50 +77,50 @@ public class VersionTest {
 	@Test
 	public final void testGetGND1XX() {
 		Version f = ParseVersion.parse(null, "KV 23");
-		assertEquals("$sKV 23", TitleUtils.getGND130Or430(f));
+		assertEquals("$sKV 23", TitleUtils.getX30ContentAsString(f));
 		
 		f = ParseVersion.parse(null, "Op. 134");
-		assertEquals("$sOp. 134", TitleUtils.getGND130Or430(f));
+		assertEquals("$sOp. 134", TitleUtils.getX30ContentAsString(f));
 		
 
 		f = ParseVersion.parse(null, "Suite");
-		assertEquals("$sSuite", TitleUtils.getGND130Or430(f));
+		assertEquals("$sSuite", TitleUtils.getX30ContentAsString(f));
 		
 		f = ParseVersion.parse(null, "Suite Vl");
-		assertEquals("$sSuite Vl", TitleUtils.getGND130Or430(f));
+		assertEquals("$sSuite Vl", TitleUtils.getX30ContentAsString(f));
 		
 		f = ParseVersion.parse(null, "Suite a-Moll");
-		assertEquals("$sSuite a-Moll", TitleUtils.getGND130Or430(f));
+		assertEquals("$sSuite a-Moll", TitleUtils.getX30ContentAsString(f));
 		
 		f = ParseVersion.parse(null, "Suite 1777");
-		assertEquals("$sSuite 1777", TitleUtils.getGND130Or430(f));
+		assertEquals("$sSuite 1777", TitleUtils.getX30ContentAsString(f));
 		
 		f = ParseVersion.parse(null, "Suite Nr. 3");
-		assertEquals("$sSuite Nr. 3", TitleUtils.getGND130Or430(f));
+		assertEquals("$sSuite Nr. 3", TitleUtils.getX30ContentAsString(f));
 		
 		f = ParseVersion.parse(null, "Fassung 1777");
-		assertEquals("$sFassung 1777", TitleUtils.getGND130Or430(f));
+		assertEquals("$sFassung 1777", TitleUtils.getX30ContentAsString(f));
 		
 		f = ParseVersion.parse(null, "Fassung Vl");
-		assertEquals("$sFassung Vl", TitleUtils.getGND130Or430(f));
+		assertEquals("$sFassung Vl", TitleUtils.getX30ContentAsString(f));
 		
 		f = ParseVersion.parse(null, "Fassung für Bläser");
-		assertEquals("$sFassung für Bläser", TitleUtils.getGND130Or430(f));
+		assertEquals("$sFassung für Bläser", TitleUtils.getX30ContentAsString(f));
 		
 		f = ParseVersion.parse(null, "Fassung Vl 1777");
-		assertEquals("$sFassung Vl 1777", TitleUtils.getGND130Or430(f));
+		assertEquals("$sFassung Vl 1777", TitleUtils.getX30ContentAsString(f));
 		
 		f = ParseVersion.parse(null, "Fassung Vl, 1777");
-		assertEquals("$sFassung Vl, 1777", TitleUtils.getGND130Or430(f));
+		assertEquals("$sFassung Vl, 1777", TitleUtils.getX30ContentAsString(f));
 		
 		f = ParseVersion.parse(null, "1777");
-		assertEquals("$s1777", TitleUtils.getGND130Or430(f));
+		assertEquals("$s1777", TitleUtils.getX30ContentAsString(f));
 		
 		f = ParseVersion.parse(null, "Vl");
-		assertEquals("$sVl", TitleUtils.getGND130Or430(f));
+		assertEquals("$sVl", TitleUtils.getX30ContentAsString(f));
 		
 		f = new Version("blabla");
-		assertEquals("$sblabla", TitleUtils.getGND130Or430(f));
+		assertEquals("$sblabla", TitleUtils.getX30ContentAsString(f));
 	}
 	
 	@Test

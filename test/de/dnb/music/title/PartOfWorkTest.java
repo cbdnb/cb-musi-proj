@@ -31,11 +31,11 @@ public class PartOfWorkTest {
 
 	@Test
 	public final void testGetGND1XX() {
-		assertEquals("$p" + s1, TitleUtils.getGND130Or430(p1));
-		assertEquals("$pSonate$nKV 1$pAdagio", TitleUtils.getGND130Or430(p2));
-		assertEquals("$pSonate$nKV 1$pAdagio$paa", TitleUtils.getGND130Or430(p3));
-		assertEquals("$pSonate$nKV 1$pAdagio$paa, bb", TitleUtils.getGND130Or430(p4));
-		assertEquals("$pMesse$nKV 1,2 Anh", TitleUtils.getGND130Or430(p5));		
+		assertEquals("$p" + s1, TitleUtils.getX30ContentAsString(p1));
+		assertEquals("$pSonate$nKV 1$pAdagio", TitleUtils.getX30ContentAsString(p2));
+		assertEquals("$pSonate$nKV 1$pAdagio$paa", TitleUtils.getX30ContentAsString(p3));
+		assertEquals("$pSonate$nKV 1$pAdagio$paa, bb", TitleUtils.getX30ContentAsString(p4));
+		assertEquals("$pMesse$nKV 1,2 Anh", TitleUtils.getX30ContentAsString(p5));		
 	}
 	
 	@Test

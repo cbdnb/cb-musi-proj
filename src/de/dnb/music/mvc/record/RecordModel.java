@@ -169,7 +169,7 @@ public class RecordModel extends Observable {
 		String s;
 		try {
 			s =
-				number + " " + TitleUtils.getGND130Or430(title) + "\n"
+				number + " " + TitleUtils.getX30ContentAsString(title) + "\n"
 					+ TitleUtils.getGND3XX(title, expansion, forceTotalCount);
 		} catch (Exception e) {
 			StringWriter sw = new StringWriter();

@@ -266,98 +266,98 @@ public class ParseInstrumentationTest {
 			ParseMusicTitle.parseTitlePlusVersion(null,
 					"Sonaten, Vl Bc, L 3,77");
 		InstrumentationList bl = mt.getInstrumentationList();
-		assertEquals("$mVl$mBc", TitleUtils.getGND130Or430(bl));
+		assertEquals("$mVl$mBc", TitleUtils.getX30ContentAsString(bl));
 
 //		MusicTitle.setGND3XXExplicit(true);
 		mt =
 			ParseMusicTitle.parseTitlePlusVersion(null,
 					"Sonate, Violine Basso continuo L 3,77");
 		bl = mt.getInstrumentationList();
-		assertEquals("$mVl$mBc", TitleUtils.getGND130Or430(bl));
+		assertEquals("$mVl$mBc", TitleUtils.getX30ContentAsString(bl));
 
 		mt =
 			ParseMusicTitle.parseTitlePlusVersion(null,
 					"Konzerte, Vc Orch, op. 5");
 		bl = mt.getInstrumentationList();
-		assertEquals("$mVc$mOrch", TitleUtils.getGND130Or430(bl));
+		assertEquals("$mVc$mOrch", TitleUtils.getX30ContentAsString(bl));
 
 		mt =
 			ParseMusicTitle.parseTitlePlusVersion(null,
 					"Konzert, Violoncello Orchester op. 5");
 		bl = mt.getInstrumentationList();
-		assertEquals("$mVc$mOrch", TitleUtils.getGND130Or430(bl));
+		assertEquals("$mVc$mOrch", TitleUtils.getX30ContentAsString(bl));
 
 		mt =
 			ParseMusicTitle.parseTitlePlusVersion(null,
 					"Sextett, Violine 1,2,3 Viola Violoncello 1,2, op. 38");
 		bl = mt.getInstrumentationList();
-		assertEquals("$mVl 1 2 3$mVa$mVc 1 2", TitleUtils.getGND130Or430(bl));
+		assertEquals("$mVl 1 2 3$mVa$mVc 1 2", TitleUtils.getX30ContentAsString(bl));
 
 		mt =
 			ParseMusicTitle.parseTitlePlusVersion(null,
 					"Sextette, Vl 1 2 3 Va Vc 1 2, op. 38");
 		bl = mt.getInstrumentationList();
-		assertEquals("$mVl 1 2 3$mVa$mVc 1 2", TitleUtils.getGND130Or430(bl));
+		assertEquals("$mVl 1 2 3$mVa$mVc 1 2", TitleUtils.getX30ContentAsString(bl));
 
 		mt =
 			ParseMusicTitle.parseTitlePlusVersion(null,
 					"Notturni, Singst. 1 2 3 4 Kl, op. 22");
 		bl = mt.getInstrumentationList();
-		assertEquals("$mSingst. 1 2 3 4$mKl", TitleUtils.getGND130Or430(bl));
+		assertEquals("$mSingst. 1 2 3 4$mKl", TitleUtils.getX30ContentAsString(bl));
 
 		mt =
 			ParseMusicTitle.parseTitlePlusVersion(null,
 					"Fantasien, Kl 4hdg., op. 31");
 		bl = mt.getInstrumentationList();
-		assertEquals("$mKl 4hdg.", TitleUtils.getGND130Or430(bl));
+		assertEquals("$mKl 4hdg.", TitleUtils.getX30ContentAsString(bl));
 
 		mt =
 			ParseMusicTitle.parseTitlePlusVersion(null,
 					"Notturno, Singstimme 1,2,3,4 Klavier op. 22");
 		bl = mt.getInstrumentationList();
-		assertEquals("$mSingst. 1 2 3 4$mKl", TitleUtils.getGND130Or430(bl));
+		assertEquals("$mSingst. 1 2 3 4$mKl", TitleUtils.getX30ContentAsString(bl));
 
 		mt =
 			ParseMusicTitle.parseTitlePlusVersion(null,
 					"Fantasien, Kl 4hdg., op. 31");
 		bl = mt.getInstrumentationList();
-		assertEquals("$mKl 4hdg.", TitleUtils.getGND130Or430(bl));
+		assertEquals("$mKl 4hdg.", TitleUtils.getX30ContentAsString(bl));
 
 		mt =
 			ParseMusicTitle.parseTitlePlusVersion(null,
 					"Fantasie, Klavier vierhändig op. 31");
 		bl = mt.getInstrumentationList();
-		assertEquals("$mKl 4hdg.", TitleUtils.getGND130Or430(bl));
+		assertEquals("$mKl 4hdg.", TitleUtils.getX30ContentAsString(bl));
 
 		mt =
 			ParseMusicTitle.parseTitlePlusVersion(null,
 					"Sonatensätze, Kl 1 2 8hdg., e-Moll");
 		bl = mt.getInstrumentationList();
-		assertEquals("$mKl 1 2 8hdg.", TitleUtils.getGND130Or430(bl));
+		assertEquals("$mKl 1 2 8hdg.", TitleUtils.getX30ContentAsString(bl));
 
 		mt =
 			ParseMusicTitle.parseTitlePlusVersion(null,
 					"Sonatensatz, Klavier 1,2 achthändig e-Moll");
 		bl = mt.getInstrumentationList();
-		assertEquals("$mKl 1 2 8hdg.", TitleUtils.getGND130Or430(bl));
+		assertEquals("$mKl 1 2 8hdg.", TitleUtils.getX30ContentAsString(bl));
 
 		mt =
 			ParseMusicTitle.parseTitlePlusVersion(null,
 					"Konzerte, Kl linke Hand Orch, Es-Dur");
 		bl = mt.getInstrumentationList();
-		assertEquals("$mKl linke Hand$mOrch", TitleUtils.getGND130Or430(bl));
+		assertEquals("$mKl linke Hand$mOrch", TitleUtils.getX30ContentAsString(bl));
 
 		mt =
 			ParseMusicTitle.parseTitlePlusVersion(null,
 					"Konzerte, Kl linke Hd Orch, Es-Dur");
 		bl = mt.getInstrumentationList();
-		assertEquals("$mKl linke Hand$mOrch", TitleUtils.getGND130Or430(bl));
+		assertEquals("$mKl linke Hand$mOrch", TitleUtils.getX30ContentAsString(bl));
 
 		mt =
 			ParseMusicTitle.parseTitlePlusVersion(null,
 					"Konzert, Klavier linke Hand Orchester Es-Dur");
 		bl = mt.getInstrumentationList();
-		assertEquals("$mKl linke Hand$mOrch", TitleUtils.getGND130Or430(bl));
+		assertEquals("$mKl linke Hand$mOrch", TitleUtils.getX30ContentAsString(bl));
 
 	}
 

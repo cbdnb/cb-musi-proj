@@ -1,12 +1,15 @@
 package utils;
 
 import java.util.Collection;
+import java.util.List;
 
 import applikationsbausteine.RangeCheckUtils;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
 import de.dnb.gnd.parser.Format;
+import de.dnb.gnd.parser.Subfield;
 import de.dnb.gnd.parser.Tag;
 import de.dnb.gnd.parser.line.Line;
+import de.dnb.gnd.parser.line.LineFactory;
 import de.dnb.gnd.parser.line.LineParser;
 import de.dnb.gnd.utils.GNDUtils;
 import de.dnb.music.publicInterface.Constants;
@@ -98,7 +101,7 @@ public final class TitleUtils {
 	}
 
 	public static String getGND1XXPlusTag(final MusicTitle musicTitle) {
-		return "130 " + getGND130Or430(musicTitle);
+		return "130 " + getX30ContentAsString(musicTitle);
 	}
 
 	/**
@@ -119,8 +122,7 @@ public final class TitleUtils {
 			new AdditionalDataIn3XXVisitor();
 		element.accept(auvis);
 		element.accept(advis);
-		String s =
-			GNDUtils.toPica(auvis.getLines(), Format.PICA3, expansion);
+		String s = GNDUtils.toPica(auvis.getLines(), Format.PICA3, expansion);
 		return s + advis.toString();
 
 	}
@@ -199,11 +201,12 @@ public final class TitleUtils {
 	}
 
 	/**
-	 * Liefert die GND-Form des Titels (mit Unterfeldern, aber ohne 130).
+	 * Liefert die GND-Form des Titels ohne Tag und ohne führendes $a.
+	 * 
 	 * @param element TitleElement nicht null.
 	 * @return GND-Titel als String.
 	 */
-	public static String getGND130Or430(final TitleElement element) {
+	public static String getX30ContentAsString(final TitleElement element) {
 		if (element == null)
 			throw new IllegalArgumentException("Titel ist null");
 		WorkTitleVisitor vis = new WorkTitleVisitor(new GNDParticleFactory());
@@ -211,21 +214,59 @@ public final class TitleUtils {
 		return vis.toString();
 	}
 
-	public static String getGND(final String titleStr) {
+	public static String getX30ContentAsString(final String titleStr) {
 		if (titleStr == null)
 			throw new IllegalArgumentException("übergebener Titel ist null");
 		MusicTitle mt = ParseMusicTitle.parseFullRAK(null, titleStr);
-		return getGND130Or430(mt);
+		return getX30ContentAsString(mt);
 	}
 
-	public static Line getGND(final Tag tag, final String titleStr)
+	public static Line getLine(final Tag tag, final String titleStr)
 			throws IllFormattedLineException {
 		RangeCheckUtils.assertReferenceParamNotNull("tag", tag);
 		RangeCheckUtils.assertStringParamNotNullOrWhitespace("titleStr",
 				titleStr);
-		String gnd = getGND(titleStr);
+		String gnd = getX30ContentAsString(titleStr);
 		Line line = LineParser.parse(tag, Format.PICA3, gnd);
 		return line;
+	}
+
+	/**
+	 * Liefert eine Zeile zu Tag und Titel.
+	 * 
+	 * @param tag		nicht null.
+	 * @param title		nicht null.
+	 * @return			nicht null.
+	 */
+	public static Line getLine(final Tag tag, final MusicTitle title) {
+		RangeCheckUtils.assertReferenceParamNotNull("tag", tag);
+		RangeCheckUtils.assertReferenceParamNotNull("element", title);
+		String gnd = getX30ContentAsString(title);
+		Line line = null;
+		try {
+			line = LineParser.parse(tag, Format.PICA3, gnd);
+		} catch (IllFormattedLineException e) {
+			// OK
+		}
+		return line;
+	}
+
+	/**
+	 * Gibt basierend auf dem Tag 130 eine Liste der Unterfelder.
+	 * 
+	 * @param title	nicht null.
+	 * @return		nicht null, nicht leer.
+	 */
+	public static List<Subfield> getSubfields(final MusicTitle title) {
+		RangeCheckUtils.assertReferenceParamNotNull("title", title);
+		String gnd = getX30ContentAsString(title);
+		final LineFactory factory = LineParser.getFactory("130");
+		try {
+			factory.load(gnd);
+		} catch (IllFormattedLineException e) {
+			// nix
+		}
+		return factory.getSubfieldList();
 	}
 
 	/**
@@ -290,10 +331,10 @@ public final class TitleUtils {
 	 * @throws IllFormattedLineException 
 	 */
 	public static void main(String[] args) throws IllFormattedLineException {
-		Tag tag = GNDConstants.TAG_130;
-		Line line =
-			getGND(tag, "Adagio und Fuge Vl 1 2 Va KV 5 "
-				+ "<Fuge KV 5a, Durchführung 1>. Fassung Kl / Arr.");
-		System.out.println(line);
+		MusicTitle title =
+			ParseMusicTitle.parseFullRAK(null,
+					"Adagio und Fuge Vl 1 2 Va KV 5 "
+						+ "<Fuge KV 5a, Durchführung 1>. Fassung Kl / Arr.");
+		System.out.println(getSubfields(title));
 	}
 }

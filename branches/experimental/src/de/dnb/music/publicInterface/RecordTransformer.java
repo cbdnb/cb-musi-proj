@@ -65,8 +65,23 @@ public class RecordTransformer {
 			addGeneralNote();
 			addGNDClassification();
 			removeTitles();
+			transform130();
+			Collection<Line> lines430 = GNDUtils.getLines(oldRecord, "430");
+			for (Line line : lines430) {
+				transform430(line);
+			}
 		}
 		return newRecord;
+	}
+
+	protected void transform430(Line line) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	protected void transform130() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	protected void removeTitles() {
@@ -84,7 +99,7 @@ public class RecordTransformer {
 			return false;
 		}
 		String comment = GNDUtils2.getFirstComment(heading);
-		if (Constants.COMMENT_MACHINE.contains(comment))
+		if (Constants.COMMENTS_MACHINE.contains(comment))
 			return false;
 		IPredicate<Line> predicate667 = new IPredicate<Line>() {
 			@Override
@@ -279,9 +294,9 @@ public class RecordTransformer {
 		for (String heading : headings) {
 			String[] parts = heading.split(": ");
 			if (parts.length == 2) {
-				titles.add(parts[1]);
+				titles.add(parts[1].replace("{", ""));
 			} else
-				titles.add(heading);
+				titles.add(heading.replace("{", ""));
 		}
 		return titles;
 	}

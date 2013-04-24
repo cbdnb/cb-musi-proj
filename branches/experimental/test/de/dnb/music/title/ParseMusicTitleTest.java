@@ -21,55 +21,55 @@ public class ParseMusicTitleTest {
 	public void testParseDollarG() {
 		titleStr = "aa$gbb";
 		mt = ParseMusicTitle.parseGND(null, titleStr);
-		assertEquals(titleStr, TitleUtils.getGND130Or430(mt));		
+		assertEquals(titleStr, TitleUtils.getX30ContentAsString(mt));		
 		mt = ParseMusicTitle.parseFullRAK(null, titleStr);
-		assertEquals(titleStr, TitleUtils.getGND130Or430(mt));
+		assertEquals(titleStr, TitleUtils.getX30ContentAsString(mt));
 		
 		titleStr = "aa$gNr. 1";
 		mt = ParseMusicTitle.parseGND(null, titleStr);
-		assertEquals("aa$nNr. 1", TitleUtils.getGND130Or430(mt));		
+		assertEquals("aa$nNr. 1", TitleUtils.getX30ContentAsString(mt));		
 		mt = ParseMusicTitle.parseFullRAK(null, titleStr);
-		assertEquals("aa$nNr. 1", TitleUtils.getGND130Or430(mt));
+		assertEquals("aa$nNr. 1", TitleUtils.getX30ContentAsString(mt));
 		
 		titleStr = "aa$g1234";
 		mt = ParseMusicTitle.parseGND(null, titleStr);
-		assertEquals("aa$f1234", TitleUtils.getGND130Or430(mt));
+		assertEquals("aa$f1234", TitleUtils.getX30ContentAsString(mt));
 		mt = ParseMusicTitle.parseFullRAK(null, titleStr);
-		assertEquals("aa$f1234", TitleUtils.getGND130Or430(mt));
+		assertEquals("aa$f1234", TitleUtils.getX30ContentAsString(mt));
 		
 		titleStr = "Adagio, Violine$g1234";
 		mt = ParseMusicTitle.parseGND(null, titleStr);
-		assertEquals("Adagio$mVl$f1234", TitleUtils.getGND130Or430(mt));
+		assertEquals("Adagio$mVl$f1234", TitleUtils.getX30ContentAsString(mt));
 		mt = ParseMusicTitle.parseFullRAK(null, titleStr);
-		assertEquals("Adagio$mVl$f1234", TitleUtils.getGND130Or430(mt));
+		assertEquals("Adagio$mVl$f1234", TitleUtils.getX30ContentAsString(mt));
 		
 		titleStr = "Adagio$g1234";
 		mt = ParseMusicTitle.parseGND(null, titleStr);
-		assertEquals("Adagio$f1234", TitleUtils.getGND130Or430(mt));
+		assertEquals("Adagio$f1234", TitleUtils.getX30ContentAsString(mt));
 		mt = ParseMusicTitle.parseFullRAK(null, titleStr);
-		assertEquals("Adagio$f1234", TitleUtils.getGND130Or430(mt));
+		assertEquals("Adagio$f1234", TitleUtils.getX30ContentAsString(mt));
 		
 		titleStr = "Adagio$g1";
 		mt = ParseMusicTitle.parseGND(null, titleStr);
-		assertEquals("Adagio$n1", TitleUtils.getGND130Or430(mt));
+		assertEquals("Adagio$n1", TitleUtils.getX30ContentAsString(mt));
 		mt = ParseMusicTitle.parseFullRAK(null, titleStr);
-		assertEquals("Adagio$n1", TitleUtils.getGND130Or430(mt));
+		assertEquals("Adagio$n1", TitleUtils.getX30ContentAsString(mt));
 		mt = ParseFormalTitle.parse(null, titleStr);
-		assertEquals("Adagio$n1", TitleUtils.getGND130Or430(mt));
+		assertEquals("Adagio$n1", TitleUtils.getX30ContentAsString(mt));
 		
 		titleStr = "Adagio$gNr. 1";
 		mt = ParseMusicTitle.parseGND(null, titleStr);
-		assertEquals("Adagio$nNr. 1", TitleUtils.getGND130Or430(mt));
+		assertEquals("Adagio$nNr. 1", TitleUtils.getX30ContentAsString(mt));
 		mt = ParseMusicTitle.parseFullRAK(null, titleStr);
-		assertEquals("Adagio$nNr. 1", TitleUtils.getGND130Or430(mt));
+		assertEquals("Adagio$nNr. 1", TitleUtils.getX30ContentAsString(mt));
 		mt = ParseFormalTitle.parse(null, titleStr);
-		assertEquals("Adagio$nNr. 1", TitleUtils.getGND130Or430(mt));
+		assertEquals("Adagio$nNr. 1", TitleUtils.getX30ContentAsString(mt));
 		
 		titleStr = "aa$g1";
 		mt = ParseMusicTitle.parseGND(null, titleStr);
-		assertEquals("aa$n1", TitleUtils.getGND130Or430(mt));
+		assertEquals("aa$n1", TitleUtils.getX30ContentAsString(mt));
 		mt = ParseMusicTitle.parseFullRAK(null, titleStr);
-		assertEquals("aa$n1", TitleUtils.getGND130Or430(mt));
+		assertEquals("aa$n1", TitleUtils.getX30ContentAsString(mt));
 	}
 
 	@Test

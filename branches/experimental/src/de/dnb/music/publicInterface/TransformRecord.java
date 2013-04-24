@@ -315,7 +315,7 @@ public final class TransformRecord {
 			boolean coincidence = true;
 
 			if (sRules == SetOfRules.RSWK) {
-				newLine += TitleUtils.getGND130Or430(sMusicTitle);
+				newLine += TitleUtils.getX30ContentAsString(sMusicTitle);
 
 				if (sTransformMode == TransformMode.MACHINE)
 					newComment = KOM_MASCHINELL;
@@ -334,14 +334,14 @@ public final class TransformRecord {
 					 * Sicherheitshalber lieber die alte $a aufheben:
 					 */
 					if (coincidence)
-						newLine += TitleUtils.getGND130Or430(sMusicTitle);
+						newLine += TitleUtils.getX30ContentAsString(sMusicTitle);
 					else {
 						newLine += sTitleStr;
 						rejectionCause +=
 							"\n130 nicht verwendet wegen "
 								+ "Differenz zu 913, daher alte 130:\n"
 								+ "130 neu:"
-								+ TitleUtils.getGND130Or430(sMusicTitle)
+								+ TitleUtils.getX30ContentAsString(sMusicTitle)
 								+ "\n130 alt:" + sTitleStr + "\n";
 					}
 
@@ -374,14 +374,14 @@ public final class TransformRecord {
 					 * Sicherheitshalber lieber die alte $a aufheben:
 					 */
 					if (coincidence)
-						newLine += TitleUtils.getGND130Or430(sMusicTitle);
+						newLine += TitleUtils.getX30ContentAsString(sMusicTitle);
 					else {
 						newLine += sTitleStr;
 						rejectionCause +=
 							"\n130 nicht verwendet wegen "
 								+ "Differenz zu 913, daher alte 130:\n"
 								+ "130 neu:"
-								+ TitleUtils.getGND130Or430(sMusicTitle)
+								+ TitleUtils.getX30ContentAsString(sMusicTitle)
 								+ "\n130 alt:" + sTitleStr + "\n";
 					}
 
@@ -411,7 +411,7 @@ public final class TransformRecord {
 					&& sTransformMode == TransformMode.INTELLECT) {
 					//	RAK, 130, vor 2003, INTELLECT: ---------------------
 					newComment = null;
-					newLine += TitleUtils.getGND130Or430(sMusicTitle);
+					newLine += TitleUtils.getX30ContentAsString(sMusicTitle);
 				} else if (KOM_VOR_2003.equals(sCommentStr)
 					&& sTransformMode == TransformMode.MACHINE) {
 					//	RAK, 130, vor 2003, maschinell: ------------------
@@ -424,7 +424,7 @@ public final class TransformRecord {
 				}
 
 			} else { // GND
-				newLine += TitleUtils.getGND130Or430(sMusicTitle);
+				newLine += TitleUtils.getX30ContentAsString(sMusicTitle);
 				;
 				newComment = sCommentStr;
 			}
@@ -441,7 +441,7 @@ public final class TransformRecord {
 					newComment = sCommentStr;
 				} else {
 					// 	RAK, 430, alle anderen: ------------------------------
-					newLine += TitleUtils.getGND130Or430(sMusicTitle);
+					newLine += TitleUtils.getX30ContentAsString(sMusicTitle);
 					newComment = sCommentStr;
 				}
 			} else { // GND
@@ -451,7 +451,7 @@ public final class TransformRecord {
 					newLine += transformOldRAK(sContent);
 					newComment = sCommentStr;
 				} else {
-					newLine += TitleUtils.getGND130Or430(sMusicTitle);
+					newLine += TitleUtils.getX30ContentAsString(sMusicTitle);
 					newComment = sCommentStr;
 				}
 			}

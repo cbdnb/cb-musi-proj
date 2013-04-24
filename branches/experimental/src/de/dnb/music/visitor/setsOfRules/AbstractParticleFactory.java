@@ -14,7 +14,7 @@ import de.dnb.music.mediumOfPerformance.Instrument;
  * 
  * Bezeichnung				RAK			GND			RSWK
  *	preTitle				""  			
- *	preTitleFirstPart		"", 		"$p"		" / "
+ *	preTitleFirstPart		""	 		"$p"		" / "
  *	preTitleFollowingPts	", "		"$p"		" / "
  *	preGenreFormal			"" 			
  *	preGenreIndiv			", " 

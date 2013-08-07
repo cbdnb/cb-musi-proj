@@ -5,6 +5,13 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import utils.TitleUtils;
+
+import applikationsbausteine.ListUtils;
+import applikationsbausteine.RangeCheckUtils;
+
+import de.dnb.music.title.MusicTitle;
+import de.dnb.music.title.ParseMusicTitle;
 import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.Visitor;
 
@@ -26,7 +33,6 @@ public class GenreList implements TitleElement {
 	 */
 	private final LinkedList<Genre> genres; // = new LinkedList<Gattung>();
 
-	@Deprecated
 	public GenreList(final Genre g) {
 		genres = new LinkedList<Genre>();
 		genres.add(g);
@@ -36,15 +42,13 @@ public class GenreList implements TitleElement {
 		genres = llg;
 	}
 
-	@Deprecated
-	public final void addGattung(final Genre g) {
+	public final void add(final Genre g) {
 		if (g == null)
 			return;
 		genres.add(g);
 	}
 
-	@Deprecated
-	public final void addGattungen(final GenreList gatt) {
+	public final void add(final GenreList gatt) {
 		if (gatt == null)
 			return;
 		genres.addAll(gatt.genres);
@@ -79,8 +83,7 @@ public class GenreList implements TitleElement {
 			return singularPreferred();
 
 		default:
-			throw new IllegalArgumentException(
-					"Numerus not supported");
+			throw new IllegalArgumentException("Numerus not supported");
 		}
 	}
 
@@ -161,7 +164,28 @@ public class GenreList implements TitleElement {
 				genre.accept(visitor);
 			}
 		visitor.leave(this);
+	}
 
+	@Override
+	public void addToTitle(MusicTitle title) {
+		RangeCheckUtils.assertReferenceParamNotNull("title", title);
+		for (Genre genre : genres) {
+			genre.addToTitle(title);
+		}
+	}
+
+	public Genre getLast() {
+		if (genres.isEmpty())
+			throw new IllegalStateException("Liste der Gattungen ist leer");
+		return ListUtils.getLast(genres);
+	}
+	
+	public static void main(final String[] args) {
+		MusicTitle mt =
+			ParseMusicTitle.parseFullRAK(null, "aa");
+		GenreList genreList = ParseGenre.parseGenreList("Adagio und Fuge");
+		genreList.addToTitle(mt);
+		System.out.println(TitleUtils.getStructured(mt));
 	}
 
 }

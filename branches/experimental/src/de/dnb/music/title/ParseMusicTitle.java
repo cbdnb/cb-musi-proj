@@ -16,11 +16,11 @@ import applikationsbausteine.RangeCheckUtils;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
 import de.dnb.gnd.parser.Indicator;
 import de.dnb.gnd.parser.Subfield;
-import de.dnb.gnd.parser.Tag;
-import de.dnb.gnd.parser.TagDB;
 import de.dnb.gnd.parser.line.Line;
 import de.dnb.gnd.parser.line.LineFactory;
 import de.dnb.gnd.parser.line.LineParser;
+import de.dnb.gnd.parser.tag.GNDTagDB;
+import de.dnb.gnd.parser.tag.Tag;
 import de.dnb.gnd.utils.Pair;
 import de.dnb.music.additionalInformation.AdditionalInformation;
 import de.dnb.music.additionalInformation.Key;
@@ -33,6 +33,7 @@ import de.dnb.music.version.ParseVersion;
 import de.dnb.music.version.Version;
 import filtering.FilterUtils;
 import filtering.IPredicate;
+import static utils.GNDConstants.TAG_DB;
 
 /**
  * Zentrale Parserklasse. Verschiedene statische Dienstfunktionen werden
@@ -334,7 +335,7 @@ public final class ParseMusicTitle {
 		final IPredicate<Subfield> dollarGPred = new IPredicate<Subfield>() {
 			@Override
 			public boolean accept(final Subfield element) {
-				return element.getIndicator() == TagDB.dollarg;
+				return element.getIndicator() == GNDTagDB.DOLLAR_G;
 			}
 		};
 
@@ -376,7 +377,7 @@ public final class ParseMusicTitle {
 			} else if (indicator == GNDConstants.DOLLAR_f
 				|| indicator == GNDConstants.DOLLAR_n
 				|| indicator == GNDConstants.DOLLAR_r
-				|| indicator == TagDB.dollarg) {
+				|| indicator == GNDTagDB.DOLLAR_G) {
 				/*
 				 * Auch hier können wir wieder so tun, als wäre ein
 				 * Komma erkannt, da ja nicht (gegenbenenfalls) ein
@@ -453,7 +454,8 @@ public final class ParseMusicTitle {
 	}
 
 	// reichhaltigste:
-	private static LineFactory factory730 = LineParser.getFactory("730");
+	private static LineFactory factory730 = TAG_DB.findTag("730")
+			.getLineFactory();
 
 	/**
 	 * Parst GND. Die Zeile oder ihr Inhalt wird als String übergeben.
@@ -471,7 +473,7 @@ public final class ParseMusicTitle {
 				parseString);
 		Line line = null;
 		try {
-			line = LineParser.parse(parseString);
+			line = LineParser.parse(parseString, TAG_DB);
 		} catch (IllFormattedLineException e) {
 			// noch nicht alles verloren
 		}
@@ -502,7 +504,7 @@ public final class ParseMusicTitle {
 		System.out.println("Titel bitte eingeben");
 		System.out.println();
 		String string = br.readLine();
-		Line line = LineParser.parse(string);
+		Line line = LineParser.parse(string, TAG_DB);
 		Pair<MusicTitle, List<Subfield>> pair = parseGND(null, line);
 		System.out.println((TitleUtils.getStructured(pair.first)));
 		System.out.println(pair.second);

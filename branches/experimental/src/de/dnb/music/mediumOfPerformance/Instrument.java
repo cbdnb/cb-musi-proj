@@ -1,5 +1,14 @@
 package de.dnb.music.mediumOfPerformance;
 
+import utils.TitleUtils;
+import applikationsbausteine.RangeCheckUtils;
+import de.dnb.music.genre.Genre;
+import de.dnb.music.genre.GenreList;
+import de.dnb.music.genre.ParseGenre;
+import de.dnb.music.title.MusicTitle;
+import de.dnb.music.title.ParseMusicTitle;
+import de.dnb.music.title.PartOfWork;
+import de.dnb.music.version.Version;
 import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.Visitor;
 
@@ -87,7 +96,7 @@ public class Instrument implements TitleElement, Comparable<Instrument> {
 	public int getCount() {
 		return count;
 	}
-	
+
 	public void setCount(int c) {
 		count = c;
 	}
@@ -122,5 +131,46 @@ public class Instrument implements TitleElement, Comparable<Instrument> {
 		return this.swd.compareTo(o.swd);
 	}
 
-	//	
+	@Override
+	public void addToTitle(MusicTitle title) {
+		/*
+		 * Kann entweder der Fassung oder dem letzten Teil oder
+		 * dem Titel selbst hinzugefügt werden.
+		 */
+		RangeCheckUtils.assertReferenceParamNotNull("title", title);
+		InstrumentationList instrumList = null;
+		InstrumentationList newInstrumList = new InstrumentationList(this);
+		if (title.containsVersion()) {
+			Version version = title.getVersion();
+			if (version.containsInstrumentation()) {
+				instrumList = version.getInstrumentationList();
+			} else {
+				version.setInstrumentation(newInstrumList);
+				return;
+			}
+		} else if (title.containsParts()) {
+			PartOfWork partOfWork = title.getPartOfWork();
+			MusicTitle lastTitle = partOfWork.getLastPart();
+			addToTitle(lastTitle);
+			return;
+		} else {
+			if (title.containsInstrumentation()) {
+				instrumList = title.getInstrumentationList();
+			} else {
+				title.setInstrumentationList(newInstrumList);
+				return;
+			}
+		}
+		instrumList.add(this);
+	}
+
+	public static void main(final String[] args) {
+		MusicTitle mt =
+			ParseMusicTitle.parseFullRAK(null, "aa <bb>. Fassung Vl");
+		Instrument instrument =
+			ParseInstrumentation.parseSingleInstrument("Va");
+		instrument.addToTitle(mt);
+		System.out.println(TitleUtils.getStructured(mt));
+	}
+
 }

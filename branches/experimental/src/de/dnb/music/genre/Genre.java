@@ -1,5 +1,15 @@
 package de.dnb.music.genre;
 
+import java.util.List;
+
+import utils.TitleUtils;
+
+import applikationsbausteine.RangeCheckUtils;
+import de.dnb.music.title.MusicTitle;
+import de.dnb.music.title.ParseMusicTitle;
+import de.dnb.music.title.PartOfWork;
+import de.dnb.music.version.ParseVersion;
+import de.dnb.music.version.Version;
 import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.Visitor;
 
@@ -89,6 +99,47 @@ public class Genre implements TitleElement, Comparable<Genre> {
 	@Override
 	public int compareTo(final Genre o) {
 		return this.swd.compareTo(o.swd);
+	}
+
+	@Override
+	public void addToTitle(MusicTitle title) {
+		/*
+		 * Kann entweder der Fassung oder dem letzten Teil oder
+		 * dem Titel selbst hinzugefügt werden.
+		 */
+		RangeCheckUtils.assertReferenceParamNotNull("title", title);
+		GenreList genreList = null;
+		GenreList newGenreList = new GenreList(this);
+		if (title.containsVersion()) {
+			Version version = title.getVersion();
+			if (version.containsGenre()) {
+				genreList = version.getGenreList();
+			} else {
+				version.setGenreList(newGenreList);
+				return;
+			}
+		} else if (title.containsParts()) {
+			PartOfWork partOfWork = title.getPartOfWork();
+			MusicTitle lastTitle = partOfWork.getLastPart();
+			addToTitle(lastTitle);
+			return;
+		} else {
+			if (title.containsGenre()) {
+				genreList = title.getGenreList();
+			} else {
+				title.setGenre(newGenreList);
+				return;
+			}
+		}
+		genreList.add(this);
+	}
+
+	public static void main(final String[] args) {
+		MusicTitle mt =
+			ParseMusicTitle.parseFullRAK(null, "aa <bb>. Fassung Vl");
+		Genre genre = ParseGenre.parseGenre("Adagio");
+		genre.addToTitle(mt);
+		System.out.println(TitleUtils.getStructured(mt));
 	}
 
 }

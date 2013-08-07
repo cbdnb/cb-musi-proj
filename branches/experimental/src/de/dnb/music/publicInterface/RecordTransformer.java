@@ -20,15 +20,20 @@ import de.dnb.gnd.exceptions.IllFormattedLineException;
 import de.dnb.gnd.parser.Field;
 import de.dnb.gnd.parser.Record;
 import de.dnb.gnd.parser.RecordParser;
+import de.dnb.gnd.parser.RecordReader;
 import de.dnb.gnd.parser.Subfield;
-import de.dnb.gnd.parser.Tag;
-import de.dnb.gnd.parser.TagDB;
+
 import de.dnb.gnd.parser.line.Line;
 import de.dnb.gnd.parser.line.LineFactory;
 import de.dnb.gnd.parser.line.LineParser;
+import de.dnb.gnd.parser.tag.GNDTag;
+import de.dnb.gnd.parser.tag.GNDTagDB;
+import de.dnb.gnd.parser.tag.Tag;
+import de.dnb.gnd.parser.tag.TagDB;
 import de.dnb.gnd.utils.GNDUtils;
-import de.dnb.gnd.utils.GNDUtils2;
+
 import de.dnb.gnd.utils.Pair;
+import de.dnb.gnd.utils.RecordUtils;
 import de.dnb.gnd.utils.WorkUtils;
 import de.dnb.music.additionalInformation.ThematicIndexDB;
 import de.dnb.music.publicInterface.Constants.SetOfRules;
@@ -49,6 +54,7 @@ public class RecordTransformer {
 
 	protected Record oldRecord;
 	protected Record newRecord;
+	private static GNDTagDB tagDB = GNDTagDB.getDB();
 
 	/**
 	 * Template-Methode.
@@ -66,7 +72,7 @@ public class RecordTransformer {
 			addGNDClassification();
 			removeTitles();
 			transform130();
-			Collection<Line> lines430 = GNDUtils.getLines(oldRecord, "430");
+			Collection<Line> lines430 = RecordUtils.getLines(oldRecord, "430");
 			for (Line line : lines430) {
 				transform430(line);
 			}
@@ -76,35 +82,35 @@ public class RecordTransformer {
 
 	protected void transform430(Line line) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	protected void transform130() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	protected void removeTitles() {
-		Collection<Tag> tags1xx = TagDB.getTag1XX();
-		GNDUtils.removeTags(newRecord, tags1xx);
-		Collection<Tag> tags4xx = TagDB.getTag4XX();
-		GNDUtils.removeTags(newRecord, tags4xx);
+		Collection<GNDTag> tags1xx = tagDB.getTag1XX();
+		RecordUtils.removeTags(newRecord, tags1xx);
+		Collection<GNDTag> tags4xx = tagDB.getTag4XX();
+		RecordUtils.removeTags(newRecord, tags4xx);
 	}
 
 	protected boolean isPermitted(Record record) {
 		Line heading;
 		try {
-			heading = GNDUtils2.getHeading(record);
+			heading = GNDUtils.getHeading(record);
 		} catch (IllegalStateException e) {
 			return false;
 		}
-		String comment = GNDUtils2.getFirstComment(heading);
+		String comment = GNDUtils.getFirstComment(heading);
 		if (Constants.COMMENTS_MACHINE.contains(comment))
 			return false;
 		IPredicate<Line> predicate667 = new IPredicate<Line>() {
 			@Override
 			public boolean accept(Line line) {
-				Subfield subfield = GNDUtils.getFirstSubfield(line, 'a');
+				Subfield subfield = RecordUtils.getFirstSubfield(line, 'a');
 				if (subfield == null)
 					return false;
 				String content = subfield.getContent();
@@ -112,7 +118,8 @@ public class RecordTransformer {
 			}
 		};
 		Collection<Line> lines667 =
-			GNDUtils.getLinesTagsGivenAsString(record, predicate667, "667");
+			RecordUtils.getLinesByTagsGivenAsStrings(record, predicate667,
+					"667");
 		return lines667.isEmpty();
 	}
 
@@ -125,8 +132,7 @@ public class RecordTransformer {
 	 */
 	protected final SetOfRules getRules(final Record record) {
 		RangeCheckUtils.assertReferenceParamNotNull("record", record);
-		ArrayList<String> authorities =
-			GNDUtils2.getOriginalAuthorityFile(record);
+		List<String> authorities = GNDUtils.getOriginalAuthorityFile(record);
 		// neu angesetzt oder "Gemerged":
 		if (authorities.size() != 1)
 			return SetOfRules.GND;
@@ -152,14 +158,13 @@ public class RecordTransformer {
 	 */
 	protected final Line transformOldRAK(final Line line) {
 		RangeCheckUtils.assertReferenceParamNotNull("line", line);
-		LineFactory factory = LineParser.getFactory(line.getTag());
+		LineFactory factory = line.getTag().getLineFactory();
 
 		/*
 		 * jetzt aufpassen: hier sollen nur die Unterfelder
 		 * $p und $s erzeugt werden.
 		 */
-		Pair<List<Subfield>, List<Subfield>> pair =
-			GNDUtils2.splitComment(line);
+		Pair<List<Subfield>, List<Subfield>> pair = GNDUtils.splitComment(line);
 		List<Subfield> oldSubfields = pair.first;
 		List<Subfield> newSubfields;
 		List<Subfield> comments = pair.second;
@@ -211,7 +216,7 @@ public class RecordTransformer {
 		RangeCheckUtils.assertReferenceParamNotNull("title", title);
 		try {
 			boolean forceTotalCount = true;
-			GNDUtils.addLines(newRecord,
+			RecordUtils.addLines(newRecord,
 					TitleUtils.get3XXLines(title, forceTotalCount));
 		} catch (OperationNotSupportedException e) {
 			// kann nichts passieren, da alle wiederholbar.
@@ -231,10 +236,10 @@ public class RecordTransformer {
 		if (cc != null) {
 			Line line;
 			try {
-				line = LineParser.parse("043 " + cc);
+				line = LineParser.parse("043 " + cc, tagDB);
 				newRecord.add(line);
 				String sourceAbb = ThematicIndexDB.getSourceAbb(idn);
-				line = LineParser.parse("670 " + sourceAbb);
+				line = LineParser.parse("670 " + sourceAbb, tagDB);
 				newRecord.add(line);
 			} catch (IllFormattedLineException e) {
 				//nix
@@ -251,7 +256,7 @@ public class RecordTransformer {
 	protected void addGNDClassification() {
 		Line line;
 		try {
-			line = LineParser.parse("065 14.4p");
+			line = LineParser.parse("065 14.4p", tagDB);
 			newRecord.add(line);
 		} catch (IllFormattedLineException e) {
 			//nix
@@ -266,7 +271,7 @@ public class RecordTransformer {
 	protected void addGeneralNote() {
 		Line line;
 		try {
-			line = LineParser.parse("667 " + SATZ_AUFG);
+			line = LineParser.parse("667 " + SATZ_AUFG, tagDB);
 			newRecord.add(line);
 		} catch (IllFormattedLineException e) {
 			//nix
@@ -289,7 +294,7 @@ public class RecordTransformer {
 	 */
 	protected final ArrayList<String> getOriginalTitles(final Record record) {
 		RangeCheckUtils.assertReferenceParamNotNull("record", record);
-		ArrayList<String> headings = GNDUtils2.getOriginalHeadings(record);
+		List<String> headings = GNDUtils.getOriginalHeadings(record);
 		ArrayList<String> titles = new ArrayList<String>();
 		for (String heading : headings) {
 			String[] parts = heading.split(": ");
@@ -310,7 +315,7 @@ public class RecordTransformer {
 			throws IllFormattedLineException,
 			OperationNotSupportedException {
 
-		Line line = LineParser.parse("430 Adagio, 3");
+		Line line = LineParser.parse("430 Adagio, 3", tagDB);
 
 		RecordTransformer transformer = new RecordTransformer();
 
@@ -331,8 +336,8 @@ public class RecordTransformer {
 		RecordTransformer transformer = new RecordTransformer();
 		BufferedReader reader =
 			new BufferedReader(new InputStreamReader(System.in));
-		RecordParser parser = new RecordParser(reader);
-		Record record = parser.getNextRecord();
+		RecordReader parser = new RecordReader(reader);
+		Record record = parser.nextRecord();
 		System.out.println(transformer.transform(record));
 	}
 }

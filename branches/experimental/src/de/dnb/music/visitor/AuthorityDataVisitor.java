@@ -1,5 +1,7 @@
 package de.dnb.music.visitor;
 
+import static utils.GNDConstants.TAG_DB;
+
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -9,6 +11,7 @@ import de.dnb.gnd.parser.Format;
 import de.dnb.gnd.parser.line.Line;
 import de.dnb.gnd.parser.line.LineParser;
 import de.dnb.gnd.utils.GNDUtils;
+import de.dnb.gnd.utils.RecordUtils;
 import de.dnb.music.genre.Genre;
 import de.dnb.music.genre.GenreList;
 import de.dnb.music.mediumOfPerformance.Instrument;
@@ -78,7 +81,7 @@ public class AuthorityDataVisitor extends Visitor {
 
 	@Override
 	public final String toString() {
-		return GNDUtils.toPica(getLines(), Format.PICA3, true);
+		return RecordUtils.toPicaExpanded(getLines());
 	}
 
 	@Override
@@ -96,7 +99,7 @@ public class AuthorityDataVisitor extends Visitor {
 				String genreStr =
 					"380 !" + genre.getIdn() + "!" + genre.getSwd();
 				try {
-					Line line = LineParser.parse(genreStr);
+					Line line = LineParser.parse(genreStr, TAG_DB);
 					genres.add(line);
 				} catch (IllFormattedLineException e) {
 					// nix.
@@ -113,7 +116,7 @@ public class AuthorityDataVisitor extends Visitor {
 	public final boolean visit(final Version version) {
 		String obin = "550 !042875420!Fassung$4obin";
 		try {
-			Line line = LineParser.parse(obin);
+			Line line = LineParser.parse(obin, TAG_DB);
 			obins.clear();
 			obins.add(line);
 		} catch (IllFormattedLineException e) {
@@ -129,7 +132,7 @@ public class AuthorityDataVisitor extends Visitor {
 	public final void visit(final Arrangement arrangement) {
 		String obin = "550 !041209818!Bearbeitung$4obin";
 		try {
-			Line line = LineParser.parse(obin);
+			Line line = LineParser.parse(obin, TAG_DB);
 			obins.clear();
 			obins.add(line);
 		} catch (IllFormattedLineException e) {
@@ -166,7 +169,7 @@ public class AuthorityDataVisitor extends Visitor {
 		if (forceTotalCount || count > 1)
 			totalCount += count;
 		try {
-			Line line = LineParser.parse(instrStr);
+			Line line = LineParser.parse(instrStr, TAG_DB);
 			instruments.add(line);
 		} catch (IllFormattedLineException e) {
 			// nix.
@@ -180,7 +183,7 @@ public class AuthorityDataVisitor extends Visitor {
 			if (outputTotalCount || forceTotalCount) {
 				String instrStr = "382 $s" + totalCount;
 				try {
-					Line line = LineParser.parse(instrStr);
+					Line line = LineParser.parse(instrStr, TAG_DB);
 					instruments.add(line);
 				} catch (IllFormattedLineException e) {
 					// nix.

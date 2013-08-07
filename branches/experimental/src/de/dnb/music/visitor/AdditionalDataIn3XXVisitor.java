@@ -1,5 +1,7 @@
 package de.dnb.music.visitor;
 
+import static utils.GNDConstants.TAG_DB;
+
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -7,6 +9,7 @@ import de.dnb.gnd.exceptions.IllFormattedLineException;
 import de.dnb.gnd.parser.line.Line;
 import de.dnb.gnd.parser.line.LineParser;
 import de.dnb.gnd.utils.GNDUtils;
+import de.dnb.gnd.utils.RecordUtils;
 import de.dnb.music.additionalInformation.DateOfComposition;
 import de.dnb.music.additionalInformation.Key;
 import de.dnb.music.additionalInformation.OpusNumber;
@@ -34,7 +37,7 @@ public class AdditionalDataIn3XXVisitor extends Visitor {
 
 	@Override
 	public final String toString() {
-		return GNDUtils.toPica3Expanded(getLines());
+		return RecordUtils.toPicaExpanded(getLines());
 	};
 
 	/**
@@ -58,7 +61,7 @@ public class AdditionalDataIn3XXVisitor extends Visitor {
 	public final void visit(final DateOfComposition dateOfComposition) {
 		String dateOfCompositionStr = "548 $c" + dateOfComposition + "$4dats";
 		try {
-			this.dateLine = LineParser.parse(dateOfCompositionStr);
+			this.dateLine = LineParser.parse(dateOfCompositionStr, TAG_DB);
 		} catch (IllFormattedLineException e) {
 			// nix
 		}
@@ -68,7 +71,7 @@ public class AdditionalDataIn3XXVisitor extends Visitor {
 	public final void visit(final Key key) {
 		String keyStr = "384 " + key;
 		try {
-			this.keyLine = LineParser.parse(keyStr);
+			this.keyLine = LineParser.parse(keyStr, TAG_DB);
 		} catch (IllFormattedLineException e) {
 			// nix
 		}
@@ -78,7 +81,7 @@ public class AdditionalDataIn3XXVisitor extends Visitor {
 	public final void visit(final OpusNumber opusNumber) {
 		String opusStr = "383 $b" + opusNumber;
 		try {
-			this.opusLine = LineParser.parse(opusStr);
+			this.opusLine = LineParser.parse(opusStr, TAG_DB);
 		} catch (IllFormattedLineException e) {
 			// nix
 		}
@@ -88,7 +91,7 @@ public class AdditionalDataIn3XXVisitor extends Visitor {
 	public final void visit(final SerialNumber serialNumber) {
 		String serNumbStr = "383 " + serialNumber;
 		try {
-			Line line = LineParser.parse(serNumbStr);
+			Line line = LineParser.parse(serNumbStr, TAG_DB);
 			this.serNumbLine = line;
 		} catch (IllFormattedLineException e) {
 			// nix
@@ -100,7 +103,7 @@ public class AdditionalDataIn3XXVisitor extends Visitor {
 		String thematicIndexStr =
 			"383 $c" + thematicIndexNumber.toStringWithoutBlanks();
 		try {
-			this.indexLine = LineParser.parse(thematicIndexStr);
+			this.indexLine = LineParser.parse(thematicIndexStr, TAG_DB);
 		} catch (IllFormattedLineException e) {
 			// nix
 		}

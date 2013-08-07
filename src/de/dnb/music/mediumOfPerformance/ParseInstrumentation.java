@@ -118,8 +118,8 @@ public final class ParseInstrumentation {
 	}
 	
 	public static void main(final String[] args) {
-		Instrument i = parseSingleInstrument("Vl 1");
-		System.out.println(i.rest);
+		Instrument i = parseSingleInstrument("Vla");
+		System.out.println(i);
 	}
 
 }

@@ -1,5 +1,6 @@
 package de.dnb.music.title;
 
+import applikationsbausteine.RangeCheckUtils;
 import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.Visitor;
 
@@ -22,6 +23,12 @@ public class Arrangement implements TitleElement{
 	@Override
 	public void accept(Visitor visitor) {
 		visitor.visit(this);		
+	}
+
+	@Override
+	public void addToTitle(MusicTitle title) {
+		RangeCheckUtils.assertReferenceParamNotNull("title", title);
+		title.setArrangement(this);
 	}
 
 	

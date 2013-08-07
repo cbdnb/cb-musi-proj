@@ -1,11 +1,16 @@
 package de.dnb.music.version;
 
+import utils.TitleUtils;
+import applikationsbausteine.RangeCheckUtils;
 import de.dnb.music.additionalInformation.AdditionalInformation;
 import de.dnb.music.additionalInformation.ParseAdditionalInformation;
 import de.dnb.music.genre.GenreList;
 import de.dnb.music.genre.ParseGenre;
 import de.dnb.music.mediumOfPerformance.InstrumentationList;
 import de.dnb.music.mediumOfPerformance.ParseInstrumentation;
+import de.dnb.music.title.MusicTitle;
+import de.dnb.music.title.ParseMusicTitle;
+import de.dnb.music.title.PartOfWork;
 import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.Visitor;
 
@@ -147,7 +152,6 @@ public class Version implements TitleElement {
 		return untergruppe;
 	}
 
-
 	public final InstrumentationList getInstrumentationList() {
 		return instrumentationList;
 	}
@@ -177,22 +181,10 @@ public class Version implements TitleElement {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Version fas = new Version();
-		fas.fallgruppeParagraphM511 = 'c';
-		fas.untergruppe = 2;
-
-		//		Zusatzangabe zus1 = ParseZusatzangabe.parse("", "op. 3");
-		AdditionalInformation zus =
-			ParseAdditionalInformation.parse("", "1996", false);
-		//		Zusatzangabe zus2 = ParseZusatzangabe.parse("", "a-Moll");
-		InstrumentationList bes = ParseInstrumentation.parse(("Vl 1 2"));
-		GenreList gat = ParseGenre.parseGenreList("Quartette");
-
-		fas.genreList = gat;
-		fas.instrumentationList = bes;
-		fas.rakPhrase = "Alternativfassung";
-		fas.additionalInformation = zus;
-
+		Version ver = ParseVersion.parse(null, "Fassung Vl");
+		MusicTitle mt = ParseMusicTitle.parseSimpleTitle(null, "aa");
+		ver.addToTitle(mt);
+		System.out.println(TitleUtils.getGND1XXPlusTag(mt));
 	}
 
 	@Override
@@ -209,16 +201,34 @@ public class Version implements TitleElement {
 		visitor.leave(this);
 	}
 
-	private boolean containsGenre() {
+	public boolean containsGenre() {
 		return genreList != null;
 	}
 
-	private boolean containsInstrumentation() {
+	public boolean containsInstrumentation() {
 		return instrumentationList != null;
 	}
 
-	private boolean containsAdditionalInformation() {
+	public boolean containsAdditionalInformation() {
 		return additionalInformation != null;
+	}
+	
+	public void setGenreList(GenreList other) {
+		genreList = other;
+	}
+	
+	public void setInstrumentation(InstrumentationList other) {
+		instrumentationList = other;
+	}
+	
+	public void setAddiationalInformation(AdditionalInformation other) {
+		additionalInformation = other;
+	}
+
+	@Override
+	public final void addToTitle(MusicTitle title) {
+		RangeCheckUtils.assertReferenceParamNotNull("title", title);
+		title.setVersion(this);
 	}
 
 }

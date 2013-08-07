@@ -1,5 +1,7 @@
 package de.dnb.music.title;
 
+import utils.TitleUtils;
+import applikationsbausteine.RangeCheckUtils;
 import de.dnb.music.additionalInformation.AdditionalInformation;
 import de.dnb.music.genre.GenreList;
 import de.dnb.music.mediumOfPerformance.InstrumentationList;
@@ -39,12 +41,16 @@ public abstract class MusicTitle implements TitleElement {
 	public final boolean containsGenre() {
 		return genreList != null;
 	}
+	
+	public final void setGenre(GenreList other) {
+		genreList = other;
+	}
 
 	public final InstrumentationList getInstrumentationList() {
 		return instrumentationList;
 	}
 
-	final void setInstrumentationList(final InstrumentationList iList) {
+	public final void setInstrumentationList(final InstrumentationList iList) {
 		instrumentationList = iList;
 	}
 
@@ -56,7 +62,7 @@ public abstract class MusicTitle implements TitleElement {
 		return additionalInformation;
 	}
 
-	final void setAdditionalInformation(final AdditionalInformation ai) {
+	public final void setAdditionalInformation(final AdditionalInformation ai) {
 		additionalInformation = ai;
 	}
 
@@ -68,8 +74,8 @@ public abstract class MusicTitle implements TitleElement {
 		return partOfWork;
 	}
 
-	final void setPartOfWork(final PartOfWork teil) {
-		this.partOfWork = teil;
+	public final void setPartOfWork(final PartOfWork part) {
+		this.partOfWork = part;
 	}
 
 	public final boolean containsParts() {
@@ -80,7 +86,7 @@ public abstract class MusicTitle implements TitleElement {
 		return version;
 	}
 
-	final void setVersion(final Version ver) {
+	public final void setVersion(final Version ver) {
 		this.version = ver;
 	}
 
@@ -92,7 +98,7 @@ public abstract class MusicTitle implements TitleElement {
 		return arrangement;
 	}
 
-	final void setArrangement(final Arrangement arrangement) {
+	public final void setArrangement(final Arrangement arrangement) {
 		this.arrangement = arrangement;
 	}
 
@@ -114,6 +120,24 @@ public abstract class MusicTitle implements TitleElement {
 		if (containsArrangement())
 			arrangement.accept(visitor);
 
+	}
+
+	
+	@Override
+	/**
+	 * this kann eigentlich nur ein Werkteil von title sein.
+	 */
+	public void addToTitle(MusicTitle title) {
+		RangeCheckUtils.assertReferenceParamNotNull("title", title);
+		PartOfWork newPart = new PartOfWork(this);
+		newPart.addToTitle(title);
+	}
+	
+	public static void main(final String[] args) {
+		MusicTitle mt1 = ParseMusicTitle.parseSimpleTitle(null, "aa");
+		MusicTitle mt2 = ParseMusicTitle.parseSimpleTitle(null, "bb");		
+		mt2.addToTitle(mt1);
+		System.out.println(TitleUtils.getRAK(mt1));
 	}
 
 	public abstract MusicTitle clone();

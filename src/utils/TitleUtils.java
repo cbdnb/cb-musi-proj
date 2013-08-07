@@ -1,17 +1,21 @@
 package utils;
 
+import static utils.GNDConstants.TAG_DB;
+
 import java.util.Collection;
 import java.util.List;
 
 import applikationsbausteine.RangeCheckUtils;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
 import de.dnb.gnd.parser.Format;
+import de.dnb.gnd.parser.Record;
 import de.dnb.gnd.parser.Subfield;
-import de.dnb.gnd.parser.Tag;
 import de.dnb.gnd.parser.line.Line;
 import de.dnb.gnd.parser.line.LineFactory;
 import de.dnb.gnd.parser.line.LineParser;
+import de.dnb.gnd.parser.tag.Tag;
 import de.dnb.gnd.utils.GNDUtils;
+import de.dnb.gnd.utils.RecordUtils;
 import de.dnb.music.publicInterface.Constants;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
@@ -122,7 +126,9 @@ public final class TitleUtils {
 			new AdditionalDataIn3XXVisitor();
 		element.accept(auvis);
 		element.accept(advis);
-		String s = GNDUtils.toPica(auvis.getLines(), Format.PICA3, expansion);
+		String s =
+			RecordUtils.toPica(auvis.getLines(), Format.PICA3, expansion,
+					Record.LINE_SEPARATOR, '$');
 		return s + advis.toString();
 
 	}
@@ -260,7 +266,7 @@ public final class TitleUtils {
 	public static List<Subfield> getSubfields(final MusicTitle title) {
 		RangeCheckUtils.assertReferenceParamNotNull("title", title);
 		String gnd = getX30ContentAsString(title);
-		final LineFactory factory = LineParser.getFactory("130");
+		final LineFactory factory = LineParser.getFactory("130", TAG_DB);
 		try {
 			factory.load(gnd);
 		} catch (IllFormattedLineException e) {

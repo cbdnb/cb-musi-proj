@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import applikationsbausteine.ListUtils;
+
 /**
  * 
  * Diese Klasse nimmt an, dass Form- und Gattungsbegriffe auch mehrfach,
@@ -81,6 +83,15 @@ public final class ParseGenre {
 
 	}
 
+	public static Genre parseGenre(final String parseString) {
+		GenreList list = parseGenreList(parseString);
+		if (list == null)
+			return null;
+		else {
+			return list.getLast();
+		}
+	}
+
 	public static Genre parseSeparatorPlusGenre(final String parseString) {
 
 		if (parseString == null)
@@ -118,7 +129,7 @@ public final class ParseGenre {
 	 */
 	public static void main(final String[] args) {
 		GenreList llg = parseGenreList("    Präludium mit Fuge");
-
+		System.out.println(llg.getLast());
 	}
 
 }

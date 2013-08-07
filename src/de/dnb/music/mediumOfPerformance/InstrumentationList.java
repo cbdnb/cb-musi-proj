@@ -5,6 +5,11 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import applikationsbausteine.ListUtils;
+import applikationsbausteine.RangeCheckUtils;
+
+import de.dnb.music.genre.Genre;
+import de.dnb.music.title.MusicTitle;
 import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.Visitor;
 
@@ -80,6 +85,12 @@ public class InstrumentationList implements TitleElement {
 	public final List<Instrument> getInstruments() {
 		return Collections.unmodifiableList(instruments);
 	}
+	
+	public final Instrument getLast() {
+		if (instruments.isEmpty())
+			throw new IllegalStateException("Liste der Instrumente ist leer");
+		return ListUtils.getLast(instruments);
+	}
 
 	@Override
 	public void accept(Visitor visitor) {
@@ -89,7 +100,14 @@ public class InstrumentationList implements TitleElement {
 				instrument.accept(visitor);
 			}
 		visitor.leave(this);
-
+	}
+	
+	@Override
+	public void addToTitle(MusicTitle title) {
+		RangeCheckUtils.assertReferenceParamNotNull("title", title);
+		for (Instrument instrument : instruments) {
+			instrument.addToTitle(title);
+		}
 	}
 
 }

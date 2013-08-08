@@ -208,9 +208,9 @@ public class PartOfWork implements TitleElement {
 
 	public static void main(final String[] args) {
 		PartOfWork pw = new PartOfWork("Adagio KV 1, oo");
-		MusicTitle mt = ParseMusicTitle.parseSimpleTitle(null, "aa");
+		MusicTitle mt = ParseMusicTitle.parseFullRAK(null, "aa <bb>");
 		pw.addToTitle(mt);
-		System.out.println(TitleUtils.getGND1XXPlusTag(mt));
+		System.out.println(TitleUtils.getStructured(mt));
 	}
 
 }

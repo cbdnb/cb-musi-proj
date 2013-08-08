@@ -16,6 +16,8 @@ import de.dnb.gnd.parser.line.LineParser;
 import de.dnb.gnd.parser.tag.Tag;
 import de.dnb.gnd.utils.GNDUtils;
 import de.dnb.gnd.utils.RecordUtils;
+import de.dnb.music.genre.GenreList;
+import de.dnb.music.genre.ParseGenre;
 import de.dnb.music.publicInterface.Constants;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
@@ -337,10 +339,10 @@ public final class TitleUtils {
 	 * @throws IllFormattedLineException 
 	 */
 	public static void main(String[] args) throws IllFormattedLineException {
-		MusicTitle title =
-			ParseMusicTitle.parseFullRAK(null,
-					"Adagio und Fuge Vl 1 2 Va KV 5 "
-						+ "<Fuge KV 5a, Durchführung 1>. Fassung Kl / Arr.");
-		System.out.println(getSubfields(title));
+		GenreList list = ParseGenre.parseGenreList("Präludium und Fuge");
+		MusicTitle mt =
+			ParseMusicTitle.parseSimpleTitle(null, "Präludium und Fuge");
+		System.out.println(getRAK(list));
+		System.out.println(getRAK(mt));
 	}
 }

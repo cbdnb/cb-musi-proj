@@ -1,5 +1,6 @@
 package de.dnb.music.version;
 
+import applikationsbausteine.RangeCheckUtils;
 import de.dnb.music.additionalInformation.AdditionalInformation;
 import de.dnb.music.additionalInformation.DateOfComposition;
 import de.dnb.music.additionalInformation.Key;
@@ -26,17 +27,21 @@ public final class ParseVersion {
 
 	}
 
-	/*
+	
+	/**
 	 * Gibt eine gültige Fassung oder null zurück. Die Fallgruppe wird in die 
 	 * entsprechenden Felder eingetragen.
+	 * 
+	 * @param composer		beliebig
+	 * @param parseString	nicht null
+	 * @return				Fassung oder null, wenn nicht den Regeln 
+	 * 						entsprechend. Dann kann aber immer noch
+	 * 						der Konstruktor aufgerufen werden.
 	 */
 	public static
 			Version
-			parse(final String komponist, final String parseString) {
-
-		if (parseString == null)
-			throw new IllegalArgumentException(
-					"Null-String an parse()übergeben");
+			parse(final String composer, final String parseString) {
+		RangeCheckUtils.assertReferenceParamNotNull("parseString", parseString);
 
 		Version version = null;
 		// Versuch nach §511  c)
@@ -62,7 +67,7 @@ public final class ParseVersion {
 					return version;
 				} else { // Rest vorhanden
 					AdditionalInformation zusatzangabe =
-						ParseAdditionalInformation.parse(komponist,
+						ParseAdditionalInformation.parse(composer,
 								besetzungsliste.getRest().trim(), false);
 					if (zusatzangabe != null) {
 						version.instrumentationList = besetzungsliste;
@@ -90,11 +95,11 @@ public final class ParseVersion {
 
 		// Versuch nach §511  b)
 		version = new Version(parseString.trim());
-		GenreList gat = ParseGenre.parseGenreList(parseString);
-		if (gat != null) {
+		GenreList gL = ParseGenre.parseGenreList(parseString);
+		if (gL != null) {
 
-			version.genreList = gat;
-			String rest = gat.getRest();
+			version.genreList = gL;
+			String rest = gL.getRest();
 
 			if (rest == null || rest.trim().length() == 0) {
 				// Fall b 1 zurückgeben
@@ -148,40 +153,40 @@ public final class ParseVersion {
 		 *  zuerst, um Fehlermeldung auszuschließen.
 		 */
 
-		AdditionalInformation zusatzangabe =
+		AdditionalInformation addInf =
 			ParseAdditionalInformation.matchOpus(parseString.trim());
-		if (zusatzangabe != null) {
+		if (addInf != null) {
 			version.fallgruppeParagraphM511 = 'a';
 			version.untergruppe = 2;
-			version.additionalInformation = zusatzangabe;
+			version.additionalInformation = addInf;
 			version.match = parseString.trim();
 			return version;
 		}
-		zusatzangabe =
-			ParseAdditionalInformation.matchThematicIndex(komponist,
+		addInf =
+			ParseAdditionalInformation.matchThematicIndex(composer,
 					parseString.trim());
-		if (zusatzangabe != null) {
+		if (addInf != null) {
 			version.fallgruppeParagraphM511 = 'a';
 			version.untergruppe = 1;
-			version.additionalInformation = zusatzangabe;
+			version.additionalInformation = addInf;
 			version.match = parseString.trim();
 			return version;
 		}
 
 		// Versuch nach e)
 
-		InstrumentationList besetzungsliste =
+		InstrumentationList instrList =
 			ParseInstrumentation.parse(parseString);
-		if (besetzungsliste != null
-			&& besetzungsliste.getRest().trim().length() == 0) {
-			version.instrumentationList = besetzungsliste;
+		if (instrList != null
+			&& instrList.getRest().trim().length() == 0) {
+			version.instrumentationList = instrList;
 			version.fallgruppeParagraphM511 = 'e';
 			version.untergruppe = 2;
 			return version;
 		}
-		zusatzangabe = ParseAdditionalInformation.matchDate(parseString);
-		if (zusatzangabe != null) {
-			version.additionalInformation = zusatzangabe;
+		addInf = ParseAdditionalInformation.matchDate(parseString);
+		if (addInf != null) {
+			version.additionalInformation = addInf;
 			version.fallgruppeParagraphM511 = 'e';
 			version.untergruppe = 1;
 			return version;

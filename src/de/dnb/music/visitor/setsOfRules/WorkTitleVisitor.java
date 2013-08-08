@@ -1,5 +1,6 @@
 package de.dnb.music.visitor.setsOfRules;
 
+import utils.TitleUtils;
 import de.dnb.music.additionalInformation.DateOfComposition;
 import de.dnb.music.additionalInformation.Key;
 import de.dnb.music.additionalInformation.OpusNumber;
@@ -276,6 +277,76 @@ public class WorkTitleVisitor extends Visitor {
 	public boolean visit(Version version) {
 		state = States.VERSION;
 		firstComponents += lastComponent;
+
+		//--------
+		String versionStr = "";
+		switch (version.getFallgruppeParagraphM511()) {
+		case 'a':
+			versionStr = version.getAdditionalInformation().toString();
+			break;
+
+		case 'b':
+			switch (version.getUntergruppe()) {
+			case 1:
+				versionStr = TitleUtils.getRAK(version.getGenreList());
+				break;
+			case 2:
+				versionStr =
+					TitleUtils.getRAK(version.getInstrumentationList());
+				break;
+			case 3:
+			case 4:
+			case 5:
+				versionStr =
+					TitleUtils.getRAK(version.getAdditionalInformation());
+				break;
+			default:
+				throw new IllegalStateException(
+						"Fallgruppe oder Untergruppe unbekannt");
+			}
+			break;
+
+		case 'c':
+			switch (version.getUntergruppe()) {
+			case 1:
+				versionStr += version.getRakPhrase() + " aus dem";
+				break;
+			case 2:
+				versionStr += version.getRakPhrase() + " für die";
+				break;
+			case 3:
+				versionStr += version.getRakPhrase() + version.getRest();
+				break;
+			case 4:
+				versionStr += version.getRakPhrase() + " für die";
+				break;
+			default:
+				break;
+			}
+			break;
+
+		case 'e':
+			switch (version.getUntergruppe()) {
+			case 1:
+				versionStr += "Fassung (altes Regelwerk)  aus dem";
+				break;
+			case 2:
+				versionStr += "Fassung (altes Regelwerk) für die";
+				break;
+			default:
+				break;
+			} // case 'e'
+			break;
+
+		case '$':
+			versionStr = version.getMatch();
+			break;
+		default:
+			break;
+		}
+		lastComponent = factory.getPreVersion() + versionStr;
+		System.err.println(lastComponent);
+		//--------
 		lastComponent = factory.getPreVersion() + version.getMatch();
 		return false;
 	}

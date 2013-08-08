@@ -116,7 +116,6 @@ public class Version implements TitleElement {
 	 *  Fall $)
 	 *  Untergruppe 1 
 	 */
-
 	String match = null;
 
 	public final String getMatch() {
@@ -124,7 +123,8 @@ public class Version implements TitleElement {
 	}
 
 	/**
-	 * 
+	 * Konstruktor für den stufenweisen Aufbau in 
+	 * {@link ParseVersion#parse(String, String)}.
 	 */
 	Version() {
 	}
@@ -136,10 +136,9 @@ public class Version implements TitleElement {
 	 * @param versionStr unstrukturierter String, der die Fassung enthält.
 	 */
 	public Version(final String versionStr) {
-		if (versionStr == null)
-			this.match = "";
-		else
-			this.match = versionStr;
+		RangeCheckUtils.assertStringParamNotNullOrEmpty("versionStr",
+				versionStr);
+		this.match = versionStr;
 		fallgruppeParagraphM511 = '$';
 		untergruppe = 1;
 	}
@@ -181,10 +180,8 @@ public class Version implements TitleElement {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Version ver = ParseVersion.parse(null, "Fassung Vl");
-		MusicTitle mt = ParseMusicTitle.parseSimpleTitle(null, "aa");
-		ver.addToTitle(mt);
-		System.out.println(TitleUtils.getGND1XXPlusTag(mt));
+		Version ver = ParseVersion.parse(null, "Präludium und Fuge");
+		System.out.println(TitleUtils.getRAK(ver));
 	}
 
 	@Override
@@ -212,15 +209,15 @@ public class Version implements TitleElement {
 	public boolean containsAdditionalInformation() {
 		return additionalInformation != null;
 	}
-	
+
 	public void setGenreList(GenreList other) {
 		genreList = other;
 	}
-	
+
 	public void setInstrumentation(InstrumentationList other) {
 		instrumentationList = other;
 	}
-	
+
 	public void setAddiationalInformation(AdditionalInformation other) {
 		additionalInformation = other;
 	}

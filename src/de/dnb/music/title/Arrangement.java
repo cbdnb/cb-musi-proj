@@ -1,6 +1,9 @@
 package de.dnb.music.title;
 
+import utils.TitleUtils;
 import applikationsbausteine.RangeCheckUtils;
+import de.dnb.music.additionalInformation.AdditionalInformation;
+import de.dnb.music.additionalInformation.ParseAdditionalInformation;
 import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.Visitor;
 
@@ -31,6 +34,12 @@ public class Arrangement implements TitleElement{
 		title.setArrangement(this);
 	}
 
-	
+	public static void main(final String[] args) {
+		MusicTitle mt =
+			ParseMusicTitle.parseFullRAK(null, "aa <Adagio, bb>. cc");
+		Arrangement arrangement = new Arrangement("Ausw.");
+		arrangement.addToTitle(mt);
+		System.out.println(TitleUtils.getStructured(mt));
+	}
 
 }

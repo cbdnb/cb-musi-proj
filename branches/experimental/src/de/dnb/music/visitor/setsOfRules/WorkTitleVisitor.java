@@ -1,5 +1,6 @@
 package de.dnb.music.visitor.setsOfRules;
 
+import applikationsbausteine.RangeCheckUtils;
 import utils.TitleUtils;
 import de.dnb.music.additionalInformation.DateOfComposition;
 import de.dnb.music.additionalInformation.Key;
@@ -8,6 +9,7 @@ import de.dnb.music.additionalInformation.Qualifier;
 import de.dnb.music.additionalInformation.SerialNumber;
 import de.dnb.music.additionalInformation.ThematicIndexNumber;
 import de.dnb.music.genre.GenreList;
+import de.dnb.music.genre.Genre.Numeri;
 import de.dnb.music.mediumOfPerformance.Instrument;
 import de.dnb.music.mediumOfPerformance.InstrumentationList;
 import de.dnb.music.title.Arrangement;
@@ -38,18 +40,36 @@ public class WorkTitleVisitor extends Visitor {
 	 * Die Zustansübergänge sind in der Regel:
 	 * 
 	 * 
-	 * INITIAL	--> TITLE --> FIRST_PART --> FOLLOWING_PARTS --> VERSION
-	 * 					|		|_________________________________î  î
-	 * 					|____________________________________________|
-	 * 				  
+	 * INITIAL	--> TITLE --> FIRST_PART --> FOLLOWING_PARTS --> VERSION --
+	 * 					|		|_________________________________î  î		|
+	 * 					|____________________________________________|		|
+	 * 																		|
+	 * 				  										ARRANGEMENT <---
 	 *
 	 *	Der Zustandswechsel erfolgt immer bei Eintritt in Title, also beim
 	 *	Aufruf von visit(IndividualTitle) oder visit(FormalTitle), oder
 	 *	beim Aufruf von visit(Version).
 	 *
+	 *	Bei Version wird berücksichtig, ob das 1., 2. oder 3. (oder höher)
+	 *	Element vorliegt. Vor dem ersten Element ist kein Präfix, vor dem
+	 *	2. Element ist ein " " und vor allen weiteren Elementen ist ein ", ".
+	 *
 	 */
 	public enum States {
 		IITIAL, TITLE, FIRST_PART, FOLLOWING_PARTS, VERSION, ARRANGEMENT
+	}
+
+	protected int numberOfVersionElement = 0;
+
+	protected String getVersionElementPrefix() {
+		if (numberOfVersionElement <= 0)
+			throw new IllegalStateException("numberOfVersionElement falsch");
+		if (numberOfVersionElement == 1)
+			return "";
+		else if (numberOfVersionElement == 2)
+			return " ";
+		else
+			return ", ";
 	}
 
 	protected States state = States.IITIAL;
@@ -141,6 +161,12 @@ public class WorkTitleVisitor extends Visitor {
 				lastComponent +=
 					genreList.toString(factory.getPreferredNumerusParts());
 				break;
+			case VERSION:
+				numberOfVersionElement++;
+				lastComponent +=
+					getVersionElementPrefix()
+						+ genreList.toString(Numeri.SINGULAR);
+				break;
 			default:
 				break;
 			}
@@ -152,9 +178,17 @@ public class WorkTitleVisitor extends Visitor {
 
 	@Override
 	public boolean visit(InstrumentationList instrumentationList) {
-		lastComponent += factory.getPreInstrList();
+		if (state == States.VERSION) {
+			numberOfVersionElement++;
+			lastComponent += getVersionElementPrefix();
+		} else {
+
+			lastComponent += factory.getPreInstrList();
+		}
 		return true;
 	}
+
+	boolean isfirstInstrumentOfVersion = true;
 
 	@Override
 	public void visit(Instrument instrument) {
@@ -162,8 +196,15 @@ public class WorkTitleVisitor extends Visitor {
 		if (inStr.contains("hdg") || inStr.contains("linke")
 			|| inStr.contains("händig"))
 			lastComponent += " ";
-		else
-			lastComponent += factory.getPreInstrumnt();
+		else {
+			if (state == States.VERSION) {
+				if (isfirstInstrumentOfVersion)
+					isfirstInstrumentOfVersion = false;
+				else
+					lastComponent += " ";
+			} else
+				lastComponent += factory.getPreInstrumnt();
+		}
 		lastComponent += inStr;
 		int count = instrument.getCount();
 		if (count > 1) {
@@ -178,8 +219,13 @@ public class WorkTitleVisitor extends Visitor {
 
 	@Override
 	public void visit(DateOfComposition dateOfComposition) {
-		lastComponent +=
-			factory.getPreYear() + dateOfComposition + factory.getPostYear();
+		if (state == States.VERSION) {
+			numberOfVersionElement++;
+			lastComponent += getVersionElementPrefix() + dateOfComposition;
+		} else
+			lastComponent +=
+				factory.getPreYear() + dateOfComposition
+					+ factory.getPostYear();
 	}
 
 	@Override
@@ -199,6 +245,10 @@ public class WorkTitleVisitor extends Visitor {
 		case TITLE:
 			lastComponent += factory.getPreKey() + key;
 			break;
+		case VERSION:
+			numberOfVersionElement++;
+			lastComponent += getVersionElementPrefix() + key;
+			break;
 
 		default:
 			break;
@@ -217,7 +267,10 @@ public class WorkTitleVisitor extends Visitor {
 		case TITLE:
 			lastComponent += factory.getPreOpus() + opusNumber;
 			break;
-
+		case VERSION:
+			numberOfVersionElement++;
+			lastComponent += getVersionElementPrefix() + opusNumber;
+			break;
 		default:
 			break;
 		}
@@ -235,7 +288,11 @@ public class WorkTitleVisitor extends Visitor {
 		case TITLE:
 			lastComponent += factory.getPreSerNum() + serialNumber;
 			break;
-
+		case VERSION:
+			numberOfVersionElement++;
+			lastComponent += getVersionElementPrefix() + serialNumber;
+			System.err.println(serialNumber);
+			break;
 		default:
 			break;
 		}
@@ -253,7 +310,10 @@ public class WorkTitleVisitor extends Visitor {
 		case TITLE:
 			lastComponent += factory.getPreThIdx() + thematicIndexNumber;
 			break;
-
+		case VERSION:
+			numberOfVersionElement++;
+			lastComponent += getVersionElementPrefix() + thematicIndexNumber;
+			break;
 		default:
 			break;
 		}
@@ -276,79 +336,21 @@ public class WorkTitleVisitor extends Visitor {
 	@Override
 	public boolean visit(Version version) {
 		state = States.VERSION;
+		isIndividualTitle = false;
 		firstComponents += lastComponent;
-
-		//--------
-		String versionStr = "";
-		switch (version.getFallgruppeParagraphM511()) {
-		case 'a':
-			versionStr = version.getAdditionalInformation().toString();
-			break;
-
-		case 'b':
-			switch (version.getUntergruppe()) {
-			case 1:
-				versionStr = TitleUtils.getRAK(version.getGenreList());
-				break;
-			case 2:
-				versionStr =
-					TitleUtils.getRAK(version.getInstrumentationList());
-				break;
-			case 3:
-			case 4:
-			case 5:
-				versionStr =
-					TitleUtils.getRAK(version.getAdditionalInformation());
-				break;
-			default:
-				throw new IllegalStateException(
-						"Fallgruppe oder Untergruppe unbekannt");
-			}
-			break;
-
-		case 'c':
-			switch (version.getUntergruppe()) {
-			case 1:
-				versionStr += version.getRakPhrase() + " aus dem";
-				break;
-			case 2:
-				versionStr += version.getRakPhrase() + " für die";
-				break;
-			case 3:
-				versionStr += version.getRakPhrase() + version.getRest();
-				break;
-			case 4:
-				versionStr += version.getRakPhrase() + " für die";
-				break;
-			default:
-				break;
-			}
-			break;
-
-		case 'e':
-			switch (version.getUntergruppe()) {
-			case 1:
-				versionStr += "Fassung (altes Regelwerk)  aus dem";
-				break;
-			case 2:
-				versionStr += "Fassung (altes Regelwerk) für die";
-				break;
-			default:
-				break;
-			} // case 'e'
-			break;
-
-		case '$':
-			versionStr = version.getMatch();
-			break;
-		default:
-			break;
+		lastComponent = factory.getPreVersion();
+		//		if (version.getMatch() != null) {
+		char fallgr = version.getFallgruppeParagraphM511();
+		int untergr = version.getUntergruppe();
+		if (fallgr == '$' || (fallgr == 'c' && untergr == 3)) {
+			lastComponent += version.getMatch();
+			return false;
 		}
-		lastComponent = factory.getPreVersion() + versionStr;
-		System.err.println(lastComponent);
-		//--------
-		lastComponent = factory.getPreVersion() + version.getMatch();
-		return false;
+		if (version.getRakPhrase() != null) {
+			numberOfVersionElement++;
+			lastComponent += version.getRakPhrase();
+		}
+		return true;
 	}
 
 	@Override
@@ -363,13 +365,8 @@ public class WorkTitleVisitor extends Visitor {
 	 */
 	public static void main(final String[] args) {
 		MusicTitle mt =
-			ParseMusicTitle.parseFullRAK(null, "Quartette <Quartett 1234, aa>");
-		WorkTitleVisitor vis = new WorkTitleVisitor(new RAKParticleFactory());
-		mt.accept(vis);
-
-		System.out.println(vis);
-		System.out.println(vis.relatedWork());
-		System.out.println(vis.state);
+			ParseMusicTitle.parseFullRAK(null, "Widerschein. Fassung 2");
+		System.out.println(mt.getVersion().containsAdditionalInformation());
 
 	}
 

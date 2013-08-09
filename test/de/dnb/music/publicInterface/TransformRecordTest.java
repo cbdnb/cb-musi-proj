@@ -25,7 +25,6 @@ public class TransformRecordTest {
 				+ "\n913 $Sest$ipt$a Quartette Vl 1 2. Kl 4hd$0";
 		newRecord =
 			TransformRecord.transform(titleStrOld, TransformMode.INTELLECT);
-		System.err.println(newRecord);
 		assertTrue(newRecord.contains("130 Quartette$mVl 1 2$sKl 4hdg.\n"));
 
 		// RAK 130 intellektuell neu

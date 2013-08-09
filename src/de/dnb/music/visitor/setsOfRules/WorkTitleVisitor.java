@@ -291,7 +291,6 @@ public class WorkTitleVisitor extends Visitor {
 		case VERSION:
 			numberOfVersionElement++;
 			lastComponent += getVersionElementPrefix() + serialNumber;
-			System.err.println(serialNumber);
 			break;
 		default:
 			break;

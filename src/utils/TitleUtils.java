@@ -38,10 +38,16 @@ public final class TitleUtils {
 	private TitleUtils() {
 	}
 
-	public static String getRSWK(final MusicTitle musicTitle) {
+	/**
+	 * Liefert die RSWK-Darstellung eines Titel-Elementes.
+	 * @param element	nicht null
+	 * @return			Titel als RSWK, soweit möglich.
+	 */
+	public static String getRSWK(final TitleElement element) {
+		RangeCheckUtils.assertReferenceParamNotNull("", element);
 		final WorkTitleVisitor vis =
 			new WorkTitleVisitor(new RSWKParticleFactory());
-		musicTitle.accept(vis);
+		element.accept(vis);
 		return vis.toString();
 	}
 
@@ -50,6 +56,14 @@ public final class TitleUtils {
 			throw new IllegalArgumentException("übergebener Titel ist null");
 		MusicTitle mt = ParseMusicTitle.parseFullRAK(null, titleStr);
 		return getRSWK(mt);
+	}
+
+	public static String getTitelAccordingRules(
+			final TitleElement element,
+			AbstractParticleFactory factory) {
+		final WorkTitleVisitor vis = new WorkTitleVisitor(factory);
+		element.accept(vis);
+		return vis.toString();
 	}
 
 	/**

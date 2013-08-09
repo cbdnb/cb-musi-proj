@@ -118,6 +118,12 @@ public class Version implements TitleElement {
 	 */
 	String match = null;
 
+	/**
+	 * Gibt den Match, der aus einem nicht weiter analysierbaren $s
+	 * gewonnen wird.
+	 * 
+	 * @return	Match oder null.
+	 */
 	public final String getMatch() {
 		return match;
 	}
@@ -188,12 +194,15 @@ public class Version implements TitleElement {
 	public final void accept(final Visitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if (visitChildren) {
-			if (containsGenre())
+			if (containsGenre()) {
 				genreList.accept(visitor);
-			if (containsInstrumentation())
+			}
+			if (containsInstrumentation()) {
 				instrumentationList.accept(visitor);
-			if (containsAdditionalInformation())
+			}
+			if (containsAdditionalInformation()) {
 				additionalInformation.accept(visitor);
+			}
 		}
 		visitor.leave(this);
 	}

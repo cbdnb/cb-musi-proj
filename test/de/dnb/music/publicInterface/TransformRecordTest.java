@@ -25,7 +25,8 @@ public class TransformRecordTest {
 				+ "\n913 $Sest$ipt$a Quartette Vl 1 2. Kl 4hd$0";
 		newRecord =
 			TransformRecord.transform(titleStrOld, TransformMode.INTELLECT);
-		assertTrue(newRecord.contains("130 Quartette$mVl 1 2$sKl 4hdg\n"));
+		System.err.println(newRecord);
+		assertTrue(newRecord.contains("130 Quartette$mVl 1 2$sKl 4hdg.\n"));
 
 		// RAK 130 intellektuell neu
 		titleStrOld =
@@ -36,15 +37,6 @@ public class TransformRecordTest {
 		assertTrue(newRecord.contains("130 Quartette$mVl 1 2$paa"));
 		assertTrue(newRecord.contains("430 Quartette, Vl 1 2 <aa>" + "$v"
 			+ KOM_PORTAL_430));
-
-		titleStrOld =
-			"130 Quartette, Vl 1 2. Fassung Kl 4hdg"
-				+ "$vR:Umsetzung GND aus RAK-M 2003"
-				+ "\n913 $Sest$it$aQuartette, Vl 1 2. Fassung Kl 4hdg$0";
-		newRecord =
-			TransformRecord.transform(titleStrOld, TransformMode.INTELLECT);
-		assertTrue(newRecord
-				.contains("130 Quartette$mVl 1 2$sFassung Kl 4hdg\n"));
 
 		assertFalse(newRecord.contains("430 Quartette, Vl 1 2. Fassung Kl 4hdg"
 			+ "$v" + KOM_PORTAL_430));
@@ -88,17 +80,7 @@ public class TransformRecordTest {
 		assertTrue(newRecord.contains("430 Quartette, Vl 1 2 <aa>" + "$v"
 			+ KOM_PORTAL_430));
 
-		titleStrOld =
-			"130 Quartette, Vl 1 2. Fassung Kl 4hdg"
-				+ "$vR:Umsetzung GND aus RAK-M 2003"
-				+ "\n913 $Sest$ipt$aQuartette, Vl 1 2. Fassung Kl 4hd$0";
-		newRecord =
-			TransformRecord.transform(titleStrOld, TransformMode.MACHINE);
-		assertTrue(newRecord
-				.contains("130 Quartette$mVl 1 2$sFassung Kl 4hdg$v"
-					+ KOM_MASCHINELL_NACH_2003));
-		assertFalse(newRecord.contains("430 Quartette, Vl 1 2. Fassung Kl 4hdg"
-			+ "$v" + KOM_PORTAL_430));
+		
 
 		// Pica+, Script, 130
 		titleStrOld =
@@ -196,7 +178,7 @@ public class TransformRecordTest {
 		titleStrOld = "430 Quartette Vl 1 2. Kl 4hdg$v11" + "\n913 $Sest$ipt$a";
 		newRecord =
 			TransformRecord.transform(titleStrOld, TransformMode.INTELLECT);
-		assertTrue(newRecord.contains("430 Quartette$mVl 1 2$sKl 4hdg$v11"));
+		assertTrue(newRecord.contains("430 Quartette$mVl 1 2$sKl 4hdg.$v11"));
 
 		// 430 RSWK (irgendein Kommentar)
 		titleStrOld =
@@ -226,7 +208,7 @@ public class TransformRecordTest {
 		titleStrOld = "430 Quartette Vl 1 2. Kl 4hdg$v11" + "\n913 $Sest$ipt$a";
 		newRecord =
 			TransformRecord.transform(titleStrOld, TransformMode.MACHINE);
-		assertTrue(newRecord.contains("430 Quartette$mVl 1 2$sKl 4hdg$v11"));
+		assertTrue(newRecord.contains("430 Quartette$mVl 1 2$sKl 4hdg.$v11"));
 
 		// 430 RSWK (irgendein Kommentar)
 		titleStrOld = "430 Quartett, Violine 1,2$v11" + "\n913 $Sswd$ipt$a";

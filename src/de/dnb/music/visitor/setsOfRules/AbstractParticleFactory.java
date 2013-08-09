@@ -238,6 +238,10 @@ public abstract class AbstractParticleFactory {
 		return preferredNumerusIndiv;
 	}
 
+	/**
+	 * ABBREVIATED, WRITTEN_OUT.
+	 * @return modus.
+	 */
 	public Instrument.AbbreviationMode getAbbreviationMode() {
 		return abbreviationMode;
 	}

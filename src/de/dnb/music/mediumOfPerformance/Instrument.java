@@ -14,6 +14,12 @@ import de.dnb.music.visitor.Visitor;
 
 public class Instrument implements TitleElement, Comparable<Instrument> {
 
+	/**
+	 * ABBREVIATED, WRITTEN_OUT.
+	 * 
+	 * @author baumann
+	 *
+	 */
 	public static enum AbbreviationMode {
 		ABBREVIATED, WRITTEN_OUT;
 	}

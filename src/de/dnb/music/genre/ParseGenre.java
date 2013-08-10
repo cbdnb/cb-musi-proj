@@ -1,5 +1,6 @@
 package de.dnb.music.genre;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -69,7 +70,7 @@ public final class ParseGenre {
 
 		// -> es wurde was gefunden
 
-		LinkedList<Genre> gg = new LinkedList<Genre>();
+		ArrayList<Genre> gg = new ArrayList<Genre>();
 		gg.add(g);
 
 		g = parseSeparatorPlusGenre(g.rest);

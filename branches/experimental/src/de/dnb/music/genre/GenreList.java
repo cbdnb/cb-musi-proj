@@ -1,5 +1,6 @@
 package de.dnb.music.genre;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -10,6 +11,7 @@ import utils.TitleUtils;
 import applikationsbausteine.ListUtils;
 import applikationsbausteine.RangeCheckUtils;
 
+import de.dnb.music.mediumOfPerformance.Instrument;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
 import de.dnb.music.visitor.TitleElement;
@@ -31,14 +33,14 @@ public class GenreList implements TitleElement {
 	 * Die eigentlichen Daten. Zur genauen Struktur
 	 * @see ParseGenre
 	 */
-	private final LinkedList<Genre> genres; // = new LinkedList<Gattung>();
+	private final ArrayList<Genre> genres;
 
 	public GenreList(final Genre g) {
-		genres = new LinkedList<Genre>();
+		genres = new ArrayList<Genre>();
 		genres.add(g);
 	}
 
-	public GenreList(final LinkedList<Genre> llg) {
+	public GenreList(final ArrayList<Genre> llg) {
 		genres = llg;
 	}
 
@@ -93,15 +95,32 @@ public class GenreList implements TitleElement {
 
 		if (genres.size() == 1)
 			return genres.get(0).asPlural();
+		/*
+		 *  Also sind es 2 oder mehr. 
+		 */
+		String match;
+		if (getMatch() == null) {
+			// Selber bauen, einfach alles im Plural und mit 
+			// Kommas und "und" verbinden:
+			int size = genres.size();
+			match = genres.get(0).asPlural();
+			for (int i = 1; i < size - 1; i++) {
+				match += ", " + genres.get(i).asPlural();
+			}
+			match += " und " + genres.get(size - 1).asPlural();
+		}
 
 		/*
-		 *  Also sind es 2 oder mehr. Daher ist das Werk oft in einer Mischung 
+		 *  Korrekterweise ist das Werk oft in einer Mischung 
 		 *  aus Singular und Plural angesetzt: 
-		 *  	"Lamento, Intermezzi und Marsch"
+		 *  	"Lamento, Intermezzi und Marsch". Daher ist der Match die
+		 *  beste Basis, da in ihn die Kenntnis des Bearbeiters eingeht.
+		 *  
 		 *  Fälschlicherweise doppelte Blanks werden entfernt und getrimmt,
 		 *  da kein Individualsachtitel vorliegt.
 		 */
-		String match = getMatch().replaceAll(" +", " ").trim();
+		else
+			match = getMatch().replaceAll(" +", " ").trim();
 		// Sonderfall nach RAK:
 		if (match.equals("Präludium und Fuge"))
 			match = "Präludien und Fugen";
@@ -140,12 +159,21 @@ public class GenreList implements TitleElement {
 		return match;
 	}
 
+	/**
+	 * Gibt die Konkatenation der matchs der Einzelgattungen.
+	 * 
+	 * @return	Gesamtmatch oder null, wenn einer der Einzelmatchs
+	 * 			null ist.
+	 */
 	public final String getMatch() {
 		String s = "";
-		for (Genre gattung : genres) {
-			s += gattung.match;
+		for (Genre genre : genres) {
+			s += genre.match;
 		}
-		return s;
+		if (s.contains("null"))
+			return null;
+		else
+			return s;
 	}
 
 	public final String getRest() {
@@ -179,13 +207,13 @@ public class GenreList implements TitleElement {
 			throw new IllegalStateException("Liste der Gattungen ist leer");
 		return ListUtils.getLast(genres);
 	}
-	
+
 	public static void main(final String[] args) {
-		MusicTitle mt =
-			ParseMusicTitle.parseFullRAK(null, "aa");
-		GenreList genreList = ParseGenre.parseGenreList("Adagio und Fuge");
-		genreList.addToTitle(mt);
-		System.out.println(TitleUtils.getStructured(mt));
+		
+		GenreList genreList = ParseGenre.parseGenreList("Adagio");
+		Genre genre = ParseGenre.parseGenre("Fuge");
+		genreList.add(genre);
+		System.out.println(genreList.pluralPreferred());
 	}
 
 }

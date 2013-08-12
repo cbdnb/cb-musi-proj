@@ -11,6 +11,7 @@ import utils.TestUtils;
 import de.dnb.music.genre.Genre;
 import de.dnb.music.genre.GenreList;
 import de.dnb.music.genre.ParseGenre;
+import de.dnb.music.genre.Genre.Numeri;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
 
@@ -85,7 +86,7 @@ public class ParseGenreTest {
 		
 		llg = ParseGenre.parseGenreList("Adagio und Fugen x");
 		assertEquals(llg.getMatch(), "Adagio und Fugen");
-		assertEquals(llg.pluralPreferred(), "Adagio und Fugen");
+		assertEquals(llg.toString(Numeri.PLURAL), "Adagio und Fugen");
 		assertEquals(llg.getRest(), " x");
 	}
 

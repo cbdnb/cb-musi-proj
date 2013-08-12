@@ -5,15 +5,11 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Matcher;
 
-import utils.TitleUtils;
-
-import applikationsbausteine.ListUtils;
 import applikationsbausteine.RangeCheckUtils;
-
-import de.dnb.music.mediumOfPerformance.Instrument;
+import de.dnb.music.genre.Genre.Numeri;
 import de.dnb.music.title.MusicTitle;
-import de.dnb.music.title.ParseMusicTitle;
 import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.Visitor;
 
@@ -50,10 +46,10 @@ public class GenreList implements TitleElement {
 		genres.add(g);
 	}
 
-	public final void add(final GenreList gatt) {
-		if (gatt == null)
+	public final void add(final GenreList otherGenres) {
+		if (otherGenres == null)
 			return;
-		genres.addAll(gatt.genres);
+		genres.addAll(otherGenres.genres);
 	}
 
 	public final LinkedList<String> nids() {
@@ -76,38 +72,31 @@ public class GenreList implements TitleElement {
 		return lls;
 	}
 
-	public final String toString(Genre.Numeri numerus) {
-		switch (numerus) {
-		case PLURAL:
-			return pluralPreferred();
-
-		case SINGULAR:
-			return singularPreferred();
-
-		default:
-			throw new IllegalArgumentException("Numerus not supported");
-		}
-	}
-
-	public final String pluralPreferred() {
+	/**
+	 * Gibt eine Stringrepräsentation im geforderten Numerus.
+	 * 
+	 * @param numerus Singular oder PLural
+	 * @return			String.	
+	 */
+	public final String toString(final Genre.Numeri numerus) {
 		if (genres.size() == 0)
 			throw new IllegalStateException("Gattungsliste leer");
 
 		if (genres.size() == 1)
-			return genres.get(0).asPlural();
+			return genres.get(0).toString(numerus);
 		/*
 		 *  Also sind es 2 oder mehr. 
 		 */
 		String match;
-		if (getMatch() == null) {
+		if (!isParsed()) {
 			// Selber bauen, einfach alles im Plural und mit 
 			// Kommas und "und" verbinden:
 			int size = genres.size();
 			match = genres.get(0).asPlural();
 			for (int i = 1; i < size - 1; i++) {
-				match += ", " + genres.get(i).asPlural();
+				match += ", " + genres.get(i).toString(numerus);
 			}
-			match += " und " + genres.get(size - 1).asPlural();
+			match += " und " + genres.get(size - 1).toString(numerus);
 		}
 
 		/*
@@ -119,73 +108,63 @@ public class GenreList implements TitleElement {
 		 *  Fälschlicherweise doppelte Blanks werden entfernt und getrimmt,
 		 *  da kein Individualsachtitel vorliegt.
 		 */
-		else
+		else {
+			// also geparst:
 			match = getMatch().replaceAll(" +", " ").trim();
+		}
 		// Sonderfall nach RAK:
-		if (match.equals("Präludium und Fuge"))
+		if (match.equals("Präludium und Fuge") && numerus == Numeri.PLURAL)
 			match = "Präludien und Fugen";
-
-		return match;
-	}
-
-	public final String singularPreferred() {
-		if (genres.size() == 0)
-			throw new IllegalStateException("Gattungsliste leer");
-
-		/*
-		 * Singular kann zwar bei Sammlungen falsch sein. Das Risiko müssen
-		 * wir eingehen ...
-		 */
-		if (genres.size() == 1)
-			return genres.get(0).asSingular();
-
-		/*
-		 *  Also sind es 2 oder mehr. Daher ist das Werk oft in einer Mischung 
-		 *  aus Singular und Plural angesetzt: 
-		 *  	"Lamento, Intermezzi und Marsch"
-		 *  Fälschlicherweise doppelte Blanks werden entfernt und getrimmt,
-		 *  da kein Individualsachtitel vorliegt.
-		 */
-		String match = getMatch().replaceAll(" +", " ").trim();
 		/* 
 		 * Sonderfall nach RAK, kann aber in RSWK schrecklich schief laufen,
 		 * wenn eine Sammlung vorliegt: 
 		 * 800 |p|Mendelssohn Bartholdy, Felix
 		 * 801 |t|Präludien und Fugen, Klavier op. 35
 		 */
-		if (match.equals("Präludien und Fugen"))
+		if (match.equals("Präludien und Fugen") && numerus == Numeri.SINGULAR)
 			match = "Präludium und Fuge";
 
 		return match;
 	}
 
 	/**
-	 * Gibt die Konkatenation der matchs der Einzelgattungen.
+	 * Gibt die Konkatenation der matchs der Einzelgattungen, was Sinn macht,
+	 * wenn geparst wurde. Das ist natürlich
+	 * Unsinn, wenn synthetisiert wurde. Daher ist immer vorher die Abfrage
+	 * {@link #isParsed()} zu machen
 	 * 
-	 * @return	Gesamtmatch oder null, wenn einer der Einzelmatchs
-	 * 			null ist.
+	 * @return	Gesamtmatch.
 	 */
 	public final String getMatch() {
 		String s = "";
 		for (Genre genre : genres) {
 			s += genre.match;
 		}
-		if (s.contains("null"))
-			return null;
-		else
-			return s;
+
+		return s;
 	}
 
+	/**
+	 * Für das Parsen des Gesamttitels, das in der Regel mit den Instrumenten
+	 * wietergeht.
+	 * 
+	 * @return rest.
+	 */
 	public final String getRest() {
 		return genres.get(genres.size() - 1).rest;
 	}
 
+	/**
+	 * Nichtmodifizierbare Liste der Gattungen.
+	 * 
+	 * @return	Gattungsliste.
+	 */
 	public final List<Genre> getGenres() {
 		return Collections.unmodifiableList(genres);
 	}
 
 	@Override
-	public void accept(Visitor visitor) {
+	public final void accept(Visitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if (visitChildren)
 			for (Genre genre : genres) {
@@ -195,25 +174,39 @@ public class GenreList implements TitleElement {
 	}
 
 	@Override
-	public void addToTitle(MusicTitle title) {
+	public final void addToTitle(MusicTitle title) {
 		RangeCheckUtils.assertReferenceParamNotNull("title", title);
 		for (Genre genre : genres) {
 			genre.addToTitle(title);
 		}
 	}
 
-	public Genre getLast() {
-		if (genres.isEmpty())
-			throw new IllegalStateException("Liste der Gattungen ist leer");
-		return ListUtils.getLast(genres);
+	/**
+	 * Ermittel aus den Einzelmatches, ob die Gattungsliste aus einer 
+	 * textuellen Form geparst wurde. Gegenteil: synthetisiert.
+	 * 
+	 * @return	true, wenn geparst wurde <br>
+	 * 			false, wenn aus Gattungsbegriffen synthetisiert.
+	 */
+	public final boolean isParsed() {
+		List<Genre> theGenres = getGenres();
+		Iterator<Genre> iterator = theGenres.iterator();
+		iterator.next();
+		for (; iterator.hasNext();) {
+			String match = iterator.next().match;
+			Matcher matcher = ParseGenre.SEPARATOR_PAT.matcher(match);
+			if (!matcher.find())
+				return false;
+		}
+		return true;
 	}
 
 	public static void main(final String[] args) {
-		
-		GenreList genreList = ParseGenre.parseGenreList("Adagio");
-		Genre genre = ParseGenre.parseGenre("Fuge");
-		genreList.add(genre);
-		System.out.println(genreList.pluralPreferred());
-	}
 
+		GenreList genreList = ParseGenre.parseGenreList("Introduktion");
+		Genre genre = GenreDB.matchGenre("Fuge");
+		genreList.add(genre);
+		System.out.println(genreList.toString(Numeri.SINGULAR));
+
+	}
 }

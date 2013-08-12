@@ -1,11 +1,10 @@
 package de.dnb.music.genre;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import applikationsbausteine.ListUtils;
+import applikationsbausteine.RangeCheckUtils;
 
 /**
  * 
@@ -26,16 +25,21 @@ public final class ParseGenre {
 	/**
 	 *  mögliche führende Blanks gefolgt von "," , "und " oder "mit ".
 	 */
-	private static String patString = "^\\s*, *" + 
-									  "|"	+ 
-									  "^\\s*und +" +
-									  "|"	+ 
-									  "^\\s*mit +";
+	public static final String PAT_STRING = 
+									"^\\s*, *" 
+									+ 
+									"|"
+									+ 
+									"^\\s*und +"
+									+
+									"|"
+									+ 
+									"^\\s*mit +";
 									
 //							(\s = Whitespace, ^ = Anfang) 
 	
-	private static Pattern 
-		pSeparator = Pattern.compile(patString);
+	public static final Pattern 
+		SEPARATOR_PAT = Pattern.compile(PAT_STRING);
 	
 //@formatter:on
 
@@ -43,7 +47,7 @@ public final class ParseGenre {
 	 * Liefert eine Liste von Gattungen, verpackt in einem GenreList-Objekt.
 	 * 
 	 * Jedes Genre enthält in g.match den matchenden String, ab Position 2 mit 
-	 * führenden Kommas, Blanks und "und" (vergleiche dazu pSeparator). 
+	 * führenden Kommas, Blanks und "und" (vergleiche dazu SEPARATOR_PAT). 
 	 * Der Match (GenreList.getMatch()) enthält alle erkannten
 	 * Zeichen, also kein abschließendes Komma.
 	 * In g.rest befindet sich logischerweise der noch nicht erkannte Rest. 
@@ -53,10 +57,7 @@ public final class ParseGenre {
 	 * @return		ein gültiges GenreList-Objekt oder null
 	 */
 	public static GenreList parseGenreList(final String s) {
-
-		if (s == null)
-			throw new IllegalArgumentException(
-					"Null-String an parseGenreList()Übergeben");
+		RangeCheckUtils.assertReferenceParamNotNull("s", s);
 
 		if (s.length() == 0)
 			return null;
@@ -84,26 +85,14 @@ public final class ParseGenre {
 
 	}
 
-	public static Genre parseGenre(final String parseString) {
-		GenreList list = parseGenreList(parseString);
-		if (list == null)
-			return null;
-		else {
-			return list.getLast();
-		}
-	}
-
 	public static Genre parseSeparatorPlusGenre(final String parseString) {
-
-		if (parseString == null)
-			throw new IllegalArgumentException(
-					"Null-String an parseSeparatorPlusGenre()Übergeben");
+		RangeCheckUtils.assertReferenceParamNotNull("parseString", parseString);
 
 		if (parseString.length() == 0)
 			return null;
 
 		// ein Trennwort MUSS vorhanden sein.
-		Matcher m = pSeparator.matcher(parseString);
+		Matcher m = SEPARATOR_PAT.matcher(parseString);
 		if (!m.find())
 			return null;
 
@@ -129,8 +118,7 @@ public final class ParseGenre {
 	 * @param args
 	 */
 	public static void main(final String[] args) {
-		GenreList llg = parseGenreList("    Präludium mit Fuge");
-		System.out.println(llg.getLast());
+		
 	}
 
 }

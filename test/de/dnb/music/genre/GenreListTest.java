@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.dnb.music.genre.Genre.Numeri;
+
 public class GenreListTest {
 
 	private GenreList g1, g2, gPrF, g3, gMult;
@@ -23,22 +25,23 @@ public class GenreListTest {
 
 	@Test
 	public final void testAsRAK() {
-		assertEquals("Präludien", g1.pluralPreferred());
-		assertEquals("Adagio, Allegro", g2.pluralPreferred());
-		assertEquals("Präludien und Fugen", gPrF.pluralPreferred());
-		assertEquals("Präludium, Tokkata und Fugen", g3.pluralPreferred());
+		assertEquals("Präludien", g1.toString(Numeri.PLURAL));
+		assertEquals("Adagio, Allegro", g2.toString(Numeri.PLURAL));
+		assertEquals("Präludien und Fugen", gPrF.toString(Numeri.PLURAL));
+		assertEquals("Präludium, Tokkata und Fugen", g3.toString(Numeri.PLURAL));
 		assertEquals("Präludium, Fuge und Thema mit Variationen",
-				gMult.pluralPreferred());
+				gMult.toString(Numeri.PLURAL));
 	}
 
 	@Test
 	public final void testAsRSWK() {
-		assertEquals("Präludium", g1.singularPreferred());
-		assertEquals("Adagio, Allegro", g2.singularPreferred());
-		assertEquals("Präludium und Fuge", gPrF.singularPreferred());
-		assertEquals("Präludium, Tokkata und Fugen", g3.singularPreferred());
+		assertEquals("Präludium", g1.toString(Numeri.SINGULAR));
+		assertEquals("Adagio, Allegro", g2.toString(Numeri.SINGULAR));
+		assertEquals("Präludium und Fuge", gPrF.toString(Numeri.SINGULAR));
+		assertEquals("Präludium, Tokkata und Fugen",
+				g3.toString(Numeri.SINGULAR));
 		assertEquals("Präludium, Fuge und Thema mit Variationen",
-				gMult.singularPreferred());
+				gMult.toString(Numeri.SINGULAR));
 	}
 
 	@Test
@@ -48,12 +51,12 @@ public class GenreListTest {
 
 	@Test
 	public final void testGetGND1XX() {
-		assertEquals("Präludien", g1.pluralPreferred());
-		assertEquals("Adagio, Allegro", g2.pluralPreferred());
-		assertEquals("Präludien und Fugen", gPrF.pluralPreferred());
-		assertEquals("Präludium, Tokkata und Fugen", g3.pluralPreferred());
+		assertEquals("Präludien", g1.toString(Numeri.PLURAL));
+		assertEquals("Adagio, Allegro", g2.toString(Numeri.PLURAL));
+		assertEquals("Präludien und Fugen", gPrF.toString(Numeri.PLURAL));
+		assertEquals("Präludium, Tokkata und Fugen", g3.toString(Numeri.PLURAL));
 		assertEquals("Präludium, Fuge und Thema mit Variationen",
-				gMult.pluralPreferred());
+				gMult.toString(Numeri.PLURAL));
 	}
 
 }

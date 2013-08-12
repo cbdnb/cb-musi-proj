@@ -87,6 +87,17 @@ public class Genre implements TitleElement, Comparable<Genre> {
 		return plural;
 	}
 
+	public final String toString(Numeri numerus) {
+		switch (numerus) {
+		case PLURAL:
+			return plural;
+		case SINGULAR:
+			return singular;
+		default:
+			throw new IllegalArgumentException("numerus unbekannt oder null");
+		}
+	}
+
 	public String getIdn() {
 		return idn;
 	}
@@ -135,11 +146,8 @@ public class Genre implements TitleElement, Comparable<Genre> {
 	}
 
 	public static void main(final String[] args) {
-		MusicTitle mt =
-			ParseMusicTitle.parseFullRAK(null, "aa <bb>. Fassung Vl");
-		Genre genre = ParseGenre.parseGenre("Adagio");
-		genre.addToTitle(mt);
-		System.out.println(TitleUtils.getStructured(mt));
+		Genre g = GenreDB.matchGenre("Fuge");
+		System.out.println(g.toString(Numeri.SINGULAR));
 	}
 
 }

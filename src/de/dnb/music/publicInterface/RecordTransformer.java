@@ -45,7 +45,8 @@ import filtering.IPredicate;
 
 /**
  * Template-Klasse. Die Unterklassen überschreiben div. Methoden, um an das
- * zu bearbeitende Datenset anzupassen.
+ * zu bearbeitende Datenset anzupassen. Daher entfällt auch der Modus 
+ * (intellektuell ...).
  *
  * @author baumann
  *

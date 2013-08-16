@@ -17,11 +17,11 @@ public class TitleController {
 
 	TitleModel model;
 
-	class ExplicitListener implements ActionListener {
+	class ExpansionListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			model.setExpansion(view.getExplicit());
+			model.setExpansion(view.getExpansion());
 			model.refresh();
 		}
 
@@ -95,7 +95,7 @@ public class TitleController {
 			info +=
 				"\n\nKurzanleitung:\n - "
 					+ "Der Analysator ist eine Oberfläche "
-					+ "(INTELLECT) zur Demonstration der aktuellen Fähigkeiten der "
+					+ "zur Demonstration der aktuellen Fähigkeiten der "
 					+ "Software zur Analyse von Werktiteln der Musik. Analysiert "
 					+ "werden Titel im RAK- oder RSWK-Format. Dabei wird nicht "
 					+ "zwischen den verschiedenen RAK-Versionen unterschieden.	"
@@ -173,7 +173,7 @@ public class TitleController {
 		model.addObserver(view);
 
 		view.addAnalyzeListener(new AnalyzeListener());
-		view.addExplicitListener(new ExplicitListener());
+		view.addExpansionListener(new ExpansionListener());
 		view.addKeyNameListener(new KeyNameListener());
 		view.addNumberListener(new NumberListener());
 		view.addPicaListener(new PicaListener());

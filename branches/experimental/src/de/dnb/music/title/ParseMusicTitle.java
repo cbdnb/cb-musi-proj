@@ -276,6 +276,7 @@ public final class ParseMusicTitle {
 	 * @return			Paar aus Musiktitel und nicht verwendeten
 	 * 					Unterfeldern.
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static Pair<MusicTitle, List<Subfield>> parseGND(
 			final String composer,
 			final Line line) {
@@ -302,24 +303,17 @@ public final class ParseMusicTitle {
 	 * 	- Altdaten mit mehreren $p. Diese stammen aus der SWD.
 	 * 	- Altdaten mit einem $p. Diese können aus der SWD oder dem DMA stammen.
 	 * 	All diese Fälle werden durch die besondere Behandlung von $p 
-	 * 	aufgefangen. (s. case-Anweisung)
+	 * 	aufgefangen. (s. if-Anweisung)
 	 *  - Altdaten mit $g. Diese können nur aus der SWD stammen. 
-	 *  	Die Altdaten enthalten keine Unterfelder $f,$m,$n ..
-	 *  	Daher kann das $g nur Bestandteil eines $a- oder $p-Feldes sein.
-	 *  	In das Aufteilen durch breakUpIntoSubfields() wird das $g nicht
-	 *  	einbezogen. Daher wird $g (in case 'a': oder evtl. case 'p')
-	 *  	entweder als Jahreszahl erkannt und in $f umgewandelt oder	
-	 *  	aber so, wie es ist, belassen. In diesem zweiten Fall wird 
-	 *  	aber der Titel ($a oder $p) als Individualtitel angesehen. 
+	 *  	Daher wird $g entweder als Jahreszahl erkannt und in $f umgewandelt oder	
+	 *  	aber so, wie es ist, belassen. In diesem zweiten Fall muss 
+	 *  	aber der Titel ($a oder $p) ein Individualtitel sein! 
 	 *  - Maschinell modifizierte Altdaten. Diese enthalten nur ein $g, wenn
 	 *  	ein Individualtitel vorliegt.
 	 *  - Neudaten enthalten nur dann ein $g, wenn ein Individualsachtitel
 	 *  	vorliegt. Das ist vor allem bei anonymen Werken der Fall. 
 	 *  	In Formalsachtiteln der Neudaten hat ein $g nichts zu suchen, 
 	 *  	insbesondere sind Bildungen wie $aAdagio$mVl$g1234 unsinnig.
-	 *  	Die Behandlung der case-Anweisung bei $m würde hier das $g-Feld 
-	 *  	vernachlässigen, da ParseInstrumentation das $g-Feld ignoriert.
-	 *  	Das ist nach dem zuvor Gesagten hinnehmbar.
 	 * 
 	 * @param composer Komponist
 	 * @param subfields	Liste von Unterfeldern, die mit $<Indikator> beginnen.
@@ -332,24 +326,7 @@ public final class ParseMusicTitle {
 		RangeCheckUtils.assertCollectionParamNotNullOrEmpty("value", subfields);
 		List<Subfield> unused = new LinkedList<Subfield>();
 
-		final IPredicate<Subfield> dollarGPred = new IPredicate<Subfield>() {
-			@Override
-			public boolean accept(final Subfield element) {
-				return element.getIndicator() == GNDTagDB.DOLLAR_G;
-			}
-		};
-
-		final boolean containsG =
-			(FilterUtils.find(subfields, dollarGPred) != null);
-
 		MusicTitle mTitle = null;
-		/*
-		 *  Zeigt auf das Werk, das gerade mit Unterfeldern aufgefüllt wird.
-		 *  Das kann das übergeordnete Werk, aber auch der Werkteil sein. 
-		 *  Im case-Fall $p wird dieser Zeiger weitergerückt. 
-		 */
-		MusicTitle actualPartTitle = null;
-		PartOfWork partOfWork = null;
 
 		for (Subfield subfield : subfields) {
 			final Indicator indicator = subfield.getIndicator();
@@ -357,23 +334,18 @@ public final class ParseMusicTitle {
 
 			if (indicator == GNDConstants.DOLLAR_a) {
 				/*
-				 * Das ist (garantiert) immer das erste Unterfeld und damit
+				 * Das ist (hoffentlich) immer das erste Unterfeld und damit
 				 * der erste behandelte Fall in der Schleife. Sollten
 				 * Altdaten vorliegen, kann höchstens eine Fassung in diesem
-				 * Feld vorkommen. Daher parseTitlePlusVersion():
+				 * Feld vorkommen. Daher parseFullRAK():
 				 */
 				mTitle =
 					ParseMusicTitle.parseFullRAK(composer, contentOfSubfield);
-				actualPartTitle = mTitle;
 			} else if (indicator == GNDConstants.DOLLAR_m) {
 
 				final InstrumentationList iList =
 					ParseInstrumentation.parse(contentOfSubfield);
-				if (!actualPartTitle.containsInstrumentation()) {
-					actualPartTitle.setInstrumentationList(iList);
-				} else {
-					actualPartTitle.getInstrumentationList().addAll(iList);
-				}
+				iList.addToTitle(mTitle);
 			} else if (indicator == GNDConstants.DOLLAR_f
 				|| indicator == GNDConstants.DOLLAR_n
 				|| indicator == GNDConstants.DOLLAR_r
@@ -389,10 +361,11 @@ public final class ParseMusicTitle {
 							contentOfSubfield, comma);
 				// Ist das $g ein maskiertes $f, $n oder $r?
 				if (ai != null)
-					actualPartTitle.setAdditionalInformation(ai);
-				else
-					actualPartTitle.setAdditionalInformation(new Qualifier(
-							contentOfSubfield));
+					ai.addToTitle(mTitle);
+				else {
+					Qualifier qualifier = new Qualifier(contentOfSubfield);
+					qualifier.addToTitle(mTitle);
+				}
 			} else if (indicator == GNDConstants.DOLLAR_p) {
 
 				if (!mTitle.containsParts()) {
@@ -402,21 +375,8 @@ public final class ParseMusicTitle {
 					 *  $p steht, also auch Teile von Teilen. Daher wird der
 					 *  Konstruktor PartOfWork(String) aufgerufen:
 					 */
-					if (containsG) {
-						/*
-						 * RSWK-Daten, enthalten mehrere $p, wenn notwendig:
-						 */
-						actualPartTitle =
-							parseSimpleTitle(composer, contentOfSubfield);
-						partOfWork = new PartOfWork(actualPartTitle);
-					} else {
-						partOfWork = new PartOfWork(contentOfSubfield);
-						final List<MusicTitle> tList =
-							partOfWork.getPartsOfWork();
-						final int partsSize = tList.size();
-						actualPartTitle = tList.get(partsSize - 1);
-					}
-					mTitle.setPartOfWork(partOfWork);
+					PartOfWork partOfWork = new PartOfWork(contentOfSubfield);
+					partOfWork.addToTitle(mTitle);
 
 				} else {
 					/*
@@ -429,10 +389,10 @@ public final class ParseMusicTitle {
 					 * In beiden Fällen enthalten das 2. und alle folgenden
 					 * $p-Felder einen und nur einen Musiktitel.
 					 */
-					actualPartTitle =
+					MusicTitle actualPartTitle =
 						ParseMusicTitle.parseSimpleTitle(composer,
 								contentOfSubfield);
-					partOfWork.addPartOfWork(actualPartTitle);
+					actualPartTitle.addToTitle(mTitle);
 				}
 
 			} else if (indicator == GNDConstants.DOLLAR_s) {
@@ -442,9 +402,10 @@ public final class ParseMusicTitle {
 				if (version == null) {
 					version = new Version(contentOfSubfield);
 				}
-				mTitle.setVersion(version);
+				version.addToTitle(mTitle);
 			} else if (indicator == GNDConstants.DOLLAR_o) {
-				mTitle.setArrangement(new Arrangement(contentOfSubfield));
+				Arrangement arrangement = new Arrangement(contentOfSubfield);
+				arrangement.addToTitle(mTitle);
 			} else {
 				unused.add(subfield);
 			}

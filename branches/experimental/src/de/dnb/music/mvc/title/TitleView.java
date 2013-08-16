@@ -26,7 +26,7 @@ public class TitleView implements Observer {
 		return gui.textFieldTitle.getText();
 	}
 	
-	public final boolean getExplicit() {
+	public final boolean getExpansion() {
 		return gui.chckbxExpansion.isSelected();
 	}
 	
@@ -46,7 +46,7 @@ public class TitleView implements Observer {
 		return gui.chckbxPopularMusic.isSelected();
 	}
 	
-	public final void addExplicitListener(final ActionListener al) {
+	public final void addExpansionListener(final ActionListener al) {
 		gui.chckbxExpansion.addActionListener(al);
 	}
 	

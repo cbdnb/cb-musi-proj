@@ -1,5 +1,13 @@
 package de.dnb.music.publicInterface;
 
+import static de.dnb.music.publicInterface.Constants.KOM_MASCHINELL;
+import static de.dnb.music.publicInterface.Constants.KOM_MASCHINELL_NACH_2003;
+import static de.dnb.music.publicInterface.Constants.KOM_MASCHINELL_VOR_2003;
+import static de.dnb.music.publicInterface.Constants.KOM_NACH_2003;
+import static de.dnb.music.publicInterface.Constants.KOM_PORTAL_430;
+import static de.dnb.music.publicInterface.Constants.KOM_VOR_2003;
+import static de.dnb.music.publicInterface.Constants.KOM_VOR_2003_430;
+import static de.dnb.music.publicInterface.Constants.RELATED_WORK_AS_STRING;
 import static de.dnb.music.publicInterface.Constants.SATZ_AUFG;
 
 import java.io.BufferedReader;
@@ -51,10 +59,23 @@ import filtering.IPredicate;
  * @author baumann
  *
  */
-public class RecordTransformer {
+public class DefaultRecordTransformer {
 
+	/**
+	 * Der gesicherte alte Datensatz.
+	 */
 	protected Record oldRecord;
+
+	/**
+	 * Der schrittweise aufzubauende neue Datensatz.
+	 */
 	protected Record newRecord;
+
+	/**
+	 * Grund, warum Datensatz nicht bearbeitet wurde.
+	 */
+	private String rejectionCause;
+
 	private static GNDTagDB tagDB = GNDTagDB.getDB();
 
 	/**
@@ -63,35 +84,137 @@ public class RecordTransformer {
 	 * @param record	nicht null.
 	 * @return			neuer Record.
 	 */
-	public Record transform(final Record record) {
+	public final Record transform(final Record record) {
 		RangeCheckUtils.assertReferenceParamNotNull("oldRecord", record);
 		this.oldRecord = record;
 		newRecord = oldRecord.clone();
+		rejectionCause = "";
 		if (isPermitted(oldRecord)) {
 			addComposerData();
 			addGeneralNote();
 			addGNDClassification();
-			removeTitles();
+			removeHeadings();
 			transform130();
-			Collection<Line> lines430 = RecordUtils.getLines(oldRecord, "430");
-			for (Line line : lines430) {
-				transform430(line);
-			}
+			transform430();
 		}
 		return newRecord;
 	}
 
-	protected void transform430(Line line) {
-		// TODO Auto-generated method stub
+	/**
+	 * Baut alle 430-Zeilen in den neuen Datensatz ein.
+	 */
+	protected final void transform430() {
+		Collection<Line> lines430 = RecordUtils.getLines(oldRecord, "430");
+		for (Line line : lines430) {
+			transform430(line);
+		}
+	}
+
+	/**
+	 * transformiertline und baut es in neuen Datensatz ein.
+	 * 
+	 * Eventuell zu überschreiben. 
+	 * 
+	 * @param line nicht null.
+	 */
+	protected void transform430(final Line line) {
+
+		// (sTag.equals("430"))
+		//			if (sRules == SetOfRules.RSWK) {
+		//				// 		RSWK, 430: ---------------------------------
+		//				newLine += TitleUtils.getRSWKInSubfields(sMusicTitle);
+		//				newComment = sCommentStr;
+		//			} else if (sRules == SetOfRules.RAK) {
+		//				if (KOM_VOR_2003_430.equals(sCommentStr)) {
+		//					// 	RAK, 430, vor 2003: ---------------------------------
+		//					newLine += transformOldRAK(sContent);
+		//					newComment = sCommentStr;
+		//				} else {
+		//					// 	RAK, 430, alle anderen: ------------------------------
+		//					newLine += TitleUtils.getX30ContentAsString(sMusicTitle);
+		//					newComment = sCommentStr;
+		//				}
+		//			} else { // GND
+		//				// GND, 430:  ---------------------------------
+		//				if (KOM_VOR_2003_430.equals(sCommentStr)) {
+		//					// irgenwoher ein altes RAK:
+		//					newLine += transformOldRAK(sContent);
+		//					newComment = sCommentStr;
+		//				} else {
+		//					newLine += TitleUtils.getX30ContentAsString(sMusicTitle);
+		//					newComment = sCommentStr;
+		//				}
+		//			}
+		//
+		//		}
 
 	}
 
+	/**
+	 * Nimmt die 130 aus {@link #oldRecord} verändert sie und fügt sie in
+	 * {@link #newRecord} ein. 
+	 * 
+	 * Der Entitätencode wird korrigiert.
+	 * Eventuell wird eine Portal-430 erzeugt. 
+	 * 
+	 * Eventuell zu überschreiben.
+	 */
 	protected void transform130() {
-		// TODO Auto-generated method stub
 
+		Line titleLine = WorkUtils.getTitleLine(oldRecord);
+		String commentStr = GNDUtils.getFirstComment(titleLine);
+		Pair<MusicTitle, List<Subfield>> musicTitleP =
+			ParseMusicTitle.parseGND(null, titleLine);
+		MusicTitle musicTitle = musicTitleP.first;
+		List<Subfield> unusedSubs = musicTitleP.second;
+
+		// 3XX hinzufügen:
+		add3XX(musicTitle);
+
+		// Entitätencode erzeugen:
+		Line entit;
+
+		try {
+			if (musicTitle.containsArrangement()
+				|| musicTitle.containsVersion())
+				entit = LineParser.parse("008 wif", tagDB);
+			else
+				entit = LineParser.parse("008 wim", tagDB);
+			newRecord.add(entit);
+			Collection<Subfield> subfields =
+				TitleUtils.getSubfields(musicTitle);
+			subfields.addAll(unusedSubs);
+			Line newLine = LineParser.parse(GNDConstants.TAG_130, subfields);
+			newRecord.add(newLine);
+		} catch (IllFormattedLineException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (OperationNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
-	protected void removeTitles() {
+	/**
+	 * Gibt den alten Titel, wenn nur einer vorhanden ist. Sonst wird
+	 * GND angenommen und null zurückgegeben.
+	 * 
+	 * @return Titel oder null.
+	 * 
+	 */
+	protected String getTitleFrom913() {
+		SetOfRules rules = getRules();
+		if (rules != SetOfRules.GND)
+			return WorkUtils.getOriginalTitles(oldRecord).get(0);
+		else
+			return null;
+	}
+
+	/**
+	 * Entfernt aus {@link #newRecord} die 1XX- und 4XX-Felder.
+	 * Diese müssen dann aus {@link #oldRecord} wieder aufgebaut werden.
+	 */
+	protected final void removeHeadings() {
 		Collection<GNDTag> tags1xx = tagDB.getTag1XX();
 		RecordUtils.removeTags(newRecord, tags1xx);
 		Collection<GNDTag> tags4xx = tagDB.getTag4XX();
@@ -131,9 +254,9 @@ public class RecordTransformer {
 	 * @param record	nicht null.
 	 * @return	RAK, RSWK, oder GND.
 	 */
-	protected final SetOfRules getRules(final Record record) {
-		RangeCheckUtils.assertReferenceParamNotNull("record", record);
-		List<String> authorities = GNDUtils.getOriginalAuthorityFile(record);
+	protected final SetOfRules getRules() {
+		RangeCheckUtils.assertReferenceParamNotNull("record", oldRecord);
+		List<String> authorities = GNDUtils.getOriginalAuthorityFile(oldRecord);
 		// neu angesetzt oder "Gemerged":
 		if (authorities.size() != 1)
 			return SetOfRules.GND;
@@ -154,7 +277,7 @@ public class RecordTransformer {
 	 * 
 	 * @param line		nach altem Regelwerk (durch Kommentar kenntlich)
 	 * 					angesetzte Zeile.	
-	 * @return			Alten Titel mit Unterfeldern $p und $s mit biherigem
+	 * @return			Alten Titel mit Unterfeldern $p und $s mit bisherigem
 	 *  				Kommentar.
 	 */
 	protected final Line transformOldRAK(final Line line) {
@@ -210,7 +333,10 @@ public class RecordTransformer {
 	}
 
 	/**
-	 * Fügt 3XX und 548 hinzu.
+	 * Fügt die aus title gewonnenen 3XX und 548 zu newRecord hinzu.
+	 * 
+	 * Da die Gesamtzahl erzeugt wird, eventuell zu überschreiben.
+	 * 
 	 * @param title		nicht null.
 	 */
 	protected void add3XX(final MusicTitle title) {
@@ -227,6 +353,8 @@ public class RecordTransformer {
 	/**
 	 * Fügt aus altem Datensatz gewonnene Komponistendaten dem
 	 * neuen Datensatz hinzu.
+	 * 
+	 * Eventuell zu überschreiben.
 	 */
 	protected void addComposerData() {
 		String idn = WorkUtils.getAuthorID(oldRecord);
@@ -252,7 +380,9 @@ public class RecordTransformer {
 	}
 
 	/**
-	 * Fügt 14.4p hinzu.
+	 * Fügt newRecord 14.4p hinzu.
+	 * 
+	 * Eventuell zu überschreiben.
 	 */
 	protected void addGNDClassification() {
 		Line line;
@@ -267,7 +397,9 @@ public class RecordTransformer {
 	}
 
 	/**
-	 * Redaktionelle Bemerkung.
+	 * Fügt newRecord die redaktionelle Bemerkung "VPe" hinzu.
+	 * 
+	 * Eventuell zu überschreiben.
 	 */
 	protected void addGeneralNote() {
 		Line line;
@@ -282,32 +414,6 @@ public class RecordTransformer {
 	}
 
 	/**
-	 * Die 913 enthält in der Regel eine Boilerplate
-	 * 	"913 $Sswd$ipt$a". 
-	 * Dann folgt der eventuelle Komponist, gefolgt von
-	 * 	", ", 
-	 * danach der Titel, danach die alte nid 
-	 * 	"$04425694-2".
-	 * 
-	 * 913 $Sswd$it$aMagnus liber <Musik>$04759556-5
-	 * @param record	nicht null.
-	 * @return Liste der Werktitel, eventuell leer.
-	 */
-	protected final ArrayList<String> getOriginalTitles(final Record record) {
-		RangeCheckUtils.assertReferenceParamNotNull("record", record);
-		List<String> headings = GNDUtils.getOriginalHeadings(record);
-		ArrayList<String> titles = new ArrayList<String>();
-		for (String heading : headings) {
-			String[] parts = heading.split(": ");
-			if (parts.length == 2) {
-				titles.add(parts[1].replace("{", ""));
-			} else
-				titles.add(heading.replace("{", ""));
-		}
-		return titles;
-	}
-
-	/**
 	 * @param args
 	 * @throws IllFormattedLineException 
 	 * @throws OperationNotSupportedException 
@@ -318,7 +424,7 @@ public class RecordTransformer {
 
 		Line line = LineParser.parse("430 Adagio, 3", tagDB);
 
-		RecordTransformer transformer = new RecordTransformer();
+		DefaultRecordTransformer transformer = new DefaultRecordTransformer();
 
 		System.out.println(transformer.transformOldRAK(line));
 
@@ -334,7 +440,7 @@ public class RecordTransformer {
 			throws IllFormattedLineException,
 			OperationNotSupportedException,
 			IOException {
-		RecordTransformer transformer = new RecordTransformer();
+		DefaultRecordTransformer transformer = new DefaultRecordTransformer();
 		BufferedReader reader =
 			new BufferedReader(new InputStreamReader(System.in));
 		RecordReader parser = new RecordReader(reader);

@@ -317,7 +317,7 @@ public final class ParseMusicTitle {
 	 * 
 	 * @param composer Komponist
 	 * @param subfields	Liste von Unterfeldern, die mit $<Indikator> beginnen.
-	 * @return	gültigen Musiktitel oder null, 
+	 * @return	Paar aus gültigen Musiktitel und den ungenutzten Unterfeldern. 
 	 * 
 	 */
 	public static Pair<MusicTitle, List<Subfield>> parseGND(

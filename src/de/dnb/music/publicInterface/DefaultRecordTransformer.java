@@ -1,19 +1,11 @@
 package de.dnb.music.publicInterface;
 
-import static de.dnb.music.publicInterface.Constants.KOM_MASCHINELL;
-import static de.dnb.music.publicInterface.Constants.KOM_MASCHINELL_NACH_2003;
-import static de.dnb.music.publicInterface.Constants.KOM_MASCHINELL_VOR_2003;
-import static de.dnb.music.publicInterface.Constants.KOM_NACH_2003;
 import static de.dnb.music.publicInterface.Constants.KOM_PORTAL_430;
-import static de.dnb.music.publicInterface.Constants.KOM_VOR_2003;
-import static de.dnb.music.publicInterface.Constants.KOM_VOR_2003_430;
-import static de.dnb.music.publicInterface.Constants.RELATED_WORK_AS_STRING;
 import static de.dnb.music.publicInterface.Constants.SATZ_AUFG;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,31 +13,25 @@ import java.util.List;
 import javax.naming.OperationNotSupportedException;
 
 import utils.GNDConstants;
-import utils.StringUtils;
 import utils.TitleUtils;
 import applikationsbausteine.RangeCheckUtils;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
-import de.dnb.gnd.parser.Field;
+import de.dnb.gnd.parser.Indicator;
 import de.dnb.gnd.parser.Record;
-import de.dnb.gnd.parser.RecordParser;
 import de.dnb.gnd.parser.RecordReader;
 import de.dnb.gnd.parser.Subfield;
-
 import de.dnb.gnd.parser.line.Line;
 import de.dnb.gnd.parser.line.LineFactory;
 import de.dnb.gnd.parser.line.LineParser;
 import de.dnb.gnd.parser.tag.GNDTag;
 import de.dnb.gnd.parser.tag.GNDTagDB;
 import de.dnb.gnd.parser.tag.Tag;
-import de.dnb.gnd.parser.tag.TagDB;
 import de.dnb.gnd.utils.GNDUtils;
-
 import de.dnb.gnd.utils.Pair;
 import de.dnb.gnd.utils.RecordUtils;
 import de.dnb.gnd.utils.WorkUtils;
 import de.dnb.music.additionalInformation.ThematicIndexDB;
 import de.dnb.music.publicInterface.Constants.SetOfRules;
-import de.dnb.music.publicInterface.Constants.TransformMode;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
 import de.dnb.music.version.Version;
@@ -74,9 +60,36 @@ public class DefaultRecordTransformer {
 	/**
 	 * Grund, warum Datensatz nicht bearbeitet wurde.
 	 */
-	private String rejectionCause;
+	protected String rejectionCause;
 
-	private static GNDTagDB tagDB = GNDTagDB.getDB();
+	protected static final GNDTagDB TAG_DB = GNDTagDB.getDB();
+
+	/**
+	 * Zur Zeit bearbeiteter Werktitel.
+	 */
+	protected MusicTitle actualMusicTitle;
+
+	/**
+	 * Zur Zeit bearbeiteter Kommentar.
+	 */
+	protected String actualCommentStr;
+
+	/**
+	 * Zur Zeit aktueller {@link Tag}.
+	 */
+	protected Tag actualTag;
+
+	/**
+	 * Unterfelder, die beim Parsen des Musiktitels nicht berücksichtigt
+	 * wurden.
+	 */
+	protected LinkedList<Subfield> unusedSubs = new LinkedList<Subfield>();
+
+	/**
+	 * Unterfelder, die zum aktuellen Titel ({@link #actualMusicTitle})
+	 * gehören.
+	 */
+	LinkedList<Subfield> titleSubs = new LinkedList<Subfield>();
 
 	/**
 	 * Template-Methode.
@@ -157,41 +170,105 @@ public class DefaultRecordTransformer {
 	 * Der Entitätencode wird korrigiert.
 	 * Eventuell wird eine Portal-430 erzeugt. 
 	 * 
-	 * Eventuell zu überschreiben.
 	 */
-	protected void transform130() {
-
+	private void transform130() {
+		// globale Variablen vorbereiten
+		actualTag = GNDConstants.TAG_130;
 		Line titleLine = WorkUtils.getTitleLine(oldRecord);
-		String commentStr = GNDUtils.getFirstComment(titleLine);
+		actualCommentStr = GNDUtils.getFirstComment(titleLine);
 		Pair<MusicTitle, List<Subfield>> musicTitleP =
 			ParseMusicTitle.parseGND(null, titleLine);
-		MusicTitle musicTitle = musicTitleP.first;
-		List<Subfield> unusedSubs = musicTitleP.second;
+		actualMusicTitle = musicTitleP.first;
+		unusedSubs = new LinkedList<Subfield>(musicTitleP.second);
 
 		// 3XX hinzufügen:
-		add3XX(musicTitle);
+		add3XX(actualMusicTitle);
 
 		// Entitätencode erzeugen:
 		Line entit;
-
 		try {
-			if (musicTitle.containsArrangement()
-				|| musicTitle.containsVersion())
-				entit = LineParser.parse("008 wif", tagDB);
+			if (actualMusicTitle.containsArrangement()
+				|| actualMusicTitle.containsVersion())
+				entit = LineParser.parse("008 wif", TAG_DB);
 			else
-				entit = LineParser.parse("008 wim", tagDB);
+				entit = LineParser.parse("008 wim", TAG_DB);
 			newRecord.add(entit);
-			Collection<Subfield> subfields =
-				TitleUtils.getSubfields(musicTitle);
-			subfields.addAll(unusedSubs);
-			Line newLine = LineParser.parse(GNDConstants.TAG_130, subfields);
+		} catch (IllFormattedLineException e) {
+			// nix
+		} catch (OperationNotSupportedException e) {
+			// nix
+		}
+
+		titleSubs =
+			new LinkedList<Subfield>(TitleUtils.getSubfields(actualMusicTitle));
+		makeNew130Comment();
+		buildAndAddLine();
+		if (actualMusicTitle.containsParts())
+			makePortal430();
+	}
+
+	protected void makePortal430() {
+		// Vorderteil basteln:
+		actualTag = GNDConstants.TAG_430;
+		String rak = TitleUtils.getRAK(actualMusicTitle);
+		Indicator a = actualTag.getIndicator('a');
+		Subfield sa = null;
+		try {
+			sa = new Subfield(a, rak);
+		} catch (IllFormattedLineException e) {
+			// nix
+		}
+		titleSubs.clear();
+		titleSubs.add(sa);
+		// Hinterteil basteln:
+		unusedSubs.clear();
+		actualCommentStr = KOM_PORTAL_430;
+		buildAndAddLine();
+	}
+
+	/**
+	 * Default: kein Kommentar.
+	 * Für maschinell zu überschreiben.
+	 */
+	protected void makeNew130Comment() {
+		// default für intellektuell:
+		actualCommentStr = null;
+	}
+
+	/**
+	 * Nimmt {@link #actualTag}, {@link #titleSubs} und {@link #unusedSubs},
+	 * baut eine Zeile zusammen und fügt sie in {@link #newRecord} ein.
+	 * <br><br>
+	 * Aus {@link #unusedSubs} werden die alten Kommentare entfernt und,
+	 * wenn {@link #actualCommentStr} != null, durch den neuen Kommentar
+	 * ersetzt.
+	 */
+	@SuppressWarnings("boxing")
+	private void buildAndAddLine() {
+		// alte Kommentare aus unusedSubs entfernen und neuen einfügen
+		unusedSubs =
+			new LinkedList<Subfield>(RecordUtils.removeSubfieldsFromCollection(
+					unusedSubs, 'v'));
+		Indicator v = actualTag.getIndicator('v');
+		if (actualCommentStr != null) {
+			try {
+				Subfield sv = new Subfield(v, actualCommentStr);
+				titleSubs.add(sv);
+			} catch (IllFormattedLineException e1) {
+				//nix
+			}
+		}
+
+		// beide Listen zusammenfügen und Zeile basteln:
+		titleSubs.addAll(unusedSubs);
+		Line newLine;
+		try {
+			newLine = LineParser.parse(actualTag, titleSubs);
 			newRecord.add(newLine);
 		} catch (IllFormattedLineException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// nix
 		} catch (OperationNotSupportedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// nix
 		}
 	}
 
@@ -211,14 +288,15 @@ public class DefaultRecordTransformer {
 	}
 
 	/**
-	 * Entfernt aus {@link #newRecord} die 1XX- und 4XX-Felder.
+	 * Entfernt aus {@link #newRecord} die oo8, 1XX- und 4XX-Felder.
 	 * Diese müssen dann aus {@link #oldRecord} wieder aufgebaut werden.
 	 */
 	protected final void removeHeadings() {
-		Collection<GNDTag> tags1xx = tagDB.getTag1XX();
+		Collection<GNDTag> tags1xx = TAG_DB.getTag1XX();
 		RecordUtils.removeTags(newRecord, tags1xx);
-		Collection<GNDTag> tags4xx = tagDB.getTag4XX();
+		Collection<GNDTag> tags4xx = TAG_DB.getTag4XX();
 		RecordUtils.removeTags(newRecord, tags4xx);
+		RecordUtils.removeTags(newRecord, TAG_DB, "008");
 	}
 
 	protected boolean isPermitted(Record record) {
@@ -365,10 +443,10 @@ public class DefaultRecordTransformer {
 		if (cc != null) {
 			Line line;
 			try {
-				line = LineParser.parse("043 " + cc, tagDB);
+				line = LineParser.parse("043 " + cc, TAG_DB);
 				newRecord.add(line);
 				String sourceAbb = ThematicIndexDB.getSourceAbb(idn);
-				line = LineParser.parse("670 " + sourceAbb, tagDB);
+				line = LineParser.parse("670 " + sourceAbb, TAG_DB);
 				newRecord.add(line);
 			} catch (IllFormattedLineException e) {
 				//nix
@@ -387,7 +465,7 @@ public class DefaultRecordTransformer {
 	protected void addGNDClassification() {
 		Line line;
 		try {
-			line = LineParser.parse("065 14.4p", tagDB);
+			line = LineParser.parse("065 14.4p", TAG_DB);
 			newRecord.add(line);
 		} catch (IllFormattedLineException e) {
 			//nix
@@ -404,7 +482,7 @@ public class DefaultRecordTransformer {
 	protected void addGeneralNote() {
 		Line line;
 		try {
-			line = LineParser.parse("667 " + SATZ_AUFG, tagDB);
+			line = LineParser.parse("667 " + SATZ_AUFG, TAG_DB);
 			newRecord.add(line);
 		} catch (IllFormattedLineException e) {
 			//nix
@@ -422,7 +500,7 @@ public class DefaultRecordTransformer {
 			throws IllFormattedLineException,
 			OperationNotSupportedException {
 
-		Line line = LineParser.parse("430 Adagio, 3", tagDB);
+		Line line = LineParser.parse("430 Adagio, 3", TAG_DB);
 
 		DefaultRecordTransformer transformer = new DefaultRecordTransformer();
 

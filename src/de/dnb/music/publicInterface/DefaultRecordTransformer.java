@@ -253,13 +253,14 @@ public class DefaultRecordTransformer {
 		if (actualCommentStr != null) {
 			try {
 				Subfield sv = new Subfield(v, actualCommentStr);
-				titleSubs.add(sv);
+				RecordUtils.insertAtBestPosition(sv, titleSubs, actualTag);
 			} catch (IllFormattedLineException e1) {
 				//nix
 			}
 		}
 
 		// beide Listen zusammenfügen und Zeile basteln:
+		RecordUtils.insertAtBestPosition(unusedSubs, titleSubs, actualTag);
 		titleSubs.addAll(unusedSubs);
 		Line newLine;
 		try {

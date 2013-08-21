@@ -44,8 +44,7 @@ public class RecordController {
 
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			model.setNewRecord(view.getNewRecord());
-			model.removeExpansion();
+			model.changeExpansion();
 			model.refresh();
 		}
 
@@ -56,7 +55,6 @@ public class RecordController {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 			model.addComposer(view.getComposer(), view.getCode());
-
 		}
 
 	}

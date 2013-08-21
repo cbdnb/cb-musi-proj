@@ -3,9 +3,7 @@ package de.dnb.music.publicInterface;
 import static de.dnb.music.publicInterface.Constants.KOM_PORTAL_430;
 import static de.dnb.music.publicInterface.Constants.SATZ_AUFG;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,10 +16,8 @@ import applikationsbausteine.RangeCheckUtils;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
 import de.dnb.gnd.parser.Indicator;
 import de.dnb.gnd.parser.Record;
-import de.dnb.gnd.parser.RecordReader;
 import de.dnb.gnd.parser.Subfield;
 import de.dnb.gnd.parser.line.Line;
-import de.dnb.gnd.parser.line.LineFactory;
 import de.dnb.gnd.parser.line.LineParser;
 import de.dnb.gnd.parser.tag.GNDTag;
 import de.dnb.gnd.parser.tag.GNDTagDB;
@@ -57,11 +53,6 @@ public class DefaultRecordTransformer {
 	 */
 	protected Record newRecord;
 
-	/**
-	 * Grund, warum Datensatz nicht bearbeitet wurde.
-	 */
-	protected String rejectionCause;
-
 	protected static final GNDTagDB TAG_DB = GNDTagDB.getDB();
 
 	/**
@@ -83,13 +74,13 @@ public class DefaultRecordTransformer {
 	 * Unterfelder, die beim Parsen des Musiktitels nicht berücksichtigt
 	 * wurden.
 	 */
-	protected LinkedList<Subfield> unusedSubs = new LinkedList<Subfield>();
+	protected List<Subfield> unusedSubs = new LinkedList<Subfield>();
 
 	/**
 	 * Unterfelder, die zum aktuellen Titel ({@link #actualMusicTitle})
 	 * gehören.
 	 */
-	LinkedList<Subfield> titleSubs = new LinkedList<Subfield>();
+	List<Subfield> titleSubs = new LinkedList<Subfield>();
 
 	/**
 	 * Template-Methode.
@@ -101,7 +92,6 @@ public class DefaultRecordTransformer {
 		RangeCheckUtils.assertReferenceParamNotNull("oldRecord", record);
 		this.oldRecord = record;
 		newRecord = oldRecord.clone();
-		rejectionCause = "";
 		if (isPermitted(oldRecord)) {
 			addComposerData();
 			addGeneralNote();
@@ -131,35 +121,27 @@ public class DefaultRecordTransformer {
 	 * @param line nicht null.
 	 */
 	protected void transform430(final Line line) {
+		RangeCheckUtils.assertReferenceParamNotNull("line", line);
 
-		// (sTag.equals("430"))
-		//			if (sRules == SetOfRules.RSWK) {
-		//				// 		RSWK, 430: ---------------------------------
-		//				newLine += TitleUtils.getRSWKInSubfields(sMusicTitle);
-		//				newComment = sCommentStr;
-		//			} else if (sRules == SetOfRules.RAK) {
-		//				if (KOM_VOR_2003_430.equals(sCommentStr)) {
-		//					// 	RAK, 430, vor 2003: ---------------------------------
-		//					newLine += transformOldRAK(sContent);
-		//					newComment = sCommentStr;
-		//				} else {
-		//					// 	RAK, 430, alle anderen: ------------------------------
-		//					newLine += TitleUtils.getX30ContentAsString(sMusicTitle);
-		//					newComment = sCommentStr;
-		//				}
-		//			} else { // GND
-		//				// GND, 430:  ---------------------------------
-		//				if (KOM_VOR_2003_430.equals(sCommentStr)) {
-		//					// irgenwoher ein altes RAK:
-		//					newLine += transformOldRAK(sContent);
-		//					newComment = sCommentStr;
-		//				} else {
-		//					newLine += TitleUtils.getX30ContentAsString(sMusicTitle);
-		//					newComment = sCommentStr;
-		//				}
-		//			}
-		//
-		//		}
+		// soll nicht verändert werden!
+		if (isOldRAK(line)) {
+			buildAndInsertOldRAK(line);
+			return;
+		}
+
+		actualTag = line.getTag();
+		actualCommentStr = null;
+		Pair<MusicTitle, List<Subfield>> pair =
+			ParseMusicTitle.parseGND(null, line);
+		actualMusicTitle = pair.first;
+		unusedSubs = pair.second;
+
+		if (getRules() == SetOfRules.RSWK)
+			titleSubs = TitleUtils.getRSWKSubfields(actualMusicTitle);
+		else
+			titleSubs = TitleUtils.getSubfields(actualMusicTitle);
+
+		buildAndAddLine(true);
 
 	}
 
@@ -202,11 +184,19 @@ public class DefaultRecordTransformer {
 		titleSubs =
 			new LinkedList<Subfield>(TitleUtils.getSubfields(actualMusicTitle));
 		makeNew130Comment();
-		buildAndAddLine();
+		buildAndAddLine(false);
 		if (actualMusicTitle.containsParts())
 			makePortal430();
 	}
 
+	/**
+	 * Erzeugt aus der 130 eine alte RAK-Form, da die Portal-Software das
+	 * angeblich nicht kann. Diese Form wird aber nur dann erzeugt, wenn
+	 * ein Werkteil vorliegt (da dann abweichende Regeln für 
+	 * Deskriptionszeichen gelten.).
+	 * 
+	 * Eventuell zu überschreiben.
+	 */
 	protected void makePortal430() {
 		// Vorderteil basteln:
 		actualTag = GNDConstants.TAG_430;
@@ -223,7 +213,7 @@ public class DefaultRecordTransformer {
 		// Hinterteil basteln:
 		unusedSubs.clear();
 		actualCommentStr = KOM_PORTAL_430;
-		buildAndAddLine();
+		buildAndAddLine(false);
 	}
 
 	/**
@@ -239,19 +229,27 @@ public class DefaultRecordTransformer {
 	 * Nimmt {@link #actualTag}, {@link #titleSubs} und {@link #unusedSubs},
 	 * baut eine Zeile zusammen und fügt sie in {@link #newRecord} ein.
 	 * <br><br>
-	 * Aus {@link #unusedSubs} werden die alten Kommentare entfernt und,
-	 * wenn {@link #actualCommentStr} != null, durch den neuen Kommentar
-	 * ersetzt.
+	 * Wenn keepOldComments == falseAus {@link #unusedSubs} werden die alten 
+	 * Kommentare entfernt. <br><br>
+	 * Wenn {@link #actualCommentStr} != null, wird ein neuer Kommentar
+	 * eingefügt.
+	 * 
+	 * @param keepOldComments 	wenn true, werden die alten Kommentare
+	 * 							übernommen.
 	 */
 	@SuppressWarnings("boxing")
-	private void buildAndAddLine() {
-		// alte Kommentare aus unusedSubs entfernen und neuen einfügen
-		unusedSubs =
-			new LinkedList<Subfield>(RecordUtils.removeSubfieldsFromCollection(
-					unusedSubs, 'v'));
-		Indicator v = actualTag.getIndicator('v');
+	private void buildAndAddLine(final boolean keepOldComments) {
+		// alte Kommentare aus unusedSubs entfernen
+		if (!keepOldComments)
+			unusedSubs =
+				new LinkedList<Subfield>(
+						RecordUtils.removeSubfieldsFromCollection(unusedSubs,
+								'v'));
+
+		// neuen Kommentar einfügen
 		if (actualCommentStr != null) {
 			try {
+				Indicator v = actualTag.getIndicator('v');
 				Subfield sv = new Subfield(v, actualCommentStr);
 				RecordUtils.insertAtBestPosition(sv, titleSubs, actualTag);
 			} catch (IllFormattedLineException e1) {
@@ -261,7 +259,6 @@ public class DefaultRecordTransformer {
 
 		// beide Listen zusammenfügen und Zeile basteln:
 		RecordUtils.insertAtBestPosition(unusedSubs, titleSubs, actualTag);
-		titleSubs.addAll(unusedSubs);
 		Line newLine;
 		try {
 			newLine = LineParser.parse(actualTag, titleSubs);
@@ -280,7 +277,7 @@ public class DefaultRecordTransformer {
 	 * @return Titel oder null.
 	 * 
 	 */
-	protected String getTitleFrom913() {
+	protected final String getTitleFrom913() {
 		SetOfRules rules = getRules();
 		if (rules != SetOfRules.GND)
 			return WorkUtils.getOriginalTitles(oldRecord).get(0);
@@ -300,7 +297,16 @@ public class DefaultRecordTransformer {
 		RecordUtils.removeTags(newRecord, TAG_DB, "008");
 	}
 
+	/**
+	 * Ermittelt, ob der Datensatz überhaupt verändert werden darf.
+	 * Dazu werden die Kommentare und die redaktionellen Bemerkungen
+	 * analysiert.
+	 * 
+	 * @param record 	nicht null
+	 * @return			true, wenn Veränderung erlaubt.
+	 */
 	protected boolean isPermitted(Record record) {
+		RangeCheckUtils.assertReferenceParamNotNull("record", record);
 		Line heading;
 		try {
 			heading = GNDUtils.getHeading(record);
@@ -309,10 +315,12 @@ public class DefaultRecordTransformer {
 		}
 		String comment = GNDUtils.getFirstComment(heading);
 		if (Constants.COMMENTS_MACHINE.contains(comment))
-			return false;
+			throw new IllegalStateException(
+					"Datensatz wurde maschinell verändert " +
+					"(aus Kommentar zu 130)");
 		IPredicate<Line> predicate667 = new IPredicate<Line>() {
 			@Override
-			public boolean accept(Line line) {
+			public boolean accept(final Line line) {
 				Subfield subfield = RecordUtils.getFirstSubfield(line, 'a');
 				if (subfield == null)
 					return false;
@@ -350,39 +358,48 @@ public class DefaultRecordTransformer {
 	}
 
 	/**
+	 * Zeigt der (erste) Kommentar, dass die Zeile nach RAK vor 2003
+	 * gebildet wurde?
+	 *  
+	 * @param line	nicht null.
+	 * 
+	 * @return true, wenn altes Regelwerk vorliegt.
+	 */
+	protected final boolean isOldRAK(final Line line) {
+		RangeCheckUtils.assertReferenceParamNotNull("line", line);
+		String comment = GNDUtils.getFirstComment(line); // auch null möglich
+		return Constants.COMMENT_OLD_RAK.contains(comment);
+	}
+
+	/**
 	 * Berücksichtigt das alte Regelwerk. Werktitel, die nach diesem aufgebaut
 	 * sind, sollen nicht in die üblichen Unterfelder zerlegt werden. Die
 	 * einzigen erlaubten Unterfelder sind $p, $s und $v. 
 	 * 
 	 * @param line		nach altem Regelwerk (durch Kommentar kenntlich)
 	 * 					angesetzte Zeile.	
-	 * @return			Alten Titel mit Unterfeldern $p und $s mit bisherigem
-	 *  				Kommentar.
 	 */
-	protected final Line transformOldRAK(final Line line) {
+	protected final void buildAndInsertOldRAK(final Line line) {
 		RangeCheckUtils.assertReferenceParamNotNull("line", line);
-		LineFactory factory = line.getTag().getLineFactory();
-
-		/*
-		 * jetzt aufpassen: hier sollen nur die Unterfelder
-		 * $p und $s erzeugt werden.
-		 */
-		Pair<List<Subfield>, List<Subfield>> pair = GNDUtils.splitComment(line);
-		List<Subfield> oldSubfields = pair.first;
-		List<Subfield> newSubfields;
-		List<Subfield> comments = pair.second;
+		if (!isOldRAK(line))
+			throw new IllegalArgumentException("kein RAK vor 2003");
+		actualTag = line.getTag();
+		actualCommentStr = null;
+		Pair<List<Subfield>, List<Subfield>> pair =
+			GNDUtils.splitCommentsFrom(line);
+		titleSubs = pair.first;
+		unusedSubs = pair.second;
 
 		/*
 		 *  Wenn oldSubfields mehr als 2 Einträge hat, dann lag
 		 *  in den alten DMA-Daten ein Werkteil (und eventuell noch
 		 *  eine Fassung) vor und die Unterfelder sind schon 
-		 *  korrekt gesetzt:
+		 *  korrekt gesetzt. Ansonsten: bearbeiten!
 		 */
-		int size = oldSubfields.size();
-		if (size == 1) {
-			newSubfields = new LinkedList<Subfield>();
+		//
+		if (titleSubs.size() == 1) {
 			Pair<String, Version> titelVersPair =
-				ParseMusicTitle.splitTitlePlusVersion(null, oldSubfields.get(0)
+				ParseMusicTitle.splitTitlePlusVersion(null, titleSubs.get(0)
 						.getContent());
 			if (titelVersPair != null) { // Fassung gefunden
 				try {
@@ -391,24 +408,15 @@ public class DefaultRecordTransformer {
 					Subfield nach =
 						new Subfield(GNDConstants.DOLLAR_s,
 								titelVersPair.second.getMatch());
-					newSubfields.add(vor);
-					newSubfields.add(nach);
+					titleSubs.clear();
+					titleSubs.add(vor);
+					titleSubs.add(nach);
 				} catch (IllFormattedLineException e) {
 					// nix
 				}
-			} else { // keine Fassung gefunden:
-				newSubfields = oldSubfields;
 			}
-		} else {
-			newSubfields = oldSubfields;
 		}
-		newSubfields.addAll(comments);
-		try {
-			factory.load(newSubfields);
-		} catch (IllFormattedLineException e) {
-			//nix
-		}
-		return factory.createLine();
+		buildAndAddLine(true);
 	}
 
 	/**
@@ -502,11 +510,7 @@ public class DefaultRecordTransformer {
 			OperationNotSupportedException {
 
 		Line line = LineParser.parse("430 Adagio, 3", TAG_DB);
-
 		DefaultRecordTransformer transformer = new DefaultRecordTransformer();
-
-		System.out.println(transformer.transformOldRAK(line));
-
 	}
 
 	/**
@@ -520,10 +524,7 @@ public class DefaultRecordTransformer {
 			OperationNotSupportedException,
 			IOException {
 		DefaultRecordTransformer transformer = new DefaultRecordTransformer();
-		BufferedReader reader =
-			new BufferedReader(new InputStreamReader(System.in));
-		RecordReader parser = new RecordReader(reader);
-		Record record = parser.nextRecord();
+		Record record = RecordUtils.readFromConsole(TAG_DB);
 		System.out.println(transformer.transform(record));
 	}
 }

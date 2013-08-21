@@ -432,7 +432,7 @@ public final class TransformRecord {
 			// (sTag.equals("430"))
 			if (sRules == SetOfRules.RSWK) {
 				// 		RSWK, 430: ---------------------------------
-				newLine += TitleUtils.getRSWKInSubfields(sMusicTitle);
+				newLine += TitleUtils.getRSWKStringInSubfields(sMusicTitle);
 				newComment = sCommentStr;
 			} else if (sRules == SetOfRules.RAK) {
 				if (KOM_VOR_2003_430.equals(sCommentStr)) {

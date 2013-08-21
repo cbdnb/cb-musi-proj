@@ -49,7 +49,7 @@ public class RecordView implements Observer {
 	
 
 	public final void addRemoveListener(final ActionListener al) {
-		gui.btnExpansionEntfernen.addActionListener(al);
+		gui.btnExpansionAendern.addActionListener(al);
 	}
 	
 	public final void addTitleListener(final ActionListener al) {

@@ -47,7 +47,7 @@ public class RecordGUI extends JFrame {
 	JComboBox comboBoxGenre;
 	JComboBox comboBoxInstru;
 	JComboBox comboBoxComp;
-	JButton btnExpansionEntfernen;
+	JButton btnExpansionAendern;
 	JComboBox comboBoxCount;
 	private JLabel label;
 	JTextField txtCode;
@@ -129,13 +129,13 @@ public class RecordGUI extends JFrame {
 		gbc_lblNeuerDatensatz.gridy = 0;
 		contentPane.add(lblNeuerDatensatz, gbc_lblNeuerDatensatz);
 
-		btnExpansionEntfernen = new JButton("Expansionen entfernen");
-		GridBagConstraints gbc_btnExpansionEntfernen = new GridBagConstraints();
-		gbc_btnExpansionEntfernen.gridwidth = 4;
-		gbc_btnExpansionEntfernen.insets = new Insets(0, 0, 5, 0);
-		gbc_btnExpansionEntfernen.gridx = 10;
-		gbc_btnExpansionEntfernen.gridy = 0;
-		contentPane.add(btnExpansionEntfernen, gbc_btnExpansionEntfernen);
+		btnExpansionAendern = new JButton("Expansionen +/-");
+		GridBagConstraints gbc_btnExpansionAendern = new GridBagConstraints();
+		gbc_btnExpansionAendern.gridwidth = 4;
+		gbc_btnExpansionAendern.insets = new Insets(0, 0, 5, 0);
+		gbc_btnExpansionAendern.gridx = 10;
+		gbc_btnExpansionAendern.gridy = 0;
+		contentPane.add(btnExpansionAendern, gbc_btnExpansionAendern);
 		
 				lblEinfgen = new JLabel("Einfügen:");
 				GridBagConstraints gbc_lblEinfgen = new GridBagConstraints();

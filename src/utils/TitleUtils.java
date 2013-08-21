@@ -70,9 +70,9 @@ public final class TitleUtils {
 	 * Setzt die vermutete RSWK-Ansetzung in GND-Unterfelder. 
 	 * 
 	 * @param musicTitle nicht null.
-	 * @return	RSWK-Form mit GND-Unterfeldern.
+	 * @return	RSWK-Form mit GND-Unterfeldern als String.
 	 */
-	public static String getRSWKInSubfields(final MusicTitle musicTitle) {
+	public static String getRSWKStringInSubfields(final MusicTitle musicTitle) {
 		WorkTitleVisitor vis = new WorkTitleVisitor(new RSWKSubfieldFactory());
 		musicTitle.accept(vis);
 		return vis.toString();
@@ -285,6 +285,25 @@ public final class TitleUtils {
 		final LineFactory factory = LineParser.getFactory("130", TAG_DB);
 		try {
 			factory.load(gnd);
+		} catch (IllFormattedLineException e) {
+			// nix
+		}
+		return factory.getSubfieldList();
+	}
+	
+	/**
+	 * Gibt basierend auf dem Tag 130 eine Liste der Unterfelder der
+	 * vermuteten RSWK-Ansetzung.
+	 * 
+	 * @param title	nicht null.
+	 * @return		nicht null, nicht leer.
+	 */
+	public static List<Subfield> getRSWKSubfields(final MusicTitle title) {
+		RangeCheckUtils.assertReferenceParamNotNull("title", title);
+		String rswk = getRSWKStringInSubfields(title);
+		final LineFactory factory = LineParser.getFactory("130", TAG_DB);
+		try {
+			factory.load(rswk);
 		} catch (IllFormattedLineException e) {
 			// nix
 		}

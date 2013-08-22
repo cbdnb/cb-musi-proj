@@ -83,8 +83,16 @@ public class DefaultRecordTransformer {
 	List<Subfield> titleSubs = new LinkedList<Subfield>();
 
 	/**
-	 * Template-Methode.
 	 * 
+	 * Zentrale Methode.
+	 * <br><br>
+	 * Template-Methode.<br>
+	 * Es können die Methoden
+	 * <br> {@link #addComposerData()}
+	 * <br> {@link #addGeneralNote()}
+	 * <br> {@link #addGNDClassification()} 
+	 * <br> {@link #transform430(Line)} 
+	 * <br>überschrieben werden.
 	 * @param record	nicht null.
 	 * @return			neuer Record.
 	 */
@@ -146,11 +154,19 @@ public class DefaultRecordTransformer {
 	}
 
 	/**
+	 * Template-Methode.
+	 * 
+	 * Es müssen die Methoden
+	 * <br> {@link #add3XX(MusicTitle)}
+	 * <br> {@link #makeNew130Comment()}
+	 * <br> {@link #makePortal430()} 
+	 * <br>überschrieben werden.
+	 * <br><br>
 	 * Nimmt die 130 aus {@link #oldRecord} verändert sie und fügt sie in
 	 * {@link #newRecord} ein. 
-	 * 
-	 * Der Entitätencode wird korrigiert.
-	 * Eventuell wird eine Portal-430 erzeugt. 
+	 * <br><br>
+	 * Der Entitätencode wird korrigiert.<br>
+	 * Es wird eine Portal-430 erzeugt. 
 	 * 
 	 */
 	private void transform130() {
@@ -305,7 +321,7 @@ public class DefaultRecordTransformer {
 	 * @param record 	nicht null
 	 * @return			true, wenn Veränderung erlaubt.
 	 */
-	protected boolean isPermitted(Record record) {
+	protected final boolean isPermitted(Record record) {
 		RangeCheckUtils.assertReferenceParamNotNull("record", record);
 		Line heading;
 		try {
@@ -316,8 +332,8 @@ public class DefaultRecordTransformer {
 		String comment = GNDUtils.getFirstComment(heading);
 		if (Constants.COMMENTS_MACHINE.contains(comment))
 			throw new IllegalStateException(
-					"Datensatz wurde maschinell verändert " +
-					"(aus Kommentar zu 130)");
+					"Datensatz wurde maschinell verändert "
+						+ "(aus Kommentar zu 130)");
 		IPredicate<Line> predicate667 = new IPredicate<Line>() {
 			@Override
 			public boolean accept(final Line line) {

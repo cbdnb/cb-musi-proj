@@ -16,6 +16,7 @@ import applikationsbausteine.RangeCheckUtils;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
 import de.dnb.gnd.parser.Indicator;
 import de.dnb.gnd.parser.Record;
+import de.dnb.gnd.parser.RecordParser;
 import de.dnb.gnd.parser.Subfield;
 import de.dnb.gnd.parser.line.Line;
 import de.dnb.gnd.parser.line.LineParser;
@@ -101,6 +102,7 @@ public class DefaultRecordTransformer {
 		this.oldRecord = record;
 		newRecord = oldRecord.clone();
 		if (isPermitted(oldRecord)) {
+			
 			addComposerData();
 			addGeneralNote();
 			addGNDClassification();
@@ -460,6 +462,7 @@ public class DefaultRecordTransformer {
 	 * Eventuell zu überschreiben.
 	 */
 	protected void addComposerData() {
+		
 		String idn = WorkUtils.getAuthorID(oldRecord);
 		if (idn == null)
 			return;
@@ -515,6 +518,21 @@ public class DefaultRecordTransformer {
 			//nix
 		}
 	}
+	
+	/**
+	 * Hilfsmethode, um einen String schnell in einen String zu transformieren.
+	 * 
+	 * @param old
+	 * @return
+	 */
+	public static String transformToString (String old){
+		DefaultRecordTransformer transformer = new DefaultRecordTransformer();
+		RecordParser parser = new RecordParser();
+		parser.setTagDB(TAG_DB);
+		Record record = parser.parse(old);
+		Record newR = transformer.transform(record);
+		return RecordUtils.toPica(newR);
+	}
 
 	/**
 	 * @param args
@@ -539,8 +557,10 @@ public class DefaultRecordTransformer {
 			throws IllFormattedLineException,
 			OperationNotSupportedException,
 			IOException {
-		DefaultRecordTransformer transformer = new DefaultRecordTransformer();
-		Record record = RecordUtils.readFromConsole(TAG_DB);
-		System.out.println(transformer.transform(record));
+		String titleStrOld = "500 !11862119X!Telemann, Georg Philipp$4kom1";
+		String recordStrNew =
+			DefaultRecordTransformer.transformToString(titleStrOld);
+		System.err.println(recordStrNew);
+		
 	}
 }

@@ -20,42 +20,7 @@ public final class StringUtils {
 	private StringUtils() {
 	}
 
-	public static String removeDollar8(String oldRecord) {
-		final Pattern dollar8P =
-			Pattern.compile("\\$8[^\\$]+", Pattern.MULTILINE);
-
-		Matcher m = dollar8P.matcher(oldRecord);
-		return m.replaceAll("");
-
-	}
-
 	private final static String idPatStr = "!\\d+X?!";
-
-	public static String removeExpansion(String oldRecord) {
-		if (oldRecord == null)
-			throw new IllegalArgumentException();
-
-		String newRecord;
-
-		/*
-		 * "!" ist ein Trick, da gar kein nachfolgendes Unterfeld 
-		 * erlaubt ist. ($! gibt es nicht):
-		 */
-		newRecord = filter(oldRecord, "169", "!");
-		newRecord = filter(newRecord, "260", "v");
-		newRecord = filter(newRecord, "372", "wZv");
-
-		newRecord = filter(newRecord, "380", "!");
-		newRecord = filter(newRecord, "382", "npsv");
-
-		newRecord = filter(newRecord, "5\\d\\d", "vXYZ45");
-
-		newRecord = filter(newRecord, "682", "v");
-		newRecord = filter(newRecord, "689", "v");
-
-		return newRecord.toString().trim();
-
-	}
 
 	private static String filter(
 			String recordStr,
@@ -622,7 +587,7 @@ public final class StringUtils {
 	 */
 	public static void main(String[] args) throws IOException {
 		String s = args[0];
-		System.out.println(removeExpansion(s));
+		
 	}
 
 	/**

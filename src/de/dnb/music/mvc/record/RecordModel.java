@@ -13,6 +13,7 @@ import javax.naming.OperationNotSupportedException;
 import javax.swing.JOptionPane;
 
 import utils.GNDConstants;
+import utils.GNDTitleUtils;
 import utils.TitleUtils;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
 import de.dnb.gnd.parser.Format;
@@ -171,7 +172,8 @@ public class RecordModel extends Observable {
 
 	public final void addInstrument(final Instrument ins) {
 		try {
-			RecordUtils.addLines(newRecord, TitleUtils.get3XXLines(ins, true));
+			RecordUtils.addLines(newRecord,
+					GNDTitleUtils.get3XXLines(ins, true));
 		} catch (OperationNotSupportedException e) {
 			// nix
 		}
@@ -180,8 +182,8 @@ public class RecordModel extends Observable {
 
 	public final void addGenre(final Genre genre) {
 		try {
-			RecordUtils
-					.addLines(newRecord, TitleUtils.get3XXLines(genre, true));
+			RecordUtils.addLines(newRecord,
+					GNDTitleUtils.get3XXLines(genre, true));
 		} catch (OperationNotSupportedException e) {
 			// nix
 		}
@@ -194,10 +196,10 @@ public class RecordModel extends Observable {
 
 		final boolean forceTotalCount = true;
 		try {
-			Line line = TitleUtils.getLine(GNDConstants.TAG_130, title);
+			Line line = GNDTitleUtils.getLine(GNDConstants.TAG_130, title);
 			newRecord.add(line);
 			RecordUtils.addLines(newRecord,
-					TitleUtils.get3XXLines(title, forceTotalCount));
+					GNDTitleUtils.get3XXLines(title, forceTotalCount));
 		} catch (Exception e) {
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);

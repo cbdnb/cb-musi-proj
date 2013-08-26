@@ -13,9 +13,13 @@ import javax.swing.JOptionPane;
 
 import applikationsbausteine.FileUtils;
 
+import utils.GNDTitleUtils;
 import utils.StringUtils;
 import utils.TitleUtils;
 
+import de.dnb.gnd.parser.Format;
+import de.dnb.gnd.parser.Record;
+import de.dnb.gnd.utils.RecordUtils;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
 
@@ -23,7 +27,7 @@ public class TitleModel extends Observable {
 
 	private MusicTitle musicTitle = null;
 
-	private boolean returnsPica;
+	private boolean returnsPicaPlus;
 
 	private boolean forceTotalCount = false;
 
@@ -44,7 +48,7 @@ public class TitleModel extends Observable {
 	}
 
 	public final void setReturnsPica(final boolean returnsPica) {
-		this.returnsPica = returnsPica;
+		this.returnsPicaPlus = returnsPica;
 	}
 
 	public final void setRegnognizeKeyName(final boolean regnognizeKeyName) {
@@ -65,11 +69,9 @@ public class TitleModel extends Observable {
 	}
 
 	public final String getGND() {
-		String gnd =
-			TitleUtils.getFullGND(musicTitle, expansion, forceTotalCount);
-		if (returnsPica)
-			gnd = StringUtils.gnd2Pica(gnd);
-		return gnd;
+		Record record = GNDTitleUtils.getRecord(musicTitle, forceTotalCount);
+		Format format = returnsPicaPlus ? Format.PICA_PLUS : Format.PICA3;
+		return RecordUtils.toPica(record, format, expansion, "\n", '$');
 	}
 
 	public final String getRAK() {

@@ -2,85 +2,16 @@ package utils;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import de.dnb.gnd.utils.Pair;
-
 import applikationsbausteine.RangeCheckUtils;
+import de.dnb.gnd.utils.Pair;
 
 public final class StringUtils {
 
 	private StringUtils() {
-	}
-
-	private final static String idPatStr = "!\\d+X?!";
-
-	private static String filter(
-			String recordStr,
-			String tag,
-			String allowedSubs) {
-		// <tag> !..!<expansion>($[<allowed>])?.*[\n\r]
-		String newRecord = "";
-		/*
-		 *  liefert die Zeile(n), in denen tag steht, die id kann auch
-		 *  später kommen
-		 */
-
-		final Pattern linePat =
-			Pattern.compile(tag + " " + "[^\\n\\r]*" + idPatStr
-				+ "([^\\n\\r]+)");
-		Matcher lineMatcher;
-		lineMatcher = linePat.matcher(recordStr);
-		int realTextStart = 0;
-		while (lineMatcher.find()) {
-			int realTextEnd = lineMatcher.start(1); // das ist ok, da zweites "!"
-			newRecord += recordStr.substring(realTextStart, realTextEnd);
-			String restOfLine = lineMatcher.group(1);
-
-			final Pattern allowedDollar =
-				Pattern.compile("\\$[" + allowedSubs + "]");
-			Matcher mAllowed = allowedDollar.matcher(restOfLine);
-			if (mAllowed.find()) {
-				// Erlaubt ist alles ab der Fundstelle:
-				realTextStart = realTextEnd + mAllowed.start();
-			} else
-				realTextStart = lineMatcher.end(1);
-		}
-		// letztes Teil geht bis zum Ende:
-		newRecord += recordStr.substring(realTextStart);
-		return newRecord;
-	}
-
-	/**
-	 * Filtert aus einem alten Record einen neuen, indem alle Vorkommen in der
-	 * ersten Klammer von filterStr entfernt werden.
-	 * 
-	 * @param oldRecord
-	 * @param filterStr
-	 * @return
-	 */
-	private static
-			String
-			filter(final String oldRecord, final String filterStr) {
-		String newRecord = "";
-		Matcher m;
-		Pattern filterPat = Pattern.compile(filterStr);
-		m = filterPat.matcher(oldRecord);
-		int realTextStart = 0;
-		while (m.find()) {
-			int realTextEnd = m.start(1);
-			newRecord += oldRecord.substring(realTextStart, realTextEnd);
-			realTextStart = m.end(1);
-		}
-		newRecord += oldRecord.substring(realTextStart);
-		return newRecord;
 	}
 
 	/**
@@ -133,8 +64,9 @@ public final class StringUtils {
 	}
 
 	/**
-	 * Findet das längste Präfix in parseString, das im Vektor data enthalten 
-	 * ist. Die Korrektheit der übergebenen Daten wird nur rudimentär überprüft.
+	 * Findet das längste Präfix in parseString, das im Vektor prefixes 
+	 * enthalten ist. Die Korrektheit der übergebenen Daten wird nur 
+	 * rudimentär überprüft.
 	 * 
 	 * @param parseString nicht null
 	 * @param prefixes	String-Vektor nicht null
@@ -283,72 +215,6 @@ public final class StringUtils {
 		return true;
 	}
 
-	//----------------------------------------------------------------
-	public static String gnd2Pica(String pica3) {
-		String gnd = pica3;
-		if (gnd == null || gnd.length() == 0)
-			return gnd;
-		if (gnd.charAt(0) != '\n')
-			gnd = '\n' + gnd;
-		gnd = gnd.replace("\n008 ", "\n004B $a");
-		gnd = gnd.replace("\n043 ", "\n042B $a");
-		gnd = gnd.replace("\n065 ", "\n042A $a");
-		gnd = gnd.replace("\n130 ", "\n022A $a");
-		gnd = gnd.replace("\n380 ", "\n032W $a");
-		gnd = gnd.replace("\n382 ", "\n032X $a");
-		gnd = gnd.replace("\n383 ", "\n032Y $a");
-		gnd = gnd.replace("\n384 ", "\n032Z $a");
-		gnd = gnd.replace("\n430 ", "\n022@ $a");
-		gnd = gnd.replace("\n530 ", "\n022R $a");
-		gnd = gnd.replace("\n548 ", "\n060R $a");
-		gnd = gnd.replace("\n667 ", "\n050C $a");
-		gnd = gnd.replace("\n670 ", "\n050E $a");
-		gnd = gnd.replace("\n675 ", "\n050F $a");
-		gnd = gnd.replace("\n678 ", "\n050G $a");
-		gnd = gnd.replace("\n679 ", "\n050H $a");
-		gnd = gnd.replace("\n680 ", "\n050D $a");
-
-		// Erstes ! durch $9 ersetzen
-		gnd = gnd.replace("$a!", "$9");
-		// Zweites ! weg, wenn es am Ende steht (also keine Expansion erwünscht)
-		gnd =
-			Pattern.compile("!$", Pattern.MULTILINE).matcher(gnd)
-					.replaceAll("");
-		// Wenn ein $ (also ein Subfeld) folgt, so muss es verschwinden 
-		gnd = gnd.replace("!$", "$");
-		// Alle anderen ! stehen innerhalb, also durch $8 ersetzen
-		gnd = gnd.replace("!", "$8");
-
-		// jetzt alle $a$, die möglicherweise zuviel sind, korrigieren:
-		gnd = gnd.replace("$a$", "$");
-
-		return gnd.substring(1);
-	}
-
-	private static String rakKomment = "$vVerweisung nach RAK";
-
-	/**
-	 * RAK-Verweisung auf Wunsch des DMA.
-	 * @param ansetzungOhneKommentar
-	 * @return	$p wird durch $g ersetzt. Dadurch kriegt man eckige Klammern
-	 * (<>). Ein Kommentar wird noch angehängt.
-	 */
-	public static String dma2GND430(String ansetzungOhneKommentar) {
-		// Teile von Werken
-		ansetzungOhneKommentar = ansetzungOhneKommentar.replace("$p", "$g");
-		return "430 " + ansetzungOhneKommentar + rakKomment;
-	}
-
-	private static Pattern patYear = null;
-
-	@Deprecated
-	public static boolean containsYear(final String s) {
-		if (patYear == null)
-			patYear = Pattern.compile("\\d\\d\\d\\d");
-		Matcher m = patYear.matcher(s);
-		return m.find();
-	}
-
 	/**
 	 * überprüft, ob prefix ein "echtes" Präfix von parseString ist. 
 	 * Der leere Strin "" wird als nicht matchend angesehen.
@@ -378,21 +244,6 @@ public final class StringUtils {
 	}
 
 	//----------------------------------------------------------------
-
-	/*
-	 * Rückt Folgezeilen eines String um anz Tabs nach rechts.
-	 */
-	public static String einruecken(final String s, final int anz) {
-		StringBuffer ein = new StringBuffer("");
-		for (int i = 0; i < anz; i++) {
-			ein.append("\t");
-		}
-		String a = "\n" + ein.toString();
-		// Ersetze alle "\n" durch "\n\t..."
-
-		//s = s.replaceAll("\n", a);
-		return s.replaceAll("\n", a);
-	}
 
 	private static Pattern patKommasBlanks = Pattern.compile("[ ,]+");
 
@@ -424,101 +275,19 @@ public final class StringUtils {
 		return s;
 	}
 
-	/**
-	 * @param repeat  number of times to repeat delim
-	 * @param padChar  character to repeat
-	 * @return String with repeated character
-	 */
-	public static String padding(final int repeat, final char padChar) {
-		if (repeat < 0) {
-			throw new IndexOutOfBoundsException(
-					"Cannot pad a negative amount: " + repeat);
-		}
-		final char[] buf = new char[repeat];
-		Arrays.fill(buf, padChar);
-		return new String(buf);
-	}
-
-	// $, gefolgt von a,m,n,f,o,p,r,s,v
-	private static Pattern patDollar = Pattern.compile("\\$[amnfoprsv]");
+	
 
 	/**
-	 * Erkennt alle Unterfelder von 130 ausser $g und $x.
+	 * Erkennt alle Unterfelder anhand $ oder ƒ.
 	 * @param contentOfField nicht null.
-	 * @return
+	 * @return	true, wenn Unterfeld erkannt.
 	 */
-	public static boolean containsSubfields(String contentOfField) {
+	public static boolean containsSubfields(final String contentOfField) {
 		RangeCheckUtils.assertStringParamNotNullOrWhitespace("contentOfField",
 				contentOfField);
-		return contentOfField.contains("$")||contentOfField.contains("ƒ");
-		
+		return contentOfField.contains("$") || contentOfField.contains("ƒ");
+
 	}
-
-	/**
-	 * Zerlegt eingabe 
-	 * 
-	 * Zerlegt den String contentOfField Unterfelder (ausser $g und $x). Leere
-	 * Unterfelder werden ignoriert!
-	 * 
-	 * @param contentOfField nicht null 
-	 * @return Eine Liste mit Unterfeldern, jedes beginnend mit $<Indikator>. 
-	 */
-	public static
-			List<String>
-			breakUpIntoSubfields(final String contentOfField) {
-		if (contentOfField == null)
-			throw new IllegalArgumentException(
-					"Null-String an breakUpIntoSubfields()übergeben");
-		LinkedList<String> listStr = new LinkedList<String>();
-		String withLeadingDollarA = "$a" + contentOfField;
-		final Matcher m = patDollar.matcher(withLeadingDollarA);
-		int pos1 = 0;
-		String subfield;
-		while (m.find()) {
-			final int pos2 = m.start();
-			subfield = withLeadingDollarA.substring(pos1, pos2);
-			if (subfield.length() > 2)
-				listStr.add(subfield);
-			pos1 = pos2;
-		}
-		subfield = withLeadingDollarA.substring(pos1);
-		listStr.add(subfield);
-
-		return listStr;
-	}
-
-	/**
-	 * Splittet einen Datensatz in eine Liste von Zeilen auf. Leere Zeilen
-	 * werden entfernt.
-	 * @param record
-	 * @return
-	 */
-	public static List<String> record2Lines(String record) {
-
-		String[] linesArr = record.split("\n");
-		List<String> linesList = new LinkedList<String>();
-
-		for (String line : linesArr) {
-			line = line.trim();
-			if (line.length() != 0)
-				linesList.add(line);
-		}
-
-		return linesList;
-	}
-
-//@formatter:off
-	public static String lines2Record(Collection<String> lines) {
-		String s = "";
-		for (Iterator<String> iterator = lines.iterator(); 
-				iterator.hasNext();) {
-			s += iterator.next();
-			if (iterator.hasNext())
-				s += "\n";
-		}
-		return s;
-	}
-	//@formatter:on
 
 	/**
 	 * Liefert ein Paar von Strings. Der erste String ist der Tag im Pica- oder
@@ -545,92 +314,13 @@ public final class StringUtils {
 
 	}
 
-	public static String getIDN(String content) {
-		if (content == null)
-			throw new IllegalArgumentException(
-					"Null-String an getIDN()übergeben");
-		String s = content;
-		if (s.startsWith("!")) {
-			s = s.substring(1);
-		} else if (s.startsWith("ƒ9") || s.startsWith("$9")
-			|| s.startsWith("Ÿ9")) {
-			s = s.substring(2);
-		} else if (s.startsWith("&flor;9")) {
-			s = s.substring(7);
-		}
-		final Pattern idnPat = Pattern.compile("^\\d{8,}X?");
-		final Matcher m = idnPat.matcher(s);
-		if (m.find()) {
-			int end = m.end();
-			String idn = s.substring(0, end);
-
-			return idn;
-		}
-
-		return null;
-
-	}
-
-	public static String concatenate(List<String> sList) {
-		if (sList == null)
-			throw new IllegalArgumentException("Liste null");
-		String s = "";
-		for (String string : sList) {
-			s += string;
-		}
-		return s;
-	}
-
 	/**
 	 * @param args
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-		String s = args[0];
 		
-	}
 
-	/**
-	 * Sortiert einen Datensatz nach den Feldern. Dabei bleibt die 
-	 * Reihenfolge innerhalb der Felder erhalten.
-	 * 
-	 * @param titleStrOld nicht null.
-	 * 
-	 * @return Sortierten Datensatz.
-	 */
-	public static String sortFields(final String titleStrOld) {
-		if (titleStrOld == null)
-			throw new IllegalArgumentException();
-		/*
-		 * Die Tags verweisen auf eine Liste von Inhalten (für wiederhol-
-		 * bare Felder):
-		 */
-		TreeMap<String, List<String>> data =
-			new TreeMap<String, List<String>>();
-		List<String> fieldList = record2Lines(titleStrOld);
-
-		// umwandeln:
-		for (String line : fieldList) {
-			Pair<String, String> pair = getTagAndcontent(line);
-			String tag = pair.first;
-			String content = pair.second;
-			List<String> tagLines = data.get(tag);
-			if (tagLines == null) {
-				tagLines = new LinkedList<String>();
-				data.put(tag, tagLines);
-			}
-			tagLines.add(content);
-		}
-		// ausgeben:
-		String out = "";
-		for (Entry<String, List<String>> entry : data.entrySet()) {
-			List<String> lines = entry.getValue();
-			for (String line : lines) {
-				out += entry.getKey() + " " + line + '\n';
-			}
-		}
-		out = out.substring(0, out.length() - 1);
-		return out;
 	}
 
 }

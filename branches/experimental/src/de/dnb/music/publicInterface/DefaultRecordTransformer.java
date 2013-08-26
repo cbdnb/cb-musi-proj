@@ -11,6 +11,7 @@ import java.util.List;
 import javax.naming.OperationNotSupportedException;
 
 import utils.GNDConstants;
+import utils.GNDTitleUtils;
 import utils.TitleUtils;
 import applikationsbausteine.RangeCheckUtils;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
@@ -102,7 +103,7 @@ public class DefaultRecordTransformer {
 		this.oldRecord = record;
 		newRecord = oldRecord.clone();
 		if (isPermitted(oldRecord)) {
-			
+
 			addComposerData();
 			addGeneralNote();
 			addGNDClassification();
@@ -147,9 +148,9 @@ public class DefaultRecordTransformer {
 		unusedSubs = pair.second;
 
 		if (getRules() == SetOfRules.RSWK)
-			titleSubs = TitleUtils.getRSWKSubfields(actualMusicTitle);
+			titleSubs = GNDTitleUtils.getRSWKSubfields(actualMusicTitle);
 		else
-			titleSubs = TitleUtils.getSubfields(actualMusicTitle);
+			titleSubs = GNDTitleUtils.getSubfields(actualMusicTitle);
 
 		buildAndAddLine(true);
 
@@ -200,7 +201,8 @@ public class DefaultRecordTransformer {
 		}
 
 		titleSubs =
-			new LinkedList<Subfield>(TitleUtils.getSubfields(actualMusicTitle));
+			new LinkedList<Subfield>(
+					GNDTitleUtils.getSubfields(actualMusicTitle));
 		makeNew130Comment();
 		buildAndAddLine(false);
 		if (actualMusicTitle.containsParts())
@@ -449,7 +451,7 @@ public class DefaultRecordTransformer {
 		try {
 			boolean forceTotalCount = true;
 			RecordUtils.addLines(newRecord,
-					TitleUtils.get3XXLines(title, forceTotalCount));
+					GNDTitleUtils.get3XXLines(title, forceTotalCount));
 		} catch (OperationNotSupportedException e) {
 			// kann nichts passieren, da alle wiederholbar.
 		}
@@ -462,7 +464,7 @@ public class DefaultRecordTransformer {
 	 * Eventuell zu überschreiben.
 	 */
 	protected void addComposerData() {
-		
+
 		String idn = WorkUtils.getAuthorID(oldRecord);
 		if (idn == null)
 			return;
@@ -518,14 +520,14 @@ public class DefaultRecordTransformer {
 			//nix
 		}
 	}
-	
+
 	/**
 	 * Hilfsmethode, um einen String schnell in einen String zu transformieren.
 	 * 
 	 * @param old
 	 * @return
 	 */
-	public static String transformToString (String old){
+	public static String transformToString(String old) {
 		DefaultRecordTransformer transformer = new DefaultRecordTransformer();
 		RecordParser parser = new RecordParser();
 		parser.setTagDB(TAG_DB);
@@ -561,6 +563,6 @@ public class DefaultRecordTransformer {
 		String recordStrNew =
 			DefaultRecordTransformer.transformToString(titleStrOld);
 		System.err.println(recordStrNew);
-		
+
 	}
 }

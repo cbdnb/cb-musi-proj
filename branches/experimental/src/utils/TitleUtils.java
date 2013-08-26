@@ -1,20 +1,9 @@
 package utils;
 
-import static utils.GNDConstants.TAG_DB;
-
-import java.util.Collection;
-import java.util.List;
-
 import applikationsbausteine.RangeCheckUtils;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
 import de.dnb.gnd.parser.Format;
 import de.dnb.gnd.parser.Record;
-import de.dnb.gnd.parser.Subfield;
-import de.dnb.gnd.parser.line.Line;
-import de.dnb.gnd.parser.line.LineFactory;
-import de.dnb.gnd.parser.line.LineParser;
-import de.dnb.gnd.parser.tag.Tag;
-import de.dnb.gnd.utils.GNDUtils;
 import de.dnb.gnd.utils.RecordUtils;
 import de.dnb.music.genre.GenreList;
 import de.dnb.music.genre.ParseGenre;
@@ -26,7 +15,6 @@ import de.dnb.music.visitor.AuthorityDataVisitor;
 import de.dnb.music.visitor.StructuredVisitor;
 import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.setsOfRules.AbstractParticleFactory;
-import de.dnb.music.visitor.setsOfRules.DNBPortal430Visitor;
 import de.dnb.music.visitor.setsOfRules.GNDParticleFactory;
 import de.dnb.music.visitor.setsOfRules.RAKParticleFactory;
 import de.dnb.music.visitor.setsOfRules.RSWKParticleFactory;
@@ -67,7 +55,15 @@ public final class TitleUtils {
 	}
 
 	/**
-	 * Setzt die vermutete RSWK-Ansetzung in GND-Unterfelder. 
+	 * Setzt die vermutete RSWK-Ansetzung in GND-Unterfelder. Es
+	 * werden also z.B. <br><br>
+	 * - Instrumente als $m kodiert, diese aber ausgeschrieben<br>
+	 * - Gattungen bevorzugt im Singular ausgegeben usw.
+	 * <br><br>
+	 * Parst titleStr und liefert eine String-Repräsentation der
+	 * RSWK-Fassung des Titels. Da der Aufbau eines Strings einfacher
+	 * ist als der Aufbau der Unterfelder, ist das zur Zeit die grundlegende
+	 * Methode - das sollte aber geändert werden.
 	 * 
 	 * @param musicTitle nicht null.
 	 * @return	RSWK-Form mit GND-Unterfeldern als String.
@@ -149,40 +145,10 @@ public final class TitleUtils {
 
 	}
 
-	/**
-	 * Liefert die 3XX-Felder.
-	 * 
-	 * @param element	TitleElement
-	 * @param forceTotalCount	Gesamtzahl bei Instrumenten erzwingen
-	 * @return 3XX-Felder der GND inclusive 548 (Zeitangabe)
-	 */
-	public static Collection<Line> get3XXLines(
-			final TitleElement element,
-			final boolean forceTotalCount) {
-		RangeCheckUtils.assertReferenceParamNotNull("element", element);
-		final AuthorityDataVisitor auvis =
-			new AuthorityDataVisitor(forceTotalCount);
-		final AdditionalDataIn3XXVisitor advis =
-			new AdditionalDataIn3XXVisitor();
-		element.accept(auvis);
-		element.accept(advis);
-		Collection<Line> lines = auvis.getLines();
-		lines.addAll(advis.getLines());
-		return lines;
-
-	}
-
 	public static String getGND3XX(final TitleElement element) {
 		final boolean expansion = false;
 		final boolean forceTotalCount = false;
 		return getGND3XX(element, expansion, forceTotalCount);
-	}
-
-	@Deprecated
-	public static String getDNBPortal4XX(final TitleElement element) {
-		final DNBPortal430Visitor vis = new DNBPortal430Visitor();
-		element.accept(vis);
-		return "430 " + vis.toString();
 	}
 
 	public static String getGND530(
@@ -202,28 +168,49 @@ public final class TitleUtils {
 			return "";
 	}
 
+	/**
+	 * Liefert die GND-Zeilen, die aus einem Werktitel gewonnen werden
+	 * können, als String.
+	 * 
+	 * @param musicTitle		nicht null
+	 * @param expansion			Links expandiert
+	 * @param forceTotalCount	Gesamtzahl bei Ausführenden wird immer
+	 * 							ausgegeben
+	 * @return					String der GND-Informationen.
+	 */
 	public static String getFullGND(
 			final MusicTitle musicTitle,
 			final boolean expansion,
 			final boolean forceTotalCount) {
-		String s =
-			getGND1XXPlusTag(musicTitle) + "\n"
-				+ getGND3XX(musicTitle, expansion, forceTotalCount);
-		if (musicTitle.containsParts())
-			s +=
-				"\n430 " + getRAK(musicTitle) + "$v" + Constants.KOM_PORTAL_430;
-		s += "\n" + getGND530(musicTitle, true);
-		return s;
+		RangeCheckUtils.assertReferenceParamNotNull("musicTitle", musicTitle);
+		Record record = GNDTitleUtils.getRecord(musicTitle, forceTotalCount);
+		return RecordUtils.toPica(record, Format.PICA3, expansion, "\n", '$');
 	}
 
+	/**
+	 * Liefert die GND-Zeilen, die aus einem Werktitel gewonnen werden
+	 * können, als String. <br>
+	 * Links sind expandiert. <br>
+	 * Gesamtzahl bei Ausführenden wird immer ausgegeben.
+	 * 
+	 * @param musicTitle		nicht null 		
+	 * 	
+	 * @return					String der GND-Informationen.
+	 */
 	public static String getFullGND(final MusicTitle musicTitle) {
+		RangeCheckUtils.assertReferenceParamNotNull("musicTitle", musicTitle);
 		final boolean expansion = false;
 		final boolean forceTotalCount = false;
 		return getFullGND(musicTitle, expansion, forceTotalCount);
 	}
 
 	/**
-	 * Liefert die GND-Form des Titels ohne Tag und ohne führendes $a.
+	 * Liefert eine String-Repräsentation der GND-Form des Titels 
+	 * ohne Tag und ohne führendes $a.
+	 * 
+	 * Da der Aufbau eines Strings einfacher ist als der Aufbau der 
+	 * Unterfelder, ist das zur Zeit die grundlegende
+	 * Methode - das sollte aber geändert werden.
 	 * 
 	 * @param element TitleElement nicht null.
 	 * @return GND-Titel als String.
@@ -236,78 +223,19 @@ public final class TitleUtils {
 		return vis.toString();
 	}
 
+	/**
+	 * 
+	 * Parst titleStr und liefert eine String-Repräsentation der
+	 * GND-Fassung des Titels.
+	 * 
+	 * @param titleStr	nicht null
+	 * @return			GND als String
+	 */
 	public static String getX30ContentAsString(final String titleStr) {
 		if (titleStr == null)
 			throw new IllegalArgumentException("übergebener Titel ist null");
 		MusicTitle mt = ParseMusicTitle.parseFullRAK(null, titleStr);
 		return getX30ContentAsString(mt);
-	}
-
-	public static Line getLine(final Tag tag, final String titleStr)
-			throws IllFormattedLineException {
-		RangeCheckUtils.assertReferenceParamNotNull("tag", tag);
-		RangeCheckUtils.assertStringParamNotNullOrWhitespace("titleStr",
-				titleStr);
-		String gnd = getX30ContentAsString(titleStr);
-		Line line = LineParser.parse(tag, Format.PICA3, gnd);
-		return line;
-	}
-
-	/**
-	 * Liefert eine Zeile zu Tag und Titel.
-	 * 
-	 * @param tag		nicht null.
-	 * @param title		nicht null.
-	 * @return			nicht null.
-	 */
-	public static Line getLine(final Tag tag, final MusicTitle title) {
-		RangeCheckUtils.assertReferenceParamNotNull("tag", tag);
-		RangeCheckUtils.assertReferenceParamNotNull("element", title);
-		String gnd = getX30ContentAsString(title);
-		Line line = null;
-		try {
-			line = LineParser.parse(tag, Format.PICA3, gnd);
-		} catch (IllFormattedLineException e) {
-			// OK
-		}
-		return line;
-	}
-
-	/**
-	 * Gibt basierend auf dem Tag 130 eine Liste der Unterfelder.
-	 * 
-	 * @param title	nicht null.
-	 * @return		nicht null, nicht leer.
-	 */
-	public static List<Subfield> getSubfields(final MusicTitle title) {
-		RangeCheckUtils.assertReferenceParamNotNull("title", title);
-		String gnd = getX30ContentAsString(title);
-		final LineFactory factory = LineParser.getFactory("130", TAG_DB);
-		try {
-			factory.load(gnd);
-		} catch (IllFormattedLineException e) {
-			// nix
-		}
-		return factory.getSubfieldList();
-	}
-	
-	/**
-	 * Gibt basierend auf dem Tag 130 eine Liste der Unterfelder der
-	 * vermuteten RSWK-Ansetzung.
-	 * 
-	 * @param title	nicht null.
-	 * @return		nicht null, nicht leer.
-	 */
-	public static List<Subfield> getRSWKSubfields(final MusicTitle title) {
-		RangeCheckUtils.assertReferenceParamNotNull("title", title);
-		String rswk = getRSWKStringInSubfields(title);
-		final LineFactory factory = LineParser.getFactory("130", TAG_DB);
-		try {
-			factory.load(rswk);
-		} catch (IllFormattedLineException e) {
-			// nix
-		}
-		return factory.getSubfieldList();
 	}
 
 	/**

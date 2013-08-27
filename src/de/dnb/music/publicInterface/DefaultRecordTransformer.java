@@ -76,7 +76,7 @@ public class DefaultRecordTransformer {
 	 * Zur Zeit aktueller {@link Tag}.
 	 */
 	protected Tag actualTag;
-	
+
 	/**
 	 * Titelzeile in Bearbeitung.
 	 */
@@ -146,13 +146,15 @@ public class DefaultRecordTransformer {
 	 */
 	protected void transform430(final Line line) {
 		RangeCheckUtils.assertReferenceParamNotNull("line", line);
-
+		actualLine = line;
 		// soll nicht verändert werden!
-		if (isOldRAK(line)) {
-			buildAndInsertOldRAK(line);
+		if (isOldRAK(actualLine)) {
+//			setGlobalsOldRAK();
+//			makeOldRakTitleSubs();
+			buildAndInsertOldRAK();
 			return;
 		}
-		setGlobals(line);
+		setGlobals(actualLine);
 
 		if (getRules() == SetOfRules.RSWK)
 			titleSubs = GNDTitleUtils.getRSWKSubfields(actualMusicTitle);
@@ -184,7 +186,6 @@ public class DefaultRecordTransformer {
 		makeEntityCode();
 		make130titleSubs();
 		makeNew130Comment();
-		keepOldComments = false;
 		buildAndAddLine();
 		if (actualMusicTitle.containsParts())
 			makePortal430();
@@ -210,8 +211,9 @@ public class DefaultRecordTransformer {
 	}
 
 	/**
-	 * Erzeugt aus actualMusicTitle die titleSubs.
-	 * 
+	 * Erzeugt aus actualMusicTitle die titleSubs. Wird erst aufgerufen, wenn 
+	 * {@link #setGlobals(Line)} aufgerufen wurde.:
+	 *
 	 *  Eventuell zu überschreiben.
 	 */
 	protected void make130titleSubs() {
@@ -272,6 +274,9 @@ public class DefaultRecordTransformer {
 	}
 
 	/**
+	 * Macht den neuen Kommentar und setzt die zugehörigen globalen
+	 * Schalter.
+	 * 
 	 * Default:	<br>
 	 * - kein neuer Kommentar<br>
 	 * - für GND-Daten den alten Kommentar beibehalten<br>
@@ -334,21 +339,6 @@ public class DefaultRecordTransformer {
 		} catch (OperationNotSupportedException e) {
 			// nix
 		}
-	}
-
-	/**
-	 * Gibt den alten Titel, wenn nur einer vorhanden ist. Sonst wird
-	 * GND angenommen und null zurückgegeben.
-	 * 
-	 * @return Titel oder null.
-	 * 
-	 */
-	protected final String getTitleFrom913() {
-		SetOfRules rules = getRules();
-		if (rules != SetOfRules.GND)
-			return WorkUtils.getOriginalTitles(oldRecord).get(0);
-		else
-			return null;
 	}
 
 	/**
@@ -445,26 +435,38 @@ public class DefaultRecordTransformer {
 	 * @param line		nach altem Regelwerk (durch Kommentar kenntlich)
 	 * 					angesetzte Zeile.	
 	 */
-	protected final void buildAndInsertOldRAK(final Line line) {
-		RangeCheckUtils.assertReferenceParamNotNull("line", line);
-		if (!isOldRAK(line))
-			throw new IllegalArgumentException("kein RAK vor 2003");
+	protected final void buildAndInsertOldRAK() {
 
+		setGlobalsOldRAK();
+		makeOldRakTitleSubs();
+		buildAndAddLine();
+	}
+
+	/**
+	 * Setzt globale Variable, strippt insbesondere die Kommentare vom den anderen
+	 * Unterfeldern.
+	 */
+	protected void setGlobalsOldRAK() {
 		keepOldComments = true; // Da aktueller Kommentar auf null gesetzt.
-		actualTag = line.getTag();
+		actualTag = actualLine.getTag();
 		actualCommentStr = null;
 		Pair<List<Subfield>, List<Subfield>> pair =
-			GNDUtils.splitCommentsFrom(line);
+			GNDUtils.splitCommentsFrom(actualLine);
 		titleSubs = pair.first;
 		unusedSubs = pair.second;
+	}
 
+	/**
+	 * Macht für alte RAK-Ansetzungen (130 und 430) die Unterfelder.
+	 * Erlaubt sind nur $a, $p und $s.
+	 */
+	protected void makeOldRakTitleSubs() {
 		/*
 		 *  Wenn oldSubfields mehr als 2 Einträge hat, dann lag
 		 *  in den alten DMA-Daten ein Werkteil (und eventuell noch
 		 *  eine Fassung) vor und die Unterfelder sind schon 
 		 *  korrekt gesetzt. Ansonsten: bearbeiten!
 		 */
-		//
 		if (titleSubs.size() == 1) {
 			Pair<String, Version> titelVersPair =
 				ParseMusicTitle.splitTitlePlusVersion(null, titleSubs.get(0)
@@ -484,7 +486,6 @@ public class DefaultRecordTransformer {
 				}
 			}
 		}
-		buildAndAddLine();
 	}
 
 	/**

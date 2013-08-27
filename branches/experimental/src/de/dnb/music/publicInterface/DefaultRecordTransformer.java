@@ -45,6 +45,13 @@ import filtering.IPredicate;
  */
 public class DefaultRecordTransformer {
 
+	protected static final GNDTagDB TAG_DB = GNDTagDB.getDB();
+
+	/**
+	 * Gesamtzahl der Instrumente erzwingen. Eventuell Überschreiben.
+	 */
+	protected boolean forceTotalCount = true;
+
 	/**
 	 * Der gesicherte alte Datensatz.
 	 */
@@ -54,8 +61,6 @@ public class DefaultRecordTransformer {
 	 * Der schrittweise aufzubauende neue Datensatz.
 	 */
 	protected Record newRecord;
-
-	protected static final GNDTagDB TAG_DB = GNDTagDB.getDB();
 
 	/**
 	 * Zur Zeit bearbeiteter Werktitel.
@@ -71,6 +76,11 @@ public class DefaultRecordTransformer {
 	 * Zur Zeit aktueller {@link Tag}.
 	 */
 	protected Tag actualTag;
+	
+	/**
+	 * Titelzeile in Bearbeitung.
+	 */
+	protected Line actualLine;
 
 	/**
 	 * Unterfelder, die beim Parsen des Musiktitels nicht berücksichtigt
@@ -83,6 +93,10 @@ public class DefaultRecordTransformer {
 	 * gehören.
 	 */
 	List<Subfield> titleSubs = new LinkedList<Subfield>();
+
+	protected boolean keepOldComments;
+
+	protected Subfield actualComment;
 
 	/**
 	 * 
@@ -103,7 +117,6 @@ public class DefaultRecordTransformer {
 		this.oldRecord = record;
 		newRecord = oldRecord.clone();
 		if (isPermitted(oldRecord)) {
-
 			addComposerData();
 			addGeneralNote();
 			addGNDClassification();
@@ -139,31 +152,23 @@ public class DefaultRecordTransformer {
 			buildAndInsertOldRAK(line);
 			return;
 		}
-
-		actualTag = line.getTag();
-		actualCommentStr = null;
-		Pair<MusicTitle, List<Subfield>> pair =
-			ParseMusicTitle.parseGND(null, line);
-		actualMusicTitle = pair.first;
-		unusedSubs = pair.second;
+		setGlobals(line);
 
 		if (getRules() == SetOfRules.RSWK)
 			titleSubs = GNDTitleUtils.getRSWKSubfields(actualMusicTitle);
 		else
 			titleSubs = GNDTitleUtils.getSubfields(actualMusicTitle);
-
-		buildAndAddLine(true);
-
+		makeNew430Comment();
+		buildAndAddLine();
 	}
 
 	/**
 	 * Template-Methode.
 	 * 
-	 * Es müssen die Methoden
-	 * <br> {@link #add3XX(MusicTitle)}
-	 * <br> {@link #makeNew130Comment()}
-	 * <br> {@link #makePortal430()} 
-	 * <br>überschrieben werden.
+	 * Es müssen die Methoden<br>
+	 * - makeNew130Comment()<br>
+	 * - makePortal430() <br>
+	 * überschrieben werden.
 	 * <br><br>
 	 * Nimmt die 130 aus {@link #oldRecord} verändert sie und fügt sie in
 	 * {@link #newRecord} ein. 
@@ -173,19 +178,22 @@ public class DefaultRecordTransformer {
 	 * 
 	 */
 	private void transform130() {
-		// globale Variablen vorbereiten
-		actualTag = GNDConstants.TAG_130;
-		Line titleLine = WorkUtils.getTitleLine(oldRecord);
-		actualCommentStr = GNDUtils.getFirstComment(titleLine);
-		Pair<MusicTitle, List<Subfield>> musicTitleP =
-			ParseMusicTitle.parseGND(null, titleLine);
-		actualMusicTitle = musicTitleP.first;
-		unusedSubs = new LinkedList<Subfield>(musicTitleP.second);
-
-		// 3XX hinzufügen:
+		Line line130 = WorkUtils.getTitleLine(oldRecord);
+		setGlobals(line130);
 		add3XX(actualMusicTitle);
+		makeEntityCode();
+		make130titleSubs();
+		makeNew130Comment();
+		keepOldComments = false;
+		buildAndAddLine();
+		if (actualMusicTitle.containsParts())
+			makePortal430();
+	}
 
-		// Entitätencode erzeugen:
+	/**
+	 * 
+	 */
+	private void makeEntityCode() {
 		Line entit;
 		try {
 			if (actualMusicTitle.containsArrangement()
@@ -199,14 +207,40 @@ public class DefaultRecordTransformer {
 		} catch (OperationNotSupportedException e) {
 			// nix
 		}
+	}
 
+	/**
+	 * Erzeugt aus actualMusicTitle die titleSubs.
+	 * 
+	 *  Eventuell zu überschreiben.
+	 */
+	protected void make130titleSubs() {
 		titleSubs =
 			new LinkedList<Subfield>(
 					GNDTitleUtils.getSubfields(actualMusicTitle));
-		makeNew130Comment();
-		buildAndAddLine(false);
-		if (actualMusicTitle.containsParts())
-			makePortal430();
+	}
+
+	/**
+	 * Bildet aus der Zeile die globalen Variablen <br>
+	 * - actualTag<br>
+	 * - actualComment (wenn != null, dann DOPPELT vorhanden!)<br>
+	 * - actualCommentStr (eventuell null)<br>
+	 * - actualMusicTitle<br>
+	 * - unusedSubs (enthält auch actualComment).<br>
+	 * 
+	 * @param line	nicht null
+	 */
+	private final void setGlobals(Line line) {
+		RangeCheckUtils.assertReferenceParamNotNull("line", line);
+		actualLine = line;
+		Pair<MusicTitle, List<Subfield>> musicTitleP =
+			ParseMusicTitle.parseGND(null, line);
+		// globale Variablen setzen:
+		actualTag = line.getTag();
+		actualComment = RecordUtils.getFirstSubfield(line, 'v');
+		actualCommentStr = GNDUtils.getFirstComment(line);
+		actualMusicTitle = musicTitleP.first;
+		unusedSubs = new LinkedList<Subfield>(musicTitleP.second);
 	}
 
 	/**
@@ -233,32 +267,44 @@ public class DefaultRecordTransformer {
 		// Hinterteil basteln:
 		unusedSubs.clear();
 		actualCommentStr = KOM_PORTAL_430;
-		buildAndAddLine(false);
+		keepOldComments = false;
+		buildAndAddLine();
 	}
 
 	/**
-	 * Default: kein Kommentar.
+	 * Default:	<br>
+	 * - kein neuer Kommentar<br>
+	 * - für GND-Daten den alten Kommentar beibehalten<br>
+	 * 
 	 * Für maschinell zu überschreiben.
 	 */
 	protected void makeNew130Comment() {
 		// default für intellektuell:
 		actualCommentStr = null;
+		keepOldComments = (getRules() == SetOfRules.GND);
 	}
 
 	/**
-	 * Nimmt {@link #actualTag}, {@link #titleSubs} und {@link #unusedSubs},
-	 * baut eine Zeile zusammen und fügt sie in {@link #newRecord} ein.
+	 * Default:	kein neuer Kommentar.
+	 */
+	protected void makeNew430Comment() {
+		actualCommentStr = null;
+		keepOldComments = true; // da die aktuellen Kommentare nicht
+								// verändert werden.
+	}
+
+	/**
+	 * Nimmt actualTag, titleSubs und unusedSubs,
+	 * baut eine Zeile zusammen und fügt sie in newRecord ein.
 	 * <br><br>
-	 * Wenn keepOldComments == falseAus {@link #unusedSubs} werden die alten 
+	 * Wenn keepOldComments == false: Aus unusedSubs werden die alten 
 	 * Kommentare entfernt. <br><br>
-	 * Wenn {@link #actualCommentStr} != null, wird ein neuer Kommentar
+	 * Wenn actualCommentStr != null, wird ein neuer Kommentar
 	 * eingefügt.
 	 * 
-	 * @param keepOldComments 	wenn true, werden die alten Kommentare
-	 * 							übernommen.
 	 */
 	@SuppressWarnings("boxing")
-	private void buildAndAddLine(final boolean keepOldComments) {
+	private void buildAndAddLine() {
 		// alte Kommentare aus unusedSubs entfernen
 		if (!keepOldComments)
 			unusedSubs =
@@ -403,6 +449,8 @@ public class DefaultRecordTransformer {
 		RangeCheckUtils.assertReferenceParamNotNull("line", line);
 		if (!isOldRAK(line))
 			throw new IllegalArgumentException("kein RAK vor 2003");
+
+		keepOldComments = true; // Da aktueller Kommentar auf null gesetzt.
 		actualTag = line.getTag();
 		actualCommentStr = null;
 		Pair<List<Subfield>, List<Subfield>> pair =
@@ -436,20 +484,17 @@ public class DefaultRecordTransformer {
 				}
 			}
 		}
-		buildAndAddLine(true);
+		buildAndAddLine();
 	}
 
 	/**
 	 * Fügt die aus title gewonnenen 3XX und 548 zu newRecord hinzu.
 	 * 
-	 * Da die Gesamtzahl erzeugt wird, eventuell zu überschreiben.
-	 * 
 	 * @param title		nicht null.
 	 */
-	protected void add3XX(final MusicTitle title) {
+	private void add3XX(final MusicTitle title) {
 		RangeCheckUtils.assertReferenceParamNotNull("title", title);
 		try {
-			boolean forceTotalCount = true;
 			RecordUtils.addLines(newRecord,
 					GNDTitleUtils.get3XXLines(title, forceTotalCount));
 		} catch (OperationNotSupportedException e) {

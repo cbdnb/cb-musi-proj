@@ -1,6 +1,12 @@
 package de.dnb.music.publicInterface;
 
 import utils.TitleUtils;
+import de.dnb.gnd.parser.Record;
+import de.dnb.gnd.parser.RecordParser;
+import de.dnb.gnd.parser.line.Line;
+import de.dnb.gnd.parser.tag.GNDTagDB;
+import de.dnb.gnd.utils.GNDUtils;
+import de.dnb.gnd.utils.RecordUtils;
 import de.dnb.gnd.utils.WorkUtils;
 import de.dnb.music.publicInterface.Constants.SetOfRules;
 
@@ -8,6 +14,39 @@ public class DefaultMachineTransformer extends DefaultRecordTransformer {
 
 	public DefaultMachineTransformer() {
 		forceTotalCount = false;
+	}
+
+	@Override
+	protected boolean isPermitted(Record record) {
+		Line heading;
+		try {
+			heading = GNDUtils.getHeading(record);
+		} catch (IllegalStateException e) {
+			return false;
+		}
+		String comment = GNDUtils.getFirstComment(heading);
+		// muss nicht zweimal maschinell transformiert werden:
+		if (Constants.COMMENTS_MACHINE.contains(comment))
+			return false;
+
+		return super.isPermitted(record);
+	}
+
+	@Override
+	protected void addComposerData() {
+//		if (getRules() != SetOfRules.RAK)
+//			super.addComposerData();
+	}
+
+	@Override
+	protected void addGeneralNote() {
+		// keine Aktion.
+	}
+
+	@Override
+	protected void addGNDClassification() {
+		if (getRules() != SetOfRules.RAK)
+			super.addGNDClassification();
 	}
 
 	@Override
@@ -29,6 +68,7 @@ public class DefaultMachineTransformer extends DefaultRecordTransformer {
 		if (getRules() == SetOfRules.RAK) {
 			if (isOldRAK(actualLine)) {
 				// nur $a, $p und $s
+				setGlobalsOldRAK();
 				makeOldRakTitleSubs();
 				return;
 			}
@@ -69,7 +109,14 @@ public class DefaultMachineTransformer extends DefaultRecordTransformer {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		DefaultRecordTransformer transformer = new DefaultMachineTransformer();
+		RecordParser parser = new RecordParser();
+		parser.setTagDB(GNDTagDB.getDB());
+		String old =
+				"130 aa\n" + "500 !11862119X!Telemann, Georg Philipp$4kom1";
+		Record record = parser.parse(old);
+		Record newR = transformer.transform(record);
+		System.out.println(RecordUtils.toPica(newR));
 
 	}
 

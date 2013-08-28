@@ -132,17 +132,9 @@ public final class TitleUtils {
 			final TitleElement element,
 			final boolean expansion,
 			final boolean forceTotalCount) {
-		final AuthorityDataVisitor auvis =
-			new AuthorityDataVisitor(forceTotalCount);
-		final AdditionalDataIn3XXVisitor advis =
-			new AdditionalDataIn3XXVisitor();
-		element.accept(auvis);
-		element.accept(advis);
-		String s =
-			RecordUtils.toPica(auvis.getLines(), Format.PICA3, expansion,
-					Record.LINE_SEPARATOR, '$');
-		return s + advis.toString();
-
+		return RecordUtils.toPica(
+				GNDTitleUtils.get3XXLines(element, forceTotalCount),
+				Format.PICA3, expansion, Record.LINE_SEPARATOR, '$');
 	}
 
 	public static String getGND3XX(final TitleElement element) {

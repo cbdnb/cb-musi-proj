@@ -122,7 +122,7 @@ public class DefaultRecordTransformer {
 			addGNDClassification();
 			removeHeadings();
 			transform130();
-			transform430();
+			transform430Lines();
 		}
 		return newRecord;
 	}
@@ -130,10 +130,11 @@ public class DefaultRecordTransformer {
 	/**
 	 * Baut alle 430-Zeilen in den neuen Datensatz ein.
 	 */
-	protected final void transform430() {
+	private void transform430Lines() {
 		Collection<Line> lines430 = RecordUtils.getLines(oldRecord, "430");
 		for (Line line : lines430) {
-			transform430(line);
+			actualLine = line;
+			transform430();
 		}
 	}
 
@@ -144,22 +145,18 @@ public class DefaultRecordTransformer {
 	 * 
 	 * @param line nicht null.
 	 */
-	protected void transform430(final Line line) {
-		RangeCheckUtils.assertReferenceParamNotNull("line", line);
-		actualLine = line;
-		// soll nicht verändert werden!
+	private void transform430() {
+		// soll nur unwesentlich verändert werden:
 		if (isOldRAK(actualLine)) {
-//			setGlobalsOldRAK();
-//			makeOldRakTitleSubs();
-			buildAndInsertOldRAK();
-			return;
+			setGlobalsOldRAK();
+			makeOldRakTitleSubs();
+		} else {
+			setGlobals();
+			if (getRules() == SetOfRules.RSWK)
+				titleSubs = GNDTitleUtils.getRSWKSubfields(actualMusicTitle);
+			else
+				titleSubs = GNDTitleUtils.getSubfields(actualMusicTitle);
 		}
-		setGlobals(actualLine);
-
-		if (getRules() == SetOfRules.RSWK)
-			titleSubs = GNDTitleUtils.getRSWKSubfields(actualMusicTitle);
-		else
-			titleSubs = GNDTitleUtils.getSubfields(actualMusicTitle);
 		makeNew430Comment();
 		buildAndAddLine();
 	}
@@ -180,8 +177,8 @@ public class DefaultRecordTransformer {
 	 * 
 	 */
 	private void transform130() {
-		Line line130 = WorkUtils.getTitleLine(oldRecord);
-		setGlobals(line130);
+		actualLine = WorkUtils.getTitleLine(oldRecord);
+		setGlobals();
 		add3XX(actualMusicTitle);
 		makeEntityCode();
 		make130titleSubs();
@@ -230,17 +227,14 @@ public class DefaultRecordTransformer {
 	 * - actualMusicTitle<br>
 	 * - unusedSubs (enthält auch actualComment).<br>
 	 * 
-	 * @param line	nicht null
 	 */
-	private final void setGlobals(Line line) {
-		RangeCheckUtils.assertReferenceParamNotNull("line", line);
-		actualLine = line;
+	private final void setGlobals() {
 		Pair<MusicTitle, List<Subfield>> musicTitleP =
-			ParseMusicTitle.parseGND(null, line);
+			ParseMusicTitle.parseGND(null, actualLine);
 		// globale Variablen setzen:
-		actualTag = line.getTag();
-		actualComment = RecordUtils.getFirstSubfield(line, 'v');
-		actualCommentStr = GNDUtils.getFirstComment(line);
+		actualTag = actualLine.getTag();
+		actualComment = RecordUtils.getFirstSubfield(actualLine, 'v');
+		actualCommentStr = GNDUtils.getFirstComment(actualLine);
 		actualMusicTitle = musicTitleP.first;
 		unusedSubs = new LinkedList<Subfield>(musicTitleP.second);
 	}
@@ -361,19 +355,13 @@ public class DefaultRecordTransformer {
 	 * @param record 	nicht null
 	 * @return			true, wenn Veränderung erlaubt.
 	 */
-	protected final boolean isPermitted(Record record) {
+	protected boolean isPermitted(Record record) {
 		RangeCheckUtils.assertReferenceParamNotNull("record", record);
-		Line heading;
 		try {
-			heading = GNDUtils.getHeading(record);
+			GNDUtils.getHeading(record);
 		} catch (IllegalStateException e) {
 			return false;
 		}
-		String comment = GNDUtils.getFirstComment(heading);
-		if (Constants.COMMENTS_MACHINE.contains(comment))
-			throw new IllegalStateException(
-					"Datensatz wurde maschinell verändert "
-						+ "(aus Kommentar zu 130)");
 		IPredicate<Line> predicate667 = new IPredicate<Line>() {
 			@Override
 			public boolean accept(final Line line) {
@@ -428,23 +416,8 @@ public class DefaultRecordTransformer {
 	}
 
 	/**
-	 * Berücksichtigt das alte Regelwerk. Werktitel, die nach diesem aufgebaut
-	 * sind, sollen nicht in die üblichen Unterfelder zerlegt werden. Die
-	 * einzigen erlaubten Unterfelder sind $p, $s und $v. 
-	 * 
-	 * @param line		nach altem Regelwerk (durch Kommentar kenntlich)
-	 * 					angesetzte Zeile.	
-	 */
-	protected final void buildAndInsertOldRAK() {
-
-		setGlobalsOldRAK();
-		makeOldRakTitleSubs();
-		buildAndAddLine();
-	}
-
-	/**
-	 * Setzt globale Variable, strippt insbesondere die Kommentare vom den anderen
-	 * Unterfeldern.
+	 * Setzt globale Variable, strippt insbesondere die Kommentare vom 
+	 * den anderen Unterfeldern.
 	 */
 	protected void setGlobalsOldRAK() {
 		keepOldComments = true; // Da aktueller Kommentar auf null gesetzt.
@@ -568,21 +541,6 @@ public class DefaultRecordTransformer {
 	}
 
 	/**
-	 * Hilfsmethode, um einen String schnell in einen String zu transformieren.
-	 * 
-	 * @param old
-	 * @return
-	 */
-	public static String transformToString(String old) {
-		DefaultRecordTransformer transformer = new DefaultRecordTransformer();
-		RecordParser parser = new RecordParser();
-		parser.setTagDB(TAG_DB);
-		Record record = parser.parse(old);
-		Record newR = transformer.transform(record);
-		return RecordUtils.toPica(newR);
-	}
-
-	/**
 	 * @param args
 	 * @throws IllFormattedLineException 
 	 * @throws OperationNotSupportedException 
@@ -605,10 +563,15 @@ public class DefaultRecordTransformer {
 			throws IllFormattedLineException,
 			OperationNotSupportedException,
 			IOException {
-		String titleStrOld = "500 !11862119X!Telemann, Georg Philipp$4kom1";
-		String recordStrNew =
-			DefaultRecordTransformer.transformToString(titleStrOld);
-		System.err.println(recordStrNew);
+		DefaultRecordTransformer transformer = new DefaultRecordTransformer();
+		RecordParser parser = new RecordParser();
+		parser.setTagDB(GNDTagDB.getDB());
+
+		String old =
+			"130 aa\n" + "500 !11862119X!Telemann, Georg Philipp$4kom1";
+		Record record = parser.parse(old);
+		Record newR = transformer.transform(record);
+		System.out.println(RecordUtils.toPica(newR));
 
 	}
 }

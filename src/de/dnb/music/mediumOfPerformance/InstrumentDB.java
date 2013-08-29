@@ -4,6 +4,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import de.dnb.gnd.utils.Pair;
+import de.dnb.music.genre.Genre;
 import utils.StringUtils;
 
 /**
@@ -379,8 +380,8 @@ public final class InstrumentDB {
 				"Bandleader", "", "ld" },
 			{ "Washboard", "Washboard", "7694575-3", "100080996X", "Washboard",
 				"", "wbd" },
-			{ "Zink", "Zink", "4190840-5", "041908406", "Zink <Musikinstrument>",
-				"", "" }
+			{ "Zink", "Zink", "4190840-5", "041908406",
+				"Zink <Musikinstrument>", "", "" }
 
 		};
 
@@ -462,8 +463,9 @@ public final class InstrumentDB {
 	}
 
 	public static void main(String[] args) {
-		Instrument i = InstrumentDB.matchInstrument("Ob d'amore");
-		System.err.println(i);
+		Set<Instrument> instruments = getAllInstruments();
+		for (Instrument instr : instruments) {
+			System.out.println(instr.swd + "\t" + instr.nid + "\t" + instr.idn);
+		}
 	}
-
 }

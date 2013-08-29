@@ -1261,7 +1261,10 @@ public final class GenreDB {
 	
 	
 	public static void main(final String[] args) {			
-		System.err.println(getAllGenres());		
+		Set<Genre> genres = getAllGenres();
+		for (Genre genre : genres) {
+			System.out.println(genre.swd + "\t" + genre.nid + "\t" + genre.idn);
+		}
 	}
 
 }

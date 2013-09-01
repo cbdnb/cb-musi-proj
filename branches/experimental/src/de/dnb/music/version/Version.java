@@ -222,7 +222,7 @@ public class Version implements TitleElement {
 		instrumentationList = other;
 	}
 
-	public void setAddiationalInformation(AdditionalInformation other) {
+	public void setAdditionalInformation(AdditionalInformation other) {
 		additionalInformation = other;
 	}
 

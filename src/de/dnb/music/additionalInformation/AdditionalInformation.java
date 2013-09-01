@@ -22,7 +22,7 @@ public abstract class AdditionalInformation implements TitleElement {
 
 		if (title.containsVersion()) {
 			Version version = title.getVersion();
-			version.setAddiationalInformation(this);
+			version.setAdditionalInformation(this);
 		} else if (title.containsParts()) {
 			PartOfWork partOfWork = title.getPartOfWork();
 			MusicTitle lastTitle = partOfWork.getLastPart();

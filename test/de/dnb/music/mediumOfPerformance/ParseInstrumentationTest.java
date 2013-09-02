@@ -13,7 +13,7 @@ import utils.TitleUtils;
 import de.dnb.music.mediumOfPerformance.Instrument;
 import de.dnb.music.mediumOfPerformance.InstrumentationList;
 import de.dnb.music.mediumOfPerformance.ParseInstrumentation;
-import de.dnb.music.title.MusicTitle;
+import de.dnb.music.title.AugmentableElement;
 import de.dnb.music.title.ParseMusicTitle;
 
 public class ParseInstrumentationTest {
@@ -91,7 +91,7 @@ public class ParseInstrumentationTest {
 
 	@Test
 	public void test380() {
-		MusicTitle mt =
+		AugmentableElement mt =
 			ParseMusicTitle.parseTitlePlusVersion(null,
 					"Sonaten, Vl Bc, L 3,77");
 		InstrumentationList bl = mt.getInstrumentationList();
@@ -262,7 +262,7 @@ public class ParseInstrumentationTest {
 	@Test
 	public void test130() {
 //		MusicTitle.setGND3XXExplicit(true);
-		MusicTitle mt =
+		AugmentableElement mt =
 			ParseMusicTitle.parseTitlePlusVersion(null,
 					"Sonaten, Vl Bc, L 3,77");
 		InstrumentationList bl = mt.getInstrumentationList();

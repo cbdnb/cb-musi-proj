@@ -5,11 +5,12 @@ import applikationsbausteine.RangeCheckUtils;
 import de.dnb.music.additionalInformation.AdditionalInformation;
 import de.dnb.music.genre.GenreList;
 import de.dnb.music.mediumOfPerformance.InstrumentationList;
+import de.dnb.music.title.AugmentableElement;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.Visitor;
 
-public class Version implements TitleElement {
+public class Version extends AugmentableElement implements TitleElement {
 
 	/**
 	 * Was nach der rak-Phrase kommt. Wird in DBFassung gesetzt und dann
@@ -33,8 +34,6 @@ public class Version implements TitleElement {
 	 2: op.
 	 * 
 	 */
-	// ->
-	AdditionalInformation additionalInformation;
 
 	/* 
 	 * Fall § M 511 b)
@@ -51,14 +50,6 @@ public class Version implements TitleElement {
 	 * 5: sonstige Zählung (nicht im Regelwerk, kommt aber beim DMA vor)
 	 * 
 	 * */
-
-	// ->
-	GenreList genreList; // im Singular
-
-	InstrumentationList instrumentationList;
-
-	// Nicht nötig, da oben schon definiert:
-	// public Zusatzangabe additionalInformation;
 
 	//	 Fall § M 511 c)
 	/*  eine  andere  erläuternde  Angabe  (z.B.  Entstehungsjahr  oder  
@@ -152,14 +143,6 @@ public class Version implements TitleElement {
 		return untergruppe;
 	}
 
-	public final InstrumentationList getInstrumentationList() {
-		return instrumentationList;
-	}
-
-	public final GenreList getGenreList() {
-		return genreList;
-	}
-
 	/**
 	 * Zur Zeit nicht benötigt.
 	 * 
@@ -171,10 +154,6 @@ public class Version implements TitleElement {
 
 	public final String getRest() {
 		return rest;
-	}
-
-	public final AdditionalInformation getAdditionalInformation() {
-		return additionalInformation;
 	}
 
 	/**
@@ -202,28 +181,12 @@ public class Version implements TitleElement {
 		visitor.leave(this);
 	}
 
-	public boolean containsGenre() {
-		return genreList != null;
-	}
-
-	public boolean containsInstrumentation() {
-		return instrumentationList != null;
-	}
-
-	public boolean containsAdditionalInformation() {
-		return additionalInformation != null;
-	}
-
 	public void setGenreList(GenreList other) {
 		genreList = other;
 	}
 
 	public void setInstrumentation(InstrumentationList other) {
 		instrumentationList = other;
-	}
-
-	public void setAdditionalInformation(AdditionalInformation other) {
-		additionalInformation = other;
 	}
 
 	@Override

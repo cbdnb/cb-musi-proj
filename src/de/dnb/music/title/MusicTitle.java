@@ -2,26 +2,11 @@ package de.dnb.music.title;
 
 import utils.TitleUtils;
 import applikationsbausteine.RangeCheckUtils;
-import de.dnb.music.additionalInformation.AdditionalInformation;
-import de.dnb.music.genre.GenreList;
-import de.dnb.music.mediumOfPerformance.InstrumentationList;
 import de.dnb.music.version.Version;
 import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.Visitor;
 
-public abstract class MusicTitle implements TitleElement {
-
-	// Bestandteile eines Titels nach RAK-M
-	protected GenreList genreList = null;
-
-	protected InstrumentationList instrumentationList = null;
-
-	/**
-	 * Auch: unterscheidende Angabe nach RAK-M §505, 6.
-	 * Diese entspricht der zusätzlichen Angabe. Es kann aber auch ein
-	 * Gattungsbegriff (Motette) folgen.
-	 */
-	protected AdditionalInformation additionalInformation = null;
+public abstract class MusicTitle extends AugmentableElement implements TitleElement {
 
 	// Anzeige nach RAK in Winkelklammern (Ordnungshilfe)
 	protected PartOfWork partOfWork = null;
@@ -33,42 +18,6 @@ public abstract class MusicTitle implements TitleElement {
 	protected Arrangement arrangement = null;
 
 	//----------------------------------------------
-
-	public final GenreList getGenreList() {
-		return genreList;
-	}
-
-	public final boolean containsGenre() {
-		return genreList != null;
-	}
-	
-	public final void setGenre(GenreList other) {
-		genreList = other;
-	}
-
-	public final InstrumentationList getInstrumentationList() {
-		return instrumentationList;
-	}
-
-	public final void setInstrumentationList(final InstrumentationList iList) {
-		instrumentationList = iList;
-	}
-
-	public final boolean containsInstrumentation() {
-		return instrumentationList != null;
-	}
-
-	public final AdditionalInformation getAdditionalInformation() {
-		return additionalInformation;
-	}
-
-	public final void setAdditionalInformation(final AdditionalInformation ai) {
-		additionalInformation = ai;
-	}
-
-	public final boolean containsAdditionalInformation() {
-		return additionalInformation != null;
-	}
 
 	public final PartOfWork getPartOfWork() {
 		return partOfWork;

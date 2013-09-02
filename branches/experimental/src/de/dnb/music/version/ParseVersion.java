@@ -19,7 +19,8 @@ public final class ParseVersion {
 	}
 
 	public static void main(final String[] args) {
-		MusicTitle title = ParseMusicTitle.parseFullRAK(null, "Widerschein. Fassung 2");
+		MusicTitle title =
+			ParseMusicTitle.parseFullRAK(null, "Widerschein. Fassung 2");
 		Version f = title.getVersion();
 		System.out.println(f.fallgruppeParagraphM511);
 		System.out.println(f.untergruppe);
@@ -27,7 +28,6 @@ public final class ParseVersion {
 
 	}
 
-	
 	/**
 	 * Gibt eine gültige Fassung oder null zurück. Die Fallgruppe wird in die 
 	 * entsprechenden Felder eingetragen.
@@ -60,7 +60,7 @@ public final class ParseVersion {
 				ParseInstrumentation.parse(rest);
 			if (besetzungsliste != null)
 				if (besetzungsliste.getRest().trim().length() == 0) {
-					version.instrumentationList = besetzungsliste;
+					version.setInstrumentationList(besetzungsliste);
 					version.fallgruppeParagraphM511 = 'c';
 					version.untergruppe = 2;
 
@@ -70,8 +70,8 @@ public final class ParseVersion {
 						ParseAdditionalInformation.parse(composer,
 								besetzungsliste.getRest().trim(), false);
 					if (zusatzangabe != null) {
-						version.instrumentationList = besetzungsliste;
-						version.additionalInformation = zusatzangabe;
+						version.setInstrumentationList(besetzungsliste);
+						version.setAdditionalInformation(zusatzangabe);
 						version.fallgruppeParagraphM511 = 'c';
 						version.untergruppe = 4;
 						return version;
@@ -80,7 +80,7 @@ public final class ParseVersion {
 			AdditionalInformation zusatzangabe =
 				ParseAdditionalInformation.matchDate(rest);
 			if (zusatzangabe != null) {
-				version.additionalInformation = zusatzangabe;
+				version.setAdditionalInformation(zusatzangabe);
 				version.fallgruppeParagraphM511 = 'c';
 				version.untergruppe = 1;
 				return version;
@@ -98,7 +98,7 @@ public final class ParseVersion {
 		GenreList gL = ParseGenre.parseGenreList(parseString);
 		if (gL != null) {
 
-			version.genreList = gL;
+			version.setGenre(gL);
 			String rest = gL.getRest();
 
 			if (rest == null || rest.trim().length() == 0) {
@@ -114,7 +114,7 @@ public final class ParseVersion {
 				// Fall b 2 zurückgeben
 				version.fallgruppeParagraphM511 = 'b';
 				version.untergruppe = 2;
-				version.instrumentationList = bes;
+				version.setInstrumentationList(bes);
 				return version;
 			}
 			AdditionalInformation zus =
@@ -124,21 +124,21 @@ public final class ParseVersion {
 					// Fall b3 zurückgeben
 					version.fallgruppeParagraphM511 = 'b';
 					version.untergruppe = 3;
-					version.additionalInformation = zus;
+					version.setAdditionalInformation(zus);
 					return version;
 				}
 				if (zus instanceof DateOfComposition) {
 					// Fall b 4 zurückgeben
 					version.fallgruppeParagraphM511 = 'b';
 					version.untergruppe = 4;
-					version.additionalInformation = zus;
+					version.setAdditionalInformation(zus);
 					return version;
 				}
 				if (zus instanceof SerialNumber) {
 					// Fall b 5 zurückgeben
 					version.fallgruppeParagraphM511 = 'b';
 					version.untergruppe = 5;
-					version.additionalInformation = zus;
+					version.setAdditionalInformation(zus);
 					return version;
 				}
 			}
@@ -158,7 +158,7 @@ public final class ParseVersion {
 		if (addInf != null) {
 			version.fallgruppeParagraphM511 = 'a';
 			version.untergruppe = 2;
-			version.additionalInformation = addInf;
+			version.setAdditionalInformation(addInf);
 			version.match = parseString.trim();
 			return version;
 		}
@@ -168,25 +168,23 @@ public final class ParseVersion {
 		if (addInf != null) {
 			version.fallgruppeParagraphM511 = 'a';
 			version.untergruppe = 1;
-			version.additionalInformation = addInf;
+			version.setAdditionalInformation(addInf);
 			version.match = parseString.trim();
 			return version;
 		}
 
 		// Versuch nach e)
 
-		InstrumentationList instrList =
-			ParseInstrumentation.parse(parseString);
-		if (instrList != null
-			&& instrList.getRest().trim().length() == 0) {
-			version.instrumentationList = instrList;
+		InstrumentationList instrList = ParseInstrumentation.parse(parseString);
+		if (instrList != null && instrList.getRest().trim().length() == 0) {
+			version.setInstrumentationList(instrList);
 			version.fallgruppeParagraphM511 = 'e';
 			version.untergruppe = 2;
 			return version;
 		}
 		addInf = ParseAdditionalInformation.matchDate(parseString);
 		if (addInf != null) {
-			version.additionalInformation = addInf;
+			version.setAdditionalInformation(addInf);
 			version.fallgruppeParagraphM511 = 'e';
 			version.untergruppe = 1;
 			return version;

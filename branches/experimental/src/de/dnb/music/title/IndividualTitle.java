@@ -32,8 +32,7 @@ public class IndividualTitle extends MusicTitle {
 	}
 
 	@Override
-	public MusicTitle clone() {
-		// TODO Auto-generated method stub
+	public IndividualTitle clone() {
 		return new IndividualTitle(this);
 	}
 

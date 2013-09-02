@@ -22,7 +22,7 @@ public class FormalTitle extends MusicTitle {
 	}
 
 	@Override
-	public MusicTitle clone() {
+	public FormalTitle clone() {
 		return new FormalTitle(this);
 	}
 	

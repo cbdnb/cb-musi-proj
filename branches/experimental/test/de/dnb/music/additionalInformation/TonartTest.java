@@ -9,6 +9,7 @@ import utils.TestUtils;
 import utils.TitleUtils;
 
 import de.dnb.music.additionalInformation.AdditionalInformation;
+import de.dnb.music.title.AugmentableElement;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
 
@@ -38,7 +39,7 @@ public class TonartTest {
 
 	@Test
 	public void testGetGND3XX() {
-		MusicTitle mt =
+		AugmentableElement mt =
 			ParseMusicTitle.parseTitlePlusVersion(null,
 					"Sonaten, Fl 1 2 Bc, B-Dur");
 		AdditionalInformation zus = mt.getAdditionalInformation();

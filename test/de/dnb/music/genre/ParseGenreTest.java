@@ -110,7 +110,7 @@ public class ParseGenreTest {
 			ParseMusicTitle.parseTitlePlusVersion(null,
 					"Präludien und Fugen, Orch, 1918");
 		gl = mt.getGenreList();
-		List<Genre> lg = gl.getGenres();
+		List<Genre> lg = gl.getChildren();
 		gnd380 = TestUtils.getGND3XX(lg.get(0));
 		assertEquals("Präludium", TestUtils.getLinkName(gnd380));
 		gnd380 = TestUtils.getGND3XX(lg.get(1));

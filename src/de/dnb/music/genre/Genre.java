@@ -1,14 +1,8 @@
 package de.dnb.music.genre;
 
-import java.util.List;
-
-import utils.TitleUtils;
-
 import applikationsbausteine.RangeCheckUtils;
 import de.dnb.music.title.MusicTitle;
-import de.dnb.music.title.ParseMusicTitle;
 import de.dnb.music.title.PartOfWork;
-import de.dnb.music.version.ParseVersion;
 import de.dnb.music.version.Version;
 import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.Visitor;
@@ -24,7 +18,7 @@ public class Genre implements TitleElement, Comparable<Genre> {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
 		}
@@ -87,7 +81,7 @@ public class Genre implements TitleElement, Comparable<Genre> {
 		return plural;
 	}
 
-	public final String toString(Numeri numerus) {
+	public final String toString(final Numeri numerus) {
 		switch (numerus) {
 		case PLURAL:
 			return plural;
@@ -131,7 +125,7 @@ public class Genre implements TitleElement, Comparable<Genre> {
 			}
 		} else if (title.containsParts()) {
 			PartOfWork partOfWork = title.getPartOfWork();
-			MusicTitle lastTitle = partOfWork.getLastPart();
+			MusicTitle lastTitle = partOfWork.getLast();
 			addToTitle(lastTitle);
 			return;
 		} else {

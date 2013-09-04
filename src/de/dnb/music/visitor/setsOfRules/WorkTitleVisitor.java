@@ -1,15 +1,13 @@
 package de.dnb.music.visitor.setsOfRules;
 
-import applikationsbausteine.RangeCheckUtils;
-import utils.TitleUtils;
 import de.dnb.music.additionalInformation.DateOfComposition;
 import de.dnb.music.additionalInformation.Key;
 import de.dnb.music.additionalInformation.OpusNumber;
 import de.dnb.music.additionalInformation.Qualifier;
 import de.dnb.music.additionalInformation.SerialNumber;
 import de.dnb.music.additionalInformation.ThematicIndexNumber;
-import de.dnb.music.genre.GenreList;
 import de.dnb.music.genre.Genre.Numeri;
+import de.dnb.music.genre.GenreList;
 import de.dnb.music.mediumOfPerformance.Instrument;
 import de.dnb.music.mediumOfPerformance.InstrumentationList;
 import de.dnb.music.title.Arrangement;
@@ -128,18 +126,18 @@ public class WorkTitleVisitor extends Visitor {
 	}
 
 	@Override
-	public void visit(FormalTitle formalTitle) {
+	public boolean visit(FormalTitle formalTitle) {
 		isIndividualTitle = false;
 		enterTitle();
-
+		return true;
 	}
 
 	@Override
-	public void visit(IndividualTitle individualTitle) {
+	public boolean visit(IndividualTitle individualTitle) {
 		isIndividualTitle = true;
 		enterTitle();
 		lastComponent += individualTitle.getIndividualTitle();
-
+		return true;
 	}
 
 	@Override

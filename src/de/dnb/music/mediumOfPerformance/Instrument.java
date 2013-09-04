@@ -2,9 +2,6 @@ package de.dnb.music.mediumOfPerformance;
 
 import utils.TitleUtils;
 import applikationsbausteine.RangeCheckUtils;
-import de.dnb.music.genre.Genre;
-import de.dnb.music.genre.GenreList;
-import de.dnb.music.genre.ParseGenre;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
 import de.dnb.music.title.PartOfWork;
@@ -69,11 +66,11 @@ public class Instrument implements TitleElement, Comparable<Instrument> {
 		return abbreviated;
 	}
 
-	public String getWrittenOut() {
+	public final String getWrittenOut() {
 		return writtenOut;
 	}
 
-	public String toString(AbbreviationMode mode) {
+	public final String toString(final AbbreviationMode mode) {
 		switch (mode) {
 		case ABBREVIATED:
 			return getAbbreviated();
@@ -95,15 +92,15 @@ public class Instrument implements TitleElement, Comparable<Instrument> {
 
 	String idn;
 
-	public String getSwd() {
+	public final String getSwd() {
 		return swd;
 	}
 
-	public int getCount() {
+	public final int getCount() {
 		return count;
 	}
 
-	public void setCount(int c) {
+	public final void setCount(int c) {
 		count = c;
 	}
 
@@ -124,21 +121,21 @@ public class Instrument implements TitleElement, Comparable<Instrument> {
 	}
 
 	@Override
-	public void accept(Visitor visitor) {
+	public final void accept(Visitor visitor) {
 		visitor.visit(this);
 	}
 
-	public String getIdn() {
+	public final String getIdn() {
 		return idn;
 	}
 
 	@Override
-	public int compareTo(Instrument o) {
+	public final int compareTo(final Instrument o) {
 		return this.swd.compareTo(o.swd);
 	}
 
 	@Override
-	public void addToTitle(MusicTitle title) {
+	public final void addToTitle(MusicTitle title) {
 		/*
 		 * Kann entweder der Fassung oder dem letzten Teil oder
 		 * dem Titel selbst hinzugefügt werden.
@@ -156,7 +153,7 @@ public class Instrument implements TitleElement, Comparable<Instrument> {
 			}
 		} else if (title.containsParts()) {
 			PartOfWork partOfWork = title.getPartOfWork();
-			MusicTitle lastTitle = partOfWork.getLastPart();
+			MusicTitle lastTitle = partOfWork.getLast();
 			addToTitle(lastTitle);
 			return;
 		} else {

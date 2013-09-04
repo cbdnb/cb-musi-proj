@@ -1,14 +1,16 @@
 package de.dnb.music.title;
 
-import junit.runner.Version;
 import de.dnb.music.additionalInformation.AdditionalInformation;
 import de.dnb.music.genre.GenreList;
 import de.dnb.music.mediumOfPerformance.InstrumentationList;
+import de.dnb.music.visitor.Visitor;
 
 /**
- * 
- * Element, dem Gattung, Instrumente und Zusatzangaben hinzugefügt werden können,
- * also {@link FormalTitle}, {@link IndividualTitle} und {@link Version}.
+ *
+ * Element, dem Gattung, Instrumente und Zusatzangaben hinzugefügt
+ * werden können, also {@link FormalTitle}, {@link IndividualTitle}
+ * und {@link Version}. Enthält alle Elemente und Methoden, die die
+ * Baumstruktur verwalten.
  * 
  * @author baumann
  *
@@ -36,7 +38,7 @@ public class AugmentableElement {
 		return genreList != null;
 	}
 
-	public final void setGenre(GenreList other) {
+	public final void setGenre(final GenreList other) {
 		genreList = other;
 	}
 
@@ -62,6 +64,21 @@ public class AugmentableElement {
 
 	public final boolean containsAdditionalInformation() {
 		return additionalInformation != null;
+	}
+
+	/**
+	 * @param visitor
+	 */
+	protected void visitChildren(final Visitor visitor) {
+		if (containsGenre()) {
+			genreList.accept(visitor);
+		}
+		if (containsInstrumentation()) {
+			instrumentationList.accept(visitor);
+		}
+		if (containsAdditionalInformation()) {
+			additionalInformation.accept(visitor);
+		}
 	}
 
 }

@@ -3,7 +3,6 @@ package de.dnb.music.visitor.setsOfRules;
 import de.dnb.music.genre.Genre;
 import de.dnb.music.genre.Genre.Numeri;
 import de.dnb.music.mediumOfPerformance.Instrument;
-import de.dnb.music.visitor.setsOfRules.WorkTitleVisitor.States;
 
 public class GNDParticleFactory extends AbstractParticleFactory {
 

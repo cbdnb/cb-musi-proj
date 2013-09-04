@@ -95,7 +95,7 @@ public class ParseInstrumentationTest {
 			ParseMusicTitle.parseTitlePlusVersion(null,
 					"Sonaten, Vl Bc, L 3,77");
 		InstrumentationList bl = mt.getInstrumentationList();
-		List<Instrument> il = bl.getInstruments();
+		List<Instrument> il = bl.getChildren();
 		Instrument i = il.get(0);
 		assertEquals("Violine",
 				TestUtils.getLinkName(TestUtils.getGND3XX(i)));
@@ -106,7 +106,7 @@ public class ParseInstrumentationTest {
 		ParseMusicTitle.parseTitlePlusVersion(null,
 				"Sonate, Violine Basso continuo L 3,77");
 		bl = mt.getInstrumentationList();
-		il = bl.getInstruments();
+		il = bl.getChildren();
 		i = il.get(0);
 		assertEquals("Violine",
 				TestUtils.getLinkName(TestUtils.getGND3XX(i)));
@@ -118,7 +118,7 @@ public class ParseInstrumentationTest {
 			ParseMusicTitle.parseTitlePlusVersion(null,
 					"Konzerte, Vc Orch, op. 5");
 		bl = mt.getInstrumentationList();
-		il = bl.getInstruments();
+		il = bl.getChildren();
 		i = il.get(0);
 		assertEquals("Violoncello",
 				TestUtils.getLinkName(TestUtils.getGND3XX(i)));
@@ -130,7 +130,7 @@ public class ParseInstrumentationTest {
 			ParseMusicTitle.parseTitlePlusVersion(null,
 					"Konzert, Violoncello Orchester op. 5");
 		bl = mt.getInstrumentationList();
-		il = bl.getInstruments();
+		il = bl.getChildren();
 		i = il.get(0);
 		assertEquals("Violoncello",
 				TestUtils.getLinkName(TestUtils.getGND3XX(i)));
@@ -142,7 +142,7 @@ public class ParseInstrumentationTest {
 			ParseMusicTitle.parseTitlePlusVersion(null,
 					"Sextette, Vl 1 2 3 Va Vc 1 2, op. 38");
 		bl = mt.getInstrumentationList();
-		il = bl.getInstruments();
+		il = bl.getChildren();
 		i = il.get(0);
 		assertEquals("Violine$n3",
 				TestUtils.getLinkName(TestUtils.getGND3XX(i)));
@@ -159,7 +159,7 @@ public class ParseInstrumentationTest {
 			ParseMusicTitle.parseTitlePlusVersion(null,
 					"Sextett, Violine 1,2,3 Viola Violoncello 1,2, op. 38");
 		bl = mt.getInstrumentationList();
-		il = bl.getInstruments();
+		il = bl.getChildren();
 		i = il.get(0);
 		assertEquals("Violine$n3",
 				TestUtils.getLinkName(TestUtils.getGND3XX(i)));
@@ -176,7 +176,7 @@ public class ParseInstrumentationTest {
 			ParseMusicTitle.parseTitlePlusVersion(null,
 					"Notturni, Singst. 1 2 3 4 Kl, op. 22");
 		bl = mt.getInstrumentationList();
-		il = bl.getInstruments();
+		il = bl.getChildren();
 		i = il.get(0);
 		assertEquals("Gesangsstimme$n4",
 				TestUtils.getLinkName(TestUtils.getGND3XX(i)));
@@ -197,7 +197,7 @@ public class ParseInstrumentationTest {
 			ParseMusicTitle.parseTitlePlusVersion(null,
 					"Notturno, Singstimme 1,2,3,4 Klavier op. 22");
 		bl = mt.getInstrumentationList();
-		il = bl.getInstruments();
+		il = bl.getChildren();
 		i = il.get(0);
 		assertEquals("Gesangsstimme$n4",
 				TestUtils.getLinkName(TestUtils.getGND3XX(i)));

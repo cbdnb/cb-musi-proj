@@ -109,7 +109,7 @@ public final class ParseVersion {
 			}
 			InstrumentationList bes = ParseInstrumentation.parse(rest);
 			if (bes != null
-				&& bes.getInstruments().size() != 0
+				&& bes.getChildren().size() != 0
 				&& (bes.getRest() == null || bes.getRest().trim().length() == 0)) {
 				// Fall b 2 zurückgeben
 				version.fallgruppeParagraphM511 = 'b';

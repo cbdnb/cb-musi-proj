@@ -2,16 +2,16 @@ package de.dnb.music.title;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import applikationsbausteine.ListUtils;
 import applikationsbausteine.RangeCheckUtils;
 
 import utils.StringUtils;
 import utils.TitleUtils;
+import de.dnb.music.genre.Genre;
+import de.dnb.music.mediumOfPerformance.Instrument;
 import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.Visitor;
 
@@ -22,39 +22,14 @@ import de.dnb.music.visitor.Visitor;
  * @author baumann
  *
  */
-public class PartOfWork implements TitleElement {
+public class PartOfWork extends ListOfElements<MusicTitle> implements
+		TitleElement {
 
-	private final List<MusicTitle> partsOfWork;
+	/**
+	 * Wenn ein übergebener String vorläufig nach ", " gesplittet
+	 * wird (Konstruktor {@link #PartOfWork(String)}
+	 */
 	private LinkedList<String> assumedParts;
-
-	public final List<MusicTitle> getPartsOfWork() {
-		return Collections.unmodifiableList(partsOfWork);
-	}
-
-	/**
-	 * Fügt der Liste einen weiteren, hierarchisch untergeordneten Teil
-	 * hinzu.
-	 * 
-	 * @param mt	nicht null.
-	 */
-	public final void addPartOfWork(final MusicTitle mt) {
-		RangeCheckUtils.assertReferenceParamNotNull("mt", mt);
-		partsOfWork.add(mt);
-	}
-
-	/**
-	 * Fügt der Liste einen weitere, hierarchisch untergeordneten Teile,
-	 * die in einer anderen Liste vorliegen, hinzu.
-	 * 
-	 * @param otherParts	nicht null.
-	 */
-	public final void addPartsOfWork(final PartOfWork otherParts) {
-		RangeCheckUtils.assertReferenceParamNotNull("otherParts", otherParts);
-		List<MusicTitle> otherTitles = otherParts.getPartsOfWork();
-		for (MusicTitle musicTitle : otherTitles) {
-			addPartOfWork(musicTitle);
-		}
-	}
 
 	/**
 	 * @param titleList Liste der Werkteile.
@@ -62,7 +37,7 @@ public class PartOfWork implements TitleElement {
 	public PartOfWork(final List<MusicTitle> titleList) {
 		RangeCheckUtils.assertCollectionParamNotNullOrEmpty("titleList",
 				titleList);
-		this.partsOfWork = titleList;
+		this.children = new ArrayList<MusicTitle>(titleList);
 	}
 
 	//@formatter:off
@@ -73,12 +48,6 @@ public class PartOfWork implements TitleElement {
 		this(Arrays.asList(titles));
 	}
 	//@formatter:on
-
-	public MusicTitle getLastPart() {
-		if (partsOfWork.isEmpty())
-			throw new IllegalStateException("Liste der Werkteile ist leer");
-		return ListUtils.getLast(partsOfWork);
-	}
 
 	/**
 	 * Findet in der Liste vermuteteTeile den längsten auf den Anfang 
@@ -128,7 +97,7 @@ public class PartOfWork implements TitleElement {
 
 	/**
 	 * 
-	 * Zerlegt werkteilString in eine Liste von Teilen von Teilen.
+	 * Zerlegt werkteilString in eine Liste von Teilen.
 	 * 
 	 * @param werkteilString
 	 * 
@@ -148,10 +117,10 @@ public class PartOfWork implements TitleElement {
 		if (werkteilString == null)
 			throw new IllegalArgumentException("Leerer Werkteilstring");
 		assumedParts = StringUtils.splitPartsOfWork(werkteilString);
-		partsOfWork = new LinkedList<MusicTitle>();
+		children = new ArrayList<MusicTitle>();
 		FormalTitle formalT = findLongestMatchingFT();
 		while (formalT != null) {
-			partsOfWork.add(formalT);
+			children.add(formalT);
 			formalT = findLongestMatchingFT();
 		}
 		// Rest als Individualtitel auffassen
@@ -164,7 +133,7 @@ public class PartOfWork implements TitleElement {
 			}
 		}
 		if (indivString.length() != 0)
-			partsOfWork.add(ParseIndividualTitle.parse(null, indivString));
+			children.add(ParseIndividualTitle.parse(null, indivString));
 
 	}
 
@@ -178,39 +147,25 @@ public class PartOfWork implements TitleElement {
 		if (titleStringList == null || titleStringList.size() == 0)
 			throw new IllegalArgumentException(
 					"Liste muss mind. ein Element enthalten");
-		LinkedList<MusicTitle> titleList = new LinkedList<MusicTitle>();
+		ArrayList<MusicTitle> titleList = new ArrayList<MusicTitle>();
 		for (String titleString : titleStringList) {
 			titleList.add(ParseMusicTitle.parseSimpleTitle(null, titleString));
 		}
-		this.partsOfWork = titleList;
-	}
-
-	@Override
-	public final void accept(Visitor visitor) {
-		boolean visitChildren = visitor.visit(this);
-		if (visitChildren)
-			for (MusicTitle musicTitle : partsOfWork) {
-				musicTitle.accept(visitor);
-			}
-		visitor.leave(this);
-	}
-
-	@Override
-	public final void addToTitle(MusicTitle title) {
-		RangeCheckUtils.assertReferenceParamNotNull("title", title);
-		if (title.containsParts()) {
-			PartOfWork titlesParts = title.getPartOfWork();
-			titlesParts.addPartsOfWork(this);
-		} else {
-			title.setPartOfWork(this);
-		}
+		this.children = titleList;
 	}
 
 	public static void main(final String[] args) {
-		PartOfWork pw = new PartOfWork("Adagio KV 1, oo");
-		MusicTitle mt = ParseMusicTitle.parseFullRAK(null, "aa <bb>");
-		pw.addToTitle(mt);
+		MusicTitle mt =
+			ParseMusicTitle.parseGND(null, "Sonaten$pSonate$nNr. 9$p1. Satz");
 		System.out.println(TitleUtils.getStructured(mt));
+	}
+
+	@Override
+	public void accept(Visitor visitor) {
+		boolean visitChildren = visitor.visit(this);
+		if (visitChildren)
+			visitChildren(visitor);
+		visitor.leave(this);
 	}
 
 }

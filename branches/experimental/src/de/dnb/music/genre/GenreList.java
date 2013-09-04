@@ -1,21 +1,22 @@
 package de.dnb.music.genre;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 
-import applikationsbausteine.RangeCheckUtils;
+import utils.TitleUtils;
 import de.dnb.music.genre.Genre.Numeri;
+import de.dnb.music.title.ListOfElements;
 import de.dnb.music.title.MusicTitle;
+import de.dnb.music.title.ParseMusicTitle;
 import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.Visitor;
 
 /**
  * Enthält in 
- * 		LinkedList<Gattung> genres 
+ * 		LinkedList<Gattung> children 
  * alle zum Werktitel gehörenden  Gattungen. Im Falle eines Titels wie 
  * "Toccata, Adagio und Fuge" wären das
  * [Toccata, Adagio, Fuge].
@@ -23,50 +24,31 @@ import de.dnb.music.visitor.Visitor;
  * @author baumann
  *
  */
-public class GenreList implements TitleElement {
-
-	/**
-	 * Die eigentlichen Daten. Zur genauen Struktur
-	 * @see ParseGenre
-	 */
-	private final ArrayList<Genre> genres;
+public class GenreList extends ListOfElements<Genre> implements TitleElement {
 
 	public GenreList(final Genre g) {
-		genres = new ArrayList<Genre>();
-		genres.add(g);
+		children.add(g);
 	}
 
 	public GenreList(final ArrayList<Genre> llg) {
-		genres = llg;
-	}
-
-	public final void add(final Genre g) {
-		if (g == null)
-			return;
-		genres.add(g);
-	}
-
-	public final void add(final GenreList otherGenres) {
-		if (otherGenres == null)
-			return;
-		genres.addAll(otherGenres.genres);
+		children = llg;
 	}
 
 	public final LinkedList<String> nids() {
-		if (genres == null)
+		if (children == null)
 			return null;
 		LinkedList<String> lls = new LinkedList<String>();
-		for (Genre g : genres) {
+		for (Genre g : children) {
 			lls.add(g.nid);
 		}
 		return lls;
 	}
 
 	public final LinkedList<String> idns() {
-		if (genres == null)
+		if (children == null)
 			return null;
 		LinkedList<String> lls = new LinkedList<String>();
-		for (Genre g : genres) {
+		for (Genre g : children) {
 			lls.add(g.idn);
 		}
 		return lls;
@@ -79,11 +61,11 @@ public class GenreList implements TitleElement {
 	 * @return			String.	
 	 */
 	public final String toString(final Genre.Numeri numerus) {
-		if (genres.size() == 0)
+		if (children.size() == 0)
 			throw new IllegalStateException("Gattungsliste leer");
 
-		if (genres.size() == 1)
-			return genres.get(0).toString(numerus);
+		if (children.size() == 1)
+			return children.get(0).toString(numerus);
 		/*
 		 *  Also sind es 2 oder mehr. 
 		 */
@@ -91,12 +73,12 @@ public class GenreList implements TitleElement {
 		if (!isParsed()) {
 			// Selber bauen, einfach alles im Plural und mit 
 			// Kommas und "und" verbinden:
-			int size = genres.size();
-			match = genres.get(0).asPlural();
+			int size = children.size();
+			match = children.get(0).asPlural();
 			for (int i = 1; i < size - 1; i++) {
-				match += ", " + genres.get(i).toString(numerus);
+				match += ", " + children.get(i).toString(numerus);
 			}
-			match += " und " + genres.get(size - 1).toString(numerus);
+			match += " und " + children.get(size - 1).toString(numerus);
 		}
 
 		/*
@@ -137,7 +119,7 @@ public class GenreList implements TitleElement {
 	 */
 	public final String getMatch() {
 		String s = "";
-		for (Genre genre : genres) {
+		for (Genre genre : children) {
 			s += genre.match;
 		}
 
@@ -151,34 +133,15 @@ public class GenreList implements TitleElement {
 	 * @return rest.
 	 */
 	public final String getRest() {
-		return genres.get(genres.size() - 1).rest;
-	}
-
-	/**
-	 * Nichtmodifizierbare Liste der Gattungen.
-	 * 
-	 * @return	Gattungsliste.
-	 */
-	public final List<Genre> getGenres() {
-		return Collections.unmodifiableList(genres);
+		return children.get(children.size() - 1).rest;
 	}
 
 	@Override
-	public final void accept(Visitor visitor) {
+	public void accept(Visitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if (visitChildren)
-			for (Genre genre : genres) {
-				genre.accept(visitor);
-			}
+			visitChildren(visitor);
 		visitor.leave(this);
-	}
-
-	@Override
-	public final void addToTitle(MusicTitle title) {
-		RangeCheckUtils.assertReferenceParamNotNull("title", title);
-		for (Genre genre : genres) {
-			genre.addToTitle(title);
-		}
 	}
 
 	/**
@@ -189,7 +152,7 @@ public class GenreList implements TitleElement {
 	 * 			false, wenn aus Gattungsbegriffen synthetisiert.
 	 */
 	public final boolean isParsed() {
-		List<Genre> theGenres = getGenres();
+		List<Genre> theGenres = getChildren();
 		Iterator<Genre> iterator = theGenres.iterator();
 		iterator.next();
 		for (; iterator.hasNext();) {
@@ -203,10 +166,9 @@ public class GenreList implements TitleElement {
 
 	public static void main(final String[] args) {
 
-		GenreList genreList = ParseGenre.parseGenreList("Introduktion");
-		Genre genre = GenreDB.matchGenre("Fuge");
-		genreList.add(genre);
-		System.out.println(genreList.toString(Numeri.SINGULAR));
-
+		MusicTitle mt =
+			ParseMusicTitle
+					.parseTitlePlusVersion(null, "Magnificat, c-Dorisch");
+		System.out.println(TitleUtils.getStructured(mt));
 	}
 }

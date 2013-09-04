@@ -15,9 +15,9 @@ import de.dnb.music.mediumOfPerformance.InstrumentationList;
 import de.dnb.music.title.Arrangement;
 import de.dnb.music.title.FormalTitle;
 import de.dnb.music.title.IndividualTitle;
+import de.dnb.music.title.ListOfElements;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
-import de.dnb.music.title.PartOfWork;
 import de.dnb.music.version.Version;
 
 public class StructuredVisitor extends Visitor {
@@ -45,20 +45,22 @@ public class StructuredVisitor extends Visitor {
 		indentation = "\n" + MyStringUtils.padding(tabs, '\t');
 	}
 
-	public void visit(IndividualTitle individualTitle) {
+	public boolean visit(IndividualTitle individualTitle) {
 		structured +=
 			indentation + "Individualtitel: "
 				+ individualTitle.getIndividualTitle();
 		increaseIndentation();
+		return true;
 	}
 
 	public void leave(IndividualTitle individualTitle) {
 		decreaseIndentation();
 	}
 
-	public void visit(FormalTitle formalTitle) {
+	public boolean visit(FormalTitle formalTitle) {
 		structured += indentation + "Formalsachtitel:";
 		increaseIndentation();
+		return true;
 	}
 
 	public void leave(FormalTitle formalTitle) {
@@ -190,13 +192,13 @@ public class StructuredVisitor extends Visitor {
 				+ arrangement.toString();
 	}
 
-	public boolean visit(PartOfWork partOfWork) {
+	public boolean visit(ListOfElements partOfWork) {
 		structured += '\n' + indentation + "Werkteile:";
 		increaseIndentation();
 		return true;
 	}
 
-	public void leave(PartOfWork partOfWork) {
+	public void leave(ListOfElements partOfWork) {
 		decreaseIndentation();
 	}
 

@@ -168,15 +168,7 @@ public class Version extends AugmentableElement implements TitleElement {
 	public final void accept(final Visitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if (visitChildren) {
-			if (containsGenre()) {
-				genreList.accept(visitor);
-			}
-			if (containsInstrumentation()) {
-				instrumentationList.accept(visitor);
-			}
-			if (containsAdditionalInformation()) {
-				additionalInformation.accept(visitor);
-			}
+			visitChildren(visitor);
 		}
 		visitor.leave(this);
 	}

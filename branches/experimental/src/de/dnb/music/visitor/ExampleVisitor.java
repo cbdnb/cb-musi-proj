@@ -13,16 +13,17 @@ import de.dnb.music.mediumOfPerformance.InstrumentationList;
 import de.dnb.music.title.Arrangement;
 import de.dnb.music.title.FormalTitle;
 import de.dnb.music.title.IndividualTitle;
+import de.dnb.music.title.ListOfElements;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
-import de.dnb.music.title.PartOfWork;
 import de.dnb.music.version.Version;
 
 public class ExampleVisitor extends Visitor {
 
-	public void visit(IndividualTitle individualTitle) {
+	public boolean visit(IndividualTitle individualTitle) {
 		System.out
 				.println("de.dnb.music.visitor.ExampleVisitor.visit(IndividualTitle)");
+		return true;
 	}
 
 	public void leave(IndividualTitle individualTitle) {
@@ -30,9 +31,10 @@ public class ExampleVisitor extends Visitor {
 				.println("de.dnb.music.visitor.ExampleVisitor.leave(IndividualTitle)");
 	}
 
-	public void visit(FormalTitle formalTitle) {
+	public boolean visit(FormalTitle formalTitle) {
 		System.out
 				.println("de.dnb.music.visitor.ExampleVisitor.visit(FormalTitle)");
+		return true;
 	}
 
 	public void leave(FormalTitle formalTitle) {
@@ -117,13 +119,13 @@ public class ExampleVisitor extends Visitor {
 				.println("de.dnb.music.visitor.ExampleVisitor.visit(Arrangement)");
 	}
 
-	public boolean visit(PartOfWork partOfWork) {
+	public boolean visit(ListOfElements partOfWork) {
 		System.out
 				.println("de.dnb.music.visitor.ExampleVisitor.visit(PartOfWork)");
 		return true;
 	}
 
-	public void leave(PartOfWork partOfWork) {
+	public void leave(ListOfElements partOfWork) {
 		System.out
 				.println("de.dnb.music.visitor.ExampleVisitor.leave(PartOfWork)");
 	}

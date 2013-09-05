@@ -67,6 +67,26 @@ public abstract class MusicTitle extends AugmentableElement implements
 			arrangement.accept(visitor);
 	}
 
+	/**
+	 * Liefert das Element (diesen Titel selbst, das unterste Werkteil
+	 * oder die Fassung), an das zur Zeit Gattungen, Instrumente und
+	 * Zusatzinformationen angehängt werden dürfen.
+	 * 
+	 * @return	nicht null
+	 */
+	public AugmentableElement getActualAugmentable() {
+		AugmentableElement element;
+		if (containsVersion()) {
+			element = getVersion();
+		} else if (containsParts()) {
+			PartOfWork partOfWork = getPartOfWork();
+			element = partOfWork.getLast();
+		} else {
+			element = this;
+		}
+		return element;
+	}
+
 	@Override
 	/**
 	 * this kann eigentlich nur ein Werkteil von title sein.

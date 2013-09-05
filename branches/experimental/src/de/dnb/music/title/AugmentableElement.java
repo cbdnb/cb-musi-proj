@@ -1,8 +1,10 @@
 package de.dnb.music.title;
 
+import applikationsbausteine.RangeCheckUtils;
 import de.dnb.music.additionalInformation.AdditionalInformation;
 import de.dnb.music.genre.GenreList;
 import de.dnb.music.mediumOfPerformance.InstrumentationList;
+import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.Visitor;
 
 /**
@@ -46,7 +48,7 @@ public class AugmentableElement {
 		return instrumentationList;
 	}
 
-	public final void setInstrumentationList(final InstrumentationList iList) {
+	public final void setInstrumentation(final InstrumentationList iList) {
 		instrumentationList = iList;
 	}
 
@@ -64,6 +66,30 @@ public class AugmentableElement {
 
 	public final boolean containsAdditionalInformation() {
 		return additionalInformation != null;
+	}
+	
+	/**
+	 * Darf das Element hinzugefügt werden?
+	 * 
+	 * @param element	nicht null.
+	 * @return			true, wenn hinzugefügt werden darf
+	 */
+	public boolean isAdditable(TitleElement element) {
+		RangeCheckUtils.assertReferenceParamNotNull("element", element);
+		// default:
+		return true;
+	}
+
+	/**
+	 * Enthält keine Informationen?
+	 * 
+	 * @return true, wenn additionalInformation == null, 
+	 * 			genreList == null und
+				instrumentationList == null
+	 */
+	public final boolean containesNoAdditables() {
+		return (additionalInformation == null) && (genreList == null)
+			&& (instrumentationList == null);
 	}
 
 	/**

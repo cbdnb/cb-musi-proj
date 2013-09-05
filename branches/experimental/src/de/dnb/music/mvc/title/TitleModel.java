@@ -152,9 +152,9 @@ public class TitleModel extends Observable {
 		MusicTitle mt = null;
 		try {
 			mt = ParseMusicTitle.parseFullRAK(composer, title);
-		} catch (IllegalArgumentException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, "Komponist falsch",
+			JOptionPane.showMessageDialog(null, e.getMessage(),
 					"Fehlerhafte Eingabe", JOptionPane.OK_CANCEL_OPTION);
 		}
 		if (mt != null) {

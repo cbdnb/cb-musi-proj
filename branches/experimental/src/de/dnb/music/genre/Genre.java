@@ -1,6 +1,8 @@
 package de.dnb.music.genre;
 
 import applikationsbausteine.RangeCheckUtils;
+import de.dnb.music.mediumOfPerformance.InstrumentationList;
+import de.dnb.music.title.AugmentableElement;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.PartOfWork;
 import de.dnb.music.version.Version;
@@ -113,30 +115,18 @@ public class Genre implements TitleElement, Comparable<Genre> {
 		 * dem Titel selbst hinzugefügt werden.
 		 */
 		RangeCheckUtils.assertReferenceParamNotNull("title", title);
-		GenreList genreList = null;
-		GenreList newGenreList = new GenreList(this);
-		if (title.containsVersion()) {
-			Version version = title.getVersion();
-			if (version.containsGenre()) {
-				genreList = version.getGenreList();
-			} else {
-				version.setGenreList(newGenreList);
-				return;
-			}
-		} else if (title.containsParts()) {
-			PartOfWork partOfWork = title.getPartOfWork();
-			MusicTitle lastTitle = partOfWork.getLast();
-			addToTitle(lastTitle);
-			return;
+		if (!title.isAdditable(this))
+			throw new UnsupportedOperationException(
+					"Titel enthält schon etwas anderes als "
+						+ this.getClass().getSimpleName());
+		GenreList instrumList = null;
+		AugmentableElement element = title.getActualAugmentable();
+		if (element.containsGenre()) {
+			instrumList = element.getGenreList();
+			instrumList.add(this);
 		} else {
-			if (title.containsGenre()) {
-				genreList = title.getGenreList();
-			} else {
-				title.setGenre(newGenreList);
-				return;
-			}
+			element.setGenre(new GenreList(this));
 		}
-		genreList.add(this);
 	}
 
 	public static void main(final String[] args) {

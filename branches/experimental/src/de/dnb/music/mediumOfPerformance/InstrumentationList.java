@@ -23,10 +23,6 @@ import de.dnb.music.visitor.Visitor;
 public class InstrumentationList extends ListOfElements<Instrument> implements
 		TitleElement {
 
-	@Deprecated
-	InstrumentationList() {
-	}
-
 	InstrumentationList(final List<Instrument> iList) {
 		children = new ArrayList<Instrument>(iList);
 	}

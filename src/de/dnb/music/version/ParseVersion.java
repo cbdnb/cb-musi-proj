@@ -60,7 +60,7 @@ public final class ParseVersion {
 				ParseInstrumentation.parse(rest);
 			if (besetzungsliste != null)
 				if (besetzungsliste.getRest().trim().length() == 0) {
-					version.setInstrumentationList(besetzungsliste);
+					version.setInstrumentation(besetzungsliste);
 					version.fallgruppeParagraphM511 = 'c';
 					version.untergruppe = 2;
 
@@ -70,7 +70,7 @@ public final class ParseVersion {
 						ParseAdditionalInformation.parse(composer,
 								besetzungsliste.getRest().trim(), false);
 					if (zusatzangabe != null) {
-						version.setInstrumentationList(besetzungsliste);
+						version.setInstrumentation(besetzungsliste);
 						version.setAdditionalInformation(zusatzangabe);
 						version.fallgruppeParagraphM511 = 'c';
 						version.untergruppe = 4;
@@ -114,7 +114,7 @@ public final class ParseVersion {
 				// Fall b 2 zurückgeben
 				version.fallgruppeParagraphM511 = 'b';
 				version.untergruppe = 2;
-				version.setInstrumentationList(bes);
+				version.setInstrumentation(bes);
 				return version;
 			}
 			AdditionalInformation zus =
@@ -177,7 +177,7 @@ public final class ParseVersion {
 
 		InstrumentationList instrList = ParseInstrumentation.parse(parseString);
 		if (instrList != null && instrList.getRest().trim().length() == 0) {
-			version.setInstrumentationList(instrList);
+			version.setInstrumentation(instrList);
 			version.fallgruppeParagraphM511 = 'e';
 			version.untergruppe = 2;
 			return version;

@@ -2,6 +2,7 @@ package de.dnb.music.mediumOfPerformance;
 
 import utils.TitleUtils;
 import applikationsbausteine.RangeCheckUtils;
+import de.dnb.music.title.AugmentableElement;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
 import de.dnb.music.title.PartOfWork;
@@ -141,30 +142,18 @@ public class Instrument implements TitleElement, Comparable<Instrument> {
 		 * dem Titel selbst hinzugefügt werden.
 		 */
 		RangeCheckUtils.assertReferenceParamNotNull("title", title);
+		if (!title.isAdditable(this))
+			throw new UnsupportedOperationException(
+					"Titel enthält schon etwas anderes als "
+						+ this.getClass().getSimpleName());
 		InstrumentationList instrumList = null;
-		InstrumentationList newInstrumList = new InstrumentationList(this);
-		if (title.containsVersion()) {
-			Version version = title.getVersion();
-			if (version.containsInstrumentation()) {
-				instrumList = version.getInstrumentationList();
-			} else {
-				version.setInstrumentation(newInstrumList);
-				return;
-			}
-		} else if (title.containsParts()) {
-			PartOfWork partOfWork = title.getPartOfWork();
-			MusicTitle lastTitle = partOfWork.getLast();
-			addToTitle(lastTitle);
-			return;
+		AugmentableElement element = title.getActualAugmentable();
+		if (element.containsInstrumentation()) {
+			instrumList = element.getInstrumentationList();
+			instrumList.add(this);
 		} else {
-			if (title.containsInstrumentation()) {
-				instrumList = title.getInstrumentationList();
-			} else {
-				title.setInstrumentationList(newInstrumList);
-				return;
-			}
+			element.setInstrumentation(new InstrumentationList(this));
 		}
-		instrumList.add(this);
 	}
 
 	public static void main(final String[] args) {

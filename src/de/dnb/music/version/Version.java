@@ -173,14 +173,6 @@ public class Version extends AugmentableElement implements TitleElement {
 		visitor.leave(this);
 	}
 
-	public void setGenreList(GenreList other) {
-		genreList = other;
-	}
-
-	public void setInstrumentation(InstrumentationList other) {
-		instrumentationList = other;
-	}
-
 	@Override
 	public final void addToTitle(MusicTitle title) {
 		RangeCheckUtils.assertReferenceParamNotNull("title", title);

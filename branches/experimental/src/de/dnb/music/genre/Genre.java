@@ -1,11 +1,8 @@
 package de.dnb.music.genre;
 
 import applikationsbausteine.RangeCheckUtils;
-import de.dnb.music.mediumOfPerformance.InstrumentationList;
 import de.dnb.music.title.AugmentableElement;
 import de.dnb.music.title.MusicTitle;
-import de.dnb.music.title.PartOfWork;
-import de.dnb.music.version.Version;
 import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.Visitor;
 
@@ -119,14 +116,8 @@ public class Genre implements TitleElement, Comparable<Genre> {
 			throw new UnsupportedOperationException(
 					"Titel enthält schon etwas anderes als "
 						+ this.getClass().getSimpleName());
-		GenreList genres = null;
 		AugmentableElement element = title.getActualAugmentable();
-		if (element.containsGenre()) {
-			genres = element.getGenreList();
-			genres.add(this);
-		} else {
-			element.setGenre(new GenreList(this));
-		}
+		element.addGenre(this);
 	}
 
 	public static void main(final String[] args) {

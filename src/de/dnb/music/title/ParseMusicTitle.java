@@ -31,6 +31,7 @@ import de.dnb.music.mediumOfPerformance.InstrumentationList;
 import de.dnb.music.mediumOfPerformance.ParseInstrumentation;
 import de.dnb.music.version.ParseVersion;
 import de.dnb.music.version.Version;
+import de.dnb.music.visitor.TitleElement;
 import filtering.FilterUtils;
 import filtering.IPredicate;
 import static utils.GNDConstants.TAG_DB;
@@ -158,7 +159,7 @@ public final class ParseMusicTitle {
 		MusicTitle mt = null;
 		String ordnungsgruppe = null; // / Arr.
 		String partsString = null;
-		String fasString = null;
+		String verString = null; // Fassung
 
 		if (StringUtils.containsOrdnungsgruppe(ansetzung)) {
 			// Ordnungsgruppe / Arr. etc. extrahieren
@@ -185,7 +186,7 @@ public final class ParseMusicTitle {
 			if (z == null) { // -> keine Jahreszahl
 
 				ansetzung = StringUtils.getAnsetzung();
-				fasString = StringUtils.getFassung();
+				verString = StringUtils.getFassung();
 
 				// Die Fassung bekommen wir ja gratis:
 				mt = ParseMusicTitle.parseSimpleTitle(composer, ansetzung);
@@ -198,10 +199,10 @@ public final class ParseMusicTitle {
 					mt.setPartOfWork(wt);
 				}
 
-				if (fasString != null && fasString.trim().length() != 0) {
-					Version fas = ParseVersion.parse(composer, fasString);
+				if (verString != null && verString.trim().length() != 0) {
+					Version fas = ParseVersion.parse(composer, verString);
 					if (fas == null) {
-						fas = new Version(fasString);
+						fas = new Version(verString);
 					}
 					mt.setVersion(fas);
 				}
@@ -235,9 +236,7 @@ public final class ParseMusicTitle {
 	public static MusicTitle parseSimpleTitle(
 			final String composer,
 			final String titleString) {
-		if (titleString == null)
-			throw new IllegalArgumentException(
-					"Nullstring in parseWithoutVersion");
+		RangeCheckUtils.assertReferenceParamNotNull("titleString", titleString);
 		MusicTitle m = null;
 		m = ParseFormalTitle.parse(composer, titleString);
 		if (m != null)
@@ -323,7 +322,8 @@ public final class ParseMusicTitle {
 	public static Pair<MusicTitle, List<Subfield>> parseGND(
 			final String composer,
 			final List<Subfield> subfields) {
-		RangeCheckUtils.assertCollectionParamNotNullOrEmpty("value", subfields);
+		RangeCheckUtils.assertCollectionParamNotNullOrEmpty("subfields",
+				subfields);
 		List<Subfield> unused = new LinkedList<Subfield>();
 
 		MusicTitle mTitle = null;
@@ -331,6 +331,8 @@ public final class ParseMusicTitle {
 		for (Subfield subfield : subfields) {
 			final Indicator indicator = subfield.getIndicator();
 			final String contentOfSubfield = subfield.getContent();
+
+			TitleElement element = null;
 
 			if (indicator == GNDConstants.DOLLAR_a) {
 				/*
@@ -341,11 +343,9 @@ public final class ParseMusicTitle {
 				 */
 				mTitle =
 					ParseMusicTitle.parseFullRAK(composer, contentOfSubfield);
+				continue;
 			} else if (indicator == GNDConstants.DOLLAR_m) {
-
-				final InstrumentationList iList =
-					ParseInstrumentation.parse(contentOfSubfield);
-				iList.addToTitle(mTitle);
+				element = ParseInstrumentation.parse(contentOfSubfield);
 			} else if (indicator == GNDConstants.DOLLAR_f
 				|| indicator == GNDConstants.DOLLAR_n
 				|| indicator == GNDConstants.DOLLAR_r
@@ -356,18 +356,14 @@ public final class ParseMusicTitle {
 				 * $n mit einer Einzelzahl aufgebaut worden wäre.
 				 */
 				final boolean comma = true;
-				final AdditionalInformation ai =
+				//				final AdditionalInformation ai =
+				element =
 					ParseAdditionalInformation.parse(composer,
 							contentOfSubfield, comma);
 				// Ist das $g ein maskiertes $f, $n oder $r?
-				if (ai != null)
-					ai.addToTitle(mTitle);
-				else {
-					Qualifier qualifier = new Qualifier(contentOfSubfield);
-					qualifier.addToTitle(mTitle);
-				}
+				if (element == null)
+					element = new Qualifier(contentOfSubfield);
 			} else if (indicator == GNDConstants.DOLLAR_p) {
-
 				if (!mTitle.containsParts()) {
 					/*
 					 *  neue Werkteilstrukur anlegen, dabei davon ausgehen,
@@ -375,9 +371,7 @@ public final class ParseMusicTitle {
 					 *  $p steht, also auch Teile von Teilen. Daher wird der
 					 *  Konstruktor PartOfWork(String) aufgerufen:
 					 */
-					PartOfWork partOfWork = new PartOfWork(contentOfSubfield);
-					partOfWork.addToTitle(mTitle);
-
+					element = new PartOfWork(contentOfSubfield);
 				} else {
 					/*
 					 * Dann gibt es zwei Möglichkeiten:
@@ -389,27 +383,24 @@ public final class ParseMusicTitle {
 					 * In beiden Fällen enthalten das 2. und alle folgenden
 					 * $p-Felder einen und nur einen Musiktitel.
 					 */
-					MusicTitle actualPartTitle =
+					element =
 						ParseMusicTitle.parseSimpleTitle(composer,
 								contentOfSubfield);
-					actualPartTitle.addToTitle(mTitle);
 				}
 
 			} else if (indicator == GNDConstants.DOLLAR_s) {
-				Version version =
-					ParseVersion.parse(composer, contentOfSubfield);
+				element = ParseVersion.parse(composer, contentOfSubfield);
 				// Notbremse für unbekannten Inhalt von $s:
-				if (version == null) {
-					version = new Version(contentOfSubfield);
+				if (element == null) {
+					element = new Version(contentOfSubfield);
 				}
-				version.addToTitle(mTitle);
 			} else if (indicator == GNDConstants.DOLLAR_o) {
-				Arrangement arrangement = new Arrangement(contentOfSubfield);
-				arrangement.addToTitle(mTitle);
+				element = new Arrangement(contentOfSubfield);
 			} else {
 				unused.add(subfield);
+				continue;
 			}
-
+			element.addToTitle(mTitle);
 		}
 		return new Pair<MusicTitle, List<Subfield>>(mTitle, unused);
 	}

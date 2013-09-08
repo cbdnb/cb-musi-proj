@@ -58,7 +58,7 @@ public final class ParseIndividualTitle {
 		String parseString = s.trim();
 		if (parseString.length() == 0)
 			return null;
-		IndividualTitle iST = new IndividualTitle();
+		IndividualTitle indTitle = new IndividualTitle();
 
 		Matcher m = trennPat.matcher(parseString);
 		String vor = "";
@@ -73,7 +73,7 @@ public final class ParseIndividualTitle {
 			match = parseString.substring(startMatch, endMatch);
 			// wird benötigt, um völlig falsche Ergebnisse auszuschliessen:
 			boolean matchIsValidSeparator =
-				match.equals(", ") || match.equals("$g");
+				match.equals(", ");// || match.equals("$g");
 
 			/*
 			 *  Vorgehen nach Regelwerk, wobei das Regelwerk nicht im Text, 
@@ -86,9 +86,9 @@ public final class ParseIndividualTitle {
 						matchIsValidSeparator);
 			if (zus != null) {
 
-				iST.additionalInformation = zus;
-				iST.individualTitle = vor;
-				return iST;
+				indTitle.additionalInformation = zus;
+				indTitle.individualTitle = vor;
+				return indTitle;
 			}
 
 			/*
@@ -106,26 +106,26 @@ public final class ParseIndividualTitle {
 				// 5. Besetzung?
 				InstrumentationList lli = ParseInstrumentation.parse(nach);
 				if (lli != null && lli.getRest().trim().length() == 0) {
-					iST.instrumentationList = lli;
-					iST.individualTitle = vor;
-					return iST;
+					indTitle.instrumentationList = lli;
+					indTitle.individualTitle = vor;
+					return indTitle;
 				}
 
 				// 6. Form, Gattung
 				GenreList gat = ParseGenre.parseGenreList(nach);
 
 				if (gat != null && gat.getRest().trim().length() == 0) {
-					iST.genreList = gat;
-					iST.individualTitle = vor;
-					return iST;
+					indTitle.genreList = gat;
+					indTitle.individualTitle = vor;
+					return indTitle;
 				}
 			}
 
 		}
 
 		// keine weiteren Teile gefunden, also
-		iST.individualTitle = parseString;
-		return iST;
+		indTitle.individualTitle = parseString;
+		return indTitle;
 	}
 
 }

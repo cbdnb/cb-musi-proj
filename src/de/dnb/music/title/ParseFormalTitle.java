@@ -40,26 +40,26 @@ public final class ParseFormalTitle {
 			throw new IllegalArgumentException(
 					"Null-String an parse()übergeben");
 		FormalTitle f;
-		GenreList gat = ParseGenre.parseGenreList(parseString);
+		GenreList genres = ParseGenre.parseGenreList(parseString);
 
-		if (gat == null)
+		if (genres == null)
 			return null;
-		String rest = gat.getRest();
+		String rest = genres.getRest();
 		if (rest == null || rest.trim().length() == 0) {
 			f = new FormalTitle();
-			f.genreList = gat;
+			f.genreList = genres;
 			return f; // Das sollte nach RAK nicht sein, nimmt aber Fälle wie
 			// "Werke" oder Einzelfälle wie "Swider: Ave Maria" mit.
 			//return null; wäre korrekt nach RAK
 		}
-		InstrumentationList bes = ParseInstrumentation.parse(rest);
+		InstrumentationList instruments = ParseInstrumentation.parse(rest);
 
-		if (bes != null)
-			rest = bes.getRest();
+		if (instruments != null)
+			rest = instruments.getRest();
 		if (rest.trim().length() == 0) {
 			f = new FormalTitle();
-			f.genreList = gat;
-			f.instrumentationList = bes;
+			f.genreList = genres;
+			f.instrumentationList = instruments;
 			return f;
 		}
 
@@ -69,17 +69,17 @@ public final class ParseFormalTitle {
 		 * erkannt wurde. Fälle wie Psalm 8 sind ja Individualsachtitel
 		 */
 		boolean leadingComma = true;
-		AdditionalInformation zus =
+		AdditionalInformation addInf =
 			ParseAdditionalInformation.parse(komponist, rest, leadingComma);
 
-		if (zus == null) // Da war was, konnte aber nicht 
+		if (addInf == null) // Da war was, konnte aber nicht 
 			// erkannt werden.
 			return null;
 
 		f = new FormalTitle();
-		f.genreList = gat;
-		f.instrumentationList = bes;
-		f.additionalInformation = zus;
+		f.genreList = genres;
+		f.instrumentationList = instruments;
+		f.additionalInformation = addInf;
 		return f;
 
 	}

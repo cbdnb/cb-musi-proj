@@ -5,8 +5,6 @@ import applikationsbausteine.RangeCheckUtils;
 import de.dnb.music.title.AugmentableElement;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
-import de.dnb.music.title.PartOfWork;
-import de.dnb.music.version.Version;
 import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.Visitor;
 
@@ -146,14 +144,8 @@ public class Instrument implements TitleElement, Comparable<Instrument> {
 			throw new UnsupportedOperationException(
 					"Titel enthält schon etwas anderes als "
 						+ this.getClass().getSimpleName());
-		InstrumentationList instrumList = null;
 		AugmentableElement element = title.getActualAugmentable();
-		if (element.containsInstrumentation()) {
-			instrumList = element.getInstrumentationList();
-			instrumList.add(this);
-		} else {
-			element.setInstrumentation(new InstrumentationList(this));
-		}
+		element.addInstrument(this);
 	}
 
 	public static void main(final String[] args) {

@@ -119,11 +119,11 @@ public class Genre implements TitleElement, Comparable<Genre> {
 			throw new UnsupportedOperationException(
 					"Titel enthält schon etwas anderes als "
 						+ this.getClass().getSimpleName());
-		GenreList instrumList = null;
+		GenreList genres = null;
 		AugmentableElement element = title.getActualAugmentable();
 		if (element.containsGenre()) {
-			instrumList = element.getGenreList();
-			instrumList.add(this);
+			genres = element.getGenreList();
+			genres.add(this);
 		} else {
 			element.setGenre(new GenreList(this));
 		}

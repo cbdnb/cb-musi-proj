@@ -3,6 +3,8 @@ package de.dnb.music.mvc.record;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -110,6 +112,22 @@ public class RecordController {
 		}
 
 	}
+	
+	class NewRecFocusListener implements FocusListener {
+
+		@Override
+		public void focusGained(FocusEvent e) {
+			// uninteressant			
+		}
+
+		@Override
+		public void focusLost(FocusEvent e) {
+			// Feld auslesen und in Record verwandeln
+			String newRecStr = view.getNewRecord();
+			model.setNewRecord(newRecStr);
+		}
+		
+	}
 
 	/**
 	 * @return the help text
@@ -202,6 +220,7 @@ public class RecordController {
 		view.addTitleListener(new TitleListener());
 		view.addFieldNumber("130");
 		view.addFieldNumber("430");
+		view.addNewRecFocusListener(new NewRecFocusListener());
 	}
 
 	/**

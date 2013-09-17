@@ -2,6 +2,7 @@ package de.dnb.music.mvc.record;
 
 import java.awt.Component;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusListener;
 import java.util.Collection;
 import java.util.Observable;
 import java.util.Observer;
@@ -44,6 +45,10 @@ public class RecordView implements Observer {
 
 	public final void addCompListener(final ActionListener al) {
 		gui.btnComp.addActionListener(al);
+	}
+	
+	public final void addNewRecFocusListener(final FocusListener fl) {
+		gui.textAreaNew.addFocusListener(fl);
 	}
 	
 	
@@ -141,13 +146,9 @@ public class RecordView implements Observer {
 	public final String getOldRecord() {
 		return gui.textAreaOld.getText();
 	}
-
+	
 	public final String getNewRecord() {
 		return gui.textAreaNew.getText();
-	}
-
-	public final void setNewRecord(final String text) {
-		gui.textAreaNew.setText(text);
 	}
 
 	public final Component getGui() {

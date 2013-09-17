@@ -16,6 +16,7 @@ import utils.GNDConstants;
 import utils.GNDTitleUtils;
 import utils.TitleUtils;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
+import de.dnb.gnd.exceptions.WrappingHandler;
 import de.dnb.gnd.parser.Format;
 import de.dnb.gnd.parser.Record;
 import de.dnb.gnd.parser.RecordParser;
@@ -32,24 +33,32 @@ import de.dnb.music.title.ParseMusicTitle;
 
 public class RecordModel extends Observable {
 
+	public RecordModel() {
+		this.oldRecordStr = "";
+		this.tagDB = GNDTagDB.getDB();
+		newRecord = new Record(null, tagDB);
+		this.parser = new RecordParser();
+		this.parser.setHandler(new WrappingHandler());
+		this.stackTrace = "";
+		this.expanded = true;
+		this.transformer = new DefaultRecordTransformer();
+	}
+
 	private String oldRecordStr;
 
-	private Record oldRecord;
+	private GNDTagDB tagDB;
 
-	private GNDTagDB tagDB = GNDTagDB.getDB();
+	private Record newRecord;;
 
-	private Record newRecord = new Record(null, tagDB);
+	private RecordParser parser;
 
-	private RecordParser parser = new RecordParser();
-
-	private String stackTrace = "";
+	private String stackTrace;
 
 	private Date creationDate;
 
-	private boolean expanded = true;
+	private boolean expanded;
 
-	private DefaultRecordTransformer transformer =
-		new DefaultRecordTransformer();
+	private DefaultRecordTransformer transformer;
 
 	public final String getStackTrace() {
 		return stackTrace;
@@ -64,10 +73,8 @@ public class RecordModel extends Observable {
 	}
 
 	public final void refresh() {
-
 		setChanged();
 		notifyObservers(null);
-
 	}
 
 	/**
@@ -121,8 +128,21 @@ public class RecordModel extends Observable {
 		return creationDate;
 	}
 
-	public final void setNewRecord(final Record newRecord2) {
-		newRecord = newRecord2;
+	/**
+	 * Nimmt den String (aus Textfeld für neuen Datensatz) und wandelt ihn
+	 * in einen Record um.
+	 * 
+	 * @param recordStr	nicht null
+	 */
+	public final void setNewRecord(final String recordStr) {
+		try {
+			newRecord = parser.parse(recordStr);
+		} catch (final Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(),
+					"Fehler im Datensatz", JOptionPane.OK_CANCEL_OPTION);
+			refresh();
+		}
+
 	}
 
 	public final void changeExpansion() {
@@ -134,7 +154,7 @@ public class RecordModel extends Observable {
 		if (oldRecordStr != null) {
 
 			try {
-				oldRecord = parser.parse(oldRecordStr);
+				Record oldRecord = parser.parse(oldRecordStr);
 				newRecord = transformer.transform(oldRecord);
 			} catch (final Exception e) {
 				StringWriter sw = new StringWriter();
@@ -192,7 +212,6 @@ public class RecordModel extends Observable {
 
 	public final void addTitle(final String number, final String titleStr) {
 
-		
 		try {
 			MusicTitle title = ParseMusicTitle.parseFullRAK(null, titleStr);
 			final boolean forceTotalCount = true;

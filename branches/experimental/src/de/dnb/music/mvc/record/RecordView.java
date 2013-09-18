@@ -140,7 +140,7 @@ public class RecordView implements Observer {
 
 	@Override
 	public final void update(final Observable obs, final Object message) {
-		gui.textAreaNew.setText(model.getNewRecord());
+		gui.textAreaNew.setText(model.getNewRecordString());
 	}
 
 	public final String getOldRecord() {

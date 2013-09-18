@@ -39,14 +39,14 @@ public class DefaultMachineTransformer extends DefaultRecordTransformer {
 	}
 
 	@Override
-	protected void addGeneralNote() {
+	public void addGeneralNote(Record record) {
 		// keine Aktion.
 	}
 
 	@Override
-	protected void addGNDClassification() {
+	public void addGNDClassification(Record record) {
 		if (getRules() != SetOfRules.RAK)
-			super.addGNDClassification();
+			super.addGNDClassification(record);
 	}
 
 	@Override

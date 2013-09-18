@@ -105,8 +105,8 @@ public class DefaultRecordTransformer {
 	 * Template-Methode.<br>
 	 * Es können die Methoden
 	 * <br> {@link #addComposerData()}
-	 * <br> {@link #addGeneralNote()}
-	 * <br> {@link #addGNDClassification()} 
+	 * <br> {@link #addGeneralNote(Record)}
+	 * <br> {@link #addGNDClassification(Record)} 
 	 * <br> {@link #transform430(Line)} 
 	 * <br>überschrieben werden.
 	 * @param record	nicht null.
@@ -118,8 +118,8 @@ public class DefaultRecordTransformer {
 		newRecord = oldRecord.clone();
 		if (isPermitted(oldRecord)) {
 			addComposerData();
-			addGeneralNote();
-			addGNDClassification();
+			addGeneralNote(newRecord);
+			addGNDClassification(newRecord);
 			removeHeadings();
 			transform130();
 			transform430Lines();
@@ -507,15 +507,18 @@ public class DefaultRecordTransformer {
 	}
 
 	/**
-	 * Fügt newRecord 14.4p hinzu.
+	 * Fügt record 14.4p hinzu.
 	 * 
 	 * Eventuell zu überschreiben.
+	 * @param record nicht null. Nicht parameterlos, damit auch von
+	 * aussen verwendbar, z.B. für den Aufbau neuer Datensätze.
 	 */
-	protected void addGNDClassification() {
+	public void addGNDClassification(Record record) {
+		RangeCheckUtils.assertReferenceParamNotNull("record", record);
 		Line line;
 		try {
 			line = LineParser.parse("065 14.4p", TAG_DB);
-			newRecord.add(line);
+			record.add(line);
 		} catch (IllFormattedLineException e) {
 			//nix
 		} catch (OperationNotSupportedException e) {
@@ -524,15 +527,18 @@ public class DefaultRecordTransformer {
 	}
 
 	/**
-	 * Fügt newRecord die redaktionelle Bemerkung "VPe" hinzu.
+	 * Fügt record die redaktionelle Bemerkung "VPe" hinzu.
 	 * 
 	 * Eventuell zu überschreiben.
+	 * @param record nicht null. Nicht parameterlos, damit auch von
+	 * aussen verwendbar, z.B. für den Aufbau neuer Datensätze.
 	 */
-	protected void addGeneralNote() {
+	public void addGeneralNote(Record record) {
+		RangeCheckUtils.assertReferenceParamNotNull("record", record);
 		Line line;
 		try {
 			line = LineParser.parse("667 " + SATZ_AUFG, TAG_DB);
-			newRecord.add(line);
+			record.add(line);
 		} catch (IllFormattedLineException e) {
 			//nix
 		} catch (OperationNotSupportedException e) {

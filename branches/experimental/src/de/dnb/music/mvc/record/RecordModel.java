@@ -12,6 +12,8 @@ import java.util.zip.ZipEntry;
 import javax.naming.OperationNotSupportedException;
 import javax.swing.JOptionPane;
 
+import applikationsbausteine.RangeCheckUtils;
+
 import utils.GNDConstants;
 import utils.GNDTitleUtils;
 import utils.TitleUtils;
@@ -65,10 +67,11 @@ public class RecordModel extends Observable {
 	}
 
 	public final void setOldRecord(final String oldRecordS) {
+		RangeCheckUtils.assertReferenceParamNotNull("oldRecordS", oldRecordS);
 		this.oldRecordStr = oldRecordS;
 	}
 
-	public final String getNewRecord() {
+	public final String getNewRecordString() {
 		return RecordUtils.toPica(newRecord, Format.PICA3, expanded, "\n", '$');
 	}
 
@@ -151,24 +154,27 @@ public class RecordModel extends Observable {
 	}
 
 	public final void analyze() {
-		if (oldRecordStr != null) {
 
-			try {
-				Record oldRecord = parser.parse(oldRecordStr);
-				newRecord = transformer.transform(oldRecord);
-			} catch (final Exception e) {
-				StringWriter sw = new StringWriter();
-				PrintWriter pw = new PrintWriter(sw);
-				e.printStackTrace(pw);
-
-				stackTrace =
-					oldRecordStr + "\n\n----------------\n\n" + sw.toString();
-				JOptionPane.showMessageDialog(null, e.getMessage(),
-						"Fehler im Datensatz", JOptionPane.OK_CANCEL_OPTION);
-
+		try {
+			Record oldRecord = parser.parse(oldRecordStr);
+			newRecord = transformer.transform(oldRecord);
+			// dann soll ein neuer Datensatz generiert werden:
+			if(RecordUtils.isEmpty(newRecord)) {
+				transformer.addGeneralNote(newRecord);
+				transformer.addGNDClassification(newRecord);
 			}
-			refresh();
+		} catch (final Exception e) {
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			e.printStackTrace(pw);
+
+			stackTrace =
+				oldRecordStr + "\n\n----------------\n\n" + sw.toString();
+			JOptionPane.showMessageDialog(null, e.getMessage(),
+					"Fehler im Datensatz", JOptionPane.OK_CANCEL_OPTION);
+
 		}
+		refresh();
 
 	}
 

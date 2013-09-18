@@ -1,5 +1,7 @@
 package de.dnb.music.title;
 
+import static utils.GNDConstants.TAG_DB;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,7 +11,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import utils.GNDConstants;
-
 import utils.StringUtils;
 import utils.TitleUtils;
 import applikationsbausteine.RangeCheckUtils;
@@ -27,14 +28,10 @@ import de.dnb.music.additionalInformation.Key;
 import de.dnb.music.additionalInformation.ParseAdditionalInformation;
 import de.dnb.music.additionalInformation.Qualifier;
 import de.dnb.music.mediumOfPerformance.InstrumentDB;
-import de.dnb.music.mediumOfPerformance.InstrumentationList;
 import de.dnb.music.mediumOfPerformance.ParseInstrumentation;
 import de.dnb.music.version.ParseVersion;
 import de.dnb.music.version.Version;
 import de.dnb.music.visitor.TitleElement;
-import filtering.FilterUtils;
-import filtering.IPredicate;
-import static utils.GNDConstants.TAG_DB;
 
 /**
  * Zentrale Parserklasse. Verschiedene statische Dienstfunktionen werden
@@ -303,10 +300,11 @@ public final class ParseMusicTitle {
 	 * 	- Altdaten mit einem $p. Diese können aus der SWD oder dem DMA stammen.
 	 * 	All diese Fälle werden durch die besondere Behandlung von $p 
 	 * 	aufgefangen. (s. if-Anweisung)
-	 *  - Altdaten mit $g. Diese können nur aus der SWD stammen. 
-	 *  	Daher wird $g entweder als Jahreszahl erkannt und in $f umgewandelt oder	
-	 *  	aber so, wie es ist, belassen. In diesem zweiten Fall muss 
-	 *  	aber der Titel ($a oder $p) ein Individualtitel sein! 
+	 *  - Altdaten mit $g. Diese können nur aus der SWD stammen.
+	 *    	Daher wird $g entweder als Jahreszahl erkannt und in $f 
+	 *    	umgewandelt oder aber so, wie es ist, belassen. 
+	 *    	In diesem zweiten Fall muss	aber der Titel ($a oder $p) ein 
+	 *    	Individualtitel sein!
 	 *  - Maschinell modifizierte Altdaten. Diese enthalten nur ein $g, wenn
 	 *  	ein Individualtitel vorliegt.
 	 *  - Neudaten enthalten nur dann ein $g, wenn ein Individualsachtitel
@@ -403,6 +401,71 @@ public final class ParseMusicTitle {
 			element.addToTitle(mTitle);
 		}
 		return new Pair<MusicTitle, List<Subfield>>(mTitle, unused);
+	}
+
+	/**
+	 * Liefert zum Unterfeld das passende Titel-Element.
+	 * @param subfield	nicht null
+	 * @param composer	auch null möglich
+	 * @return			Unterfeld oder null, wenn zu keinem Titelelement
+	 * 					gehörig (z.B. $v)
+	 */
+	public static
+			TitleElement
+			parseSubfield(Subfield subfield, String composer) {
+		{
+			RangeCheckUtils.assertReferenceParamNotNull("subfield", subfield);
+			final Indicator indicator = subfield.getIndicator();
+			final String contentOfSubfield = subfield.getContent();
+
+			if (indicator == GNDConstants.DOLLAR_a) {
+				return ParseMusicTitle
+						.parseFullRAK(composer, contentOfSubfield);
+			} else if (indicator == GNDConstants.DOLLAR_m) {
+				return ParseInstrumentation.parse(contentOfSubfield);
+			} else if (indicator == GNDConstants.DOLLAR_f
+				|| indicator == GNDConstants.DOLLAR_n
+				|| indicator == GNDConstants.DOLLAR_r
+				|| indicator == GNDTagDB.DOLLAR_G) {
+				/*
+				 * Auch hier können wir wieder so tun, als wäre ein
+				 * Komma erkannt, da ja nicht (gegenbenenfalls) ein
+				 * $n mit einer Einzelzahl aufgebaut worden wäre.
+				 */
+				final boolean comma = true;
+				//				final AdditionalInformation ai =
+				TitleElement element =
+					ParseAdditionalInformation.parse(composer,
+							contentOfSubfield, comma);
+				// Ist das $g ein maskiertes $f, $n oder $r?
+				if (element == null)
+					element = new Qualifier(contentOfSubfield);
+				return element;
+			} else if (indicator == GNDConstants.DOLLAR_p) {
+
+				/*
+				 *  neue Werkteilstrukur anlegen, dabei davon ausgehen,
+				 *  dass auch vollkommen Unstrukturiertes (Altdaten?) in
+				 *  $p steht, also auch Teile von Teilen. Daher wird der
+				 *  Konstruktor PartOfWork(String) aufgerufen:
+				 */
+				return new PartOfWork(contentOfSubfield);
+
+			} else if (indicator == GNDConstants.DOLLAR_s) {
+				TitleElement element =
+					ParseVersion.parse(composer, contentOfSubfield);
+				// Notbremse für unbekannten Inhalt von $s:
+				if (element == null) {
+					element = new Version(contentOfSubfield);
+				}
+				return element;
+			} else if (indicator == GNDConstants.DOLLAR_o) {
+				return new Arrangement(contentOfSubfield);
+			} else {
+				return null;
+			}
+
+		}
 	}
 
 	// reichhaltigste:

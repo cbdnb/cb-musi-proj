@@ -278,18 +278,6 @@ public final class StringUtils {
 	
 
 	/**
-	 * Erkennt alle Unterfelder anhand $ oder ƒ.
-	 * @param contentOfField nicht null.
-	 * @return	true, wenn Unterfeld erkannt.
-	 */
-	public static boolean containsSubfields(final String contentOfField) {
-		RangeCheckUtils.assertStringParamNotNullOrWhitespace("contentOfField",
-				contentOfField);
-		return contentOfField.contains("$") || contentOfField.contains("ƒ");
-
-	}
-
-	/**
 	 * Liefert ein Paar von Strings. Der erste String ist der Tag im Pica- oder
 	 * Pica+-Format, der zweite der Inhalt der Zeile.
 	 * 

@@ -140,7 +140,7 @@ public final class ParseMusicTitle {
 	 */
 	public static MusicTitle parseFullRAK(
 			final String composer,
-			final String parseString) {
+			String parseString) {
 		if (parseString == null)
 			throw new IllegalArgumentException(
 					"Null-String an parseFullRAK()übergeben");
@@ -150,9 +150,20 @@ public final class ParseMusicTitle {
 			return null;
 
 		// Erkennen, ob schon eine GND-Form vorliegt:
-		if (StringUtils.containsSubfields(ansetzung))
-			return parseGND(composer, ansetzung);
-
+		try {
+			factory730.load(ansetzung);
+			List<Subfield> subfields = factory730.getSubfieldList();
+			if (subfields.size() != 1  ) {
+				Pair<MusicTitle, List<Subfield>> pair =
+					parseGND(composer, subfields);
+				return pair.first;
+			}
+		} catch (Exception e) {
+			// nix
+		}
+		// kürzester Weg um
+		if (ansetzung.startsWith("$a")||ansetzung.startsWith("ƒa"))
+			ansetzung = ansetzung.substring("$a".length());
 		MusicTitle mt = null;
 		String ordnungsgruppe = null; // / Arr.
 		String partsString = null;
@@ -294,6 +305,45 @@ public final class ParseMusicTitle {
 	 * nicht erkannten Felder werden als zweiter Bestandteil
 	 * zurückgegeben.
 	 * 
+	 * @param composer Komponist
+	 * @param subfields	Liste von Unterfeldern, die mit $<Indikator> beginnen.
+	 * @return	Paar aus gültigen Musiktitel und den ungenutzten Unterfeldern. 
+	 * 
+	 */
+	public static Pair<MusicTitle, List<Subfield>> parseGND(
+			final String composer,
+			final List<Subfield> subfields) {
+		RangeCheckUtils.assertCollectionParamNotNullOrEmpty("subfields",
+				subfields);
+		List<Subfield> unused = new LinkedList<Subfield>();
+
+		MusicTitle mTitle = null;
+
+		for (Subfield subfield : subfields) {
+			TitleElement element = parseSubfield(composer, subfield);
+			// wird nicht erkannt, also zu unused hinzufügen:
+			if (element == null) {
+				unused.add(subfield);
+				continue;
+			}
+			// also nicht null
+			if (mTitle == null) {
+				try {
+					mTitle = (MusicTitle) element;
+				} catch (ClassCastException e) {
+					throw new IllegalArgumentException(
+							"Liste fängt nicht mit $a an");
+				}
+				continue;
+			}
+			element.addToTitle(mTitle);
+		}
+		return new Pair<MusicTitle, List<Subfield>>(mTitle, unused);
+	}
+
+	/**
+	 * Liefert zum Unterfeld das passende Titel-Element.
+	 * 
 	 * Dabei können mehrere Möglichkeiten auftreten:
 	 * 	- Altdaten mit $p und $s. Diese stammen vom DMA.
 	 * 	- Altdaten mit mehreren $p. Diese stammen aus der SWD.
@@ -312,107 +362,14 @@ public final class ParseMusicTitle {
 	 *  	In Formalsachtiteln der Neudaten hat ein $g nichts zu suchen, 
 	 *  	insbesondere sind Bildungen wie $aAdagio$mVl$g1234 unsinnig.
 	 * 
-	 * @param composer Komponist
-	 * @param subfields	Liste von Unterfeldern, die mit $<Indikator> beginnen.
-	 * @return	Paar aus gültigen Musiktitel und den ungenutzten Unterfeldern. 
-	 * 
-	 */
-	public static Pair<MusicTitle, List<Subfield>> parseGND(
-			final String composer,
-			final List<Subfield> subfields) {
-		RangeCheckUtils.assertCollectionParamNotNullOrEmpty("subfields",
-				subfields);
-		List<Subfield> unused = new LinkedList<Subfield>();
-
-		MusicTitle mTitle = null;
-
-		for (Subfield subfield : subfields) {
-			final Indicator indicator = subfield.getIndicator();
-			final String contentOfSubfield = subfield.getContent();
-
-			TitleElement element = null;
-
-			if (indicator == GNDConstants.DOLLAR_a) {
-				/*
-				 * Das ist (hoffentlich) immer das erste Unterfeld und damit
-				 * der erste behandelte Fall in der Schleife. Sollten
-				 * Altdaten vorliegen, kann höchstens eine Fassung in diesem
-				 * Feld vorkommen. Daher parseFullRAK():
-				 */
-				mTitle =
-					ParseMusicTitle.parseFullRAK(composer, contentOfSubfield);
-				continue;
-			} else if (indicator == GNDConstants.DOLLAR_m) {
-				element = ParseInstrumentation.parse(contentOfSubfield);
-			} else if (indicator == GNDConstants.DOLLAR_f
-				|| indicator == GNDConstants.DOLLAR_n
-				|| indicator == GNDConstants.DOLLAR_r
-				|| indicator == GNDTagDB.DOLLAR_G) {
-				/*
-				 * Auch hier können wir wieder so tun, als wäre ein
-				 * Komma erkannt, da ja nicht (gegenbenenfalls) ein
-				 * $n mit einer Einzelzahl aufgebaut worden wäre.
-				 */
-				final boolean comma = true;
-				//				final AdditionalInformation ai =
-				element =
-					ParseAdditionalInformation.parse(composer,
-							contentOfSubfield, comma);
-				// Ist das $g ein maskiertes $f, $n oder $r?
-				if (element == null)
-					element = new Qualifier(contentOfSubfield);
-			} else if (indicator == GNDConstants.DOLLAR_p) {
-				if (!mTitle.containsParts()) {
-					/*
-					 *  neue Werkteilstrukur anlegen, dabei davon ausgehen,
-					 *  dass auch vollkommen Unstrukturiertes (Altdaten?) in
-					 *  $p steht, also auch Teile von Teilen. Daher wird der
-					 *  Konstruktor PartOfWork(String) aufgerufen:
-					 */
-					element = new PartOfWork(contentOfSubfield);
-				} else {
-					/*
-					 * Dann gibt es zwei Möglichkeiten:
-					 * 	1. Es liegen Altdaten aus SWD-Zeiten vor, die
-					 * 		auch schon damals Teile von Teilen enthalten
-					 * 		konnten.
-					 * 	2. Es liegen neue oder aufgearbeitete Daten vor.
-					 * 
-					 * In beiden Fällen enthalten das 2. und alle folgenden
-					 * $p-Felder einen und nur einen Musiktitel.
-					 */
-					element =
-						ParseMusicTitle.parseSimpleTitle(composer,
-								contentOfSubfield);
-				}
-
-			} else if (indicator == GNDConstants.DOLLAR_s) {
-				element = ParseVersion.parse(composer, contentOfSubfield);
-				// Notbremse für unbekannten Inhalt von $s:
-				if (element == null) {
-					element = new Version(contentOfSubfield);
-				}
-			} else if (indicator == GNDConstants.DOLLAR_o) {
-				element = new Arrangement(contentOfSubfield);
-			} else {
-				unused.add(subfield);
-				continue;
-			}
-			element.addToTitle(mTitle);
-		}
-		return new Pair<MusicTitle, List<Subfield>>(mTitle, unused);
-	}
-
-	/**
-	 * Liefert zum Unterfeld das passende Titel-Element.
-	 * @param subfield	nicht null
 	 * @param composer	auch null möglich
+	 * @param subfield	nicht null
 	 * @return			Unterfeld oder null, wenn zu keinem Titelelement
 	 * 					gehörig (z.B. $v)
 	 */
 	public static
 			TitleElement
-			parseSubfield(Subfield subfield, String composer) {
+			parseSubfield(String composer, Subfield subfield) {
 		{
 			RangeCheckUtils.assertReferenceParamNotNull("subfield", subfield);
 			final Indicator indicator = subfield.getIndicator();
@@ -500,10 +457,8 @@ public final class ParseMusicTitle {
 				return null;
 			}
 		}
-
 		final MusicTitle mt = ParseMusicTitle.parseGND(null, line).first;
 		return mt;
-
 	}
 
 	/**
@@ -514,15 +469,13 @@ public final class ParseMusicTitle {
 	public static void main(final String[] args)
 			throws IOException,
 			IllFormattedLineException {
-		final BufferedReader br =
-			new BufferedReader(new InputStreamReader(System.in));
-		System.out.println("Titel bitte eingeben");
-		System.out.println();
-		String string = br.readLine();
-		Line line = LineParser.parse(string, TAG_DB);
-		Pair<MusicTitle, List<Subfield>> pair = parseGND(null, line);
-		System.out.println((TitleUtils.getStructured(pair.first)));
-		System.out.println(pair.second);
+
+		String string = "aa$bbb$gff";
+
+		MusicTitle title = parseFullRAK(null, string);
+		System.out.println((TitleUtils.getStructured(title)));
+		
+
 	}
 
 }

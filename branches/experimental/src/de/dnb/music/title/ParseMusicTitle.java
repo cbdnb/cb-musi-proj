@@ -127,6 +127,8 @@ public final class ParseMusicTitle {
 	}
 
 	/**
+	 * Flexibelste Methode.
+	 * 
 	 * Erkennt den vollständigen Titel nach RAK, aber auch nach RSWK und GND.
 	 * Parst nach Werkteil (in <>), Fassung und Ordnungsgruppe ("Arr.")
 	 * 
@@ -136,14 +138,10 @@ public final class ParseMusicTitle {
 	 * 
 	 * @param composer		Zur Überprüfung des korrekten WVs
 	 * @param parseString	Zu untersuchend, nicht null
-	 * @return				Gültiger Musiktitel.
+	 * @return				Gültiger Musiktitel oder null.
 	 */
-	public static MusicTitle parseFullRAK(
-			final String composer,
-			String parseString) {
-		if (parseString == null)
-			throw new IllegalArgumentException(
-					"Null-String an parseFullRAK()übergeben");
+	public static MusicTitle parse(final String composer, String parseString) {
+		RangeCheckUtils.assertReferenceParamNotNull("parseString", parseString);
 
 		String ansetzung = parseString.trim();
 		if (ansetzung.length() == 0)
@@ -153,7 +151,12 @@ public final class ParseMusicTitle {
 		try {
 			factory730.load(ansetzung);
 			List<Subfield> subfields = factory730.getSubfieldList();
-			if (subfields.size() != 1  ) {
+			/*
+			 * - wurden mehr als ein Unterfeld erkannt?
+			 * - wurde ein Unterfeld erkann, das aber mit $a anfängt?
+			 */
+			if (subfields.size() != 1
+				|| !subfields.get(0).getContent().equals(ansetzung)) {
 				Pair<MusicTitle, List<Subfield>> pair =
 					parseGND(composer, subfields);
 				return pair.first;
@@ -161,9 +164,6 @@ public final class ParseMusicTitle {
 		} catch (Exception e) {
 			// nix
 		}
-		// kürzester Weg um
-		if (ansetzung.startsWith("$a")||ansetzung.startsWith("ƒa"))
-			ansetzung = ansetzung.substring("$a".length());
 		MusicTitle mt = null;
 		String ordnungsgruppe = null; // / Arr.
 		String partsString = null;
@@ -180,7 +180,7 @@ public final class ParseMusicTitle {
 		 * verrückte Titel wie "<>=6" vorkommen!
 		 */
 		if (StringUtils.containsOrdnungshilfe(ansetzung)
-			&& StringUtils.getOrdnungshilfe().trim().length() > 0) {
+			&& !StringUtils.getOrdnungshilfe().trim().isEmpty()) {
 			/*
 			 *  Also enthält der Parsetring die sogenannte Ordnungshilfe <...>.
 			 *  Diese enthält in der Regel einen Werkteil. Um zu vermeiden, 
@@ -208,11 +208,11 @@ public final class ParseMusicTitle {
 				}
 
 				if (verString != null && verString.trim().length() != 0) {
-					Version fas = ParseVersion.parse(composer, verString);
-					if (fas == null) {
-						fas = new Version(verString);
+					Version ver = ParseVersion.parse(composer, verString);
+					if (ver == null) {
+						ver = new Version(verString);
 					}
-					mt.setVersion(fas);
+					mt.setVersion(ver);
 				}
 			} else { // -> Jahreszahl (seltsam), also muss Fassung möglicher-
 				// weise noch extrahiert werden.
@@ -281,7 +281,11 @@ public final class ParseMusicTitle {
 	 * @param composer	egal
 	 * @param line		nicht null, korrekter Tag
 	 * @return			Paar aus Musiktitel und nicht verwendeten
-	 * 					Unterfeldern.
+	 * 					Unterfeldern. Wenn alle
+	 * 					Unterfelder ungenutzt sind, kann der Musiktitel 
+	 * 					null sein. Ist das erste nutzbare Unterfeld kein $a 
+	 * 					(z.B. [$mVl, $f 1900]"), so wird eine 
+	 * 					{@link IllegalArgumentException} geworfen.			
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static Pair<MusicTitle, List<Subfield>> parseGND(
@@ -306,9 +310,13 @@ public final class ParseMusicTitle {
 	 * zurückgegeben.
 	 * 
 	 * @param composer Komponist
-	 * @param subfields	Liste von Unterfeldern, die mit $<Indikator> beginnen.
-	 * @return	Paar aus gültigen Musiktitel und den ungenutzten Unterfeldern. 
-	 * 
+	 * @param subfields	Liste von Unterfeldern
+	 * @return	Paar aus Musiktitel und den ungenutzten Unterfeldern. Wenn alle
+	 * 			Unterfelder ungenutzt sind, kann der Musiktitel null sein.
+	 * 			Ist das erste nutzbare Unterfeld kein $a 
+	 * 			(z.B. [$mVl, $f 1900]"), so wird eine 
+	 * 			{@link IllegalArgumentException} geworfen.
+	 *  
 	 */
 	public static Pair<MusicTitle, List<Subfield>> parseGND(
 			final String composer,
@@ -376,8 +384,7 @@ public final class ParseMusicTitle {
 			final String contentOfSubfield = subfield.getContent();
 
 			if (indicator == GNDConstants.DOLLAR_a) {
-				return ParseMusicTitle
-						.parseFullRAK(composer, contentOfSubfield);
+				return ParseMusicTitle.parse(composer, contentOfSubfield);
 			} else if (indicator == GNDConstants.DOLLAR_m) {
 				return ParseInstrumentation.parse(contentOfSubfield);
 			} else if (indicator == GNDConstants.DOLLAR_f
@@ -447,7 +454,7 @@ public final class ParseMusicTitle {
 		try {
 			line = LineParser.parse(parseString, TAG_DB);
 		} catch (IllFormattedLineException e) {
-			// noch nicht alles verloren
+			// noch nicht alles verloren: es liegt nur der Inhalt vor.
 		}
 		if (line == null) {
 			try {
@@ -472,9 +479,8 @@ public final class ParseMusicTitle {
 
 		String string = "aa$bbb$gff";
 
-		MusicTitle title = parseFullRAK(null, string);
+		MusicTitle title = parse(null, string);
 		System.out.println((TitleUtils.getStructured(title)));
-		
 
 	}
 

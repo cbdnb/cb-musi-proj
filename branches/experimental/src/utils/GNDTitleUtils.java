@@ -180,7 +180,7 @@ public final class GNDTitleUtils {
 			final boolean forceTotalCount) {
 		RangeCheckUtils.assertStringParamNotNullOrWhitespace("musicTitle",
 				musicTitle);
-		MusicTitle title = ParseMusicTitle.parseFullRAK(null, musicTitle);
+		MusicTitle title = ParseMusicTitle.parse(null, musicTitle);
 		return getLines(title, forceTotalCount);
 	}
 
@@ -220,7 +220,7 @@ public final class GNDTitleUtils {
 			final boolean forceTotalCount) {
 		RangeCheckUtils.assertStringParamNotNullOrWhitespace("musicTitle",
 				musicTitle);
-		MusicTitle title = ParseMusicTitle.parseFullRAK(null, musicTitle);
+		MusicTitle title = ParseMusicTitle.parse(null, musicTitle);
 		return getRecord(title, forceTotalCount);
 	}
 	

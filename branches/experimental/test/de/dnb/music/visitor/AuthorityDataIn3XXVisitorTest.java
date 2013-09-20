@@ -68,7 +68,7 @@ public class AuthorityDataIn3XXVisitorTest {
 	
 	@Test
 	public final void testGenre() {
-		mt = ParseMusicTitle.parseFullRAK(null, "Adagio und Fuge, Vl Va 1 2 3"
+		mt = ParseMusicTitle.parse(null, "Adagio und Fuge, Vl Va 1 2 3"
 				+ "<Fuge KV 5a, Durchführung 1>. Fassung 1234");
 		mt.accept(vis);
 		assertFalse(vis.toString().contains("Adagio"));

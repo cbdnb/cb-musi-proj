@@ -34,7 +34,7 @@ public class Arrangement implements TitleElement {
 
 	public static void main(final String[] args) {
 		MusicTitle mt =
-			ParseMusicTitle.parseFullRAK(null, "aa <Adagio, bb>. cc");
+			ParseMusicTitle.parse(null, "aa <Adagio, bb>. cc");
 		Arrangement arrangement = new Arrangement("Ausw.");
 		arrangement.addToTitle(mt);
 		System.out.println(TitleUtils.getStructured(mt));

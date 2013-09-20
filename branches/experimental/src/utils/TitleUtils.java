@@ -42,7 +42,7 @@ public final class TitleUtils {
 	public static String getRSWK(final String titleStr) {
 		if (titleStr == null)
 			throw new IllegalArgumentException("übergebener Titel ist null");
-		MusicTitle mt = ParseMusicTitle.parseFullRAK(null, titleStr);
+		MusicTitle mt = ParseMusicTitle.parse(null, titleStr);
 		return getRSWK(mt);
 	}
 
@@ -95,7 +95,7 @@ public final class TitleUtils {
 	public static String getRAK(final String titleStr) {
 		if (titleStr == null)
 			throw new IllegalArgumentException("übergebener Titel ist null");
-		MusicTitle mt = ParseMusicTitle.parseFullRAK(null, titleStr);
+		MusicTitle mt = ParseMusicTitle.parse(null, titleStr);
 		return getRAK(mt);
 	}
 
@@ -226,7 +226,7 @@ public final class TitleUtils {
 	public static String getX30ContentAsString(final String titleStr) {
 		if (titleStr == null)
 			throw new IllegalArgumentException("übergebener Titel ist null");
-		MusicTitle mt = ParseMusicTitle.parseFullRAK(null, titleStr);
+		MusicTitle mt = ParseMusicTitle.parse(null, titleStr);
 		return getX30ContentAsString(mt);
 	}
 
@@ -282,7 +282,7 @@ public final class TitleUtils {
 
 		if (titleStr == null)
 			throw new IllegalArgumentException("übergebener Titel ist null");
-		MusicTitle mt = ParseMusicTitle.parseFullRAK(null, titleStr);
+		MusicTitle mt = ParseMusicTitle.parse(null, titleStr);
 		return isIdenticalWithinRules(titleStr, mt, rulesFactory);
 
 	}

@@ -150,7 +150,7 @@ public class Instrument implements TitleElement, Comparable<Instrument> {
 
 	public static void main(final String[] args) {
 		MusicTitle mt =
-			ParseMusicTitle.parseFullRAK(null, "aa <bb>. Fassung Vl");
+			ParseMusicTitle.parse(null, "aa <bb>. Fassung Vl");
 		Instrument instrument =
 			ParseInstrumentation.parseSingleInstrument("Va");
 		instrument.addToTitle(mt);

@@ -362,7 +362,7 @@ public class WorkTitleVisitor extends Visitor {
 	 */
 	public static void main(final String[] args) {
 		MusicTitle mt =
-			ParseMusicTitle.parseFullRAK(null, "Widerschein. Fassung 2");
+			ParseMusicTitle.parse(null, "Widerschein. Fassung 2");
 		System.out.println(mt.getVersion().containsAdditionalInformation());
 
 	}

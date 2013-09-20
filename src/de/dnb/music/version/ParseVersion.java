@@ -20,7 +20,7 @@ public final class ParseVersion {
 
 	public static void main(final String[] args) {
 		MusicTitle title =
-			ParseMusicTitle.parseFullRAK(null, "Widerschein. Fassung 2");
+			ParseMusicTitle.parse(null, "Widerschein. Fassung 2");
 		Version f = title.getVersion();
 		System.out.println(f.fallgruppeParagraphM511);
 		System.out.println(f.untergruppe);

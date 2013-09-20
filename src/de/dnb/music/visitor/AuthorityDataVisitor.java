@@ -196,7 +196,7 @@ public class AuthorityDataVisitor extends Visitor {
 	 */
 	public static void main(final String[] args) {
 		MusicTitle mt =
-			ParseMusicTitle.parseFullRAK(null, "Adagio und Fuge, Vl Va 1 2 3"
+			ParseMusicTitle.parse(null, "Adagio und Fuge, Vl Va 1 2 3"
 				+ "<Fuge KV 5a, Durchführung 1>. Fassung Kl");
 		AuthorityDataVisitor vis = new AuthorityDataVisitor();
 		vis.setForceTotalCount(true);

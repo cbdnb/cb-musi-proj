@@ -151,7 +151,7 @@ public class TitleModel extends Observable {
 	public final void refresh() {
 		MusicTitle mt = null;
 		try {
-			mt = ParseMusicTitle.parseFullRAK(composer, title);
+			mt = ParseMusicTitle.parse(composer, title);
 		} catch (Exception e) {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, e.getMessage(),

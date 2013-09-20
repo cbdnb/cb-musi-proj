@@ -22,7 +22,7 @@ public class RSWKSubfieldFactory extends GNDParticleFactory {
 	 */
 	public static void main(final String[] args) {
 		MusicTitle mt =
-			ParseMusicTitle.parseFullRAK(null,
+			ParseMusicTitle.parse(null,
 					"Stücke, Klavier$g1955-1956");
 		WorkTitleVisitor vis = new WorkTitleVisitor(new RSWKSubfieldFactory());
 		mt.accept(vis);

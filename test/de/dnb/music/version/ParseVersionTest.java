@@ -61,7 +61,7 @@ public class ParseVersionTest {
 				TitleUtils.getGND1XXPlusTag(mt));
 
 		mt =
-			ParseMusicTitle.parseFullRAK(null,
+			ParseMusicTitle.parse(null,
 					"Stücke, Vl Org, op. 150 <Abendlied>. Fassung Vc Org");
 		assertEquals(
 				"130 Stücke$mVl$mOrg$nop. 150$pAbendlied$sFassung Vc Org",
@@ -70,7 +70,7 @@ public class ParseVersionTest {
 				TitleUtils.getGND530(mt, true));
 
 		mt =
-			ParseMusicTitle.parseFullRAK(null,
+			ParseMusicTitle.parse(null,
 					"Klang <5. Stunde>. Fassung Fl");
 		assertEquals("130 Klang$p5. Stunde$sFassung Fl", TitleUtils.getGND1XXPlusTag(mt));
 		assertEquals("530 Klang$p5. Stunde$4werk", TitleUtils.getGND530(mt, true));

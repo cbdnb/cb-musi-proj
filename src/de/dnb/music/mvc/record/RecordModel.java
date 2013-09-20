@@ -219,7 +219,7 @@ public class RecordModel extends Observable {
 	public final void addTitle(final String number, final String titleStr) {
 
 		try {
-			MusicTitle title = ParseMusicTitle.parseFullRAK(null, titleStr);
+			MusicTitle title = ParseMusicTitle.parse(null, titleStr);
 			final boolean forceTotalCount = true;
 			Line line = GNDTitleUtils.getLine(GNDConstants.TAG_130, title);
 			newRecord.add(line);

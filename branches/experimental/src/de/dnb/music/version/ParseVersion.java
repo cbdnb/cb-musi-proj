@@ -61,7 +61,6 @@ public final class ParseVersion {
 			if (besetzungsliste != null)
 				if (besetzungsliste.getRest().trim().length() == 0) {
 					version.setInstrumentationList(besetzungsliste);
-					version.fallgruppeParagraphM511 = 'c';
 					version.untergruppe = 2;
 
 					return version;
@@ -72,7 +71,6 @@ public final class ParseVersion {
 					if (zusatzangabe != null) {
 						version.setInstrumentationList(besetzungsliste);
 						version.setAdditionalInformation(zusatzangabe);
-						version.fallgruppeParagraphM511 = 'c';
 						version.untergruppe = 4;
 						return version;
 					}

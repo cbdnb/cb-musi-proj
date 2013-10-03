@@ -151,17 +151,13 @@ public class Version extends AugmentableElement implements TitleElement {
 	public final String getRakPhrase() {
 		return rakPhrase;
 	}
+	
+	public final void setRakPhrase(String phrase){
+		
+	}
 
 	public final String getRest() {
 		return rest;
-	}
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		Version ver = ParseVersion.parse(null, "Präludium und Fuge");
-		System.out.println(TitleUtils.getRAK(ver));
 	}
 
 	@Override
@@ -177,6 +173,15 @@ public class Version extends AugmentableElement implements TitleElement {
 	public final void addToTitle(MusicTitle title) {
 		RangeCheckUtils.assertReferenceParamNotNull("title", title);
 		title.setVersion(this);
+	}
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		Version ver = new Version();
+		ver.rakPhrase = "ww";
+		System.out.println(TitleUtils.getRAK(ver));
 	}
 
 }

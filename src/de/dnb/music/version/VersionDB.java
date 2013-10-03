@@ -1,5 +1,10 @@
 package de.dnb.music.version;
 
+import java.util.Arrays;
+import java.util.Set;
+import java.util.TreeSet;
+
+import de.dnb.music.genre.Genre;
 import utils.StringUtils;
 
 public class VersionDB {
@@ -36,19 +41,23 @@ public class VersionDB {
 			Version version = new Version();
 			version.rakPhrase = prefix;
 			version.rest = parseString.substring(prefix.length());
+			version.fallgruppeParagraphM511 = 'c';
 			return version;
 		}
-
 		return null;
+	}
+	
+	public static Set<String> getAllVersionPhrases(){
+		return new TreeSet<String>(Arrays.asList(phrasenStrings));
 	}
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Version f = matchVersion("Rev. Fassung");
-		System.out.println(f);
-
+		
+		System.out.println(getAllVersionPhrases());
+		System.out.println(matchVersion("Frühfassung").rakPhrase);
 	}
 
 }

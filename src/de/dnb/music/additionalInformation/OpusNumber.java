@@ -1,5 +1,9 @@
 package de.dnb.music.additionalInformation;
 
+import java.util.Arrays;
+import java.util.Set;
+import java.util.TreeSet;
+
 import de.dnb.music.visitor.Visitor;
 
 public class OpusNumber extends AdditionalInformation {
@@ -15,6 +19,10 @@ public class OpusNumber extends AdditionalInformation {
 	String zaehlung = null;
 
 	public static final String[] OPERA = { "op.", "Op.", "WoO" };
+	
+	public static Set<String> getOperaPhrases(){
+		return new TreeSet<String>(Arrays.asList(OPERA));
+	}
 
 	@Override
 	public void accept(Visitor visitor) {

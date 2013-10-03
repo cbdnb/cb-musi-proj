@@ -868,7 +868,18 @@ public final class ThematicIndexDB {
 	private static HashMap<String, LinkedList<String>> komp2ThIdxsMap =
 		new HashMap<String, LinkedList<String>>();
 
+	/**
+	 * Alle Werkverzeichnisnummern.
+	 */
 	private static TreeSet<String> knownThIdx = new TreeSet<String>();
+	
+	/**
+	 * Liefert alle Werkverzeichnisnummern.
+	 * @return Alle Werkverzeichnisnummern.
+	 */
+	public static Set<String> getThematicIndices(){
+		return new TreeSet<String>(knownThIdx);
+	}
 
 	static {
 		Pattern patSlash = Pattern.compile("/");
@@ -946,29 +957,6 @@ public final class ThematicIndexDB {
 		return null;
 	}
 
-	public static ThematicIndexNumber matchWVOld(
-			final String komponist,
-			final String zusatzString) {
-		if (zusatzString == null || zusatzString.length() == 0)
-			return null;
-
-		String s1 = zusatzString.trim();
-		LinkedList<String> wvsKom = getThematicIndices(komponist);
-
-		for (String wv : knownThIdx) {
-			if (s1.startsWith(wv + ' ')) {
-				if (wvsKom != null && !wvsKom.contains(wv))
-					throw new IllegalArgumentException("Komponist falsch");
-				int pos = wv.length();
-				ThematicIndexNumber wvnr = new ThematicIndexNumber();
-				wvnr.abbreviation = wv;
-				wvnr.number = s1.substring(pos).trim();
-				return wvnr;
-			}
-		}
-		return null;
-	}
-
 	public static boolean isValidThIdx(final String komponist, final String wv) {
 		//	Hier muss man wohl von einem nicht
 		// benannten Komponisten ausgehen
@@ -1002,18 +990,7 @@ public final class ThematicIndexDB {
 	 * @param args
 	 */
 	public static void main(final String[] args) {
-		Set<Composer> cs = getAllComposers();
-		for (Composer composer : cs) {
-			System.out.println(composer);
-		}
-		cs = null;
-		System.gc();
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		System.out.println(getThematicIndices());
 
 	}
 

@@ -1,5 +1,9 @@
 package de.dnb.music.additionalInformation;
 
+import java.util.Arrays;
+import java.util.Set;
+import java.util.TreeSet;
+
 import de.dnb.music.visitor.Visitor;
 
 public class SerialNumber extends AdditionalInformation {
@@ -20,6 +24,10 @@ public class SerialNumber extends AdditionalInformation {
 		"Werk", "Vol.", "production", "Bd.", "conatum", "pars", "ps.", "t.",
 		"fasc.", "Abt.", "Folge", "pt.", "parte", "H.", "Heft", "set",
 		"Sammlung" ,"book", "livraison" };
+	
+	public static Set<String> getSerialNumberPhrases(){
+		return new TreeSet<String>(Arrays.asList(PHRASES));
+	}
 
 	@Override
 	public void accept(Visitor visitor) {

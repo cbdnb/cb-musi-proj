@@ -18,6 +18,11 @@ public class IndividualTitle extends MusicTitle {
 		super();
 	}
 
+	public IndividualTitle(String individualTitle) {
+		super();
+		this.individualTitle = individualTitle;
+	}
+
 	@Override
 	public void accept(Visitor visitor) {
 		boolean visitChildren = visitor.visit(this);

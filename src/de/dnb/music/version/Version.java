@@ -3,6 +3,10 @@ package de.dnb.music.version;
 import utils.TitleUtils;
 import applikationsbausteine.RangeCheckUtils;
 import de.dnb.music.additionalInformation.AdditionalInformation;
+import de.dnb.music.additionalInformation.DateOfComposition;
+import de.dnb.music.additionalInformation.Key;
+import de.dnb.music.additionalInformation.OpusNumber;
+import de.dnb.music.additionalInformation.ThematicIndexNumber;
 import de.dnb.music.genre.GenreList;
 import de.dnb.music.mediumOfPerformance.InstrumentationList;
 import de.dnb.music.title.AugmentableElement;
@@ -118,7 +122,7 @@ public class Version extends AugmentableElement implements TitleElement {
 	 * Konstruktor für den stufenweisen Aufbau in 
 	 * {@link ParseVersion#parse(String, String)}.
 	 */
-	Version() {
+	public Version() {
 	}
 
 	/**
@@ -136,11 +140,63 @@ public class Version extends AugmentableElement implements TitleElement {
 	}
 
 	public final char getFallgruppeParagraphM511() {
-		return fallgruppeParagraphM511;
+//		if (fallgruppeParagraphM511 != 0)
+//			return fallgruppeParagraphM511;
+		if (rakPhrase != null)
+			return 'c';
+		if (containsGenre())
+			return 'b';
+		AdditionalInformation ai = getAdditionalInformation();
+		if (ai != null) {
+			if (ai instanceof OpusNumber || ai instanceof ThematicIndexNumber)
+				return 'a';
+			if (ai instanceof DateOfComposition)
+				return 'e';
+		} else if (containsInstrumentation())
+			return 'e';
+		return '$';
+
 	}
 
 	public final int getUntergruppe() {
-		return untergruppe;
+//		if (untergruppe != 0)
+//			return untergruppe;
+		AdditionalInformation ai = getAdditionalInformation();
+		if (getFallgruppeParagraphM511() == '$')
+			return 1;
+		if (getFallgruppeParagraphM511() == 'c') {
+			if (containsAdditionalInformation() && containsInstrumentation())
+				return 4;
+			if (containsAdditionalInformation()) {
+				if (getAdditionalInformation() instanceof DateOfComposition)
+					return 1;
+			}
+			if (containsInstrumentation())
+				return 2;
+			return 3;
+		}
+		if (getFallgruppeParagraphM511() == 'b') {
+			if (containsInstrumentation())
+				return 2;
+			if (ai == null)
+				return 1;
+			if (ai instanceof Key)
+				return 3;
+			if (ai instanceof DateOfComposition)
+				return 4;
+			return 5;
+		}
+		if (getFallgruppeParagraphM511() == 'a') {
+			if (ai instanceof ThematicIndexNumber)
+				return 1;
+			else
+				return 2;
+		}
+		// also e:
+		if (containsInstrumentation())
+			return 2;
+		else
+			return 1;
 	}
 
 	/**
@@ -151,9 +207,9 @@ public class Version extends AugmentableElement implements TitleElement {
 	public final String getRakPhrase() {
 		return rakPhrase;
 	}
-	
-	public final void setRakPhrase(String phrase){
-		
+
+	public final void setRakPhrase(String phrase) {
+
 	}
 
 	public final String getRest() {
@@ -179,9 +235,8 @@ public class Version extends AugmentableElement implements TitleElement {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Version ver = new Version();
-		ver.rakPhrase = "ww";
-		System.out.println(TitleUtils.getRAK(ver));
+		Version version = ParseVersion.parse(null, "a-Moll");
+		System.out.println(version.getFallgruppeParagraphM511());
 	}
 
 }

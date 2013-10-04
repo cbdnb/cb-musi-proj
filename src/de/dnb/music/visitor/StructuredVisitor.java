@@ -18,6 +18,7 @@ import de.dnb.music.title.IndividualTitle;
 import de.dnb.music.title.ListOfElements;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
+import de.dnb.music.title.PartOfWork;
 import de.dnb.music.version.Version;
 
 public class StructuredVisitor extends Visitor {
@@ -192,13 +193,13 @@ public class StructuredVisitor extends Visitor {
 				+ arrangement.toString();
 	}
 
-	public boolean visit(ListOfElements partOfWork) {
+	public boolean visit(PartOfWork partOfWork) {
 		structured += '\n' + indentation + "Werkteile:";
 		increaseIndentation();
 		return true;
 	}
 
-	public void leave(ListOfElements partOfWork) {
+	public void leave(PartOfWork partOfWork) {
 		decreaseIndentation();
 	}
 

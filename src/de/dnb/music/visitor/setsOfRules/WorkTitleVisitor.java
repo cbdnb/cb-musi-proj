@@ -1,5 +1,6 @@
 package de.dnb.music.visitor.setsOfRules;
 
+import utils.TitleUtils;
 import de.dnb.music.additionalInformation.DateOfComposition;
 import de.dnb.music.additionalInformation.Key;
 import de.dnb.music.additionalInformation.OpusNumber;
@@ -16,7 +17,9 @@ import de.dnb.music.title.IndividualTitle;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
 import de.dnb.music.title.PartOfWork;
+import de.dnb.music.version.ParseVersion;
 import de.dnb.music.version.Version;
+import de.dnb.music.version.VersionDB;
 import de.dnb.music.visitor.Visitor;
 
 public class WorkTitleVisitor extends Visitor {
@@ -332,6 +335,7 @@ public class WorkTitleVisitor extends Visitor {
 
 	@Override
 	public boolean visit(Version version) {
+		
 		state = States.VERSION;
 		isIndividualTitle = false;
 		firstComponents += lastComponent;
@@ -361,9 +365,9 @@ public class WorkTitleVisitor extends Visitor {
 	 * @param args
 	 */
 	public static void main(final String[] args) {
-		MusicTitle mt =
-			ParseMusicTitle.parse(null, "Widerschein. Fassung 2");
-		System.out.println(mt.getVersion().containsAdditionalInformation());
+		Version ver = ParseVersion.parse(null, "Entwurf");
+
+		System.out.println(TitleUtils.getRAK(ver));
 
 	}
 

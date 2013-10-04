@@ -19,12 +19,8 @@ public final class ParseVersion {
 	}
 
 	public static void main(final String[] args) {
-		MusicTitle title =
-			ParseMusicTitle.parse(null, "Widerschein. Fassung 2");
-		Version f = title.getVersion();
-		System.out.println(f.fallgruppeParagraphM511);
-		System.out.println(f.untergruppe);
-		System.out.println(f.getMatch());
+		Version version = ParseVersion.parse(null, "a-Moll");
+		System.out.println(version.getFallgruppeParagraphM511());
 
 	}
 
@@ -45,6 +41,7 @@ public final class ParseVersion {
 
 		Version version = null;
 		// Versuch nach §511  c)
+		
 		version = VersionDB.matchVersion(parseString);
 		if (version != null) {
 
@@ -92,10 +89,11 @@ public final class ParseVersion {
 		}
 
 		// Versuch nach §511  b)
+		
 		version = new Version(parseString.trim());
+		
 		GenreList gL = ParseGenre.parseGenreList(parseString);
-		if (gL != null) {
-
+		if (gL != null) {			
 			version.setGenreList(gL);
 			String rest = gL.getRest();
 
@@ -105,6 +103,7 @@ public final class ParseVersion {
 				version.untergruppe = 1;
 				return version;
 			}
+			
 			InstrumentationList bes = ParseInstrumentation.parse(rest);
 			if (bes != null
 				&& bes.getChildren().size() != 0
@@ -115,9 +114,11 @@ public final class ParseVersion {
 				version.setInstrumentationList(bes);
 				return version;
 			}
+			
 			AdditionalInformation zus =
 				ParseAdditionalInformation.parse("", rest, false);
 			if (zus != null) {
+				
 				if (zus instanceof Key) {
 					// Fall b3 zurückgeben
 					version.fallgruppeParagraphM511 = 'b';

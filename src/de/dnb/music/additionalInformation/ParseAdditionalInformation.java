@@ -143,7 +143,7 @@ public final class ParseAdditionalInformation {
 		return ThematicIndexDB.matchThIdx(komponist, s);
 	}
 
-	private static Key matchKey(final String s) {
+	public static Key matchKey(final String s) {
 		if (s == null)
 			throw new IllegalArgumentException();
 		if (s.length() == 0)
@@ -169,7 +169,7 @@ public final class ParseAdditionalInformation {
 	 * 								Zeichen erkannt wurde. 
 	 * @return	Gültiges DateOfComposition-Objekt oder null
 	 */
-	private static SerialNumber matchSerialNumber(
+	public static SerialNumber matchSerialNumber(
 			final String s,
 			final boolean leadingSpaceAndComma) {
 		if (s == null)

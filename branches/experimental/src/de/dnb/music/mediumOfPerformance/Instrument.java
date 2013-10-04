@@ -8,7 +8,7 @@ import de.dnb.music.title.ParseMusicTitle;
 import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.Visitor;
 
-public class Instrument implements TitleElement, Comparable<Instrument> {
+public class Instrument implements TitleElement, Comparable<Instrument>, Cloneable {
 
 	/**
 	 * ABBREVIATED, WRITTEN_OUT.
@@ -146,6 +146,11 @@ public class Instrument implements TitleElement, Comparable<Instrument> {
 						+ this.getClass().getSimpleName());
 		AugmentableElement element = title.getActualAugmentable();
 		element.addInstrument(this);
+	}
+	
+	@Override
+	public Instrument clone() throws CloneNotSupportedException {
+		return (Instrument) super.clone();
 	}
 
 	public static void main(final String[] args) {

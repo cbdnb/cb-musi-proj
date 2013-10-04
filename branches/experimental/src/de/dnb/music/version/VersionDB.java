@@ -46,8 +46,8 @@ public class VersionDB {
 		}
 		return null;
 	}
-	
-	public static Set<String> getAllVersionPhrases(){
+
+	public static Set<String> getAllVersionPhrases() {
 		return new TreeSet<String>(Arrays.asList(phrasenStrings));
 	}
 
@@ -55,8 +55,7 @@ public class VersionDB {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		
-		System.out.println(getAllVersionPhrases());
+
 		System.out.println(matchVersion("Frühfassung").rakPhrase);
 	}
 

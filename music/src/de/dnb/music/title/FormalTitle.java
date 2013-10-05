@@ -2,14 +2,13 @@ package de.dnb.music.title;
 
 import de.dnb.music.visitor.Visitor;
 
-public class FormalTitle extends MusicTitle {
-
+public class FormalTitle extends MusicTitle implements Cloneable {
 
 	public FormalTitle(FormalTitle ft) {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	public FormalTitle() {
 	}
 
@@ -25,6 +24,5 @@ public class FormalTitle extends MusicTitle {
 	public MusicTitle clone() {
 		return new FormalTitle(this);
 	}
-	
 
 }

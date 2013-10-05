@@ -152,6 +152,17 @@
 				           value="de.dnb.music.mvc.record.RecordController" />
 			</manifest>
 		</jar>
+		<jar destfile="${release.dir.local}/MusiktitelSynthese.jar">
+					<fileset dir="${build.dir}"
+					         excludes="**/*Test.class, **/Test*.class" />
+					<!-- Alle jar.-Dateien in /lib entpacken und gleich
+																wieder verpacken: -->
+					<zipgroupfileset dir="${lib.dir}" includes="*.jar" />
+					<manifest>
+						<attribute name="Main-Class"
+						           value="de.dnb.music.mvc.synth.Controller" />
+					</manifest>
+				</jar>
 	</target>
 
 	<target name="-allTests" depends="build">

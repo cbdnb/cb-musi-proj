@@ -14,16 +14,16 @@ public class Composer implements Comparable<Composer>{
 		this.countrCode = countrCode;
 	}
 
-	final public String name;
+	public final String name;
 
-	final public String thematicIndexAbb;
+	public final String thematicIndexAbb;
 
-	final public String sourceAbb;
+	public final String sourceAbb;
 
-	final public String idn;
+	public final String idn;
 
 	@Override
-	public String toString() {
+	public final String toString() {
 		return name;
 	}
 
@@ -36,7 +36,7 @@ public class Composer implements Comparable<Composer>{
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public final boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
 		}
@@ -57,15 +57,15 @@ public class Composer implements Comparable<Composer>{
 		return true;
 	}
 
-	final public String countrCode;
+	public final String countrCode;
 
 	@Override
-	public int compareTo(final Composer o) {
+	public final int compareTo(final Composer o) {
 		return this.name.compareTo(o.name);
 	}
 	
 	@Override
-	protected void finalize() throws Throwable {
+	protected final void finalize() throws Throwable {
 		System.err.println("Decomposing: Composer " + name);
 	}
 

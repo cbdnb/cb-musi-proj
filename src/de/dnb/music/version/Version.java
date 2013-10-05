@@ -18,13 +18,9 @@ public class Version extends AugmentableElement implements TitleElement {
 
 	/**
 	 * Was nach der rak-Phrase kommt. Wird in DBFassung gesetzt und dann
-	 * von
+	 * von {@link ParseVersion} weiter ausgewertet.
 	 */
 	String rest = "";
-
-	char fallgruppeParagraphM511 = 0;
-
-	int untergruppe = 0;
 
 	// Mögliche Fälle:
 
@@ -135,13 +131,9 @@ public class Version extends AugmentableElement implements TitleElement {
 		RangeCheckUtils.assertStringParamNotNullOrEmpty("versionStr",
 				versionStr);
 		this.match = versionStr;
-		fallgruppeParagraphM511 = '$';
-		untergruppe = 1;
 	}
 
 	public final char getFallgruppeParagraphM511() {
-//		if (fallgruppeParagraphM511 != 0)
-//			return fallgruppeParagraphM511;
 		if (rakPhrase != null)
 			return 'c';
 		if (containsGenre())
@@ -159,12 +151,11 @@ public class Version extends AugmentableElement implements TitleElement {
 	}
 
 	public final int getUntergruppe() {
-//		if (untergruppe != 0)
-//			return untergruppe;
 		AdditionalInformation ai = getAdditionalInformation();
-		if (getFallgruppeParagraphM511() == '$')
+		char fallgruppe = getFallgruppeParagraphM511();
+		if (fallgruppe == '$')
 			return 1;
-		if (getFallgruppeParagraphM511() == 'c') {
+		if (fallgruppe == 'c') {
 			if (containsAdditionalInformation() && containsInstrumentation())
 				return 4;
 			if (containsAdditionalInformation()) {
@@ -175,7 +166,7 @@ public class Version extends AugmentableElement implements TitleElement {
 				return 2;
 			return 3;
 		}
-		if (getFallgruppeParagraphM511() == 'b') {
+		if (fallgruppe == 'b') {
 			if (containsInstrumentation())
 				return 2;
 			if (ai == null)
@@ -186,7 +177,7 @@ public class Version extends AugmentableElement implements TitleElement {
 				return 4;
 			return 5;
 		}
-		if (getFallgruppeParagraphM511() == 'a') {
+		if (fallgruppe == 'a') {
 			if (ai instanceof ThematicIndexNumber)
 				return 1;
 			else

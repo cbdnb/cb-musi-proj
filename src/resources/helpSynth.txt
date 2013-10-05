@@ -1,0 +1,10 @@
+Diese Tool hilft bei der Synthese von Titeln.
+ - mit "Neu..." wird alles auf null zurueckgesetzt
+ - Dann muss ein Formal- oder Individualsachtitel eingefuegt werden
+ - In diesen koennen nun weitere unterscheidende Angaben (Gattung, Instrument, Opus ...) eingefuegt werden
+ - Liegen Werkteile (mit natuerlich eigenem Titel) vor, so koennen diese ueber "Neues Werk / Neuen Werkteil hinzufuegen" hinzugefuegt werden
+ - Auch der letzte eingefuegte Werkteil kann mit unterscheidenden Angaben angereichert werden
+ - Zuletzt kann noch eine Fassung dieses Werkes/Teiles erzeugt werden
+ - Eine leere Fassung muss, eine Fassung mit Fassungsphrase kann mit unterscheidenden Angaben angereichert werden
+ 
+ 

@@ -41,7 +41,6 @@ public class VersionDB {
 			Version version = new Version();
 			version.rakPhrase = prefix;
 			version.rest = parseString.substring(prefix.length());
-			version.fallgruppeParagraphM511 = 'c';
 			return version;
 		}
 		return null;

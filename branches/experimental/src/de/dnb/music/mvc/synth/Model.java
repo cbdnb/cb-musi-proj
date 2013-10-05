@@ -1,6 +1,8 @@
 package de.dnb.music.mvc.synth;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
@@ -93,55 +95,7 @@ public class Model extends Observable {
 		String structured = TitleUtils.getStructured(theTitle);
 		return structured;
 	}
-
-	/**
-	 * @return the creationDate
-	 */
-	public final Date getCreationDate() {
-		if (creationDate == null) {
-
-			/*
-			 * Die Manifest-Datei der eigenen jar-Datei ist immer aktuell. Daher
-			 * Zugriff auf deren URL:
-			 */
-			URL url = this.getClass().getResource("/META-INF/MANIFEST.MF");
-			String fileStr = url.getFile();
-			/*
-			 * Die URL ist etwas komplizierter aufgebaut. Sie hat - ein Präfix
-			 * "file:/" - ein Postfix, das mit "!" beginnt, welches die Dateien
-			 * in der .jar kennzeichnet.
-			 */
-			int pos1 = "file:/".length();
-			int pos2 = fileStr.indexOf("!");
-			fileStr = fileStr.substring(pos1, pos2);
-			/*
-			 * fileStr enthält nun nur noch den Pfad der eigenen jar-Datei
-			 */
-			JarFile jarFile = null;
-			try {
-				jarFile = new JarFile(fileStr);
-				ZipEntry zEnt = jarFile.getEntry("META-INF/MANIFEST.MF");
-				creationDate = new Date(zEnt.getTime());
-			} catch (Exception e) {
-				StringWriter sw = new StringWriter();
-				PrintWriter pw = new PrintWriter(sw);
-				e.printStackTrace(pw);
-
-				JOptionPane.showMessageDialog(null, e.getMessage(),
-						"Fehler beim Datum", JOptionPane.OK_CANCEL_OPTION);
-			} finally {
-				if (jarFile != null)
-					try {
-						jarFile.close();
-					} catch (IOException e) {
-						// nix
-					}
-			}
-
-		}
-		return creationDate;
-	}
-
+	
 	public final void refresh() {
 		setChanged();
 		notifyObservers(null);

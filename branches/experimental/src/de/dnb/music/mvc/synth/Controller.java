@@ -2,6 +2,10 @@ package de.dnb.music.mvc.synth;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -11,6 +15,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
 
+import de.dnb.gnd.utils.Misc;
+import de.dnb.gnd.utils.MyStringUtils;
 import de.dnb.music.additionalInformation.DateOfComposition;
 import de.dnb.music.additionalInformation.Key;
 import de.dnb.music.additionalInformation.OpusNumber;
@@ -21,6 +27,7 @@ import de.dnb.music.additionalInformation.ThematicIndexNumber;
 import de.dnb.music.genre.GenreDB;
 import de.dnb.music.mediumOfPerformance.Instrument;
 import de.dnb.music.mediumOfPerformance.InstrumentDB;
+import de.dnb.music.mvc.record.RecordController;
 import de.dnb.music.title.FormalTitle;
 import de.dnb.music.title.IndividualTitle;
 import de.dnb.music.version.ParseVersion;
@@ -28,8 +35,6 @@ import de.dnb.music.version.Version;
 import de.dnb.music.version.VersionDB;
 
 public class Controller {
-
-	private GUI gui;
 
 	private Model model;
 
@@ -57,8 +62,8 @@ public class Controller {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			try {
-				IndividualTitle title = new IndividualTitle(
-						view.getNewIndivTitle());
+				IndividualTitle title =
+					new IndividualTitle(view.getNewIndivTitle());
 				model.addElement(title);
 				model.refresh();
 			} catch (IllegalArgumentException ex) {
@@ -96,8 +101,8 @@ public class Controller {
 		public void actionPerformed(ActionEvent e) {
 			try {
 				String opus = view.getOpus();
-				OpusNumber opusNumber = ParseAdditionalInformation
-						.matchOpus(opus);
+				OpusNumber opusNumber =
+					ParseAdditionalInformation.matchOpus(opus);
 				model.addElement(opusNumber);
 				model.refresh();
 			} catch (IllegalArgumentException ex) {
@@ -113,8 +118,8 @@ public class Controller {
 		public void actionPerformed(ActionEvent e) {
 			try {
 				String idx = view.getIdx();
-				ThematicIndexNumber idxNumber = ParseAdditionalInformation
-						.matchThematicIndex(null, idx);
+				ThematicIndexNumber idxNumber =
+					ParseAdditionalInformation.matchThematicIndex(null, idx);
 				model.addElement(idxNumber);
 				model.refresh();
 			} catch (IllegalArgumentException ex) {
@@ -130,8 +135,8 @@ public class Controller {
 		public void actionPerformed(ActionEvent e) {
 			try {
 				String ser = view.getSerial();
-				SerialNumber serNumber = ParseAdditionalInformation
-						.matchSerialNumber(ser, true);
+				SerialNumber serNumber =
+					ParseAdditionalInformation.matchSerialNumber(ser, true);
 				model.addElement(serNumber);
 				model.refresh();
 			} catch (IllegalArgumentException ex) {
@@ -147,8 +152,8 @@ public class Controller {
 		public void actionPerformed(ActionEvent e) {
 			try {
 				String y = view.getYear();
-				DateOfComposition year = ParseAdditionalInformation
-						.matchDate(y);
+				DateOfComposition year =
+					ParseAdditionalInformation.matchDate(y);
 				model.addElement(year);
 				model.refresh();
 			} catch (IllegalArgumentException ex) {
@@ -184,11 +189,24 @@ public class Controller {
 		public void actionPerformed(ActionEvent e) {
 			String v = view.getVersionPhrase();
 			Version version;
-			if (v.isEmpty())
+			if (v.isEmpty()) {
 				version = new Version();
-			else
+				String message =
+					"Sie sollten jetzt noch"
+						+ "\n a) eine WV-Nummer oder eine Opusnummer"
+						+ "\n b) einen Gattungsbegriff und evtl. Besetzung, Tonart, Jahr oder Zählung"
+						+ "\neingeben";
+				JOptionPane.showMessageDialog(null, message, "Leere Fassung",
+						JOptionPane.INFORMATION_MESSAGE);
+			} else {
+				String message =
+					"Sie können zusätzlich noch"
+						+ "\n a) eine Jahreszahl und/oder"
+						+ "\n b) eine Besetzung" + "\neingeben";
+				JOptionPane.showMessageDialog(null, message, "Optionen",
+						JOptionPane.INFORMATION_MESSAGE);
 				version = ParseVersion.parse(null, v);
-			System.err.println(version.getRakPhrase());
+			}
 			model.addElement(version);
 			model.refresh();
 		}
@@ -222,30 +240,7 @@ public class Controller {
 
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			SimpleDateFormat formatter = new SimpleDateFormat(
-					"d. M. yyyy 'um' H:mm 'Uhr'");
-			Date date = model.getCreationDate();
-			String dateStr = formatter.format(date);
-			String info = "Version 2.00"
-					+ "\nErstellt in und für die Deutsche Nationalbibliothek"
-					+ "\nAutor: Christian Baumann\n" + "Erstellungsdatum: "
-					+ dateStr;
-
-			info += "\n\nKurzanleitung:\n - ";
-			JTextArea ar = new JTextArea(info);
-			ar.setEditable(false);
-			ar.setLineWrap(true);
-			ar.setWrapStyleWord(true);
-			ar.setBackground(UIManager.getColor("Label.background"));
-			JScrollPane scrollpane = new JScrollPane(ar);
-			JOptionPane jOpPane = new JOptionPane(scrollpane,
-					JOptionPane.PLAIN_MESSAGE);
-			JDialog jDialog = jOpPane.createDialog(view.getGui(),
-					"   Info zum \"Musiktitel-Analysator\"");
-			jDialog.setSize(500, 700);
-			jDialog.setLocationRelativeTo(null);
-			jDialog.setResizable(true);
-			jDialog.setVisible(true);
+			Misc.showInfo(this, "1.00", "/resources/helpSynth.txt");
 		}
 	}
 

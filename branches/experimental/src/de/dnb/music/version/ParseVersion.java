@@ -44,7 +44,6 @@ public final class ParseVersion {
 		
 		version = VersionDB.matchVersion(parseString);
 		if (version != null) {
-
 			/* 
 			 * jetzt kann eine Jahreszahl, eine Besetzung oder etwas
 			 * total abstruses (Fall 3) folgen. auf jeden Fall wird davon
@@ -58,8 +57,6 @@ public final class ParseVersion {
 			if (besetzungsliste != null)
 				if (besetzungsliste.getRest().trim().length() == 0) {
 					version.setInstrumentationList(besetzungsliste);
-					version.untergruppe = 2;
-
 					return version;
 				} else { // Rest vorhanden
 					AdditionalInformation zusatzangabe =
@@ -68,7 +65,6 @@ public final class ParseVersion {
 					if (zusatzangabe != null) {
 						version.setInstrumentationList(besetzungsliste);
 						version.setAdditionalInformation(zusatzangabe);
-						version.untergruppe = 4;
 						return version;
 					}
 				}
@@ -76,31 +72,21 @@ public final class ParseVersion {
 				ParseAdditionalInformation.matchDate(rest);
 			if (zusatzangabe != null) {
 				version.setAdditionalInformation(zusatzangabe);
-				version.fallgruppeParagraphM511 = 'c';
-				version.untergruppe = 1;
 				return version;
 			}
 			// Also easy and dirty: Fall 3:
-			version.fallgruppeParagraphM511 = 'c';
-			version.untergruppe = 3;
-
 			return version;
-
 		}
 
-		// Versuch nach §511  b)
-		
+		// Versuch nach §511  b)		
 		version = new Version(parseString.trim());
 		
 		GenreList gL = ParseGenre.parseGenreList(parseString);
 		if (gL != null) {			
 			version.setGenreList(gL);
 			String rest = gL.getRest();
-
 			if (rest == null || rest.trim().length() == 0) {
 				// Fall b 1 zurückgeben
-				version.fallgruppeParagraphM511 = 'b';
-				version.untergruppe = 1;
 				return version;
 			}
 			
@@ -109,34 +95,25 @@ public final class ParseVersion {
 				&& bes.getChildren().size() != 0
 				&& (bes.getRest() == null || bes.getRest().trim().length() == 0)) {
 				// Fall b 2 zurückgeben
-				version.fallgruppeParagraphM511 = 'b';
-				version.untergruppe = 2;
 				version.setInstrumentationList(bes);
 				return version;
 			}
 			
 			AdditionalInformation zus =
 				ParseAdditionalInformation.parse("", rest, false);
-			if (zus != null) {
-				
+			if (zus != null) {				
 				if (zus instanceof Key) {
 					// Fall b3 zurückgeben
-					version.fallgruppeParagraphM511 = 'b';
-					version.untergruppe = 3;
 					version.setAdditionalInformation(zus);
 					return version;
 				}
 				if (zus instanceof DateOfComposition) {
 					// Fall b 4 zurückgeben
-					version.fallgruppeParagraphM511 = 'b';
-					version.untergruppe = 4;
 					version.setAdditionalInformation(zus);
 					return version;
 				}
 				if (zus instanceof SerialNumber) {
 					// Fall b 5 zurückgeben
-					version.fallgruppeParagraphM511 = 'b';
-					version.untergruppe = 5;
 					version.setAdditionalInformation(zus);
 					return version;
 				}
@@ -144,7 +121,6 @@ public final class ParseVersion {
 		}
 
 		// Versuch nach §511  a)
-
 		/*
 		 *  Opus wie in 
 		 *  de.dnb.music.additionalInformation.ParseAdditionalInformation.
@@ -155,8 +131,6 @@ public final class ParseVersion {
 		AdditionalInformation addInf =
 			ParseAdditionalInformation.matchOpus(parseString.trim());
 		if (addInf != null) {
-			version.fallgruppeParagraphM511 = 'a';
-			version.untergruppe = 2;
 			version.setAdditionalInformation(addInf);
 			version.match = parseString.trim();
 			return version;
@@ -165,27 +139,20 @@ public final class ParseVersion {
 			ParseAdditionalInformation.matchThematicIndex(composer,
 					parseString.trim());
 		if (addInf != null) {
-			version.fallgruppeParagraphM511 = 'a';
-			version.untergruppe = 1;
 			version.setAdditionalInformation(addInf);
 			version.match = parseString.trim();
 			return version;
 		}
 
 		// Versuch nach e)
-
 		InstrumentationList instrList = ParseInstrumentation.parse(parseString);
 		if (instrList != null && instrList.getRest().trim().length() == 0) {
 			version.setInstrumentationList(instrList);
-			version.fallgruppeParagraphM511 = 'e';
-			version.untergruppe = 2;
 			return version;
 		}
 		addInf = ParseAdditionalInformation.matchDate(parseString);
 		if (addInf != null) {
 			version.setAdditionalInformation(addInf);
-			version.fallgruppeParagraphM511 = 'e';
-			version.untergruppe = 1;
 			return version;
 		}
 

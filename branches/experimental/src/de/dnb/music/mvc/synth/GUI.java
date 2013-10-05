@@ -83,22 +83,6 @@ public class GUI extends JFrame {
 	JLabel lblTon;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					GUI frame = new GUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the frame.
 	 */
 	public GUI() {
@@ -140,8 +124,8 @@ public class GUI extends JFrame {
 		comboBoxGenreFormal.setBounds(10, 11, 332, 22);
 		panelFormal.add(comboBoxGenreFormal);
 
-		btnAddFormal = new JButton("hinzufügen");
-		btnAddFormal.setBounds(368, 10, 167, 26);
+		btnAddFormal = new JButton("Neues Werk / Neuen Werkteil hinzufügen");
+		btnAddFormal.setBounds(368, 10, 305, 26);
 		panelFormal.add(btnAddFormal);
 
 		panelIndiv = new JPanel();
@@ -154,8 +138,8 @@ public class GUI extends JFrame {
 		textFieldIndivTitle.setColumns(10);
 		panelIndiv.add(textFieldIndivTitle);
 
-		btnAddIndiv = new JButton("hinzufügen");
-		btnAddIndiv.setBounds(368, 10, 167, 26);
+		btnAddIndiv = new JButton("Neues Werk / Neuen Werkteil hinzufügen");
+		btnAddIndiv.setBounds(368, 10, 305, 26);
 		panelIndiv.add(btnAddIndiv);
 
 		btnAddGenre = new JButton("Gattung hinzufügen");
@@ -281,8 +265,8 @@ public class GUI extends JFrame {
 		btnAddYear.setBounds(231, 11, 120, 20);
 		panelYear.add(btnAddYear);
 
-		lblFassungsphraseAuswhlen = new JLabel("Fassungsphrase auswählen:");
-		lblFassungsphraseAuswhlen.setBounds(377, 85, 167, 14);
+		lblFassungsphraseAuswhlen = new JLabel("evtl. Fassungsphrase auswählen:");
+		lblFassungsphraseAuswhlen.setBounds(377, 85, 213, 14);
 
 		comboBoxVersion = new JComboBox();
 		comboBoxVersion.setBounds(377, 107, 385, 22);

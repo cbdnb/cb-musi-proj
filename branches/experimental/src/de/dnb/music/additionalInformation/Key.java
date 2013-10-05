@@ -1,5 +1,14 @@
 package de.dnb.music.additionalInformation;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+
+import utils.TitleUtils;
+
+import de.dnb.music.title.MusicTitle;
+import de.dnb.music.title.ParseMusicTitle;
 import de.dnb.music.visitor.Visitor;
 
 public class Key extends AdditionalInformation {
@@ -50,23 +59,40 @@ public class Key extends AdditionalInformation {
 	 * @param args
 	 */
 	public static void main(final String[] args) {
-		tonBuchstabenErkennen = true;
-		Key t = new Key("a");
-		System.out.println(t);
-		System.out.println(t.tonBuchstabe);
-		System.out.println(t.tonGeschlecht);
+		
+		MusicTitle title = ParseMusicTitle.parseGND(null, "aa$rC-Dur$pbb");
+		System.out.println(TitleUtils.getStructured(title));
+		Key key = new Key("D-Dur");
+		System.out.println(TitleUtils.getStructured(key));
+		key.addToTitle(title);
+		System.out.println(TitleUtils.getStructured(title));
+		
+		title = ParseMusicTitle.parseGND(null, "aa$rC-Dur$pbb$rC-Dur");
+		System.out.println(TitleUtils.getStructured(title));
 	}
 
-	private static String[] tonBuchstaben = { "C", "D", "E", "F", "G", "A",
-		"H",
+	private static String[] tonBuchstaben = { "C", "Cis", "Des", "D", "Dis",
+		"E", "Es", "F", "Fis", "Ges", "G", "Gis", "As", "A", "B", "H",
 
-		"Ceses", "Ces", "Deses", "Des", "Eses", "Es", "Fes", "Feses", "Ges",
-		"Asas", "As", "Heses", "B",
+		"Ceses", "Ces", "Deses", "Eses", "Fes", "Feses", "Asas", "Heses",
 
-		"Cis", "Cisis", "Dis", "Disis", "Eis", "Fis", "Fisis", "Gis", "Gisis",
-		"Ais", "Aisis", "His"
+		"Cisis", "Disis", "Eis", "Fisis", "Gisis", "Ais", "Aisis", "His"
 
 	};
+
+	public static Collection<String> getKeyNames() {
+		return Arrays.asList(tonBuchstaben);
+	}
+
+	public static Collection<String> getModeNames() {
+		List<String> list = new LinkedList<String>();
+		list.add("Dur");
+		list.add("Moll");
+		list.addAll(Arrays.asList(tonGeschlechterAltMoll));
+		list.addAll(Arrays.asList(tonGeschlechterAltDur));
+
+		return list;
+	}
 
 	//	private static String tonGeschlechterNeu[] = { "Dur", "Moll" };
 

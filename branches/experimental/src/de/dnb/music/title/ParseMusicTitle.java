@@ -461,6 +461,7 @@ public final class ParseMusicTitle {
 				factory730.load(parseString);
 				line = factory730.createLine();
 			} catch (IllFormattedLineException e) {
+				System.err.println("hier");
 				return null;
 			}
 		}
@@ -477,10 +478,7 @@ public final class ParseMusicTitle {
 			throws IOException,
 			IllFormattedLineException {
 
-		String string = "aa$bbb$gff";
-
-		MusicTitle title = parse(null, string);
-		System.out.println((TitleUtils.getStructured(title)));
+		Line line = LineParser.parse("130 aa$rC-Dur$pbb$rC-Dur", TAG_DB);
 
 	}
 

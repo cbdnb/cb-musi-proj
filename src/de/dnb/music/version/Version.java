@@ -159,11 +159,14 @@ public class Version extends AugmentableElement implements TitleElement {
 			if (containsAdditionalInformation() && containsInstrumentation())
 				return 4;
 			if (containsAdditionalInformation()) {
-				if (getAdditionalInformation() instanceof DateOfComposition)
+				if (ai instanceof DateOfComposition)
 					return 1;
 			}
 			if (containsInstrumentation())
 				return 2;
+			/*
+			 * Also ist der Rest ungeparst:
+			 */
 			return 3;
 		}
 		if (fallgruppe == 'b') {
@@ -190,11 +193,6 @@ public class Version extends AugmentableElement implements TitleElement {
 			return 1;
 	}
 
-	/**
-	 * Zur Zeit nicht benötigt.
-	 * 
-	 * @return
-	 */
 	public final String getRakPhrase() {
 		return rakPhrase;
 	}

@@ -340,7 +340,6 @@ public class WorkTitleVisitor extends Visitor {
 		isIndividualTitle = false;
 		firstComponents += lastComponent;
 		lastComponent = factory.getPreVersion();
-		//		if (version.getMatch() != null) {
 		char fallgr = version.getFallgruppeParagraphM511();
 		int untergr = version.getUntergruppe();
 		if (fallgr == '$' || (fallgr == 'c' && untergr == 3)) {

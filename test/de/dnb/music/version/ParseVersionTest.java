@@ -52,6 +52,7 @@ public class ParseVersionTest {
 		assertEquals("130 Solos$mBlfl$f1993$sFassung 2009", TitleUtils.getGND1XXPlusTag(mt));
 
 		mt = ParseMusicTitle.parseTitlePlusVersion(null, "Widerschein. Fassung 2");
+		System.err.println(TitleUtils.getGND1XXPlusTag(mt));
 		assertEquals("130 Widerschein$sFassung 2", TitleUtils.getGND1XXPlusTag(mt));
 
 		mt =

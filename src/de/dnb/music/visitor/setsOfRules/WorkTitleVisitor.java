@@ -335,14 +335,14 @@ public class WorkTitleVisitor extends Visitor {
 
 	@Override
 	public boolean visit(Version version) {
-		
+
 		state = States.VERSION;
 		isIndividualTitle = false;
 		firstComponents += lastComponent;
 		lastComponent = factory.getPreVersion();
 		char fallgr = version.getFallgruppeParagraphM511();
 		int untergr = version.getUntergruppe();
-		if (fallgr == '$' || (fallgr == 'c' && untergr == 3)) {
+		if (fallgr == '$' || (fallgr == 'c' && (untergr == 3 || untergr == 5))) {
 			lastComponent += version.getMatch();
 			return false;
 		}

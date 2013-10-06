@@ -280,10 +280,11 @@ public class GUI extends JFrame {
 		btnAddYear.setBounds(231, 11, 120, 20);
 		panelYear.add(btnAddYear);
 
-		lblFassungsphraseAuswhlen = new JLabel("evtl. Fassungsphrase auswählen:");
-		lblFassungsphraseAuswhlen.setBounds(377, 85, 213, 14);
+		lblFassungsphraseAuswhlen = new JLabel("evtl. Fassungsphrase auswählen und editieren:");
+		lblFassungsphraseAuswhlen.setBounds(377, 85, 331, 14);
 
 		comboBoxVersion = new JComboBox();
+		comboBoxVersion.setEditable(true);
 		comboBoxVersion.setBounds(377, 107, 321, 22);
 
 		scrollPane = new JScrollPane();

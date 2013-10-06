@@ -74,7 +74,7 @@ public class View implements Observer {
 	}
 	
 	public final void addModusListener(final ActionListener infoListener) {
-		gui.buttonAddModus.addActionListener(infoListener);
+		gui.btnAddModus.addActionListener(infoListener);
 	}
 
 	public final void addYearListener(final ActionListener infoListener) {
@@ -82,7 +82,7 @@ public class View implements Observer {
 	}
 
 	public final void addSerialListener(final ActionListener infoListener) {
-		gui.buttonSerial.addActionListener(infoListener);
+		gui.btnSerial.addActionListener(infoListener);
 	}
 
 	public final void addFormalListener(final ActionListener infoListener) {
@@ -187,6 +187,66 @@ public class View implements Observer {
 	public final void addInstrumentCount(final int c) {
 		gui.comboBoxCount.addItem(c);
 	}
+	
+	public void enableNewTitle(){
+		gui.btnAddFormal.setEnabled(true);
+		gui.btnAddIndiv.setEnabled(true);
+		
+		gui.btnVersion.setEnabled(false);
+		
+		gui.btnAddGenre.setEnabled(false);
+		gui.btnAddInstrument.setEnabled(false);
+		gui.btnAddOpus.setEnabled(false);
+		gui.btnAddIdx.setEnabled(false);
+		gui.btnAddKey.setEnabled(false);
+		gui.btnAddYear.setEnabled(false);		
+		gui.btnSerial.setEnabled(false);
+		gui.btnAddModus.setEnabled(false);
+		
+	}
+	
+	public void enableAll(){
+		gui.btnAddFormal.setEnabled(true);
+		gui.btnAddIndiv.setEnabled(true);
+		
+		gui.btnVersion.setEnabled(true);
+		
+		gui.btnAddGenre.setEnabled(true);
+		gui.btnAddInstrument.setEnabled(true);
+		gui.btnAddOpus.setEnabled(true);
+		gui.btnAddIdx.setEnabled(true);
+		gui.btnAddKey.setEnabled(true);
+		gui.btnAddYear.setEnabled(true);		
+		gui.btnSerial.setEnabled(true);
+		gui.btnAddModus.setEnabled(true);
+	}
+	
+	public void disableAfterVersion(){
+		gui.btnAddFormal.setEnabled(false);
+		gui.btnAddIndiv.setEnabled(false);
+		
+		gui.btnVersion.setEnabled(false);
+		
+		gui.btnAddGenre.setEnabled(true);
+		gui.btnAddInstrument.setEnabled(true);
+		gui.btnAddOpus.setEnabled(true);
+		gui.btnAddIdx.setEnabled(true);
+		gui.btnAddKey.setEnabled(true);
+		gui.btnAddYear.setEnabled(true);		
+		gui.btnSerial.setEnabled(true);
+		gui.btnAddModus.setEnabled(true);
+	}
+	
+	public void setTip(String tip){
+		gui.textPaneTip.setText(tip);
+		if (tip.isEmpty())
+			gui.lblTip.setText("");
+		else
+			gui.lblTip.setText("Tip:");
+	}
+	
+
+	// Getter: -------------------------------
 
 	public final Genre getGenre() {
 		return (Genre) gui.comboBoxGenre.getSelectedItem();

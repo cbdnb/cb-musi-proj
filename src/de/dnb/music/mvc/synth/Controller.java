@@ -43,6 +43,8 @@ public class Controller {
 	class NewListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			view.enableNewTitle();
+			view.setTip("Bitte zunächst Individual- oder Formalsachtitel eingeben");
 			model.reset();
 			model.refresh();
 		}
@@ -53,6 +55,8 @@ public class Controller {
 		public void actionPerformed(ActionEvent e) {
 			FormalTitle title = new FormalTitle();
 			title.addGenre(view.getNewTitleGenre());
+			view.enableAll();
+			view.setTip("");
 			model.addElement(title);
 			model.refresh();
 		}
@@ -64,6 +68,8 @@ public class Controller {
 			try {
 				IndividualTitle title =
 					new IndividualTitle(view.getNewIndivTitle());
+				view.enableAll();
+				view.setTip("");
 				model.addElement(title);
 				model.refresh();
 			} catch (IllegalArgumentException ex) {
@@ -192,21 +198,21 @@ public class Controller {
 			if (v.isEmpty()) {
 				version = new Version();
 				String message =
-					"Sie sollten jetzt noch"
-						+ "\n a) eine WV-Nummer oder eine Opusnummer"
-						+ "\n b) einen Gattungsbegriff und evtl. Besetzung, Tonart, Jahr oder Zählung"
+					"Sie sollten jetzt noch entweder"
+						+ "\n\ta) eine WV-Nummer oder eine Opusnummer\toder"
+						+ "\n\tb) einen Gattungsbegriff "
+						+ "\n\t     und evtl. Besetzung, Tonart, Jahr oder Zählung"
 						+ "\neingeben";
-				JOptionPane.showMessageDialog(null, message, "Leere Fassung",
-						JOptionPane.INFORMATION_MESSAGE);
+				view.setTip(message);
 			} else {
 				String message =
 					"Sie können zusätzlich noch"
-						+ "\n a) eine Jahreszahl und/oder"
-						+ "\n b) eine Besetzung" + "\neingeben";
-				JOptionPane.showMessageDialog(null, message, "Optionen",
-						JOptionPane.INFORMATION_MESSAGE);
+						+ "\n\ta) eine Jahreszahl und/oder"
+						+ "\n\tb) eine Besetzung" + "\neingeben";
+				view.setTip(message);
 				version = ParseVersion.parse(null, v);
 			}
+			view.disableAfterVersion();
 			model.addElement(version);
 			model.refresh();
 		}
@@ -288,6 +294,8 @@ public class Controller {
 		view.addModeNames(Key.getModeNames());
 		for (int i = 1; i <= 13; i++)
 			view.addModusCount(i);
+		
+		view.setTip("Bitte zunächst Individual- oder Formalsachtitel eingeben");
 	}
 
 	/**

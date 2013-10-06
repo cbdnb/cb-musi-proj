@@ -21,6 +21,10 @@ import javax.swing.JCheckBox;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Component;
+import javax.swing.JTextPane;
+import java.awt.Color;
+import java.awt.SystemColor;
+import java.awt.Font;
 
 public class GUI extends JFrame {
 
@@ -73,14 +77,16 @@ public class GUI extends JFrame {
 	JPanel panelSerial;
 	JComboBox comboBoxSerial;
 	JTextField textFieldSerial;
-	JButton buttonSerial;
+	JButton btnSerial;
 	JComboBox comboBoxModeName;
 	JComboBox comboBoxKeyName;
 	JPanel panelModus;
-	JButton buttonAddModus;
+	JButton btnAddModus;
 	JComboBox comboBoxModusNumber;
 	JLabel label;
 	JLabel lblTon;
+	JLabel lblTip;
+	JTextArea textPaneTip;
 
 	/**
 	 * Create the frame.
@@ -106,6 +112,7 @@ public class GUI extends JFrame {
 		mntmInfo = new JMenuItem("Info");
 		mnNewMenu.add(mntmInfo);
 		contentPane = new JPanel();
+		contentPane.setBackground(new Color(240, 240, 240));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 
@@ -143,22 +150,24 @@ public class GUI extends JFrame {
 		panelIndiv.add(btnAddIndiv);
 
 		btnAddGenre = new JButton("Gattung hinzufügen");
+		btnAddGenre.setEnabled(false);
 		btnAddGenre.setBounds(205, 165, 167, 23);
 
 		comboBoxGenre = new JComboBox();
-		comboBoxGenre.setBounds(377, 166, 604, 22);
+		comboBoxGenre.setBounds(377, 166, 321, 22);
 
 		btnAddInstrument = new JButton("Instrument hinzufügen");
+		btnAddInstrument.setEnabled(false);
 		btnAddInstrument.setBounds(205, 194, 167, 23);
 
 		comboBoxInstru = new JComboBox();
-		comboBoxInstru.setBounds(377, 195, 604, 22);
+		comboBoxInstru.setBounds(377, 195, 228, 22);
 
 		comboBoxCount = new JComboBox();
-		comboBoxCount.setBounds(991, 195, 90, 22);
+		comboBoxCount.setBounds(615, 195, 62, 22);
 
 		lblmal = new JLabel("-mal");
-		lblmal.setBounds(1086, 198, 53, 14);
+		lblmal.setBounds(682, 198, 53, 14);
 		lblmal.setHorizontalAlignment(SwingConstants.LEFT);
 
 		tabbedPaneAdditional = new JTabbedPane(JTabbedPane.TOP);
@@ -178,6 +187,7 @@ public class GUI extends JFrame {
 		panelOpus.add(textFieldOpus);
 
 		btnAddOpus = new JButton("hinzufügen");
+		btnAddOpus.setEnabled(false);
 		btnAddOpus.setBounds(230, 11, 120, 20);
 		panelOpus.add(btnAddOpus);
 
@@ -196,6 +206,7 @@ public class GUI extends JFrame {
 		panelThematic.add(textFieldIdx);
 
 		btnAddIdx = new JButton("hinzufügen");
+		btnAddIdx.setEnabled(false);
 		btnAddIdx.setBounds(230, 11, 120, 20);
 		panelThematic.add(btnAddIdx);
 		
@@ -212,15 +223,17 @@ public class GUI extends JFrame {
 		textFieldSerial.setBounds(129, 11, 86, 20);
 		panelSerial.add(textFieldSerial);
 		
-		buttonSerial = new JButton("hinzufügen");
-		buttonSerial.setBounds(230, 11, 120, 20);
-		panelSerial.add(buttonSerial);
+		btnSerial = new JButton("hinzufügen");
+		btnSerial.setEnabled(false);
+		btnSerial.setBounds(230, 11, 120, 20);
+		panelSerial.add(btnSerial);
 
 		JPanel panelKey = new JPanel();
 		tabbedPaneAdditional.addTab("Tonart", null, panelKey, null);
 		panelKey.setLayout(null);
 
 		btnAddKey = new JButton("hinzufügen");
+		btnAddKey.setEnabled(false);
 		btnAddKey.setBounds(231, 11, 120, 20);
 		panelKey.add(btnAddKey);
 		
@@ -240,9 +253,10 @@ public class GUI extends JFrame {
 		panelModus.setLayout(null);
 		tabbedPaneAdditional.addTab("Modus", null, panelModus, null);
 		
-		buttonAddModus = new JButton("hinzufügen");
-		buttonAddModus.setBounds(231, 11, 120, 20);
-		panelModus.add(buttonAddModus);
+		btnAddModus = new JButton("hinzufügen");
+		btnAddModus.setEnabled(false);
+		btnAddModus.setBounds(231, 11, 120, 20);
+		panelModus.add(btnAddModus);
 		
 		comboBoxModusNumber = new JComboBox();
 		comboBoxModusNumber.setBounds(61, 11, 46, 20);
@@ -262,6 +276,7 @@ public class GUI extends JFrame {
 		panelYear.add(textFieldYear);
 
 		btnAddYear = new JButton("hinzufügen");
+		btnAddYear.setEnabled(false);
 		btnAddYear.setBounds(231, 11, 120, 20);
 		panelYear.add(btnAddYear);
 
@@ -269,7 +284,7 @@ public class GUI extends JFrame {
 		lblFassungsphraseAuswhlen.setBounds(377, 85, 213, 14);
 
 		comboBoxVersion = new JComboBox();
-		comboBoxVersion.setBounds(377, 107, 385, 22);
+		comboBoxVersion.setBounds(377, 107, 321, 22);
 
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(36, 360, 708, 300);
@@ -278,6 +293,7 @@ public class GUI extends JFrame {
 		scrollPane_1.setBounds(754, 360, 400, 300);
 
 		textAreaGND = new JTextArea();
+		textAreaGND.setEditable(false);
 		scrollPane.setViewportView(textAreaGND);
 		contentPane.setLayout(null);
 		contentPane.add(btnAddGenre);
@@ -294,6 +310,7 @@ public class GUI extends JFrame {
 		contentPane.add(scrollPane_1);
 
 		textAreaStruct = new JTextArea();
+		textAreaStruct.setEditable(false);
 		textAreaStruct.setTabSize(2);
 		scrollPane_1.setViewportView(textAreaStruct);
 		contentPane.add(comboBoxVersion);
@@ -307,6 +324,7 @@ public class GUI extends JFrame {
 		contentPane.add(lblStrukturiert);
 
 		btnVersion = new JButton("Fassung hinzufügen");
+		btnVersion.setEnabled(false);
 		btnVersion.setBounds(205, 107, 167, 23);
 		contentPane.add(btnVersion);
 
@@ -321,5 +339,18 @@ public class GUI extends JFrame {
 		checkBoxTotalCount = new JCheckBox("Gesamtzahl");
 		checkBoxTotalCount.setBounds(331, 330, 134, 23);
 		contentPane.add(checkBoxTotalCount);
+		
+		lblTip = new JLabel("Tip:");
+		lblTip.setBounds(754, 111, 46, 14);
+		contentPane.add(lblTip);
+		
+		textPaneTip = new JTextArea();
+		textPaneTip.setTabSize(3);
+		textPaneTip.setEditable(false);
+		textPaneTip.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		textPaneTip.setForeground(SystemColor.menuText);
+		textPaneTip.setBackground(SystemColor.control);
+		textPaneTip.setBounds(754, 127, 368, 184);
+		contentPane.add(textPaneTip);
 	}
 }

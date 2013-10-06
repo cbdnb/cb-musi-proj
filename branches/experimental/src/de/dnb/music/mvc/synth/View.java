@@ -221,6 +221,23 @@ public class View implements Observer {
 		gui.btnAddModus.setEnabled(true);
 	}
 	
+	public void disableAll() {
+		gui.btnAddFormal.setEnabled(false);
+		gui.btnAddIndiv.setEnabled(false);
+		
+		gui.btnVersion.setEnabled(false);
+		
+		gui.btnAddGenre.setEnabled(false);
+		gui.btnAddInstrument.setEnabled(false);
+		gui.btnAddOpus.setEnabled(false);
+		gui.btnAddIdx.setEnabled(false);
+		gui.btnAddKey.setEnabled(false);
+		gui.btnAddYear.setEnabled(false);		
+		gui.btnSerial.setEnabled(false);
+		gui.btnAddModus.setEnabled(false);
+		
+	}
+	
 	public void disableAfterVersion(){
 		gui.btnAddFormal.setEnabled(false);
 		gui.btnAddIndiv.setEnabled(false);
@@ -329,5 +346,7 @@ public class View implements Observer {
 	public final Component getGui() {
 		return gui;
 	}
+
+	
 
 }

@@ -204,15 +204,26 @@ public class Controller {
 						+ "\n\t     und evtl. Besetzung, Tonart, Jahr oder Zählung"
 						+ "\neingeben";
 				view.setTip(message);
+				view.disableAfterVersion();
 			} else {
-				String message =
-					"Sie können zusätzlich noch"
-						+ "\n\ta) eine Jahreszahl und/oder"
-						+ "\n\tb) eine Besetzung" + "\neingeben";
-				view.setTip(message);
+
 				version = ParseVersion.parse(null, v);
+				if (version == null
+					|| (version.getFallgruppeParagraphM511() == 'c' && version
+							.getUntergruppe() == 5)) {
+					version = new Version(v);
+					view.disableAll();
+					view.setTip("Keine weiteren Eingaben mehr möglich, "
+						+ "\nda eine eigene Fassungsphrase erzeugt wurde");
+				} else {
+					String message =
+						"Sie können zusätzlich noch"
+							+ "\n\ta) eine Jahreszahl und/oder"
+							+ "\n\tb) eine Besetzung" + "\neingeben";
+					view.setTip(message);
+					view.disableAfterVersion();
+				}
 			}
-			view.disableAfterVersion();
 			model.addElement(version);
 			model.refresh();
 		}
@@ -294,7 +305,7 @@ public class Controller {
 		view.addModeNames(Key.getModeNames());
 		for (int i = 1; i <= 13; i++)
 			view.addModusCount(i);
-		
+
 		view.setTip("Bitte zunächst Individual- oder Formalsachtitel eingeben");
 	}
 

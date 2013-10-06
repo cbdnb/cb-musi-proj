@@ -60,11 +60,10 @@ public class Version extends AugmentableElement implements TitleElement {
 	 * Untergruppe:
 	 * 1: Jahr
 	 * 2: Besetzung
-	 * 3: Irgend eine andere Angabe oder auch keine: "Frühfassung" 
-	 * 	  "Fassung für Bläser" (Nicht im Regelwerk explizit, aber oft 
-	 * 	  in der Datenbank). 66-mal kommt so etwas wie "Fassung 2" vor,
-	 * 	  was auch hier abgehandelt wird.
+	 * 3: Irgend eine andere Angabe oder auch keine: "Frühfassung" 	 * 	  
 	 * 4: die Kombination Besetzung + Jahr (9-mal in Datenbank)
+	 * 5: "Fassung für Bläser" (Nicht im Regelwerk explizit, aber oft 
+	 * 	  in der Datenbank). 66-mal kommt so etwas wie "Fassung 2" vor
 	 * 
 	 * */
 
@@ -164,10 +163,14 @@ public class Version extends AugmentableElement implements TitleElement {
 			}
 			if (containsInstrumentation())
 				return 2;
+			if (rest.isEmpty())
+				return 3;
+			else
+				return 5;
 			/*
 			 * Also ist der Rest ungeparst:
 			 */
-			return 3;
+			
 		}
 		if (fallgruppe == 'b') {
 			if (containsInstrumentation())

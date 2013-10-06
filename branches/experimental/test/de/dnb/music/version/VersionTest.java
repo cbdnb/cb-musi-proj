@@ -53,7 +53,7 @@ public class VersionTest {
 
 		f = ParseVersion.parse(null, "Fassung für Bläser");
 		assertEquals('c', f.getFallgruppeParagraphM511());
-		assertEquals(3, f.getUntergruppe());
+		assertEquals(5, f.getUntergruppe());
 
 		f = ParseVersion.parse(null, "Fassung Vl 1777");
 		assertEquals('c', f.getFallgruppeParagraphM511());

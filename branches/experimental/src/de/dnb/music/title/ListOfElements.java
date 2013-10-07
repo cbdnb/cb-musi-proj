@@ -1,5 +1,6 @@
 package de.dnb.music.title;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -9,8 +10,12 @@ import applikationsbausteine.RangeCheckUtils;
 import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.Visitor;
 
-public abstract class ListOfElements<T extends TitleElement> {
+public abstract class ListOfElements<T extends TitleElement> implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3912047403531026080L;
 	protected ArrayList<T> children = new ArrayList<T>();
 
 	public ListOfElements() {

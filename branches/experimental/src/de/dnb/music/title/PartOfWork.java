@@ -23,6 +23,10 @@ public class PartOfWork extends ListOfElements<MusicTitle> implements
 		TitleElement {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7826797272026488805L;
+	/**
 	 * Wenn ein übergebener String vorläufig nach ", " gesplittet
 	 * wird (Konstruktor {@link #PartOfWork(String)}.
 	 */

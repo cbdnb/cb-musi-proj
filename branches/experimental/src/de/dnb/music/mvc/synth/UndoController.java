@@ -22,7 +22,7 @@ import de.dnb.music.version.ParseVersion;
 import de.dnb.music.version.Version;
 import de.dnb.music.version.VersionDB;
 
-public class Controller {
+public class UndoController {
 
 	private Model model;
 
@@ -42,7 +42,6 @@ public class Controller {
 		public void actionPerformed(ActionEvent e) {
 			FormalTitle title = new FormalTitle();
 			title.addGenre(view.getNewTitleGenre());
-			view.enableAll();
 			view.setTip("");
 			model.addElement(title);
 		}
@@ -54,7 +53,6 @@ public class Controller {
 			try {
 				IndividualTitle title =
 					new IndividualTitle(view.getNewIndivTitle());
-				view.enableAll();
 				view.setTip("");
 				model.addElement(title);
 			} catch (IllegalArgumentException ex) {
@@ -144,7 +142,8 @@ public class Controller {
 			} catch (IllegalArgumentException ex) {
 				ex.printStackTrace();
 				JOptionPane.showMessageDialog(null, ex.getMessage(),
-						"Falsche Eingabe", JOptionPane.OK_CANCEL_OPTION);			}
+						"Falsche Eingabe", JOptionPane.OK_CANCEL_OPTION);
+			}
 		}
 	}
 
@@ -180,7 +179,6 @@ public class Controller {
 						+ "\n\t     und evtl. Besetzung, Tonart, Jahr oder Zählung"
 						+ "\neingeben";
 				view.setTip(message);
-				view.disableAfterVersion();
 			} else {
 
 				version = ParseVersion.parse(null, v);
@@ -188,7 +186,6 @@ public class Controller {
 					|| (version.getFallgruppeParagraphM511() == 'c' && version
 							.getUntergruppe() == 5)) {
 					version = new Version(v);
-					view.disableAll();
 					view.setTip("Keine weiteren Eingaben mehr möglich, "
 						+ "\nda eine eigene Fassungsphrase erzeugt wurde");
 				} else {
@@ -197,7 +194,6 @@ public class Controller {
 							+ "\n\ta) eine Jahreszahl und/oder"
 							+ "\n\tb) eine Besetzung" + "\neingeben";
 					view.setTip(message);
-					view.disableAfterVersion();
 				}
 			}
 			model.addElement(version);
@@ -225,21 +221,30 @@ public class Controller {
 		}
 	}
 
-	class InfoListener implements ActionListener {
+	class UndoListener implements ActionListener {
+		@Override
+		public void actionPerformed(final ActionEvent e) {
+			model.undo();
+		}
+	}
 
+	class InfoListener implements ActionListener {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 			Misc.showInfo(this, "1.00", "/resources/helpSynth.txt");
 		}
 	}
 
-	public Controller() {
+	public UndoController() {
 		super();
 		this.model = new Model();
 		this.view = new View(model);
 		model.addObserver(view);
-
+		
+		view.enableAll();
 		view.addNewListener(new NewListener());
+		view.setUndoVisible(true);
+		view.addUndoListener(new UndoListener());
 
 		view.addFormalListener(new NewFormalListener());
 		view.addIndividualListener(new NewIndividualListener());
@@ -285,7 +290,7 @@ public class Controller {
 	 * @param args
 	 */
 	public static void main(final String[] args) {
-		new Controller();
+		new UndoController();
 
 	}
 

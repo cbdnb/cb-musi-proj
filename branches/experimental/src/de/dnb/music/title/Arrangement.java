@@ -1,12 +1,18 @@
 package de.dnb.music.title;
 
+import java.io.Serializable;
+
 import utils.TitleUtils;
 import applikationsbausteine.RangeCheckUtils;
 import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.Visitor;
 
-public class Arrangement implements TitleElement {
+public class Arrangement implements TitleElement, Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7382022301660193100L;
 	private String arrangementPhrase;
 
 	public Arrangement(final String arrangementPhrase) {

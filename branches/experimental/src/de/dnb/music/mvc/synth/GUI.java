@@ -82,6 +82,7 @@ public class GUI extends JFrame {
 	JLabel lblTon;
 	JLabel lblTip;
 	JTextArea textPaneTip;
+	JButton btnUndo;
 
 	/**
 	 * Create the frame.
@@ -112,7 +113,7 @@ public class GUI extends JFrame {
 		setContentPane(contentPane);
 
 		btnNew = new JButton("Neu ...");
-		btnNew.setBounds(36, 37, 69, 26);
+		btnNew.setBounds(36, 37, 67, 23);
 
 		tabbedPaneNewTitle = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPaneNewTitle.setBounds(205, 5, 773, 69);
@@ -349,5 +350,10 @@ public class GUI extends JFrame {
 		textPaneTip.setBackground(SystemColor.control);
 		textPaneTip.setBounds(754, 127, 368, 184);
 		contentPane.add(textPaneTip);
+		
+		btnUndo = new JButton("Rückgängig");
+		btnUndo.setVisible(false);
+		btnUndo.setBounds(36, 102, 134, 23);
+		contentPane.add(btnUndo);
 	}
 }

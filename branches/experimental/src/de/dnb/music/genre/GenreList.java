@@ -26,6 +26,11 @@ import de.dnb.music.visitor.Visitor;
  */
 public class GenreList extends ListOfElements<Genre> implements TitleElement {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5553131061633389371L;
+
 	public GenreList(final Genre g) {
 		children.add(g);
 	}

@@ -14,6 +14,11 @@ import de.dnb.music.visitor.Visitor;
 public class Version extends AugmentableElement implements TitleElement {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 91555539907150543L;
+
+	/**
 	 * Was nach der rak-Phrase kommt. Wird in DBFassung gesetzt und dann
 	 * von {@link ParseVersion} weiter ausgewertet.
 	 */

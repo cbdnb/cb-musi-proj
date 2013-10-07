@@ -8,7 +8,8 @@ import de.dnb.music.title.ParseMusicTitle;
 import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.Visitor;
 
-public class Instrument implements TitleElement, Comparable<Instrument>, Cloneable {
+public class Instrument implements TitleElement, Comparable<Instrument>,
+		Cloneable {
 
 	/**
 	 * ABBREVIATED, WRITTEN_OUT.
@@ -142,20 +143,18 @@ public class Instrument implements TitleElement, Comparable<Instrument>, Cloneab
 		RangeCheckUtils.assertReferenceParamNotNull("title", title);
 		if (!title.isAdditable(this))
 			throw new UnsupportedOperationException(
-					"Titel enthält schon etwas anderes als "
-						+ this.getClass().getSimpleName());
+					"Instrument darf nicht mehr hinzugefügt werden");
 		AugmentableElement element = title.getActualAugmentable();
 		element.addInstrument(this);
 	}
-	
+
 	@Override
 	public Instrument clone() throws CloneNotSupportedException {
 		return (Instrument) super.clone();
 	}
 
 	public static void main(final String[] args) {
-		MusicTitle mt =
-			ParseMusicTitle.parse(null, "aa <bb>. Fassung Vl");
+		MusicTitle mt = ParseMusicTitle.parse(null, "aa <bb>. Fassung Vl");
 		Instrument instrument =
 			ParseInstrumentation.parseSingleInstrument("Va");
 		instrument.addToTitle(mt);

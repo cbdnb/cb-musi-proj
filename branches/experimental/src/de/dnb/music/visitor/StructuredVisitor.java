@@ -95,6 +95,9 @@ public class StructuredVisitor extends Visitor {
 			case 4:
 				structured += version.getRakPhrase() + " für die";
 				break;
+			case 5:
+				structured += version.getRakPhrase() + version.getRest();
+				break;
 			default:
 				break;
 			}

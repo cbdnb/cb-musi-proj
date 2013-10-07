@@ -346,6 +346,7 @@ public class GUI extends JFrame {
 		contentPane.add(lblTip);
 		
 		textPaneTip = new JTextArea();
+		textPaneTip.setOpaque(false);
 		textPaneTip.setTabSize(3);
 		textPaneTip.setEditable(false);
 		textPaneTip.setFont(new Font("Tahoma", Font.PLAIN, 12));

@@ -10,12 +10,12 @@ public class DateOfComposition extends AdditionalInformation {
 	int date = 0;
 
 	@Override
-	public void accept(Visitor visitor) {
+	public void accept(final Visitor visitor) {
 		visitor.visit(this);
 	}
 
 	@Override
-	public String toString() {
+	public final String toString() {
 		return "" + date;
 	}
 

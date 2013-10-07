@@ -4,10 +4,12 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.TreeSet;
 
-import de.dnb.music.genre.Genre;
 import utils.StringUtils;
 
 public class VersionDB {
+
+	private VersionDB() {
+	}
 
 	private static String[] phrasenStrings = { "Fassung", "Kurze Fassung",
 		"Korrigierte Fassung", "Rev. Fassung", "Umgearb. Fassung",
@@ -27,7 +29,7 @@ public class VersionDB {
 	 * @param parseString nicht null
 	 * @return eine rudimentäre Fassung oder null.
 	 */
-	public static Version matchVersion(String parseString) {
+	public static Version matchVersion(final String parseString) {
 		if (parseString == null)
 			throw new IllegalArgumentException(
 					"Null-String an matchVersion()übergeben");

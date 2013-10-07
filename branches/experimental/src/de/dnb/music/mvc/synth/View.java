@@ -72,7 +72,7 @@ public class View implements Observer {
 	public final void addKeyListener(final ActionListener infoListener) {
 		gui.btnAddKey.addActionListener(infoListener);
 	}
-	
+
 	public final void addModusListener(final ActionListener infoListener) {
 		gui.btnAddModus.addActionListener(infoListener);
 	}
@@ -157,7 +157,7 @@ public class View implements Observer {
 			addSerial(ser);
 		}
 	}
-	
+
 	public final void addKeyName(final String key) {
 		gui.comboBoxKeyName.addItem(key);
 	}
@@ -167,7 +167,7 @@ public class View implements Observer {
 			addKeyName(key);
 		}
 	}
-	
+
 	public final void addModeName(final String mode) {
 		gui.comboBoxModeName.addItem(mode);
 	}
@@ -177,7 +177,7 @@ public class View implements Observer {
 			addModeName(mode);
 		}
 	}
-	
+
 	@SuppressWarnings("boxing")
 	public final void addModusCount(final int c) {
 		gui.comboBoxModusNumber.addItem(c);
@@ -187,81 +187,80 @@ public class View implements Observer {
 	public final void addInstrumentCount(final int c) {
 		gui.comboBoxCount.addItem(c);
 	}
-	
-	public void enableNewTitle(){
+
+	public void enableNewTitle() {
 		gui.btnAddFormal.setEnabled(true);
 		gui.btnAddIndiv.setEnabled(true);
-		
+
 		gui.btnVersion.setEnabled(false);
-		
+
 		gui.btnAddGenre.setEnabled(false);
 		gui.btnAddInstrument.setEnabled(false);
 		gui.btnAddOpus.setEnabled(false);
 		gui.btnAddIdx.setEnabled(false);
 		gui.btnAddKey.setEnabled(false);
-		gui.btnAddYear.setEnabled(false);		
+		gui.btnAddYear.setEnabled(false);
 		gui.btnSerial.setEnabled(false);
 		gui.btnAddModus.setEnabled(false);
-		
+
 	}
-	
-	public void enableAll(){
+
+	public void enableAll() {
 		gui.btnAddFormal.setEnabled(true);
 		gui.btnAddIndiv.setEnabled(true);
-		
+
 		gui.btnVersion.setEnabled(true);
-		
+
 		gui.btnAddGenre.setEnabled(true);
 		gui.btnAddInstrument.setEnabled(true);
 		gui.btnAddOpus.setEnabled(true);
 		gui.btnAddIdx.setEnabled(true);
 		gui.btnAddKey.setEnabled(true);
-		gui.btnAddYear.setEnabled(true);		
+		gui.btnAddYear.setEnabled(true);
 		gui.btnSerial.setEnabled(true);
 		gui.btnAddModus.setEnabled(true);
 	}
-	
+
 	public void disableAll() {
 		gui.btnAddFormal.setEnabled(false);
 		gui.btnAddIndiv.setEnabled(false);
-		
+
 		gui.btnVersion.setEnabled(false);
-		
+
 		gui.btnAddGenre.setEnabled(false);
 		gui.btnAddInstrument.setEnabled(false);
 		gui.btnAddOpus.setEnabled(false);
 		gui.btnAddIdx.setEnabled(false);
 		gui.btnAddKey.setEnabled(false);
-		gui.btnAddYear.setEnabled(false);		
+		gui.btnAddYear.setEnabled(false);
 		gui.btnSerial.setEnabled(false);
 		gui.btnAddModus.setEnabled(false);
-		
+
 	}
-	
-	public void disableAfterVersion(){
+
+	public void disableAfterVersion() {
 		gui.btnAddFormal.setEnabled(false);
 		gui.btnAddIndiv.setEnabled(false);
-		
+
 		gui.btnVersion.setEnabled(false);
-		
+
 		gui.btnAddGenre.setEnabled(true);
 		gui.btnAddInstrument.setEnabled(true);
 		gui.btnAddOpus.setEnabled(true);
 		gui.btnAddIdx.setEnabled(true);
 		gui.btnAddKey.setEnabled(true);
-		gui.btnAddYear.setEnabled(true);		
+		gui.btnAddYear.setEnabled(true);
 		gui.btnSerial.setEnabled(true);
 		gui.btnAddModus.setEnabled(true);
 	}
-	
-	public void setTip(String tip){
+
+	public void setTip(String tip) {
 		gui.textPaneTip.setText(tip);
 		if (tip.isEmpty())
 			gui.lblTip.setText("");
 		else
 			gui.lblTip.setText("Tip:");
 	}
-	
 
 	// Getter: -------------------------------
 
@@ -298,7 +297,7 @@ public class View implements Observer {
 		if (number.isEmpty())
 			throw new IllegalArgumentException("Opuszahl eingeben");
 		return ((String) gui.comboBoxOpus.getSelectedItem()) + " "
-				+ number.trim();
+			+ number.trim();
 	}
 
 	public final String getIdx() {
@@ -306,7 +305,7 @@ public class View implements Observer {
 		if (number.isEmpty())
 			throw new IllegalArgumentException("WV-Nummer eingeben");
 		return ((String) gui.comboBoxIdx.getSelectedItem()) + " "
-				+ number.trim();
+			+ number.trim();
 	}
 
 	public final String getSerial() {
@@ -314,19 +313,22 @@ public class View implements Observer {
 		if (number.isEmpty())
 			throw new IllegalArgumentException("Fortlaufende Zählung eingeben");
 		return ((String) gui.comboBoxSerial.getSelectedItem()) + " "
-				+ number.trim();
+			+ number.trim();
 	}
 
 	public final String getKey() {
-		String mode =  (String) gui.comboBoxModeName.getSelectedItem();
+		String mode = (String) gui.comboBoxModeName.getSelectedItem();
 		String key = (String) gui.comboBoxKeyName.getSelectedItem();
 		if (Key.istMollig(mode))
 			key = key.toLowerCase();
 		return key + "-" + mode;
 	}
-	
+
 	public final String getModus() {
-		String number = Integer.toString((Integer) gui.comboBoxModusNumber.getSelectedItem());
+		@SuppressWarnings("boxing")
+		String number =
+			Integer.toString((Integer) gui.comboBoxModusNumber
+					.getSelectedItem());
 		return number + ". Ton";
 	}
 
@@ -346,7 +348,5 @@ public class View implements Observer {
 	public final Component getGui() {
 		return gui;
 	}
-
-	
 
 }

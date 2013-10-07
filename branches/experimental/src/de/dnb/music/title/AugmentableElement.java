@@ -133,7 +133,7 @@ public class AugmentableElement {
 	 * @param element	nicht null.
 	 * @return			true, wenn hinzugefügt werden darf
 	 */
-	public boolean isAdditable(TitleElement element) {
+	public boolean isAdditable(final TitleElement element) {
 		RangeCheckUtils.assertReferenceParamNotNull("element", element);
 		// default:
 		return true;

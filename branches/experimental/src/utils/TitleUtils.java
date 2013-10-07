@@ -7,11 +7,8 @@ import de.dnb.gnd.parser.Record;
 import de.dnb.gnd.utils.RecordUtils;
 import de.dnb.music.genre.GenreList;
 import de.dnb.music.genre.ParseGenre;
-import de.dnb.music.publicInterface.Constants;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
-import de.dnb.music.visitor.AdditionalDataIn3XXVisitor;
-import de.dnb.music.visitor.AuthorityDataVisitor;
 import de.dnb.music.visitor.StructuredVisitor;
 import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.setsOfRules.AbstractParticleFactory;
@@ -48,7 +45,7 @@ public final class TitleUtils {
 
 	public static String getTitelAccordingRules(
 			final TitleElement element,
-			AbstractParticleFactory factory) {
+			final AbstractParticleFactory factory) {
 		final WorkTitleVisitor vis = new WorkTitleVisitor(factory);
 		element.accept(vis);
 		return vis.toString();

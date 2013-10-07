@@ -2,9 +2,7 @@ package de.dnb.music.title;
 
 import static utils.GNDConstants.TAG_DB;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -12,7 +10,6 @@ import java.util.regex.Pattern;
 
 import utils.GNDConstants;
 import utils.StringUtils;
-import utils.TitleUtils;
 import applikationsbausteine.RangeCheckUtils;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
 import de.dnb.gnd.parser.Indicator;
@@ -140,7 +137,9 @@ public final class ParseMusicTitle {
 	 * @param parseString	Zu untersuchend, nicht null
 	 * @return				Gültiger Musiktitel oder null.
 	 */
-	public static MusicTitle parse(final String composer, String parseString) {
+	public static MusicTitle parse(
+			final String composer,
+			final String parseString) {
 		RangeCheckUtils.assertReferenceParamNotNull("parseString", parseString);
 
 		String ansetzung = parseString.trim();
@@ -375,60 +374,56 @@ public final class ParseMusicTitle {
 	 * @return			Unterfeld oder null, wenn zu keinem Titelelement
 	 * 					gehörig (z.B. $v)
 	 */
-	public static
-			TitleElement
-			parseSubfield(String composer, Subfield subfield) {
-		{
-			RangeCheckUtils.assertReferenceParamNotNull("subfield", subfield);
-			final Indicator indicator = subfield.getIndicator();
-			final String contentOfSubfield = subfield.getContent();
+	public static TitleElement parseSubfield(
+			final String composer,
+			final Subfield subfield) {
+		RangeCheckUtils.assertReferenceParamNotNull("subfield", subfield);
+		final Indicator indicator = subfield.getIndicator();
+		final String contentOfSubfield = subfield.getContent();
+		if (indicator == GNDConstants.DOLLAR_a) {
+			return ParseMusicTitle.parse(composer, contentOfSubfield);
+		} else if (indicator == GNDConstants.DOLLAR_m) {
+			return ParseInstrumentation.parse(contentOfSubfield);
+		} else if (indicator == GNDConstants.DOLLAR_f
+			|| indicator == GNDConstants.DOLLAR_n
+			|| indicator == GNDConstants.DOLLAR_r
+			|| indicator == GNDTagDB.DOLLAR_G) {
+			/*
+			 * Auch hier können wir wieder so tun, als wäre ein
+			 * Komma erkannt, da ja nicht (gegenbenenfalls) ein
+			 * $n mit einer Einzelzahl aufgebaut worden wäre.
+			 */
+			final boolean comma = true;
+			//				final AdditionalInformation ai =
+			TitleElement element =
+				ParseAdditionalInformation.parse(composer, contentOfSubfield,
+						comma);
+			// Ist das $g ein maskiertes $f, $n oder $r?
+			if (element == null)
+				element = new Qualifier(contentOfSubfield);
+			return element;
+		} else if (indicator == GNDConstants.DOLLAR_p) {
 
-			if (indicator == GNDConstants.DOLLAR_a) {
-				return ParseMusicTitle.parse(composer, contentOfSubfield);
-			} else if (indicator == GNDConstants.DOLLAR_m) {
-				return ParseInstrumentation.parse(contentOfSubfield);
-			} else if (indicator == GNDConstants.DOLLAR_f
-				|| indicator == GNDConstants.DOLLAR_n
-				|| indicator == GNDConstants.DOLLAR_r
-				|| indicator == GNDTagDB.DOLLAR_G) {
-				/*
-				 * Auch hier können wir wieder so tun, als wäre ein
-				 * Komma erkannt, da ja nicht (gegenbenenfalls) ein
-				 * $n mit einer Einzelzahl aufgebaut worden wäre.
-				 */
-				final boolean comma = true;
-				//				final AdditionalInformation ai =
-				TitleElement element =
-					ParseAdditionalInformation.parse(composer,
-							contentOfSubfield, comma);
-				// Ist das $g ein maskiertes $f, $n oder $r?
-				if (element == null)
-					element = new Qualifier(contentOfSubfield);
-				return element;
-			} else if (indicator == GNDConstants.DOLLAR_p) {
+			/*
+			 *  neue Werkteilstrukur anlegen, dabei davon ausgehen,
+			 *  dass auch vollkommen Unstrukturiertes (Altdaten?) in
+			 *  $p steht, also auch Teile von Teilen. Daher wird der
+			 *  Konstruktor PartOfWork(String) aufgerufen:
+			 */
+			return new PartOfWork(contentOfSubfield);
 
-				/*
-				 *  neue Werkteilstrukur anlegen, dabei davon ausgehen,
-				 *  dass auch vollkommen Unstrukturiertes (Altdaten?) in
-				 *  $p steht, also auch Teile von Teilen. Daher wird der
-				 *  Konstruktor PartOfWork(String) aufgerufen:
-				 */
-				return new PartOfWork(contentOfSubfield);
-
-			} else if (indicator == GNDConstants.DOLLAR_s) {
-				TitleElement element =
-					ParseVersion.parse(composer, contentOfSubfield);
-				// Notbremse für unbekannten Inhalt von $s:
-				if (element == null) {
-					element = new Version(contentOfSubfield);
-				}
-				return element;
-			} else if (indicator == GNDConstants.DOLLAR_o) {
-				return new Arrangement(contentOfSubfield);
-			} else {
-				return null;
+		} else if (indicator == GNDConstants.DOLLAR_s) {
+			TitleElement element =
+				ParseVersion.parse(composer, contentOfSubfield);
+			// Notbremse für unbekannten Inhalt von $s:
+			if (element == null) {
+				element = new Version(contentOfSubfield);
 			}
-
+			return element;
+		} else if (indicator == GNDConstants.DOLLAR_o) {
+			return new Arrangement(contentOfSubfield);
+		} else {
+			return null;
 		}
 	}
 

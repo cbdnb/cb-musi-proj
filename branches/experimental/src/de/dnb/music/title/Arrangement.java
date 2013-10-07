@@ -22,12 +22,12 @@ public class Arrangement implements TitleElement {
 	}
 
 	@Override
-	public final void accept(Visitor visitor) {
+	public final void accept(final Visitor visitor) {
 		visitor.visit(this);
 	}
 
 	@Override
-	public final void addToTitle(MusicTitle title) {
+	public final void addToTitle(final MusicTitle title) {
 		RangeCheckUtils.assertReferenceParamNotNull("title", title);
 		title.setArrangement(this);
 	}

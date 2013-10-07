@@ -17,7 +17,7 @@ public abstract class ListOfElements<T extends TitleElement> {
 		super();
 	}
 
-	public List<T> getChildren() {
+	public final List<T> getChildren() {
 		return Collections.unmodifiableList(children);
 	}
 
@@ -27,7 +27,7 @@ public abstract class ListOfElements<T extends TitleElement> {
 	 * 
 	 * @param elem	nicht null.
 	 */
-	public void add(final T elem) {
+	public final void add(final T elem) {
 		RangeCheckUtils.assertReferenceParamNotNull("elem", elem);
 		children.add(elem);
 	}
@@ -38,7 +38,7 @@ public abstract class ListOfElements<T extends TitleElement> {
 	 * 
 	 * @param other	nicht null.
 	 */
-	public void addAll(final ListOfElements<T> other) {
+	public final void addAll(final ListOfElements<T> other) {
 		RangeCheckUtils.assertReferenceParamNotNull("other", other);
 		List<T> otherTitles = other.getChildren();
 		for (T musicTitle : otherTitles) {
@@ -46,19 +46,19 @@ public abstract class ListOfElements<T extends TitleElement> {
 		}
 	}
 
-	public T getLast() {
+	public final T getLast() {
 		if (children.isEmpty())
 			throw new IllegalStateException("Liste ist leer");
 		return ListUtils.getLast(children);
 	}
 
-	protected void visitChildren(Visitor visitor) {
+	protected final void visitChildren(final Visitor visitor) {
 		for (T elem : getChildren()) {
 			elem.accept(visitor);
 		}
 	}
 
-	public void addToTitle(MusicTitle title) {
+	public final void addToTitle(final MusicTitle title) {
 		RangeCheckUtils.assertReferenceParamNotNull("title", title);
 		for (T child : children) {
 			child.addToTitle(title);

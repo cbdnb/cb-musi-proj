@@ -137,7 +137,7 @@ public class GenreList extends ListOfElements<Genre> implements TitleElement {
 	}
 
 	@Override
-	public void accept(Visitor visitor) {
+	public final void accept(final Visitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if (visitChildren)
 			visitChildren(visitor);

@@ -1,14 +1,11 @@
 package de.dnb.music.version;
 
-import utils.TitleUtils;
 import applikationsbausteine.RangeCheckUtils;
 import de.dnb.music.additionalInformation.AdditionalInformation;
 import de.dnb.music.additionalInformation.DateOfComposition;
 import de.dnb.music.additionalInformation.Key;
 import de.dnb.music.additionalInformation.OpusNumber;
 import de.dnb.music.additionalInformation.ThematicIndexNumber;
-import de.dnb.music.genre.GenreList;
-import de.dnb.music.mediumOfPerformance.InstrumentationList;
 import de.dnb.music.title.AugmentableElement;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.visitor.TitleElement;
@@ -170,7 +167,7 @@ public class Version extends AugmentableElement implements TitleElement {
 			/*
 			 * Also ist der Rest ungeparst:
 			 */
-			
+
 		}
 		if (fallgruppe == 'b') {
 			if (containsInstrumentation())
@@ -200,10 +197,6 @@ public class Version extends AugmentableElement implements TitleElement {
 		return rakPhrase;
 	}
 
-	public final void setRakPhrase(String phrase) {
-
-	}
-
 	public final String getRest() {
 		return rest;
 	}
@@ -218,7 +211,7 @@ public class Version extends AugmentableElement implements TitleElement {
 	}
 
 	@Override
-	public final void addToTitle(MusicTitle title) {
+	public final void addToTitle(final MusicTitle title) {
 		RangeCheckUtils.assertReferenceParamNotNull("title", title);
 		title.setVersion(this);
 	}

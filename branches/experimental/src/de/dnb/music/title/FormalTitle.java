@@ -4,16 +4,15 @@ import de.dnb.music.visitor.Visitor;
 
 public class FormalTitle extends MusicTitle {
 
-	public FormalTitle(FormalTitle ft) {
+	public FormalTitle(final FormalTitle ft) {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public FormalTitle() {
 	}
 
 	@Override
-	public void accept(Visitor visitor) {
+	public final void accept(final Visitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if (visitChildren) {
 			visitChildren(visitor);

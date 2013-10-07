@@ -9,7 +9,7 @@ import de.dnb.music.visitor.Visitor;
 public class Genre implements TitleElement, Comparable<Genre> {
 
 	@Override
-	public int hashCode() {
+	public final int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((idn == null) ? 0 : idn.hashCode());
@@ -17,7 +17,7 @@ public class Genre implements TitleElement, Comparable<Genre> {
 	}
 
 	@Override
-	public boolean equals(final Object obj) {
+	public final boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
 		}
@@ -63,7 +63,7 @@ public class Genre implements TitleElement, Comparable<Genre> {
 
 	String swd = "";
 
-	public String getSwd() {
+	public final String getSwd() {
 		return swd;
 	}
 
@@ -91,22 +91,22 @@ public class Genre implements TitleElement, Comparable<Genre> {
 		}
 	}
 
-	public String getIdn() {
+	public final String getIdn() {
 		return idn;
 	}
 
 	@Override
-	public void accept(Visitor visitor) {
+	public final void accept(final Visitor visitor) {
 		visitor.visit(this);
 	}
 
 	@Override
-	public int compareTo(final Genre o) {
+	public final int compareTo(final Genre o) {
 		return this.swd.compareTo(o.swd);
 	}
 
 	@Override
-	public void addToTitle(MusicTitle title) {
+	public final void addToTitle(final MusicTitle title) {
 		/*
 		 * Kann entweder der Fassung oder dem letzten Teil oder
 		 * dem Titel selbst hinzugefügt werden.

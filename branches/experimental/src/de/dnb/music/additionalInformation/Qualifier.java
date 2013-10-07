@@ -31,12 +31,12 @@ public class Qualifier extends AdditionalInformation {
 	}
 
 	@Override
-	public final void accept(Visitor visitor) {
+	public final void accept(final Visitor visitor) {
 		visitor.visit(this);
 	}
 	
 	@Override
-	public String toString() {
+	public final String toString() {
 		return qualifier;
 	}
 

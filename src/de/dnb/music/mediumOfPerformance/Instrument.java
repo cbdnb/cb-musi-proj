@@ -1,5 +1,7 @@
 package de.dnb.music.mediumOfPerformance;
 
+import java.io.Serializable;
+
 import utils.TitleUtils;
 import applikationsbausteine.RangeCheckUtils;
 import de.dnb.music.title.AugmentableElement;
@@ -9,7 +11,12 @@ import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.Visitor;
 
 public class Instrument implements TitleElement, Comparable<Instrument>,
-		Cloneable {
+		Cloneable, Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8511447876377824593L;
 
 	/**
 	 * ABBREVIATED, WRITTEN_OUT.

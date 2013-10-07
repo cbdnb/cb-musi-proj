@@ -4,9 +4,10 @@ import de.dnb.music.visitor.Visitor;
 
 public class FormalTitle extends MusicTitle {
 
-	public FormalTitle(final FormalTitle ft) {
-		super();
-	}
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5970209730845494678L;
 
 	public FormalTitle() {
 	}

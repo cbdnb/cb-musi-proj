@@ -1,5 +1,7 @@
 package de.dnb.music.title;
 
+import java.io.Serializable;
+
 import applikationsbausteine.RangeCheckUtils;
 import de.dnb.music.additionalInformation.AdditionalInformation;
 import de.dnb.music.genre.Genre;
@@ -19,7 +21,12 @@ import de.dnb.music.visitor.Visitor;
  * @author baumann
  *
  */
-public class AugmentableElement {
+public class AugmentableElement implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8730755183846231065L;
 
 	public AugmentableElement() {
 		super();

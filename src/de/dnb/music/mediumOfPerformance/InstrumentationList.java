@@ -23,6 +23,11 @@ import de.dnb.music.visitor.Visitor;
 public class InstrumentationList extends ListOfElements<Instrument> implements
 		TitleElement {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6907859120358725516L;
+
 	InstrumentationList(final List<Instrument> iList) {
 		children = new ArrayList<Instrument>(iList);
 	}

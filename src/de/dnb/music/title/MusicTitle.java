@@ -1,5 +1,7 @@
 package de.dnb.music.title;
 
+import java.io.Serializable;
+
 import utils.TitleUtils;
 import applikationsbausteine.RangeCheckUtils;
 import de.dnb.music.version.Version;
@@ -8,6 +10,11 @@ import de.dnb.music.visitor.Visitor;
 
 public abstract class MusicTitle extends AugmentableElement implements
 		TitleElement {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5441679538889599338L;
 
 	// Anzeige nach RAK in Winkelklammern (Ordnungshilfe)
 	protected PartOfWork partOfWork = null;

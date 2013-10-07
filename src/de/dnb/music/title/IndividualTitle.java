@@ -10,9 +10,10 @@ import de.dnb.music.visitor.Visitor;
 
 public class IndividualTitle extends MusicTitle {
 
-	public IndividualTitle(final IndividualTitle it) {
-		super();
-	}
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1879608734586187703L;
 
 	public IndividualTitle() {
 		super();
@@ -46,8 +47,7 @@ public class IndividualTitle extends MusicTitle {
 		if ((element instanceof GenreList || element instanceof Genre)
 			&& !containsGenre())
 			return false;
-		if ((element instanceof InstrumentationList 
-				|| element instanceof Instrument)
+		if ((element instanceof InstrumentationList || element instanceof Instrument)
 			&& !containsInstrumentation())
 			return false;
 		if (element instanceof AdditionalInformation

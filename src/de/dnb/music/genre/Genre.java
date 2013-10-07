@@ -1,12 +1,19 @@
 package de.dnb.music.genre;
 
+import java.io.Serializable;
+
 import applikationsbausteine.RangeCheckUtils;
 import de.dnb.music.title.AugmentableElement;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.Visitor;
 
-public class Genre implements TitleElement, Comparable<Genre> {
+public class Genre implements TitleElement, Comparable<Genre>, Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6596107928244919983L;
 
 	@Override
 	public final int hashCode() {

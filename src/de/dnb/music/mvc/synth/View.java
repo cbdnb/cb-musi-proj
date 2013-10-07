@@ -21,18 +21,8 @@ public class View implements Observer {
 		gui.setVisible(true);
 	}
 
-	public final boolean expansionWanted() {
-		return gui.checkBoxExpansion.isSelected();
-	}
-
-	public final boolean picaWanted() {
-		return gui.checkBoxPicaPlus.isSelected();
-	}
-
-	public final boolean numberWanted() {
-		return gui.checkBoxTotalCount.isSelected();
-	}
-
+	// Listener: -------------------------------
+	
 	public final void addExpansionListener(final ActionListener al) {
 		gui.checkBoxExpansion.addActionListener(al);
 	}
@@ -45,57 +35,63 @@ public class View implements Observer {
 		gui.checkBoxTotalCount.addActionListener(al);
 	}
 
-	public final void addInfoListener(final ActionListener infoListener) {
-		gui.mntmInfo.addActionListener(infoListener);
+	public final void addInfoListener(final ActionListener al) {
+		gui.mntmInfo.addActionListener(al);
 	}
 
-	public final void addNewListener(final ActionListener infoListener) {
-		gui.btnNew.addActionListener(infoListener);
+	public final void addNewListener(final ActionListener al) {
+		gui.btnNew.addActionListener(al);
 	}
 
-	public final void addGenreListener(final ActionListener infoListener) {
-		gui.btnAddGenre.addActionListener(infoListener);
+	public final void addGenreListener(final ActionListener al) {
+		gui.btnAddGenre.addActionListener(al);
 	}
 
-	public final void addInstrumentListener(final ActionListener infoListener) {
-		gui.btnAddInstrument.addActionListener(infoListener);
+	public final void addInstrumentListener(final ActionListener al) {
+		gui.btnAddInstrument.addActionListener(al);
 	}
 
-	public final void addOpusListener(final ActionListener infoListener) {
-		gui.btnAddOpus.addActionListener(infoListener);
+	public final void addOpusListener(final ActionListener al) {
+		gui.btnAddOpus.addActionListener(al);
 	}
 
-	public final void addIdxListener(final ActionListener infoListener) {
-		gui.btnAddIdx.addActionListener(infoListener);
+	public final void addIdxListener(final ActionListener al) {
+		gui.btnAddIdx.addActionListener(al);
 	}
 
-	public final void addKeyListener(final ActionListener infoListener) {
-		gui.btnAddKey.addActionListener(infoListener);
+	public final void addKeyListener(final ActionListener al) {
+		gui.btnAddKey.addActionListener(al);
 	}
 
-	public final void addModusListener(final ActionListener infoListener) {
-		gui.btnAddModus.addActionListener(infoListener);
+	public final void addModusListener(final ActionListener al) {
+		gui.btnAddModus.addActionListener(al);
 	}
 
-	public final void addYearListener(final ActionListener infoListener) {
-		gui.btnAddYear.addActionListener(infoListener);
+	public final void addYearListener(final ActionListener al) {
+		gui.btnAddYear.addActionListener(al);
 	}
 
-	public final void addSerialListener(final ActionListener infoListener) {
-		gui.btnSerial.addActionListener(infoListener);
+	public final void addSerialListener(final ActionListener al) {
+		gui.btnSerial.addActionListener(al);
 	}
 
-	public final void addFormalListener(final ActionListener infoListener) {
-		gui.btnAddFormal.addActionListener(infoListener);
+	public final void addFormalListener(final ActionListener al) {
+		gui.btnAddFormal.addActionListener(al);
 	}
 
-	public final void addIndividualListener(final ActionListener infoListener) {
-		gui.btnAddIndiv.addActionListener(infoListener);
+	public final void addIndividualListener(final ActionListener al) {
+		gui.btnAddIndiv.addActionListener(al);
 	}
 
-	public final void addVersionListener(final ActionListener infoListener) {
-		gui.btnVersion.addActionListener(infoListener);
+	public final void addVersionListener(final ActionListener al) {
+		gui.btnVersion.addActionListener(al);
 	}
+	
+	public final void addUndoListener(final ActionListener al) {
+		gui.btnUndo.addActionListener(al);
+	}
+	
+	// Combos füllen: --------------------------------------
 
 	public final void addGenre(final Genre genre) {
 		gui.comboBoxGenre.addItem(genre);
@@ -187,6 +183,8 @@ public class View implements Observer {
 	public final void addInstrumentCount(final int c) {
 		gui.comboBoxCount.addItem(c);
 	}
+	
+	// Sichtbarkeit: --------------------------------
 
 	public void enableNewTitle() {
 		gui.btnAddFormal.setEnabled(true);
@@ -260,6 +258,10 @@ public class View implements Observer {
 			gui.lblTip.setText("");
 		else
 			gui.lblTip.setText("Tip:");
+	}
+
+	public void setUndoVisible(boolean v) {
+		gui.btnUndo.setVisible(v);
 	}
 
 	// Getter: -------------------------------
@@ -337,6 +339,18 @@ public class View implements Observer {
 		if (year.isEmpty())
 			throw new IllegalArgumentException("Jahreszahl eingeben");
 		return year;
+	}
+
+	public final boolean expansionWanted() {
+		return gui.checkBoxExpansion.isSelected();
+	}
+
+	public final boolean picaWanted() {
+		return gui.checkBoxPicaPlus.isSelected();
+	}
+
+	public final boolean numberWanted() {
+		return gui.checkBoxTotalCount.isSelected();
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 package de.dnb.music.additionalInformation;
 
-public class Composer implements Comparable<Composer>{
+public class Composer implements Comparable<Composer> {
 	public Composer(
 			String name,
 			String thematicIndexAbb,

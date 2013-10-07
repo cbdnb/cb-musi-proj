@@ -1,6 +1,5 @@
 package de.dnb.music.visitor;
 
-import utils.StringUtils;
 import de.dnb.gnd.utils.MyStringUtils;
 import de.dnb.music.additionalInformation.DateOfComposition;
 import de.dnb.music.additionalInformation.Key;
@@ -15,7 +14,6 @@ import de.dnb.music.mediumOfPerformance.InstrumentationList;
 import de.dnb.music.title.Arrangement;
 import de.dnb.music.title.FormalTitle;
 import de.dnb.music.title.IndividualTitle;
-import de.dnb.music.title.ListOfElements;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
 import de.dnb.music.title.PartOfWork;

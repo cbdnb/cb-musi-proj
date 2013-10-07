@@ -74,7 +74,7 @@ public abstract class MusicTitle extends AugmentableElement implements
 	 * 
 	 * @return	nicht null
 	 */
-	public AugmentableElement getActualAugmentable() {
+	public final AugmentableElement getActualAugmentable() {
 		AugmentableElement element;
 		if (containsVersion()) {
 			element = getVersion();
@@ -87,11 +87,12 @@ public abstract class MusicTitle extends AugmentableElement implements
 		return element;
 	}
 
-	@Override
+	
 	/**
 	 * this kann eigentlich nur ein Werkteil von title sein.
 	 */
-	public void addToTitle(MusicTitle title) {
+	@Override
+	public final void addToTitle(final MusicTitle title) {
 		RangeCheckUtils.assertReferenceParamNotNull("title", title);
 		if (title.containsParts()) {
 			PartOfWork titlesParts = title.getPartOfWork();

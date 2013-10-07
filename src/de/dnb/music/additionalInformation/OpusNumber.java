@@ -19,18 +19,18 @@ public class OpusNumber extends AdditionalInformation {
 	String zaehlung = null;
 
 	public static final String[] OPERA = { "op.", "Op.", "WoO" };
-	
-	public static Set<String> getOperaPhrases(){
+
+	public static Set<String> getOperaPhrases() {
 		return new TreeSet<String>(Arrays.asList(OPERA));
 	}
 
 	@Override
-	public void accept(Visitor visitor) {
+	public final void accept(final Visitor visitor) {
 		visitor.visit(this);
 	}
 
 	@Override
-	public String toString() {
+	public final String toString() {
 		return op.trim() + " " + zaehlung;
 	};
 

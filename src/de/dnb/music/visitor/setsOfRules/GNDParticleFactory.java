@@ -53,9 +53,9 @@ public class GNDParticleFactory extends AbstractParticleFactory {
 		preYear = "$f";
 
 		postYear = "";
-		
+
 		preQualifier = "$g";
-		
+
 		postQualifier = "";
 
 		preParts = "";
@@ -65,12 +65,12 @@ public class GNDParticleFactory extends AbstractParticleFactory {
 		preVersion = "$s";
 
 		preArrgmt = "$o";
-		
+
 		preComment = "$v";
 
 	}
 
-	public String getRelatorCode(WorkTitleVisitor.States state) {
+	public final String getRelatorCode(final WorkTitleVisitor.States state) {
 		switch (state) {
 		case FIRST_PART:
 		case FOLLOWING_PARTS:

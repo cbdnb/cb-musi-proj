@@ -6,12 +6,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import applikationsbausteine.RangeCheckUtils;
-
 import utils.StringUtils;
 import utils.TitleUtils;
-import de.dnb.music.genre.Genre;
-import de.dnb.music.mediumOfPerformance.Instrument;
+import applikationsbausteine.RangeCheckUtils;
 import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.Visitor;
 
@@ -27,7 +24,7 @@ public class PartOfWork extends ListOfElements<MusicTitle> implements
 
 	/**
 	 * Wenn ein übergebener String vorläufig nach ", " gesplittet
-	 * wird (Konstruktor {@link #PartOfWork(String)}
+	 * wird (Konstruktor {@link #PartOfWork(String)}.
 	 */
 	private LinkedList<String> assumedParts;
 
@@ -161,7 +158,7 @@ public class PartOfWork extends ListOfElements<MusicTitle> implements
 	}
 
 	@Override
-	public void accept(Visitor visitor) {
+	public final void accept(final Visitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if (visitChildren)
 			visitChildren(visitor);

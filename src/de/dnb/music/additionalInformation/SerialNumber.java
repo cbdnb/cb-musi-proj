@@ -20,22 +20,22 @@ public class SerialNumber extends AdditionalInformation {
 	int sonstZahl = 0;
 
 	public static final String[] PHRASES = { "Nr.", "ordre", "Buch", "libro",
-		"livre", "liber", "tomus", "Zyklus", "no.", "No.", "Teil", "Volume", "Theil",
-		"Werk", "Vol.", "production", "Bd.", "conatum", "pars", "ps.", "t.",
-		"fasc.", "Abt.", "Folge", "pt.", "parte", "H.", "Heft", "set",
-		"Sammlung" ,"book", "livraison" };
-	
-	public static Set<String> getSerialNumberPhrases(){
+		"livre", "liber", "tomus", "Zyklus", "no.", "No.", "Teil", "Volume",
+		"Theil", "Werk", "Vol.", "production", "Bd.", "conatum", "pars", "ps.",
+		"t.", "fasc.", "Abt.", "Folge", "pt.", "parte", "H.", "Heft", "set",
+		"Sammlung", "book", "livraison" };
+
+	public static Set<String> getSerialNumberPhrases() {
 		return new TreeSet<String>(Arrays.asList(PHRASES));
 	}
 
 	@Override
-	public void accept(Visitor visitor) {
+	public final void accept(final Visitor visitor) {
 		visitor.visit(this);
 	}
 
 	@Override
-	public String toString() {
+	public final String toString() {
 		return phrase + sonstZahl;
 	}
 

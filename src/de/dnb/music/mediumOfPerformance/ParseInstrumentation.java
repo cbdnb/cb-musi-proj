@@ -6,8 +6,6 @@ import java.util.regex.Pattern;
 
 import utils.StringUtils;
 
-
-
 public final class ParseInstrumentation {
 
 	private ParseInstrumentation() {
@@ -34,23 +32,24 @@ public final class ParseInstrumentation {
 	 * @param s				der zu parsende String.
 	 * @return				eine gültige Besetzung oder null
 	 */
-	public static InstrumentationList parse(final String s) {		
+	public static InstrumentationList parse(final String s) {
 		if (s == null)
-			throw new IllegalArgumentException("Null-String an parse()übergeben");
+			throw new IllegalArgumentException(
+					"Null-String an parse()übergeben");
 
 		String parseString = s;
 
 		Instrument i = parseSingleInstrument(parseString);
-		if(i == null)
+		if (i == null)
 			return null;
-		
+
 		LinkedList<Instrument> besetzung = new LinkedList<Instrument>();
-		
-		while(i != null) {
+
+		while (i != null) {
 			besetzung.add(i);
 			i = parseSingleInstrument(i.rest);
 		}
-		
+
 		return new InstrumentationList(besetzung);
 
 	}
@@ -116,7 +115,7 @@ public final class ParseInstrumentation {
 
 		return i;
 	}
-	
+
 	public static void main(final String[] args) {
 		Instrument i = parseSingleInstrument("Vla");
 		System.out.println(i);

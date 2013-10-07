@@ -72,8 +72,7 @@ public final class ParseIndividualTitle {
 			nach = parseString.substring(endMatch);
 			match = parseString.substring(startMatch, endMatch);
 			// wird benötigt, um völlig falsche Ergebnisse auszuschliessen:
-			boolean matchIsValidSeparator =
-				match.equals(", ");// || match.equals("$g");
+			boolean matchIsValidSeparator = match.equals(", ");
 
 			/*
 			 *  Vorgehen nach Regelwerk, wobei das Regelwerk nicht im Text, 

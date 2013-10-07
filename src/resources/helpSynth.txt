@@ -7,7 +7,7 @@ Diese Tool hilft bei der Synthese von Titeln.
  - Zuletzt kann noch eine Fassung dieses Werkes/Teiles erzeugt werden
  - Eine leere Fassung muss, eine Fassung mit Fassungsphrase kann mit unterscheidenden Angaben angereichert werden
  
- - Im GND-Ausgabefeld sind Instrumente (382) und Gattungen (380) standardmaeßig nicht expandiert, durch Klick auf die Box links neben „Expansion“ koennen Sie dies aendern.
+ - Im GND-Ausgabefeld sind Instrumente (382) und Gattungen (380) standardmaeßig nicht expandiert, durch Klick auf die Box links neben "Expansion" koennen Sie dies aendern.
  - Das Pica+-Feldformat kann durch Klicken auf die entsprechende Check-Box erzeugt werden.
  - Um eine Ausgabe der Gesamtzahl aller Musizierenden zu erzwingen, koennen Sie die Check-Box "Gesamtzahl" anklicken. Diese Gesamtzahl macht allerdings nur bei Kammermusik Sinn. Ist diese Checkbox nicht markiert, so wird eine Gesamtzahl nur dann ausgegeben, wenn alle Instrumente mit Zahlen versehen sind (also ausgegeben fuer Vl 1 2 Vc 1 2 3; nicht ausgegeben fuer Vl 1 2 Va)
  - Im Feld "strukturiert" sehen Sie eine moeglichst weitgehende Analyse der eingegebenen Daten. Alle diese Daten werden zur Gewinnung der 3XX-Felder in der GND herangezogen.

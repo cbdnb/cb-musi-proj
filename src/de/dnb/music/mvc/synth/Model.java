@@ -1,15 +1,6 @@
 package de.dnb.music.mvc.synth;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.net.URL;
-import java.util.Date;
 import java.util.Observable;
-import java.util.jar.JarFile;
-import java.util.zip.ZipEntry;
 
 import javax.swing.JOptionPane;
 
@@ -31,8 +22,6 @@ public class Model extends Observable {
 	private boolean forceTotalCount = false;
 
 	private boolean expansion = false;
-
-	private Date creationDate;
 
 	public final void reset() {
 		theTitle = null;
@@ -99,7 +88,6 @@ public class Model extends Observable {
 	public final void refresh() {
 		setChanged();
 		notifyObservers(null);
-
 	}
 
 }

@@ -17,12 +17,12 @@ public class ThematicIndexNumber extends AdditionalInformation {
 	String number = null;
 
 	@Override
-	public void accept(Visitor visitor) {
+	public final void accept(final Visitor visitor) {
 		visitor.visit(this);
 	}
 
 	@Override
-	public String toString() {
+	public final String toString() {
 		return abbreviation + " " + number;
 	}
 

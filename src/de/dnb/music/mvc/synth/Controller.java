@@ -2,21 +2,10 @@ package de.dnb.music.mvc.synth;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.UIManager;
 
 import de.dnb.gnd.utils.Misc;
-import de.dnb.gnd.utils.MyStringUtils;
 import de.dnb.music.additionalInformation.DateOfComposition;
 import de.dnb.music.additionalInformation.Key;
 import de.dnb.music.additionalInformation.OpusNumber;
@@ -27,7 +16,6 @@ import de.dnb.music.additionalInformation.ThematicIndexNumber;
 import de.dnb.music.genre.GenreDB;
 import de.dnb.music.mediumOfPerformance.Instrument;
 import de.dnb.music.mediumOfPerformance.InstrumentDB;
-import de.dnb.music.mvc.record.RecordController;
 import de.dnb.music.title.FormalTitle;
 import de.dnb.music.title.IndividualTitle;
 import de.dnb.music.version.ParseVersion;

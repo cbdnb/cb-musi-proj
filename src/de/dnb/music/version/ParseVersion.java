@@ -10,8 +10,6 @@ import de.dnb.music.genre.GenreList;
 import de.dnb.music.genre.ParseGenre;
 import de.dnb.music.mediumOfPerformance.InstrumentationList;
 import de.dnb.music.mediumOfPerformance.ParseInstrumentation;
-import de.dnb.music.title.MusicTitle;
-import de.dnb.music.title.ParseMusicTitle;
 
 public final class ParseVersion {
 
@@ -41,7 +39,7 @@ public final class ParseVersion {
 
 		Version version = null;
 		// Versuch nach §511  c)
-		
+
 		version = VersionDB.matchVersion(parseString);
 		if (version != null) {
 			/* 
@@ -80,28 +78,29 @@ public final class ParseVersion {
 
 		// Versuch nach §511  b)		
 		version = new Version(parseString.trim());
-		
+
 		GenreList gL = ParseGenre.parseGenreList(parseString);
-		if (gL != null) {			
+		if (gL != null) {
 			version.setGenreList(gL);
 			String rest = gL.getRest();
 			if (rest == null || rest.trim().length() == 0) {
 				// Fall b 1 zurückgeben
 				return version;
 			}
-			
+			//@formatter:off
 			InstrumentationList bes = ParseInstrumentation.parse(rest);
 			if (bes != null
 				&& bes.getChildren().size() != 0
-				&& (bes.getRest() == null || bes.getRest().trim().length() == 0)) {
+				&& (bes.getRest() == null 
+				|| bes.getRest().trim().length() == 0)) {
 				// Fall b 2 zurückgeben
 				version.setInstrumentationList(bes);
 				return version;
 			}
-			
+			//@formatter:on
 			AdditionalInformation zus =
 				ParseAdditionalInformation.parse("", rest, false);
-			if (zus != null) {				
+			if (zus != null) {
 				if (zus instanceof Key) {
 					// Fall b3 zurückgeben
 					version.setAdditionalInformation(zus);

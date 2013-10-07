@@ -56,7 +56,7 @@ public class InstrumentationList extends ListOfElements<Instrument> implements
 	}
 
 	@Override
-	public void accept(Visitor visitor) {
+	public final void accept(final Visitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if (visitChildren)
 			visitChildren(visitor);

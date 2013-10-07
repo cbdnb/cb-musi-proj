@@ -28,7 +28,7 @@ public class Instrument implements TitleElement, Comparable<Instrument>,
 	String abbreviated;
 
 	@Override
-	public int hashCode() {
+	public final int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((idn == null) ? 0 : idn.hashCode());
@@ -36,7 +36,7 @@ public class Instrument implements TitleElement, Comparable<Instrument>,
 	}
 
 	@Override
-	public boolean equals(final Object obj) {
+	public final boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
 		}
@@ -62,7 +62,7 @@ public class Instrument implements TitleElement, Comparable<Instrument>,
 	 */
 	String writtenOut;
 
-	public String getAbbreviated() {
+	public final String getAbbreviated() {
 		return abbreviated;
 	}
 
@@ -100,7 +100,7 @@ public class Instrument implements TitleElement, Comparable<Instrument>,
 		return count;
 	}
 
-	public final void setCount(int c) {
+	public final void setCount(final int c) {
 		count = c;
 	}
 
@@ -121,7 +121,7 @@ public class Instrument implements TitleElement, Comparable<Instrument>,
 	}
 
 	@Override
-	public final void accept(Visitor visitor) {
+	public final void accept(final Visitor visitor) {
 		visitor.visit(this);
 	}
 
@@ -135,7 +135,7 @@ public class Instrument implements TitleElement, Comparable<Instrument>,
 	}
 
 	@Override
-	public final void addToTitle(MusicTitle title) {
+	public final void addToTitle(final MusicTitle title) {
 		/*
 		 * Kann entweder der Fassung oder dem letzten Teil oder
 		 * dem Titel selbst hinzugefügt werden.
@@ -149,7 +149,7 @@ public class Instrument implements TitleElement, Comparable<Instrument>,
 	}
 
 	@Override
-	public Instrument clone() throws CloneNotSupportedException {
+	public final Instrument clone() throws CloneNotSupportedException {
 		return (Instrument) super.clone();
 	}
 

@@ -114,8 +114,8 @@ public class Genre implements TitleElement, Comparable<Genre> {
 		RangeCheckUtils.assertReferenceParamNotNull("title", title);
 		if (!title.isAdditable(this))
 			throw new UnsupportedOperationException(
-					"Titel enthält schon etwas anderes als "
-						+ this.getClass().getSimpleName());
+					"Form- oder Gattungsbegriff darf nicht mehr "
+						+ "hinzugefügt werden");
 		AugmentableElement element = title.getActualAugmentable();
 		element.addGenre(this);
 	}

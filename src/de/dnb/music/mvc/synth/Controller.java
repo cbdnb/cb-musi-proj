@@ -198,7 +198,7 @@ public class Controller {
 			if (v.isEmpty()) {
 				version = new Version();
 				String message =
-					"Sie sollten jetzt noch entweder"
+					"Sie müssen jetzt noch entweder"
 						+ "\n\ta) eine WV-Nummer oder eine Opusnummer\toder"
 						+ "\n\tb) einen Gattungsbegriff "
 						+ "\n\t     und evtl. Besetzung, Tonart, Jahr oder Zählung"

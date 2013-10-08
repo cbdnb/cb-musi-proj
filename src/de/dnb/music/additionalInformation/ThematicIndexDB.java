@@ -872,12 +872,12 @@ public final class ThematicIndexDB {
 	 * Alle Werkverzeichnisnummern.
 	 */
 	private static TreeSet<String> knownThIdx = new TreeSet<String>();
-	
+
 	/**
 	 * Liefert alle Werkverzeichnisnummern.
 	 * @return Alle Werkverzeichnisnummern.
 	 */
-	public static Set<String> getThematicIndices(){
+	public static Set<String> getThematicIndices() {
 		return new TreeSet<String>(knownThIdx);
 	}
 
@@ -957,6 +957,14 @@ public final class ThematicIndexDB {
 		return null;
 	}
 
+	public static String getComposerID(final String compName) {
+		for (String[] line : DATA) {
+			if (line[NAME].equals(compName))
+				return line[IDN];
+		}
+		return null;
+	}
+
 	public static boolean isValidThIdx(final String komponist, final String wv) {
 		//	Hier muss man wohl von einem nicht
 		// benannten Komponisten ausgehen
@@ -977,6 +985,8 @@ public final class ThematicIndexDB {
 		return false;
 	}
 
+	//@formatter:on
+
 	public static Set<Composer> getAllComposers() {
 		Set<Composer> genSet = new TreeSet<Composer>();
 		for (String[] genreS : DATA) {
@@ -990,7 +1000,17 @@ public final class ThematicIndexDB {
 	 * @param args
 	 */
 	public static void main(final String[] args) {
-		System.out.println(getThematicIndices());
+		HashMap<String, LinkedList<String>> map = komp2ThIdxsMap;
+		Set<String> keyset = map.keySet();
+		for (String composer : keyset) {
+			String idn = getComposerID(composer);
+			String source = getSourceAbb(idn);
+			LinkedList<String> abbs = map.get(composer);
+			for (String abb : abbs) {
+				System.out.println(composer + "\t" + source + "\t" + abb);
+
+			}
+		}
 
 	}
 

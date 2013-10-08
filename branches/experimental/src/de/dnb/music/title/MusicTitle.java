@@ -44,6 +44,9 @@ public abstract class MusicTitle extends AugmentableElement implements
 	}
 
 	public final void setVersion(final Version ver) {
+		if (containsVersion())
+			throw new UnsupportedOperationException(
+					"Titel enthält schon eine Fassung ");
 		this.version = ver;
 	}
 
@@ -99,13 +102,13 @@ public abstract class MusicTitle extends AugmentableElement implements
 	 * this kann eigentlich nur ein Werkteil von title sein.
 	 */
 	@Override
-	public final void addToTitle(final MusicTitle title) {
-		RangeCheckUtils.assertReferenceParamNotNull("title", title);
-		if (title.containsParts()) {
-			PartOfWork titlesParts = title.getPartOfWork();
-			titlesParts.add(this);
+	public final void addToTitle(final MusicTitle otherTitle) {
+		RangeCheckUtils.assertReferenceParamNotNull("title", otherTitle);
+		if (otherTitle.containsParts()) {
+			PartOfWork otherParts = otherTitle.getPartOfWork();
+			otherParts.add(this);
 		} else {
-			title.setPartOfWork(new PartOfWork(this));
+			otherTitle.setPartOfWork(new PartOfWork(this));
 		}
 	}
 

@@ -40,17 +40,25 @@ public class Model extends Observable {
 		refresh();
 	}
 
-	public final void addElement(TitleElement element) {
+	/**
+	 * Fügt Element dem Titel hinzu.
+	 * 
+	 * @param element	nicht null
+	 * @return			Erfolg.
+	 */
+	public final boolean addElement(TitleElement element) {
 		RangeCheckUtils.assertReferenceParamNotNull("element", element);
 		try {
 			MusicTitle oldTitle = CopyObjectUtils.copyObject(theTitle);
 			element.addToTitle(theTitle);
 			history.push(oldTitle);
 			refresh();
+			return true;
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(),
-					"Bitte erst neuen Titel erzeugen",
+					"Erst neuen Titel erzeugen",
 					JOptionPane.OK_CANCEL_OPTION);
+			return false;
 		}
 	}
 

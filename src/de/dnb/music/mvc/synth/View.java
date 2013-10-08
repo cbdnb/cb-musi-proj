@@ -357,6 +357,7 @@ public class View implements Observer {
 	public final void update(final Observable obs, final Object message) {
 		gui.textAreaGND.setText(model.getGND());
 		gui.textAreaStruct.setText(model.getStructured());
+		gui.textAreaAleph.setText(model.getAleph());
 	}
 
 	public final Component getGui() {

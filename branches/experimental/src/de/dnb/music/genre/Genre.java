@@ -132,4 +132,8 @@ public class Genre implements TitleElement, Comparable<Genre>, Serializable {
 		System.out.println(g.toString(Numeri.SINGULAR));
 	}
 
+	public String getNid() {
+		return nid;
+	}
+
 }

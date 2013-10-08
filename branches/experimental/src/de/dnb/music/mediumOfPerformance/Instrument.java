@@ -168,4 +168,8 @@ public class Instrument implements TitleElement, Comparable<Instrument>,
 		System.out.println(TitleUtils.getStructured(mt));
 	}
 
+	public String getNid() {
+		return nid;
+	}
+
 }

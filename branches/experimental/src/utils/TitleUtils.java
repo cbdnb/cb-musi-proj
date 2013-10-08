@@ -9,6 +9,8 @@ import de.dnb.music.genre.GenreList;
 import de.dnb.music.genre.ParseGenre;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
+import de.dnb.music.visitor.AdditionalDataIn3XXVisitor;
+import de.dnb.music.visitor.AuthorityDataAlephVisitor;
 import de.dnb.music.visitor.StructuredVisitor;
 import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.setsOfRules.AbstractParticleFactory;
@@ -132,6 +134,25 @@ public final class TitleUtils {
 		return RecordUtils.toPica(
 				GNDTitleUtils.get3XXLines(element, forceTotalCount),
 				Format.PICA3, expansion, Record.LINE_SEPARATOR, '$');
+	}
+
+	/**
+	 * Liefert die 3XX-Felder als String.
+	 * 
+	 * @param element	TitleElement
+	 * @param forceTotalCount	Gesamtzahl bei Instrumenten erzwingen
+	 * @return 3XX-Felder der GND inclusive 548 (Zeitangabe)
+	 */
+	public static String getGND3XXAleph(
+			final TitleElement element,
+			final boolean forceTotalCount) {
+		AuthorityDataAlephVisitor ausvis =
+			new AuthorityDataAlephVisitor(forceTotalCount);
+		element.accept(ausvis);
+		final AdditionalDataIn3XXVisitor advis =
+				new AdditionalDataIn3XXVisitor();
+			element.accept(advis);
+		return ausvis.toString() + "\n" + advis.toString();
 	}
 
 	public static String getGND3XX(final TitleElement element) {

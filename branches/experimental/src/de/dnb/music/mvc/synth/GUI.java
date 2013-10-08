@@ -20,6 +20,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import java.awt.Dimension;
 
 public class GUI extends JFrame {
 
@@ -54,8 +55,6 @@ public class GUI extends JFrame {
 	private JPanel panelFormal;
 	private JPanel panelIndiv;
 	JTextField textFieldIndivTitle;
-	private JScrollPane scrollPane;
-	JTextArea textAreaGND;
 	private JScrollPane scrollPane_1;
 	JTextArea textAreaStruct;
 	private JLabel lblGnd;
@@ -65,8 +64,6 @@ public class GUI extends JFrame {
 	JButton btnAddKey;
 	JButton btnAddYear;
 	JButton btnVersion;
-	JCheckBox checkBoxExpansion;
-	JCheckBox checkBoxPicaPlus;
 	JCheckBox checkBoxTotalCount;
 	JComboBox comboBoxGenreFormal;
 	JPanel panelSerial;
@@ -83,6 +80,15 @@ public class GUI extends JFrame {
 	JLabel lblTip;
 	JTextArea textPaneTip;
 	JButton btnUndo;
+	JTabbedPane tabbedPaneSystems;
+	JPanel panelPica;
+	JPanel panelAleph;
+	JCheckBox checkBoxExpansion;
+	JCheckBox checkBoxPicaPlus;
+	JScrollPane scrollPaneGND;
+	JTextArea textAreaGND;
+	JScrollPane scrollPaneAleph;
+	JTextArea textAreaAleph;
 
 	/**
 	 * Create the frame.
@@ -283,15 +289,8 @@ public class GUI extends JFrame {
 		comboBoxVersion.setEditable(true);
 		comboBoxVersion.setBounds(377, 107, 321, 22);
 
-		scrollPane = new JScrollPane();
-		scrollPane.setBounds(36, 360, 708, 300);
-
 		scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(754, 360, 400, 300);
-
-		textAreaGND = new JTextArea();
-		textAreaGND.setEditable(false);
-		scrollPane.setViewportView(textAreaGND);
 		contentPane.setLayout(null);
 		contentPane.add(btnAddGenre);
 		contentPane.add(comboBoxGenre);
@@ -303,7 +302,6 @@ public class GUI extends JFrame {
 		contentPane.add(lblFassungsphraseAuswhlen);
 		contentPane.add(btnNew);
 		contentPane.add(tabbedPaneNewTitle);
-		contentPane.add(scrollPane);
 		contentPane.add(scrollPane_1);
 
 		textAreaStruct = new JTextArea();
@@ -313,7 +311,7 @@ public class GUI extends JFrame {
 		contentPane.add(comboBoxVersion);
 
 		lblGnd = new JLabel("GND:");
-		lblGnd.setBounds(36, 335, 46, 14);
+		lblGnd.setBounds(117, 362, 46, 23);
 		contentPane.add(lblGnd);
 
 		lblStrukturiert = new JLabel("Strukturiert:");
@@ -324,18 +322,6 @@ public class GUI extends JFrame {
 		btnVersion.setEnabled(false);
 		btnVersion.setBounds(205, 107, 167, 23);
 		contentPane.add(btnVersion);
-
-		checkBoxExpansion = new JCheckBox("Expansion");
-		checkBoxExpansion.setBounds(107, 330, 105, 23);
-		contentPane.add(checkBoxExpansion);
-
-		checkBoxPicaPlus = new JCheckBox("Pica+");
-		checkBoxPicaPlus.setBounds(236, 330, 90, 23);
-		contentPane.add(checkBoxPicaPlus);
-
-		checkBoxTotalCount = new JCheckBox("Gesamtzahl");
-		checkBoxTotalCount.setBounds(331, 330, 134, 23);
-		contentPane.add(checkBoxTotalCount);
 		
 		lblTip = new JLabel("Tip:");
 		lblTip.setBounds(754, 111, 46, 14);
@@ -355,5 +341,47 @@ public class GUI extends JFrame {
 		btnUndo.setVisible(false);
 		btnUndo.setBounds(36, 102, 134, 23);
 		contentPane.add(btnUndo);
+		
+		tabbedPaneSystems = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPaneSystems.setBounds(36, 332, 699, 328);
+		contentPane.add(tabbedPaneSystems);
+		
+		panelPica = new JPanel();
+		tabbedPaneSystems.addTab("Pica", null, panelPica, null);
+		panelPica.setLayout(null);
+		
+		scrollPaneGND = new JScrollPane();
+		scrollPaneGND.setLocation(10, 35);
+		scrollPaneGND.setSize(new Dimension(674, 251));
+		scrollPaneGND.setPreferredSize(new Dimension(20, 20));
+		panelPica.add(scrollPaneGND);
+		
+		textAreaGND = new JTextArea();
+		scrollPaneGND.setViewportView(textAreaGND);
+		
+		checkBoxExpansion = new JCheckBox("Expansion");
+		checkBoxExpansion.setBounds(293, 5, 118, 23);
+		panelPica.add(checkBoxExpansion);
+		
+		checkBoxPicaPlus = new JCheckBox("Pica+");
+		checkBoxPicaPlus.setBounds(427, 5, 118, 23);
+		panelPica.add(checkBoxPicaPlus);
+		
+		panelAleph = new JPanel();
+		tabbedPaneSystems.addTab("Aleph", null, panelAleph, null);
+		panelAleph.setLayout(null);
+		
+		scrollPaneAleph = new JScrollPane();
+		scrollPaneAleph.setLocation(10, 35);
+		scrollPaneAleph.setSize(new Dimension(674, 251));
+		scrollPaneAleph.setPreferredSize(new Dimension(20, 20));
+		panelAleph.add(scrollPaneAleph);
+		
+		textAreaAleph = new JTextArea();
+		scrollPaneAleph.setViewportView(textAreaAleph);
+		
+				checkBoxTotalCount = new JCheckBox("Gesamtzahl");
+				checkBoxTotalCount.setBounds(36, 288, 151, 23);
+				contentPane.add(checkBoxTotalCount);
 	}
 }

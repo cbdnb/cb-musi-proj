@@ -1,7 +1,10 @@
 package de.dnb.music.mvc.synth;
 
+import static utils.GNDConstants.TAG_DB;
+
 import java.util.Observable;
 import java.util.Stack;
+import java.util.regex.Matcher;
 
 import javax.swing.JOptionPane;
 
@@ -13,6 +16,7 @@ import applikationsbausteine.RangeCheckUtils;
 import de.dnb.gnd.parser.Format;
 import de.dnb.gnd.parser.Record;
 import de.dnb.gnd.utils.RecordUtils;
+import de.dnb.music.publicInterface.Constants;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.visitor.TitleElement;
 
@@ -56,8 +60,7 @@ public class Model extends Observable {
 			return true;
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(),
-					"Erst neuen Titel erzeugen",
-					JOptionPane.OK_CANCEL_OPTION);
+					"Erst neuen Titel erzeugen", JOptionPane.OK_CANCEL_OPTION);
 			return false;
 		}
 	}
@@ -117,13 +120,28 @@ public class Model extends Observable {
 	public final void refresh() {
 		setChanged();
 		notifyObservers(null);
-//		System.err.println("--------");
-//		for (MusicTitle title : history) {
-//			if (title == null)
-//				System.err.println("**" + title);
-//			else
-//				System.err.println("**" + TitleUtils.getStructured(title));
-//		}
+		//		System.err.println("--------");
+		//		for (MusicTitle title : history) {
+		//			if (title == null)
+		//				System.err.println("**" + title);
+		//			else
+		//				System.err.println("**" + TitleUtils.getStructured(title));
+		//		}
+	}
+
+	public String getAleph() {
+		if (theTitle == null)
+			return "";
+		String s = TitleUtils.getGND1XXPlusTag(theTitle);
+		s += "\n" + TitleUtils.getGND3XXAleph(theTitle, forceTotalCount);
+		if (theTitle.containsParts())
+			s +=
+				"\n430 " + TitleUtils.getRAK(theTitle) + "$v"
+					+ Constants.KOM_PORTAL_430;
+		s =
+			s.replaceAll(Matcher.quoteReplacement("$p"),
+					Matcher.quoteReplacement("$u"));
+		return s;
 	}
 
 }

@@ -31,7 +31,6 @@ public class UndoController {
 	class NewListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			view.enableNewTitle();
 			view.setTip("Bitte zunächst Individual- oder Formalsachtitel eingeben");
 			model.reset();
 		}
@@ -56,7 +55,7 @@ public class UndoController {
 				view.setTip("");
 				model.addElement(title);
 			} catch (IllegalArgumentException ex) {
-				ex.printStackTrace();
+//				ex.printStackTrace();
 				JOptionPane.showMessageDialog(null, ex.getMessage(),
 						"Falsche Eingabe", JOptionPane.OK_CANCEL_OPTION);
 			}
@@ -92,7 +91,6 @@ public class UndoController {
 					ParseAdditionalInformation.matchOpus(opus);
 				model.addElement(opusNumber);
 			} catch (IllegalArgumentException ex) {
-				ex.printStackTrace();
 				JOptionPane.showMessageDialog(null, ex.getMessage(),
 						"Falsche Eingabe", JOptionPane.OK_CANCEL_OPTION);
 			}
@@ -108,7 +106,6 @@ public class UndoController {
 					ParseAdditionalInformation.matchThematicIndex(null, idx);
 				model.addElement(idxNumber);
 			} catch (IllegalArgumentException ex) {
-				ex.printStackTrace();
 				JOptionPane.showMessageDialog(null, ex.getMessage(),
 						"Falsche Eingabe", JOptionPane.OK_CANCEL_OPTION);
 			}
@@ -124,7 +121,7 @@ public class UndoController {
 					ParseAdditionalInformation.matchSerialNumber(ser, true);
 				model.addElement(serNumber);
 			} catch (IllegalArgumentException ex) {
-				ex.printStackTrace();
+//				ex.printStackTrace();
 				JOptionPane.showMessageDialog(null, ex.getMessage(),
 						"Falsche Eingabe", JOptionPane.OK_CANCEL_OPTION);
 			}
@@ -140,7 +137,7 @@ public class UndoController {
 					ParseAdditionalInformation.matchDate(y);
 				model.addElement(year);
 			} catch (IllegalArgumentException ex) {
-				ex.printStackTrace();
+//				ex.printStackTrace();
 				JOptionPane.showMessageDialog(null, ex.getMessage(),
 						"Falsche Eingabe", JOptionPane.OK_CANCEL_OPTION);
 			}
@@ -170,15 +167,15 @@ public class UndoController {
 		public void actionPerformed(ActionEvent e) {
 			String v = view.getVersionPhrase();
 			Version version;
+			String message = "";
 			if (v.isEmpty()) {
 				version = new Version();
-				String message =
+				message =
 					"Sie müssen jetzt noch entweder"
 						+ "\n\ta) eine WV-Nummer oder eine Opusnummer\toder"
 						+ "\n\tb) einen Gattungsbegriff "
 						+ "\n\t     und evtl. Besetzung, Tonart, Jahr oder Zählung"
 						+ "\neingeben";
-				view.setTip(message);
 			} else {
 
 				version = ParseVersion.parse(null, v);
@@ -186,17 +183,19 @@ public class UndoController {
 					|| (version.getFallgruppeParagraphM511() == 'c' && version
 							.getUntergruppe() == 5)) {
 					version = new Version(v);
-					view.setTip("Keine weiteren Eingaben mehr möglich, "
-						+ "\nda eine eigene Fassungsphrase erzeugt wurde");
+					message =
+						"Keine weiteren Eingaben mehr sinnvoll, "
+							+ "\nda eine eigene Fassungsphrase erzeugt wurde";
 				} else {
-					String message =
+					message =
 						"Sie können zusätzlich noch"
 							+ "\n\ta) eine Jahreszahl und/oder"
 							+ "\n\tb) eine Besetzung" + "\neingeben";
-					view.setTip(message);
 				}
 			}
-			model.addElement(version);
+			boolean success = model.addElement(version);
+			if (success)
+				view.setTip(message);
 		}
 	}
 
@@ -240,7 +239,7 @@ public class UndoController {
 		this.model = new Model();
 		this.view = new View(model);
 		model.addObserver(view);
-		
+
 		view.enableAll();
 		view.addNewListener(new NewListener());
 		view.setUndoVisible(true);

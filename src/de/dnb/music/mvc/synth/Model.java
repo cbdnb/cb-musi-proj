@@ -2,8 +2,11 @@ package de.dnb.music.mvc.synth;
 
 import static utils.GNDConstants.TAG_DB;
 
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Observable;
 import java.util.Stack;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 
 import javax.swing.JOptionPane;
@@ -132,16 +135,8 @@ public class Model extends Observable {
 	public String getAleph() {
 		if (theTitle == null)
 			return "";
-		String s = TitleUtils.getGND1XXPlusTag(theTitle);
-		s += "\n" + TitleUtils.getGND3XXAleph(theTitle, forceTotalCount);
-		if (theTitle.containsParts())
-			s +=
-				"\n430 " + TitleUtils.getRAK(theTitle) + "$v"
-					+ Constants.KOM_PORTAL_430;
-		s =
-			s.replaceAll(Matcher.quoteReplacement("$p"),
-					Matcher.quoteReplacement("$u"));
-		return s;
+		return TitleUtils.getAleph(theTitle, forceTotalCount);
+
 	}
 
 }

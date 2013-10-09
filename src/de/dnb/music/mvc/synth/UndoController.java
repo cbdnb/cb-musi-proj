@@ -10,6 +10,7 @@ import de.dnb.music.additionalInformation.DateOfComposition;
 import de.dnb.music.additionalInformation.Key;
 import de.dnb.music.additionalInformation.OpusNumber;
 import de.dnb.music.additionalInformation.ParseAdditionalInformation;
+import de.dnb.music.additionalInformation.Qualifier;
 import de.dnb.music.additionalInformation.SerialNumber;
 import de.dnb.music.additionalInformation.ThematicIndexDB;
 import de.dnb.music.additionalInformation.ThematicIndexNumber;
@@ -143,6 +144,22 @@ public class UndoController {
 			}
 		}
 	}
+	
+	class QualifListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			try {
+				String q = view.getQualifier();
+				Qualifier qualif =
+					new Qualifier(q);
+				model.addElement(qualif);
+			} catch (IllegalArgumentException ex) {
+//				ex.printStackTrace();
+				JOptionPane.showMessageDialog(null, ex.getMessage(),
+						"Falsche Eingabe", JOptionPane.OK_CANCEL_OPTION);
+			}
+		}
+	}
 
 	class KeyListener implements ActionListener {
 		@Override
@@ -259,6 +276,7 @@ public class UndoController {
 		view.addYearListener(new YearListener());
 		view.addKeyListener(new KeyListener());
 		view.addModusListener(new ModusListener());
+		view.addQualiListener(new QualifListener());
 
 		view.addExpansionListener(new ExpansionListener());
 		view.addNumberListener(new NumberListener());

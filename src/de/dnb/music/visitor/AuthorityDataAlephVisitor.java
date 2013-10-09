@@ -87,8 +87,8 @@ public class AuthorityDataAlephVisitor extends Visitor {
 	@Override
 	public final boolean visit(final Version version) {
 		relatedIn550 =
-			"\n550" + dollarS + "Fassung" + dollar9 + owner + "4287542-0"
-				+ dollar4 + "obin";
+			"\n550" + dollarS + "Fassung" + dollar4 + "obin" + dollar9 + owner
+				+ "4287542-0";
 		return true; // tiefer gehen, um Instrumente ... zu extrahieren.
 	}
 
@@ -98,8 +98,8 @@ public class AuthorityDataAlephVisitor extends Visitor {
 	@Override
 	public final void visit(final Arrangement arrangement) {
 		relatedIn550 =
-			"\n550" + dollarS + "Bearbeitung" + dollar9 + owner + "4120981-3"
-				+ dollar4 + "obin";
+			"\n550" + dollarS + "Bearbeitung" + dollar4 + "obin" + dollar9
+				+ owner + "4120981-3";
 	}
 
 	@Override

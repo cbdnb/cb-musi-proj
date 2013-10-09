@@ -70,6 +70,10 @@ public class View implements Observer {
 	public final void addYearListener(final ActionListener al) {
 		gui.btnAddYear.addActionListener(al);
 	}
+	
+	public final void addQualiListener(final ActionListener al) {
+		gui.btnQualifier.addActionListener(al);
+	}
 
 	public final void addSerialListener(final ActionListener al) {
 		gui.btnSerial.addActionListener(al);
@@ -200,6 +204,7 @@ public class View implements Observer {
 		gui.btnAddYear.setEnabled(false);
 		gui.btnSerial.setEnabled(false);
 		gui.btnAddModus.setEnabled(false);
+		gui.btnQualifier.setEnabled(false);
 
 	}
 
@@ -217,6 +222,7 @@ public class View implements Observer {
 		gui.btnAddYear.setEnabled(true);
 		gui.btnSerial.setEnabled(true);
 		gui.btnAddModus.setEnabled(true);
+		gui.btnQualifier.setEnabled(true);
 	}
 
 	public void disableAll() {
@@ -233,7 +239,7 @@ public class View implements Observer {
 		gui.btnAddYear.setEnabled(false);
 		gui.btnSerial.setEnabled(false);
 		gui.btnAddModus.setEnabled(false);
-
+		gui.btnQualifier.setEnabled(false);
 	}
 
 	public void disableAfterVersion() {
@@ -250,6 +256,7 @@ public class View implements Observer {
 		gui.btnAddYear.setEnabled(true);
 		gui.btnSerial.setEnabled(true);
 		gui.btnAddModus.setEnabled(true);
+		gui.btnQualifier.setEnabled(false);
 	}
 
 	public void setTip(String tip) {
@@ -339,6 +346,13 @@ public class View implements Observer {
 		if (year.isEmpty())
 			throw new IllegalArgumentException("Jahreszahl eingeben");
 		return year;
+	}
+	
+	public final String getQualifier() {
+		String qualifier = gui.textFieldQualifier.getText();
+		if (qualifier.isEmpty())
+			throw new IllegalArgumentException("Zusatz eingeben");
+		return qualifier;
 	}
 
 	public final boolean expansionWanted() {

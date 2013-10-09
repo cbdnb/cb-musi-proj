@@ -335,6 +335,10 @@ public final class TitleUtils {
 		s =
 			s.replaceAll(Matcher.quoteReplacement("$g"),
 					Matcher.quoteReplacement("$h"));
+		// 130/430-t
+		s = s.replace("130 ", "130 $a $t");
+		s = s.replace("430 ", "430 $a $t");
+		
 		// Sortieren und komprimieren - nötig?
 		String[] lines = s.split("\n");
 		TreeSet<String> lineSet = new TreeSet<String>(Arrays.asList(lines));

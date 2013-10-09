@@ -336,8 +336,8 @@ public final class TitleUtils {
 			s.replaceAll(Matcher.quoteReplacement("$g"),
 					Matcher.quoteReplacement("$h"));
 		// 130/430-t
-		s = s.replace("130 ", "130 $a $t");
-		s = s.replace("430 ", "430 $a $t");
+		s = s.replace("130 ", "130 $p $t");
+		s = s.replace("430 ", "430 $p $t");
 		
 		// Sortieren und komprimieren - nötig?
 		String[] lines = s.split("\n");

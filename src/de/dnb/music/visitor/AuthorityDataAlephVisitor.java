@@ -119,9 +119,7 @@ public class AuthorityDataAlephVisitor extends Visitor {
 			|| instrument.getIdn().length() == 0)
 			return;
 
-		instrIn382 +=
-			"\n382" + dollarS + instrument.getSwd() + dollar9 + owner
-				+ instrument.getNid();
+		instrIn382 += "\n382" + dollarS + instrument.getSwd();
 
 		int count = instrument.getCount();
 		if (count > 1) {
@@ -130,7 +128,8 @@ public class AuthorityDataAlephVisitor extends Visitor {
 			outputTotalCount = false;
 		if (forceTotalCount || count > 1)
 			totalCount += count;
-
+		
+		instrIn382 += dollar9 + owner + instrument.getNid();
 	}
 
 	@Override

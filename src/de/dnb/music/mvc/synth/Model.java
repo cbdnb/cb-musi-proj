@@ -1,25 +1,17 @@
 package de.dnb.music.mvc.synth;
 
-import static utils.GNDConstants.TAG_DB;
-
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.Observable;
 import java.util.Stack;
-import java.util.TreeSet;
-import java.util.regex.Matcher;
 
 import javax.swing.JOptionPane;
-
-import cloneable.CopyObjectUtils;
 
 import utils.GNDTitleUtils;
 import utils.TitleUtils;
 import applikationsbausteine.RangeCheckUtils;
+import cloneable.CopyObjectUtils;
 import de.dnb.gnd.parser.Format;
 import de.dnb.gnd.parser.Record;
 import de.dnb.gnd.utils.RecordUtils;
-import de.dnb.music.publicInterface.Constants;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.visitor.TitleElement;
 
@@ -53,7 +45,7 @@ public class Model extends Observable {
 	 * @param element	nicht null
 	 * @return			Erfolg.
 	 */
-	public final boolean addElement(TitleElement element) {
+	public final boolean addElement(final TitleElement element) {
 		RangeCheckUtils.assertReferenceParamNotNull("element", element);
 		try {
 			MusicTitle oldTitle = CopyObjectUtils.copyObject(theTitle);
@@ -68,7 +60,7 @@ public class Model extends Observable {
 		}
 	}
 
-	public final void addElement(MusicTitle title) {
+	public final void addElement(final MusicTitle title) {
 		RangeCheckUtils.assertReferenceParamNotNull("title", title);
 		history.push(CopyObjectUtils.copyObject(theTitle));
 		if (theTitle == null)
@@ -132,7 +124,7 @@ public class Model extends Observable {
 		//		}
 	}
 
-	public String getAleph() {
+	public final String getAleph() {
 		if (theTitle == null)
 			return "";
 		return TitleUtils.getAleph(theTitle, forceTotalCount);

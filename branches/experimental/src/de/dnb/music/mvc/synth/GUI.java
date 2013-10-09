@@ -89,6 +89,9 @@ public class GUI extends JFrame {
 	JTextArea textAreaGND;
 	JScrollPane scrollPaneAleph;
 	JTextArea textAreaAleph;
+	private JPanel panelQualifier;
+	JTextField textFieldQualifier;
+	JButton btnQualifier;
 
 	/**
 	 * Create the frame.
@@ -299,6 +302,20 @@ public class GUI extends JFrame {
 		contentPane.add(comboBoxCount);
 		contentPane.add(lblmal);
 		contentPane.add(tabbedPaneAdditional);
+		
+		panelQualifier = new JPanel();
+		panelQualifier.setLayout(null);
+		tabbedPaneAdditional.addTab("Identfiz. Zusatz", null, panelQualifier, null);
+		
+		textFieldQualifier = new JTextField();
+		textFieldQualifier.setColumns(10);
+		textFieldQualifier.setBounds(10, 11, 191, 20);
+		panelQualifier.add(textFieldQualifier);
+		
+		btnQualifier = new JButton("hinzufügen");
+		btnQualifier.setEnabled(false);
+		btnQualifier.setBounds(231, 11, 120, 20);
+		panelQualifier.add(btnQualifier);
 		contentPane.add(lblFassungsphraseAuswhlen);
 		contentPane.add(btnNew);
 		contentPane.add(tabbedPaneNewTitle);

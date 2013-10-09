@@ -17,7 +17,7 @@ public abstract class AdditionalInformation implements TitleElement, Serializabl
 	private static final long serialVersionUID = -1494467999400306326L;
 
 	@Override
-	public final void addToTitle(MusicTitle title) {
+	public void addToTitle(MusicTitle title) {
 		RangeCheckUtils.assertReferenceParamNotNull("title", title);
 		AugmentableElement element = title.getActualAugmentable();
 		element.addAdditionalInformation(this);

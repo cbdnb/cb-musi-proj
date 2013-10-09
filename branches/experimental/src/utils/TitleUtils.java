@@ -1,5 +1,10 @@
 package utils;
 
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.TreeSet;
+import java.util.regex.Matcher;
+
 import applikationsbausteine.RangeCheckUtils;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
 import de.dnb.gnd.parser.Format;
@@ -7,6 +12,7 @@ import de.dnb.gnd.parser.Record;
 import de.dnb.gnd.utils.RecordUtils;
 import de.dnb.music.genre.GenreList;
 import de.dnb.music.genre.ParseGenre;
+import de.dnb.music.publicInterface.Constants;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
 import de.dnb.music.visitor.AdditionalDataIn3XXVisitor;
@@ -297,12 +303,54 @@ public final class TitleUtils {
 	public static boolean isConformToRules(
 			final String titleStr,
 			final AbstractParticleFactory rulesFactory) {
-
 		if (titleStr == null)
 			throw new IllegalArgumentException("übergebener Titel ist null");
 		MusicTitle mt = ParseMusicTitle.parse(null, titleStr);
 		return isIdenticalWithinRules(titleStr, mt, rulesFactory);
+	}
+	
+	/**
+	 * Liefert die Aleph-Form eines Titels.
+	 * 
+	 * @param theMusicTitle			nicht null
+	 * @param forceTotalCount	Zählung der Instrumente
+	 * @return					Aleph.
+	 */
+	public static String getAleph(
+			final MusicTitle theMusicTitle,
+			final boolean forceTotalCount) {
+		RangeCheckUtils.assertReferenceParamNotNull("theTitle", theMusicTitle);
 
+		// zusammenbauen
+		String s = TitleUtils.getGND1XXPlusTag(theMusicTitle);
+		s += "\n" + TitleUtils.getGND3XXAleph(theMusicTitle, forceTotalCount);
+		if (theMusicTitle.containsParts())
+			s +=
+				"\n430 " + TitleUtils.getRAK(theMusicTitle) + "$v"
+					+ Constants.KOM_PORTAL_430;
+		// Alephspezifische Unterfelder
+		s =
+			s.replaceAll(Matcher.quoteReplacement("$p"),
+					Matcher.quoteReplacement("$u"));
+		s =
+			s.replaceAll(Matcher.quoteReplacement("$g"),
+					Matcher.quoteReplacement("$h"));
+		// Sortieren und komprimieren - nötig?
+		String[] lines = s.split("\n");
+		TreeSet<String> lineSet = new TreeSet<String>(Arrays.asList(lines));
+		String result = "";
+		//@formatter:off
+		for (Iterator<String> iterator = lineSet.iterator(); 
+				iterator.hasNext();) {
+			//@formatter:on
+			String line = iterator.next();
+			if (!line.isEmpty()) {
+				result += line;
+				if (iterator.hasNext())
+					result += "\n";
+			}
+		}
+		return result;
 	}
 
 	/**

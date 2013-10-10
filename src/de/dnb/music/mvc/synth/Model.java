@@ -11,6 +11,8 @@ import applikationsbausteine.RangeCheckUtils;
 import cloneable.CopyObjectUtils;
 import de.dnb.gnd.parser.Format;
 import de.dnb.gnd.parser.Record;
+import de.dnb.gnd.parser.line.Line;
+import de.dnb.gnd.parser.line.LineParser;
 import de.dnb.gnd.utils.RecordUtils;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.visitor.TitleElement;

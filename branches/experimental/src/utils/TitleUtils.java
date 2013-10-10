@@ -1,5 +1,7 @@
 package utils;
 
+import static utils.GNDConstants.TAG_DB;
+
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.TreeSet;
@@ -9,6 +11,7 @@ import applikationsbausteine.RangeCheckUtils;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
 import de.dnb.gnd.parser.Format;
 import de.dnb.gnd.parser.Record;
+import de.dnb.gnd.parser.line.LineParser;
 import de.dnb.gnd.utils.RecordUtils;
 import de.dnb.music.genre.GenreList;
 import de.dnb.music.genre.ParseGenre;
@@ -156,8 +159,8 @@ public final class TitleUtils {
 			new AuthorityDataAlephVisitor(forceTotalCount);
 		element.accept(ausvis);
 		final AdditionalDataIn3XXVisitor advis =
-				new AdditionalDataIn3XXVisitor();
-			element.accept(advis);
+			new AdditionalDataIn3XXVisitor();
+		element.accept(advis);
 		return ausvis.toString() + "\n" + advis.toString();
 	}
 
@@ -308,7 +311,7 @@ public final class TitleUtils {
 		MusicTitle mt = ParseMusicTitle.parse(null, titleStr);
 		return isIdenticalWithinRules(titleStr, mt, rulesFactory);
 	}
-	
+
 	/**
 	 * Liefert die Aleph-Form eines Titels.
 	 * 
@@ -320,14 +323,21 @@ public final class TitleUtils {
 			final MusicTitle theMusicTitle,
 			final boolean forceTotalCount) {
 		RangeCheckUtils.assertReferenceParamNotNull("theTitle", theMusicTitle);
+		String s;
+		if (theMusicTitle.containsVersion()) {
+			s = "093 $a wif";
+		} else {
+			s = "093 $a wim";
+		}
 
 		// zusammenbauen
-		String s = TitleUtils.getGND1XXPlusTag(theMusicTitle);
+		s += "\n" + TitleUtils.getGND1XXPlusTag(theMusicTitle);
 		s += "\n" + TitleUtils.getGND3XXAleph(theMusicTitle, forceTotalCount);
 		if (theMusicTitle.containsParts())
 			s +=
 				"\n430 " + TitleUtils.getRAK(theMusicTitle) + "$v"
 					+ Constants.KOM_PORTAL_430;
+
 		// Alephspezifische Unterfelder
 		s =
 			s.replaceAll(Matcher.quoteReplacement("$p"),
@@ -338,7 +348,7 @@ public final class TitleUtils {
 		// 130/430-t
 		s = s.replace("130 ", "130 $p $t");
 		s = s.replace("430 ", "430 $p $t");
-		
+
 		// Sortieren und komprimieren - nötig?
 		String[] lines = s.split("\n");
 		TreeSet<String> lineSet = new TreeSet<String>(Arrays.asList(lines));

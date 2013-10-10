@@ -163,6 +163,16 @@ public final class GNDTitleUtils {
 				// nix
 			}
 		}
+		try {
+			if (musicTitle.containsVersion()) {
+				line = LineParser.parse("008 wif", TAG_DB);
+			} else {
+				line = LineParser.parse("008 wim", TAG_DB);
+			}
+		} catch (IllFormattedLineException e) {
+			// nix
+		}
+		lines.add(line);
 		return lines;
 	}
 
@@ -223,7 +233,7 @@ public final class GNDTitleUtils {
 		MusicTitle title = ParseMusicTitle.parse(null, musicTitle);
 		return getRecord(title, forceTotalCount);
 	}
-	
+
 	public static void main(String[] args) {
 		System.out.println(getRecord("Adagio Vl <Fuge>", true));
 	}

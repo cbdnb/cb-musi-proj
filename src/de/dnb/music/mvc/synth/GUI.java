@@ -92,6 +92,8 @@ public class GUI extends JFrame {
 	private JPanel panelQualifier;
 	JTextField textFieldQualifier;
 	JButton btnQualifier;
+	JComboBox comboBoxComposer;
+	JLabel lblKomponist;
 
 	/**
 	 * Create the frame.
@@ -293,7 +295,7 @@ public class GUI extends JFrame {
 		comboBoxVersion.setBounds(377, 107, 321, 22);
 
 		scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(754, 360, 400, 300);
+		scrollPane_1.setBounds(754, 371, 400, 289);
 		contentPane.setLayout(null);
 		contentPane.add(btnAddGenre);
 		contentPane.add(comboBoxGenre);
@@ -332,7 +334,7 @@ public class GUI extends JFrame {
 		contentPane.add(lblGnd);
 
 		lblStrukturiert = new JLabel("Strukturiert:");
-		lblStrukturiert.setBounds(755, 335, 90, 14);
+		lblStrukturiert.setBounds(754, 350, 90, 14);
 		contentPane.add(lblStrukturiert);
 
 		btnVersion = new JButton("Fassung hinzufügen");
@@ -351,7 +353,7 @@ public class GUI extends JFrame {
 		textPaneTip.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		textPaneTip.setForeground(SystemColor.menuText);
 		textPaneTip.setBackground(SystemColor.control);
-		textPaneTip.setBounds(754, 127, 368, 184);
+		textPaneTip.setBounds(754, 127, 368, 114);
 		contentPane.add(textPaneTip);
 		
 		btnUndo = new JButton("Rückgängig");
@@ -400,5 +402,13 @@ public class GUI extends JFrame {
 				checkBoxTotalCount = new JCheckBox("Gesamtzahl");
 				checkBoxTotalCount.setBounds(36, 288, 151, 23);
 				contentPane.add(checkBoxTotalCount);
+		
+		comboBoxComposer = new JComboBox();
+		comboBoxComposer.setBounds(754, 288, 385, 22);
+		contentPane.add(comboBoxComposer);
+		
+		lblKomponist = new JLabel("Komponist (wenn in der Werkverzeichnisliste):");
+		lblKomponist.setBounds(754, 263, 385, 14);
+		contentPane.add(lblKomponist);
 	}
 }

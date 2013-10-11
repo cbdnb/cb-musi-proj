@@ -17,6 +17,7 @@ import de.dnb.music.additionalInformation.ThematicIndexNumber;
 import de.dnb.music.genre.GenreDB;
 import de.dnb.music.mediumOfPerformance.Instrument;
 import de.dnb.music.mediumOfPerformance.InstrumentDB;
+import de.dnb.music.mvc.synth.Controller.ComposerListener;
 import de.dnb.music.title.FormalTitle;
 import de.dnb.music.title.IndividualTitle;
 import de.dnb.music.version.ParseVersion;
@@ -32,7 +33,8 @@ public class UndoController {
 	class NewListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			view.setTip("Bitte zunächst Individual- oder Formalsachtitel eingeben");
+			view.setTip("Bitte zunächst Individual- "
+				+ "oder Formalsachtitel eingeben");
 			model.reset();
 		}
 	}
@@ -56,7 +58,7 @@ public class UndoController {
 				view.setTip("");
 				model.addElement(title);
 			} catch (IllegalArgumentException ex) {
-//				ex.printStackTrace();
+				//				ex.printStackTrace();
 				JOptionPane.showMessageDialog(null, ex.getMessage(),
 						"Falsche Eingabe", JOptionPane.OK_CANCEL_OPTION);
 			}
@@ -122,7 +124,7 @@ public class UndoController {
 					ParseAdditionalInformation.matchSerialNumber(ser, true);
 				model.addElement(serNumber);
 			} catch (IllegalArgumentException ex) {
-//				ex.printStackTrace();
+				//				ex.printStackTrace();
 				JOptionPane.showMessageDialog(null, ex.getMessage(),
 						"Falsche Eingabe", JOptionPane.OK_CANCEL_OPTION);
 			}
@@ -138,23 +140,22 @@ public class UndoController {
 					ParseAdditionalInformation.matchDate(y);
 				model.addElement(year);
 			} catch (IllegalArgumentException ex) {
-//				ex.printStackTrace();
+				//				ex.printStackTrace();
 				JOptionPane.showMessageDialog(null, ex.getMessage(),
 						"Falsche Eingabe", JOptionPane.OK_CANCEL_OPTION);
 			}
 		}
 	}
-	
+
 	class QualifListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			try {
 				String q = view.getQualifier();
-				Qualifier qualif =
-					new Qualifier(q);
+				Qualifier qualif = new Qualifier(q);
 				model.addElement(qualif);
 			} catch (IllegalArgumentException ex) {
-//				ex.printStackTrace();
+				//				ex.printStackTrace();
 				JOptionPane.showMessageDialog(null, ex.getMessage(),
 						"Falsche Eingabe", JOptionPane.OK_CANCEL_OPTION);
 			}
@@ -191,8 +192,8 @@ public class UndoController {
 					"Sie müssen jetzt noch entweder"
 						+ "\n\ta) eine WV-Nummer oder eine Opusnummer\toder"
 						+ "\n\tb) einen Gattungsbegriff "
-						+ "\n\t     und evtl. Besetzung, Tonart, Jahr oder Zählung"
-						+ "\neingeben";
+						+ "\n\t     und evtl. Besetzung, "
+						+ "Tonart, Jahr oder Zählung" + "\neingeben";
 			} else {
 
 				version = ParseVersion.parse(null, v);
@@ -213,6 +214,13 @@ public class UndoController {
 			boolean success = model.addElement(version);
 			if (success)
 				view.setTip(message);
+		}
+	}
+
+	class ComposerListener implements ActionListener {
+		@Override
+		public void actionPerformed(final ActionEvent e) {
+			model.addComposer(view.getComposer());
 		}
 	}
 
@@ -277,6 +285,7 @@ public class UndoController {
 		view.addKeyListener(new KeyListener());
 		view.addModusListener(new ModusListener());
 		view.addQualiListener(new QualifListener());
+		view.addComposerListener(new ComposerListener());
 
 		view.addExpansionListener(new ExpansionListener());
 		view.addNumberListener(new NumberListener());
@@ -290,6 +299,8 @@ public class UndoController {
 		view.addInstruments(InstrumentDB.getAllInstruments());
 		for (int i = 1; i < 10; i++)
 			view.addInstrumentCount(i);
+		view.addComposer(null);
+		view.addComposers(ThematicIndexDB.getAllComposers());
 
 		view.addIndices(ThematicIndexDB.getThematicIndices());
 		view.addOpera(OpusNumber.getOperaPhrases());

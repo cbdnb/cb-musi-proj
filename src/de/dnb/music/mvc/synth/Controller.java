@@ -33,7 +33,8 @@ public class Controller {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			view.enableNewTitle();
-			view.setTip("Bitte zunächst Individual- oder Formalsachtitel eingeben");
+			view.setTip("Bitte zunächst Individual- "
+				+ "oder Formalsachtitel eingeben");
 			model.reset();
 		}
 	}
@@ -145,20 +146,20 @@ public class Controller {
 			} catch (IllegalArgumentException ex) {
 				ex.printStackTrace();
 				JOptionPane.showMessageDialog(null, ex.getMessage(),
-						"Falsche Eingabe", JOptionPane.OK_CANCEL_OPTION);			}
+						"Falsche Eingabe", JOptionPane.OK_CANCEL_OPTION);
+			}
 		}
 	}
-	
+
 	class QualifListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			try {
 				String q = view.getQualifier();
-				Qualifier qualif =
-					new Qualifier(q);
+				Qualifier qualif = new Qualifier(q);
 				model.addElement(qualif);
 			} catch (IllegalArgumentException ex) {
-//				ex.printStackTrace();
+				//				ex.printStackTrace();
 				JOptionPane.showMessageDialog(null, ex.getMessage(),
 						"Falsche Eingabe", JOptionPane.OK_CANCEL_OPTION);
 			}
@@ -194,8 +195,8 @@ public class Controller {
 					"Sie müssen jetzt noch entweder"
 						+ "\n\ta) eine WV-Nummer oder eine Opusnummer\toder"
 						+ "\n\tb) einen Gattungsbegriff "
-						+ "\n\t     und evtl. Besetzung, Tonart, Jahr oder Zählung"
-						+ "\neingeben";
+						+ "\n\t     und evtl. "
+						+ "Besetzung, Tonart, Jahr oder Zählung" + "\neingeben";
 				view.setTip(message);
 				view.disableAfterVersion();
 			} else {
@@ -218,6 +219,13 @@ public class Controller {
 				}
 			}
 			model.addElement(version);
+		}
+	}
+
+	class ComposerListener implements ActionListener {
+		@Override
+		public void actionPerformed(final ActionEvent e) {
+			model.addComposer(view.getComposer());
 		}
 	}
 
@@ -273,6 +281,7 @@ public class Controller {
 		view.addKeyListener(new KeyListener());
 		view.addModusListener(new ModusListener());
 		view.addQualiListener(new QualifListener());
+		view.addComposerListener(new ComposerListener());
 
 		view.addExpansionListener(new ExpansionListener());
 		view.addNumberListener(new NumberListener());
@@ -295,6 +304,8 @@ public class Controller {
 		view.addModeNames(Key.getModeNames());
 		for (int i = 1; i <= 13; i++)
 			view.addModusCount(i);
+		view.addComposer(null);
+		view.addComposers(ThematicIndexDB.getAllComposers());
 
 		view.setTip("Bitte zunächst Individual- oder Formalsachtitel eingeben");
 	}

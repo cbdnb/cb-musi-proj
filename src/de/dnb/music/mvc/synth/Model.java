@@ -3,17 +3,22 @@ package de.dnb.music.mvc.synth;
 import java.util.Observable;
 import java.util.Stack;
 
+import javax.naming.OperationNotSupportedException;
 import javax.swing.JOptionPane;
 
 import utils.GNDTitleUtils;
 import utils.TitleUtils;
 import applikationsbausteine.RangeCheckUtils;
 import cloneable.CopyObjectUtils;
+import de.dnb.gnd.exceptions.IllFormattedLineException;
 import de.dnb.gnd.parser.Format;
 import de.dnb.gnd.parser.Record;
 import de.dnb.gnd.parser.line.Line;
 import de.dnb.gnd.parser.line.LineParser;
+import de.dnb.gnd.parser.tag.GNDTagDB;
+import de.dnb.gnd.parser.tag.TagDB;
 import de.dnb.gnd.utils.RecordUtils;
+import de.dnb.music.additionalInformation.Composer;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.visitor.TitleElement;
 
@@ -29,13 +34,17 @@ public class Model extends Observable {
 
 	private boolean expansion = false;
 
+	private Composer tehComposer = null;
+
+	private TagDB tagDB = GNDTagDB.getDB();
+
 	public final void reset() {
 		history.push(CopyObjectUtils.copyObject(theTitle));
 		theTitle = null;
 		refresh();
 	}
 
-	public void undo() {
+	public final void undo() {
 		if (!history.empty())
 			theTitle = history.pop();
 		refresh();
@@ -91,6 +100,22 @@ public class Model extends Observable {
 		if (theTitle == null)
 			return "";
 		Record record = GNDTitleUtils.getRecord(theTitle, forceTotalCount);
+		if (tehComposer != null) {
+			try {
+				Line line =
+					LineParser.parse("500 " + "!" + tehComposer.idn + "!"
+						+ tehComposer.name + "$4kom1", tagDB);
+				record.add(line);
+				line = LineParser.parse("670 " + tehComposer.sourceAbb, tagDB);
+				record.add(line);
+				line = LineParser.parse("043 " + tehComposer.countrCode, tagDB);
+				record.add(line);
+			} catch (IllFormattedLineException e) {
+				// nix
+			} catch (OperationNotSupportedException e) {
+				// nix
+			}
+		}
 		Format format = returnsPicaPlus ? Format.PICA_PLUS : Format.PICA3;
 		return RecordUtils.toPica(record, format, expansion, "\n", '$');
 	}
@@ -117,20 +142,18 @@ public class Model extends Observable {
 	public final void refresh() {
 		setChanged();
 		notifyObservers(null);
-		//		System.err.println("--------");
-		//		for (MusicTitle title : history) {
-		//			if (title == null)
-		//				System.err.println("**" + title);
-		//			else
-		//				System.err.println("**" + TitleUtils.getStructured(title));
-		//		}
 	}
 
 	public final String getAleph() {
 		if (theTitle == null)
 			return "";
-		return TitleUtils.getAleph(theTitle, forceTotalCount);
+		return TitleUtils.getAleph(theTitle, forceTotalCount, tehComposer);
 
+	}
+
+	public final void addComposer(final Composer composer) {
+		this.tehComposer = composer;
+		refresh();
 	}
 
 }

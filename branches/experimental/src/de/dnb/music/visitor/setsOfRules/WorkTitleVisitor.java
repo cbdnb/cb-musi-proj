@@ -1,5 +1,6 @@
 package de.dnb.music.visitor.setsOfRules;
 
+import applikationsbausteine.RangeCheckUtils;
 import utils.TitleUtils;
 import de.dnb.music.additionalInformation.DateOfComposition;
 import de.dnb.music.additionalInformation.Key;
@@ -25,6 +26,7 @@ import de.dnb.music.visitor.Visitor;
 public class WorkTitleVisitor extends Visitor {
 
 	public WorkTitleVisitor(AbstractParticleFactory factory) {
+		RangeCheckUtils.assertReferenceParamNotNull("factory", factory);
 		this.factory = factory;
 	}
 

@@ -74,10 +74,14 @@ public class AuthorityDataAlephVisitor extends Visitor {
 	@Override
 	public final void visit(final Genre genre) {
 		if (!"Werke".equals(genre.asPlural()))
-			if (genre.getIdn().length() > 0)
+			if (genre.getIdn().length() > 0) {
+				String swd = genre.getSwd();
+				swd = swd.replace(" <", "$h");
+				swd = swd.replace(">", "");
 				genreIn380 +=
-					"\n380" + dollarS + genre.getSwd() + dollar9 + owner
+					"\n380" + dollarS + swd + dollar9 + owner
 						+ genre.getNid();
+			}
 
 	}
 
@@ -119,7 +123,10 @@ public class AuthorityDataAlephVisitor extends Visitor {
 			|| instrument.getIdn().length() == 0)
 			return;
 
-		instrIn382 += "\n382" + dollarS + instrument.getSwd();
+		String swd = instrument.getSwd();
+		swd = swd.replace(" <", "$h");
+		swd = swd.replace(">", "");
+		instrIn382 += "\n382" + dollarS + swd;
 
 		int count = instrument.getCount();
 		if (count > 1) {

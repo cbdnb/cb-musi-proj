@@ -1,7 +1,5 @@
 package utils;
 
-import static utils.GNDConstants.TAG_DB;
-
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.TreeSet;
@@ -11,8 +9,8 @@ import applikationsbausteine.RangeCheckUtils;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
 import de.dnb.gnd.parser.Format;
 import de.dnb.gnd.parser.Record;
-import de.dnb.gnd.parser.line.LineParser;
 import de.dnb.gnd.utils.RecordUtils;
+import de.dnb.music.additionalInformation.Composer;
 import de.dnb.music.genre.GenreList;
 import de.dnb.music.genre.ParseGenre;
 import de.dnb.music.publicInterface.Constants;
@@ -29,6 +27,12 @@ import de.dnb.music.visitor.setsOfRules.RSWKParticleFactory;
 import de.dnb.music.visitor.setsOfRules.RSWKSubfieldFactory;
 import de.dnb.music.visitor.setsOfRules.WorkTitleVisitor;
 
+/**
+ * Utilities, die aus Titelelementen Strings oder bools machen.
+ * 
+ * @author baumann
+ *
+ */
 public final class TitleUtils {
 
 	private TitleUtils() {
@@ -54,9 +58,19 @@ public final class TitleUtils {
 		return getRSWK(mt);
 	}
 
+	/**
+	 * 
+	 * Liefert die Darstellung eines Titel(elementes) gemäß dem
+	 * übergebenen Regelwerk, das in factory implementiert ist.
+	 * 
+	 * @param element	nicht null
+	 * @param factory	nicht null
+	 * @return			nicht null
+	 */
 	public static String getTitelAccordingRules(
 			final TitleElement element,
 			final AbstractParticleFactory factory) {
+		RangeCheckUtils.assertReferenceParamNotNull("element", element);
 		final WorkTitleVisitor vis = new WorkTitleVisitor(factory);
 		element.accept(vis);
 		return vis.toString();
@@ -94,6 +108,7 @@ public final class TitleUtils {
 	}
 
 	public static String getRAK(final TitleElement element) {
+		RangeCheckUtils.assertReferenceParamNotNull("element", element);
 		final WorkTitleVisitor vis =
 			new WorkTitleVisitor(new RAKParticleFactory());
 		element.accept(vis);
@@ -119,12 +134,14 @@ public final class TitleUtils {
 	}
 
 	public static String getStructured(final TitleElement element) {
+		RangeCheckUtils.assertReferenceParamNotNull("element", element);
 		final StructuredVisitor sVis = new StructuredVisitor();
 		element.accept(sVis);
 		return sVis.toString();
 	}
 
 	public static String getGND1XXPlusTag(final MusicTitle musicTitle) {
+		RangeCheckUtils.assertReferenceParamNotNull("musicTitle", musicTitle);
 		return "130 " + getX30ContentAsString(musicTitle);
 	}
 
@@ -303,6 +320,16 @@ public final class TitleUtils {
 
 	}
 
+	/**
+	 * Überprüft, ob der übergebene titelStr nach den Regeln von
+	 * rulesFactory aus element abgeleitet werden kann.
+	 * 
+	 * @param titleStr		nicht null, nicht nur Blanks, kann mit $a beginnen.
+	 * 						Vor und nach $a können Blanks stehen, vor und nach 
+	 * 						allen anderen Unterfelder nicht.
+	 * @param rulesFactory	Menge von Regeln (z.Z. RAK, RSWK, GND)
+	 * @return				titleStr == element.
+	 */
 	public static boolean isConformToRules(
 			final String titleStr,
 			final AbstractParticleFactory rulesFactory) {
@@ -315,39 +342,49 @@ public final class TitleUtils {
 	/**
 	 * Liefert die Aleph-Form eines Titels.
 	 * 
-	 * @param theMusicTitle			nicht null
+	 * @param theMusicTitle		nicht null
 	 * @param forceTotalCount	Zählung der Instrumente
+	 * @param composer 			auch null
 	 * @return					Aleph.
 	 */
 	public static String getAleph(
 			final MusicTitle theMusicTitle,
-			final boolean forceTotalCount) {
+			final boolean forceTotalCount,
+			final Composer composer) {
+		final String owner = "(DE-588)";
 		RangeCheckUtils.assertReferenceParamNotNull("theTitle", theMusicTitle);
 		String s;
+		String composerPhrase = "";
 		if (theMusicTitle.containsVersion()) {
 			s = "093 $a wif";
 		} else {
 			s = "093 $a wim";
 		}
 
-		// zusammenbauen
-		s += "\n" + TitleUtils.getGND1XXPlusTag(theMusicTitle);
+		if (composer != null) {
+			composerPhrase = "$p" + composer.name;
+			s += "\n043 $a" + composer.countrCode;
+			s += "\n500 " + composerPhrase + "$4kom1$9" + owner + composer.idn;
+			s += "\n670 $a" + composer.sourceAbb;
+
+		}
+
+		String titleStr = TitleUtils.getX30ContentAsString(theMusicTitle);
+		// Alephspezifische Unterfelder
+		titleStr =
+			titleStr.replaceAll(Matcher.quoteReplacement("$p"),
+					Matcher.quoteReplacement("$u"));
+		titleStr =
+			titleStr.replaceAll(Matcher.quoteReplacement("$g"),
+					Matcher.quoteReplacement("$h"));
+		s += "\n130 " + composerPhrase + "$t" + titleStr;
+
 		s += "\n" + TitleUtils.getGND3XXAleph(theMusicTitle, forceTotalCount);
 		if (theMusicTitle.containsParts())
 			s +=
-				"\n430 " + TitleUtils.getRAK(theMusicTitle) + "$v"
+				"\n430 " + composerPhrase + "$t"
+					+ TitleUtils.getRAK(theMusicTitle) + "$v"
 					+ Constants.KOM_PORTAL_430;
-
-		// Alephspezifische Unterfelder
-		s =
-			s.replaceAll(Matcher.quoteReplacement("$p"),
-					Matcher.quoteReplacement("$u"));
-		s =
-			s.replaceAll(Matcher.quoteReplacement("$g"),
-					Matcher.quoteReplacement("$h"));
-		// 130/430-t
-		s = s.replace("130 ", "130 $p $t");
-		s = s.replace("430 ", "430 $p $t");
 
 		// Sortieren und komprimieren - nötig?
 		String[] lines = s.split("\n");

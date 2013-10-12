@@ -1259,6 +1259,14 @@ public final class GenreDB {
 		return genSet;
 	}
 	
+	public static String getGNDIdn(final String idn) {
+		for (String[] line : DATA) {
+			if (line[IDN].equals(idn))
+				return line[NID];
+		}
+		return null;
+	}
+	
 	
 	public static void main(final String[] args) {			
 		Set<Genre> genres = getAllGenres();

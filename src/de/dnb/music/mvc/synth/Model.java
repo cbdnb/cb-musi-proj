@@ -6,6 +6,7 @@ import java.util.Stack;
 import javax.naming.OperationNotSupportedException;
 import javax.swing.JOptionPane;
 
+import utils.Field3XXFinder;
 import utils.GNDTitleUtils;
 import utils.TitleUtils;
 import applikationsbausteine.RangeCheckUtils;
@@ -17,6 +18,7 @@ import de.dnb.gnd.parser.line.Line;
 import de.dnb.gnd.parser.line.LineParser;
 import de.dnb.gnd.parser.tag.GNDTagDB;
 import de.dnb.gnd.parser.tag.TagDB;
+import de.dnb.gnd.utils.GNDUtils;
 import de.dnb.gnd.utils.RecordUtils;
 import de.dnb.music.additionalInformation.Composer;
 import de.dnb.music.title.MusicTitle;
@@ -34,9 +36,11 @@ public class Model extends Observable {
 
 	private boolean expansion = false;
 
-	private Composer tehComposer = null;
+	private Composer theComposer = null;
 
 	private TagDB tagDB = GNDTagDB.getDB();
+
+	private Record theRecord;
 
 	public final void reset() {
 		history.push(CopyObjectUtils.copyObject(theTitle));
@@ -99,25 +103,36 @@ public class Model extends Observable {
 	public final String getGND() {
 		if (theTitle == null)
 			return "";
-		Record record = GNDTitleUtils.getRecord(theTitle, forceTotalCount);
-		if (tehComposer != null) {
+		buildRecord();
+		Format format = returnsPicaPlus ? Format.PICA_PLUS : Format.PICA3;
+		return RecordUtils.toPica(theRecord, format, expansion, "\n", '$');
+	}
+
+	/**
+	 * @return
+	 */
+	private void buildRecord() {
+		if (theTitle == null){
+			theRecord = null;
+			return;
+		}
+		theRecord = GNDTitleUtils.getRecord(theTitle, forceTotalCount);
+		if (theComposer != null) {
 			try {
 				Line line =
-					LineParser.parse("500 " + "!" + tehComposer.idn + "!"
-						+ tehComposer.name + "$4kom1", tagDB);
-				record.add(line);
-				line = LineParser.parse("670 " + tehComposer.sourceAbb, tagDB);
-				record.add(line);
-				line = LineParser.parse("043 " + tehComposer.countrCode, tagDB);
-				record.add(line);
+					LineParser.parse("500 " + "!" + theComposer.idn + "!"
+						+ theComposer.name + "$4kom1", tagDB);
+				theRecord.add(line);
+				line = LineParser.parse("670 " + theComposer.sourceAbb, tagDB);
+				theRecord.add(line);
+				line = LineParser.parse("043 " + theComposer.countrCode, tagDB);
+				theRecord.add(line);
 			} catch (IllFormattedLineException e) {
 				// nix
 			} catch (OperationNotSupportedException e) {
 				// nix
 			}
 		}
-		Format format = returnsPicaPlus ? Format.PICA_PLUS : Format.PICA3;
-		return RecordUtils.toPica(record, format, expansion, "\n", '$');
 	}
 
 	public final String getRAK() {
@@ -140,19 +155,23 @@ public class Model extends Observable {
 	}
 
 	public final void refresh() {
+		buildRecord();
 		setChanged();
 		notifyObservers(null);
 	}
+	
+	private Field3XXFinder finder = new Field3XXFinder();
 
 	public final String getAleph() {
 		if (theTitle == null)
 			return "";
-		return TitleUtils.getAleph(theTitle, forceTotalCount, tehComposer);
+		return GNDUtils.toAleph(theRecord,finder);
+//		return TitleUtils.getAleph(theTitle, forceTotalCount, theComposer);
 
 	}
 
 	public final void addComposer(final Composer composer) {
-		this.tehComposer = composer;
+		this.theComposer = composer;
 		refresh();
 	}
 

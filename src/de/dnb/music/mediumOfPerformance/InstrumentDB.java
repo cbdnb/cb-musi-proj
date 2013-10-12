@@ -461,6 +461,15 @@ public final class InstrumentDB {
 		}
 		return insSet;
 	}
+	
+	public static String getGNDIdn(final String idn) {
+		for (String[] line : DATA) {
+			if (line[IDN].equals(idn))
+				return line[NID];
+		}
+		return null;
+	}
+
 
 	public static void main(String[] args) {
 		Set<Instrument> instruments = getAllInstruments();

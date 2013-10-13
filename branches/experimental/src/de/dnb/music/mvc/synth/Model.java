@@ -6,7 +6,7 @@ import java.util.Stack;
 import javax.naming.OperationNotSupportedException;
 import javax.swing.JOptionPane;
 
-import utils.Field3XXFinder;
+import utils.MusicIDFinder;
 import utils.GNDTitleUtils;
 import utils.TitleUtils;
 import applikationsbausteine.RangeCheckUtils;
@@ -160,7 +160,7 @@ public class Model extends Observable {
 		notifyObservers(null);
 	}
 	
-	private Field3XXFinder finder = new Field3XXFinder();
+	private MusicIDFinder finder = new MusicIDFinder();
 
 	public final String getAleph() {
 		if (theTitle == null)

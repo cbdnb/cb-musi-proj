@@ -10,14 +10,20 @@ import javax.naming.OperationNotSupportedException;
 
 import applikationsbausteine.RangeCheckUtils;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
+import de.dnb.gnd.parser.Field;
 import de.dnb.gnd.parser.Format;
+import de.dnb.gnd.parser.Indicator;
 import de.dnb.gnd.parser.Record;
 import de.dnb.gnd.parser.Subfield;
 import de.dnb.gnd.parser.line.Line;
 import de.dnb.gnd.parser.line.LineFactory;
 import de.dnb.gnd.parser.line.LineParser;
+import de.dnb.gnd.parser.tag.GNDTag;
 import de.dnb.gnd.parser.tag.Tag;
 import de.dnb.gnd.utils.RecordUtils;
+import de.dnb.music.genre.Genre;
+import de.dnb.music.mediumOfPerformance.Instrument;
+import de.dnb.music.mediumOfPerformance.InstrumentDB;
 import de.dnb.music.publicInterface.Constants;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
@@ -194,6 +200,135 @@ public final class GNDTitleUtils {
 		return getLines(title, forceTotalCount);
 	}
 
+	public static final GNDTag TAG_382 = TAG_DB.findTag("382");
+
+	private static LineFactory<? extends GNDTag> factory382 = TAG_382
+			.getLineFactory();
+
+	private static Indicator dollarS = TAG_382.getIndicator('s');
+
+	/**
+	 * Liefert eine Zeile 382 $s<Anzahl>.
+	 * 
+	 * @param lines	nicht null, alle mit Tag 382
+	 * @return		Zeile mit Gesamtzahl oder null
+	 */
+	public static Line getTotalInstrumentCount(Iterable<Line> lines) {
+		RangeCheckUtils.assertReferenceParamNotNull("lines", lines);
+		int count = 0;
+		for (Line line : lines) {
+			if (line.getTag() != TAG_382)
+				throw new IllegalArgumentException("Kein 382-Feld");
+			// Zeile(n) mit $n überspringen:
+			if (RecordUtils.containsIndicator(line, '9')) {
+				// Alle Sonderfälle ausschließen:
+				Subfield dollar8 = RecordUtils.getFirstSubfield(line, '8');
+				if (dollar8 != null) {
+					String instr = dollar8.getContent();
+					// Orchester:
+					if (instr.contains("orch") || instr.contains("Orch"))
+						return null;
+					// Chor:
+					if (instr.contains("chor") || instr.contains("Chor"))
+						return null;
+					// ensemble:
+					if (instr.contains("ensemble")
+						|| instr.contains("Ensemble"))
+						return null;
+					// Tonband ...
+					if (instr.contains("Tonb"))
+						return null;
+					// mehrstimmig:
+					if (instr.contains("stimmig")
+						&& !instr.equals("Einstimmige Musik")) {
+						return null;
+					}
+				}
+				Subfield dollarN = RecordUtils.getFirstSubfield(line, 'n');
+				if (dollarN == null)
+					count++;
+				else {
+					int diff = Integer.parseInt(dollarN.getContent());
+					count += diff;
+				}
+			}
+		}
+
+		try {
+			Subfield subDollarS =
+				new Subfield(dollarS, Integer.toString(count));
+			factory382.load(subDollarS);
+			return factory382.createLine();
+		} catch (IllFormattedLineException e) {
+			// nix
+		}
+
+		return null;
+	}
+
+	/**
+	 * Liefert eine Zeile 382 $s<Anzahl>.
+	 * 
+	 * @param lines	nicht null, alle mit Tag 382
+	 * @return		Zeile mit Gesamtzahl oder null
+	 */
+	public static Line getTotalInstrumentCount(Record record) {
+		RangeCheckUtils.assertReferenceParamNotNull("record", record);
+		Field field382 = record.getField(TAG_382);
+		if (field382 != null) {
+			return getTotalInstrumentCount(field382);
+		}
+		return null;
+	}
+
+	/**
+	 * Fügt einem Musikdatensatz die Besetzungsstärke hinzu. Die alte
+	 * Besetzungsstärke wird überschrieben.
+	 * 
+	 * @param record			nicht null
+	 * @param line382dollarS	Enthält die Gesamtbesetzungsstärke. 
+	 * 							Kann auch null sein, dann wird nichts geändert.
+	 */
+	public static void setTotalInstrumentCount(
+			Record record,
+			Line line382dollarS) {
+		RangeCheckUtils.assertReferenceParamNotNull("record", record);
+		if (record.tagDB != TAG_DB)
+			throw new IllegalArgumentException("Kein GND-Datensatz");
+		if (line382dollarS == null)
+			return;
+		if (line382dollarS.getTag() != TAG_382)
+			throw new IllegalArgumentException("Kein 382-Feld");
+		// Zeile(n) mit $n überspringen:
+		if (!RecordUtils.containsIndicator(line382dollarS, 's'))
+			throw new IllegalArgumentException(
+					"Enthält keine Gesamtbesetzungsstärke");
+		// alte Zeile entfernen:
+		Field field382 = record.getField(TAG_382);
+		if (field382 != null) {
+			for (Line line : field382) {
+				if (RecordUtils.containsIndicator(line, 's'))
+					record.remove(line);
+			}
+		}
+		try {
+			record.add(line382dollarS);
+		} catch (OperationNotSupportedException e) {
+			// nix
+		}
+	}
+
+	/**
+	 * Fügt einem Musikdatensatz die aktuelle Besetzungsstärke hinzu. Die alte
+	 * Besetzungsstärke wird überschrieben.
+	 * 
+	 * @param record			nicht null
+	 */
+	public static void setTotalInstrumentCount(Record record) {
+		RangeCheckUtils.assertReferenceParamNotNull("record", record);
+		setTotalInstrumentCount(record, getTotalInstrumentCount(record));
+	}
+
 	/**
 	 * Liefert die GND-Zeilen, die aus einem Werktitel gewonnen werden
 	 * können. Der Werktitel kommt in die 130.
@@ -234,8 +369,58 @@ public final class GNDTitleUtils {
 		return getRecord(title, forceTotalCount);
 	}
 
-	public static void main(String[] args) {
-		System.out.println(getRecord("Adagio Vl <Fuge>", true));
+	/**
+	 * Wandelt ein Instrument in eine GND-Zeile um.
+	 * 
+	 * @param instrument	nicht null
+	 * @return				null, wenn ein Fehler auftritt.
+	 */
+	public static Line makeLine(final Instrument instrument) {
+		RangeCheckUtils.assertReferenceParamNotNull("instrument", instrument);
+		String instrStr =
+			"382 !" + instrument.getIdn() + "!" + instrument.getSwd();
+		int count = instrument.getCount();
+		if (count > 1) {
+			instrStr += "$n" + count;
+		}
+		try {
+			return LineParser.parse(instrStr, TAG_DB);
+		} catch (IllFormattedLineException e) {
+			return null;
+		}
+	}
+
+	/**
+	 * Wandelt eine Form in eine GND-Zeile um.
+	 * 
+	 * @param genre	nicht null
+	 * @return		null, wenn ein Fehler auftritt.
+	 */
+	public static Line makeLine(final Genre genre) {
+		RangeCheckUtils.assertReferenceParamNotNull("genre", genre);
+		if (genre.getIdn().length() > 0) {
+
+			String genreStr = "380 !" + genre.getIdn() + "!" + genre.getSwd();
+			try {
+				return LineParser.parse(genreStr, TAG_DB);
+			} catch (IllFormattedLineException e) {
+				// nix
+			}
+		}
+		return null;
+	}
+
+	public static void main(String[] args)
+			throws OperationNotSupportedException {
+		Record record = getRecord("Adagio Vl", true);
+		System.out.println(record);
+		System.out.println();
+		Instrument instrument = InstrumentDB.matchInstrument("Va");
+		instrument.setCount(3);
+		Line line = makeLine(instrument);
+		record.add(line);
+		setTotalInstrumentCount(record);
+		System.out.println(record);
 	}
 
 }

@@ -2,12 +2,14 @@ package de.dnb.music.mvc.dialog;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.SystemColor;
 import java.awt.Toolkit;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -22,7 +24,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import java.awt.Dimension;
 
-public class GUI extends JFrame {
+public class DialogGUI extends JDialog {
 
 	/**
 	 * 
@@ -98,16 +100,17 @@ public class GUI extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public GUI() {
+	public DialogGUI(Frame frame, boolean modality) {
+		super(frame, modality);
 		setResizable(false);
 		initialize();
 	}
 
 	private void initialize() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(
-				GUI.class.getResource("/resources/Violin_256.png")));
+				DialogGUI.class.getResource("/resources/Violin_256.png")));
 		setTitle("Baue Werktitel");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1170, 721);
 
 		menuBar = new JMenuBar();

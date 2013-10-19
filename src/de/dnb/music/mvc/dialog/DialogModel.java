@@ -24,7 +24,7 @@ import de.dnb.music.additionalInformation.Composer;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.visitor.TitleElement;
 
-public class Model extends Observable {
+public class DialogModel extends Observable {
 
 	private MusicTitle theTitle = null;
 

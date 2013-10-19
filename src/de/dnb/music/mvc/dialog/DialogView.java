@@ -1,6 +1,7 @@
 package de.dnb.music.mvc.dialog;
 
 import java.awt.Component;
+import java.awt.Frame;
 import java.awt.event.ActionListener;
 import java.util.Collection;
 import java.util.Observable;
@@ -11,14 +12,14 @@ import de.dnb.music.additionalInformation.Key;
 import de.dnb.music.genre.Genre;
 import de.dnb.music.mediumOfPerformance.Instrument;
 
-public class View implements Observer {
+public class DialogView implements Observer {
 
-	private GUI theGui;
-	private Model theModel;
+	private DialogGUI theGui;
+	private DialogModel theModel;
 
-	public View(final Model model) {
+	public DialogView(final DialogModel model, final Frame parent) {
 		this.theModel = model;
-		theGui = new GUI();
+		theGui = new DialogGUI(null, true);
 		theGui.setVisible(true);
 	}
 

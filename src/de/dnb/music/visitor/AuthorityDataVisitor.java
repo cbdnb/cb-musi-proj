@@ -95,7 +95,6 @@ public class AuthorityDataVisitor extends Visitor {
 	public final void visit(final Genre genre) {
 		if (!"Werke".equals(genre.asPlural())) {
 			if (genre.getIdn().length() > 0) {
-
 				String genreStr =
 					"380 !" + genre.getIdn() + "!" + genre.getSwd();
 				try {

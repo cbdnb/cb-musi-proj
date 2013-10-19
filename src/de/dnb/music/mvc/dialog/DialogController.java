@@ -1,8 +1,10 @@
 package de.dnb.music.mvc.dialog;
 
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import de.dnb.gnd.utils.Misc;
@@ -23,11 +25,11 @@ import de.dnb.music.version.ParseVersion;
 import de.dnb.music.version.Version;
 import de.dnb.music.version.VersionDB;
 
-public class UndoController {
+public class DialogController {
 
-	private Model model;
+	private DialogModel model;
 
-	private View view;
+	private DialogView view;
 
 	class NewListener implements ActionListener {
 		@Override
@@ -258,10 +260,10 @@ public class UndoController {
 		}
 	}
 
-	public UndoController() {
+	public DialogController(Frame parent) {
 		super();
-		this.model = new Model();
-		this.view = new View(model);
+		this.model = new DialogModel();
+		this.view = new DialogView(model, parent);
 		model.addObserver(view);
 
 		view.enableAll();
@@ -317,7 +319,11 @@ public class UndoController {
 	 * @param args
 	 */
 	public static void main(final String[] args) {
-		new UndoController();
+		JFrame frame = new JFrame();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setBounds(100, 100, 1170, 721);
+		frame.setVisible(true);
+		new DialogController(frame);
 
 	}
 

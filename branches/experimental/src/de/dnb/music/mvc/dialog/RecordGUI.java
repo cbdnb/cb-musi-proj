@@ -22,6 +22,10 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JTabbedPane;
+import javax.swing.JCheckBox;
 
 public class RecordGUI extends JFrame {
 
@@ -30,31 +34,35 @@ public class RecordGUI extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	JButton btnAnalysieren;
-	JTextArea textAreaOld;
-	JTextArea textAreaNew;
-	private JLabel lblAlterDatensatz;
-	private JLabel lblNeuerDatensatz;
-	private JSplitPane splitPane;
+	JButton btnAnalyse;
 	private JMenuBar menuBar;
 	private JMenu mnNewMenu;
 	JMenuItem mntmZeigeFehler;
 	JMenuItem mntmInfo;
-	private JLabel lblEinfgen;
 	JButton btnGenre;
 	JButton btnInstrument;
 	JButton btnComp;
 	JComboBox comboBoxGenre;
 	JComboBox comboBoxInstru;
 	JComboBox comboBoxComp;
-	JButton btnExpansionAendern;
 	JComboBox comboBoxCount;
 	private JLabel label;
 	JTextField txtCode;
 	private JLabel lblmal;
-	JButton btnTitle;
-	JComboBox comboBoxFieldNumber;
-	JTextField textFieldTitle;
+	JTabbedPane tabbedPane;
+	JPanel panelPica;
+	JPanel panelAleph;
+	JScrollPane scrollPaneOldRecord;
+	JTextArea textAreaOldRecord;
+	JCheckBox chckbxExpansion;
+	JCheckBox chckbxPica;
+	JScrollPane scrollPanePica;
+	JTextArea textAreaPica;
+	JScrollPane scrollPaneAleph;
+	JTextArea textAreaAleph;
+	JButton btnUndo;
+	JLabel label_1;
+	JButton btnAddTitle;
 
 	/**
 	 * Launch the application.
@@ -82,7 +90,7 @@ public class RecordGUI extends JFrame {
 	private void initialize() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(
 				RecordGUI.class.getResource("/resources/Violin_256.png")));
-		setTitle("Bearbeite Titel");
+		setTitle("Bearbeite Datensatz");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1170, 516);
 
@@ -102,114 +110,75 @@ public class RecordGUI extends JFrame {
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
 		gbl_contentPane.columnWidths =
-			new int[] { 0, 0, 0, 0, 96, 62, 89, 72, 77, 0, 49, 41, 27, 0, 0 };
-		gbl_contentPane.rowHeights = new int[] { 32, 0, 0, 30, 0, 0 };
+			new int[] { 0, 0, 0, 36, 62, 89, 161, 34, 49, 41, 0, 0 };
+		gbl_contentPane.rowHeights = new int[] { 0, 0, 0, 30, 0, 0 };
 		gbl_contentPane.columnWeights =
-			new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0,
+			new double[] { 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0,
 				0.0, Double.MIN_VALUE };
 		gbl_contentPane.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0 };
 		contentPane.setLayout(gbl_contentPane);
-
-		lblAlterDatensatz = new JLabel("Alter Datensatz");
-		lblAlterDatensatz.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAlterDatensatz.setFont(new Font("Tahoma", Font.BOLD, 12));
-		GridBagConstraints gbc_lblAlterDatensatz = new GridBagConstraints();
-		gbc_lblAlterDatensatz.fill = GridBagConstraints.HORIZONTAL;
-		gbc_lblAlterDatensatz.insets = new Insets(0, 0, 5, 5);
-		gbc_lblAlterDatensatz.gridx = 2;
-		gbc_lblAlterDatensatz.gridy = 0;
-		contentPane.add(lblAlterDatensatz, gbc_lblAlterDatensatz);
-
-		lblNeuerDatensatz = new JLabel("Neuer Datensatz");
-		lblNeuerDatensatz.setFont(new Font("Tahoma", Font.BOLD, 12));
-		GridBagConstraints gbc_lblNeuerDatensatz = new GridBagConstraints();
-		gbc_lblNeuerDatensatz.gridwidth = 3;
-		gbc_lblNeuerDatensatz.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNeuerDatensatz.gridx = 6;
-		gbc_lblNeuerDatensatz.gridy = 0;
-		contentPane.add(lblNeuerDatensatz, gbc_lblNeuerDatensatz);
-
-		btnExpansionAendern = new JButton("Expansionen +/-");
-		GridBagConstraints gbc_btnExpansionAendern = new GridBagConstraints();
-		gbc_btnExpansionAendern.gridwidth = 4;
-		gbc_btnExpansionAendern.insets = new Insets(0, 0, 5, 0);
-		gbc_btnExpansionAendern.gridx = 10;
-		gbc_btnExpansionAendern.gridy = 0;
-		contentPane.add(btnExpansionAendern, gbc_btnExpansionAendern);
-		
-				lblEinfgen = new JLabel("Einfügen:");
-				GridBagConstraints gbc_lblEinfgen = new GridBagConstraints();
-				gbc_lblEinfgen.insets = new Insets(0, 0, 5, 5);
-				gbc_lblEinfgen.gridx = 5;
-				gbc_lblEinfgen.gridy = 1;
-				contentPane.add(lblEinfgen, gbc_lblEinfgen);
 				
-				btnTitle = new JButton("Werktitel");
-				GridBagConstraints gbc_btnWerktitel = new GridBagConstraints();
-				gbc_btnWerktitel.fill = GridBagConstraints.HORIZONTAL;
-				gbc_btnWerktitel.insets = new Insets(0, 0, 5, 5);
-				gbc_btnWerktitel.gridx = 6;
-				gbc_btnWerktitel.gridy = 1;
-				contentPane.add(btnTitle, gbc_btnWerktitel);
+						btnAnalyse = new JButton("Bearbeiten / Neu ...");
+						
+								GridBagConstraints gbc_btnAnalyse = new GridBagConstraints();
+								gbc_btnAnalyse.fill = GridBagConstraints.HORIZONTAL;
+								gbc_btnAnalyse.insets = new Insets(0, 0, 5, 5);
+								gbc_btnAnalyse.gridx = 2;
+								gbc_btnAnalyse.gridy = 1;
+								contentPane.add(btnAnalyse, gbc_btnAnalyse);
 				
-				comboBoxFieldNumber = new JComboBox();
-				GridBagConstraints gbc_comboBox = new GridBagConstraints();
-				gbc_comboBox.insets = new Insets(0, 0, 5, 5);
-				gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
-				gbc_comboBox.gridx = 7;
-				gbc_comboBox.gridy = 1;
-				contentPane.add(comboBoxFieldNumber, gbc_comboBox);
+				label_1 = new JLabel(" Einfügen:");
+				GridBagConstraints gbc_label_1 = new GridBagConstraints();
+				gbc_label_1.insets = new Insets(0, 0, 5, 5);
+				gbc_label_1.gridx = 4;
+				gbc_label_1.gridy = 1;
+				contentPane.add(label_1, gbc_label_1);
 				
-				textFieldTitle = new JTextField();
-				GridBagConstraints gbc_textField = new GridBagConstraints();
-				gbc_textField.gridwidth = 5;
-				gbc_textField.insets = new Insets(0, 0, 5, 5);
-				gbc_textField.fill = GridBagConstraints.BOTH;
-				gbc_textField.gridx = 8;
-				gbc_textField.gridy = 1;
-				contentPane.add(textFieldTitle, gbc_textField);
-				textFieldTitle.setColumns(10);
+				btnAddTitle = new JButton("Neuer Werktitel in 1XX oder 4XX ...");
+				btnAddTitle.setActionCommand("");
+				GridBagConstraints gbc_btnAddTitle = new GridBagConstraints();
+				gbc_btnAddTitle.insets = new Insets(0, 0, 5, 5);
+				gbc_btnAddTitle.gridx = 5;
+				gbc_btnAddTitle.gridy = 1;
+				contentPane.add(btnAddTitle, gbc_btnAddTitle);
 		
 				btnGenre = new JButton("Gattung");
 				GridBagConstraints gbc_btnGenre = new GridBagConstraints();
 				gbc_btnGenre.fill = GridBagConstraints.HORIZONTAL;
 				gbc_btnGenre.insets = new Insets(0, 0, 5, 5);
-				gbc_btnGenre.gridx = 6;
+				gbc_btnGenre.gridx = 5;
 				gbc_btnGenre.gridy = 2;
 				contentPane.add(btnGenre, gbc_btnGenre);
 
 		comboBoxGenre = new JComboBox();
 		GridBagConstraints gbc_comboBoxGenre = new GridBagConstraints();
-		gbc_comboBoxGenre.gridwidth = 2;
 		gbc_comboBoxGenre.insets = new Insets(0, 0, 5, 5);
 		gbc_comboBoxGenre.fill = GridBagConstraints.HORIZONTAL;
-		gbc_comboBoxGenre.gridx = 7;
+		gbc_comboBoxGenre.gridx = 6;
 		gbc_comboBoxGenre.gridy = 2;
 		contentPane.add(comboBoxGenre, gbc_comboBoxGenre);
-
-		btnAnalysieren = new JButton("Bearbeiten / Neu ...");
-
-		GridBagConstraints gbc_btnAnalysieren = new GridBagConstraints();
-		gbc_btnAnalysieren.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnAnalysieren.insets = new Insets(0, 0, 5, 5);
-		gbc_btnAnalysieren.gridx = 2;
-		gbc_btnAnalysieren.gridy = 3;
-		contentPane.add(btnAnalysieren, gbc_btnAnalysieren);
+				
+				btnUndo = new JButton("Letzte Aktion rückgängig");
+				GridBagConstraints gbc_btnUndo = new GridBagConstraints();
+				gbc_btnUndo.fill = GridBagConstraints.HORIZONTAL;
+				gbc_btnUndo.insets = new Insets(0, 0, 5, 5);
+				gbc_btnUndo.gridx = 2;
+				gbc_btnUndo.gridy = 3;
+				contentPane.add(btnUndo, gbc_btnUndo);
 		
 				btnInstrument = new JButton("Instrument");
 				GridBagConstraints gbc_btnInstrument = new GridBagConstraints();
 				gbc_btnInstrument.fill = GridBagConstraints.HORIZONTAL;
 				gbc_btnInstrument.insets = new Insets(0, 0, 5, 5);
-				gbc_btnInstrument.gridx = 6;
+				gbc_btnInstrument.gridx = 5;
 				gbc_btnInstrument.gridy = 3;
 				contentPane.add(btnInstrument, gbc_btnInstrument);
 
 		comboBoxInstru = new JComboBox();
 		GridBagConstraints gbc_comboBoxInstru = new GridBagConstraints();
-		gbc_comboBoxInstru.gridwidth = 2;
 		gbc_comboBoxInstru.insets = new Insets(0, 0, 5, 5);
 		gbc_comboBoxInstru.fill = GridBagConstraints.HORIZONTAL;
-		gbc_comboBoxInstru.gridx = 7;
+		gbc_comboBoxInstru.gridx = 6;
 		gbc_comboBoxInstru.gridy = 3;
 		contentPane.add(comboBoxInstru, gbc_comboBoxInstru);
 		
@@ -218,7 +187,7 @@ public class RecordGUI extends JFrame {
 				gbc_comboBoxCount.gridwidth = 2;
 				gbc_comboBoxCount.insets = new Insets(0, 0, 5, 5);
 				gbc_comboBoxCount.fill = GridBagConstraints.HORIZONTAL;
-				gbc_comboBoxCount.gridx = 9;
+				gbc_comboBoxCount.gridx = 7;
 				gbc_comboBoxCount.gridy = 3;
 				contentPane.add(comboBoxCount, gbc_comboBoxCount);
 		
@@ -227,7 +196,7 @@ public class RecordGUI extends JFrame {
 		GridBagConstraints gbc_lblmal = new GridBagConstraints();
 		gbc_lblmal.anchor = GridBagConstraints.WEST;
 		gbc_lblmal.insets = new Insets(0, 0, 5, 5);
-		gbc_lblmal.gridx = 11;
+		gbc_lblmal.gridx = 9;
 		gbc_lblmal.gridy = 3;
 		contentPane.add(lblmal, gbc_lblmal);
 		
@@ -235,16 +204,15 @@ public class RecordGUI extends JFrame {
 				GridBagConstraints gbc_btnComp = new GridBagConstraints();
 				gbc_btnComp.fill = GridBagConstraints.HORIZONTAL;
 				gbc_btnComp.insets = new Insets(0, 0, 5, 5);
-				gbc_btnComp.gridx = 6;
+				gbc_btnComp.gridx = 5;
 				gbc_btnComp.gridy = 4;
 				contentPane.add(btnComp, gbc_btnComp);
 
 		comboBoxComp = new JComboBox();
 		GridBagConstraints gbc_comboBoxComp = new GridBagConstraints();
-		gbc_comboBoxComp.gridwidth = 2;
 		gbc_comboBoxComp.insets = new Insets(0, 0, 5, 5);
 		gbc_comboBoxComp.fill = GridBagConstraints.HORIZONTAL;
-		gbc_comboBoxComp.gridx = 7;
+		gbc_comboBoxComp.gridx = 6;
 		gbc_comboBoxComp.gridy = 4;
 		contentPane.add(comboBoxComp, gbc_comboBoxComp);
 		
@@ -253,7 +221,7 @@ public class RecordGUI extends JFrame {
 		GridBagConstraints gbc_label = new GridBagConstraints();
 		gbc_label.anchor = GridBagConstraints.EAST;
 		gbc_label.insets = new Insets(0, 0, 5, 5);
-		gbc_label.gridx = 9;
+		gbc_label.gridx = 7;
 		gbc_label.gridy = 4;
 		contentPane.add(label, gbc_label);
 		
@@ -262,42 +230,56 @@ public class RecordGUI extends JFrame {
 		GridBagConstraints gbc_txtCode = new GridBagConstraints();
 		gbc_txtCode.fill = GridBagConstraints.VERTICAL;
 		gbc_txtCode.anchor = GridBagConstraints.WEST;
-		gbc_txtCode.gridwidth = 2;
 		gbc_txtCode.insets = new Insets(0, 0, 5, 5);
-		gbc_txtCode.gridx = 10;
+		gbc_txtCode.gridx = 8;
 		gbc_txtCode.gridy = 4;
 		contentPane.add(txtCode, gbc_txtCode);
 		txtCode.setColumns(10);
-
-		splitPane = new JSplitPane();
-		GridBagConstraints gbc_splitPane = new GridBagConstraints();
-		gbc_splitPane.gridwidth = 14;
-		gbc_splitPane.fill = GridBagConstraints.BOTH;
-		gbc_splitPane.gridx = 0;
-		gbc_splitPane.gridy = 5;
-		contentPane.add(splitPane, gbc_splitPane);
-
-		JScrollPane scrollPane_1 = new JScrollPane();
-		splitPane.setRightComponent(scrollPane_1);
-		scrollPane_1
-				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollPane_1
-				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-
-		textAreaNew = new JTextArea();
-		textAreaNew.setTabSize(2);
-		scrollPane_1.setViewportView(textAreaNew);
-
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane
-				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		splitPane.setLeftComponent(scrollPane);
-		scrollPane
-				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-
-		textAreaOld = new JTextArea();
-		scrollPane.setViewportView(textAreaOld);
-		splitPane.setDividerLocation(250);
+		
+		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		GridBagConstraints gbc_tabbedPane = new GridBagConstraints();
+		gbc_tabbedPane.gridwidth = 9;
+		gbc_tabbedPane.insets = new Insets(0, 0, 0, 5);
+		gbc_tabbedPane.fill = GridBagConstraints.BOTH;
+		gbc_tabbedPane.gridx = 1;
+		gbc_tabbedPane.gridy = 5;
+		contentPane.add(tabbedPane, gbc_tabbedPane);
+		
+		scrollPaneOldRecord = new JScrollPane();
+		tabbedPane.addTab("Alter Datensatz", null, scrollPaneOldRecord, null);
+		
+		textAreaOldRecord = new JTextArea();
+		scrollPaneOldRecord.setViewportView(textAreaOldRecord);
+		
+		panelPica = new JPanel();
+		tabbedPane.addTab("Neu Pica", null, panelPica, null);
+		panelPica.setLayout(null);
+		
+		chckbxExpansion = new JCheckBox("Expansion");
+		chckbxExpansion.setBounds(182, 7, 97, 23);
+		panelPica.add(chckbxExpansion);
+		
+		chckbxPica = new JCheckBox("Pica+");
+		chckbxPica.setBounds(332, 7, 97, 23);
+		panelPica.add(chckbxPica);
+		
+		scrollPanePica = new JScrollPane();
+		scrollPanePica.setBounds(10, 36, 1054, 238);
+		panelPica.add(scrollPanePica);
+		
+		textAreaPica = new JTextArea();
+		scrollPanePica.setViewportView(textAreaPica);
+		
+		panelAleph = new JPanel();
+		tabbedPane.addTab("Neu Aleph", null, panelAleph, null);
+		panelAleph.setLayout(null);
+		
+		scrollPaneAleph = new JScrollPane();
+		scrollPaneAleph.setBounds(0, 0, 1074, 274);
+		panelAleph.add(scrollPaneAleph);
+		
+		textAreaAleph = new JTextArea();
+		textAreaAleph.setTabSize(4);
+		scrollPaneAleph.setViewportView(textAreaAleph);
 	}
-
 }

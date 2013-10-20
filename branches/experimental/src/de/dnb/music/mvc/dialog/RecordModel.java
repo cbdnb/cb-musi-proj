@@ -6,6 +6,7 @@ import java.io.StringWriter;
 import java.net.URL;
 import java.util.Date;
 import java.util.Observable;
+import java.util.Stack;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
@@ -16,6 +17,7 @@ import applikationsbausteine.RangeCheckUtils;
 
 import utils.GNDConstants;
 import utils.GNDTitleUtils;
+import utils.MusicIDFinder;
 import utils.TitleUtils;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
 import de.dnb.gnd.exceptions.WrappingHandler;
@@ -25,6 +27,7 @@ import de.dnb.gnd.parser.RecordParser;
 import de.dnb.gnd.parser.line.Line;
 import de.dnb.gnd.parser.line.LineParser;
 import de.dnb.gnd.parser.tag.GNDTagDB;
+import de.dnb.gnd.utils.GNDUtils;
 import de.dnb.gnd.utils.RecordUtils;
 import de.dnb.music.additionalInformation.Composer;
 import de.dnb.music.genre.Genre;
@@ -38,19 +41,22 @@ public class RecordModel extends Observable {
 	public RecordModel() {
 		this.oldRecordStr = "";
 		this.tagDB = GNDTagDB.getDB();
-		newRecord = new Record(null, tagDB);
+		theRecord = new Record(null, tagDB);
 		this.parser = new RecordParser();
 		this.parser.setHandler(new WrappingHandler());
 		this.stackTrace = "";
 		this.expanded = true;
 		this.transformer = new DefaultRecordTransformer();
+		returnsPicaPlus = false;
 	}
+
+	private Stack<Record> history = new Stack<Record>();
 
 	private String oldRecordStr;
 
 	private GNDTagDB tagDB;
 
-	private Record newRecord;;
+	private Record theRecord;;
 
 	private RecordParser parser;
 
@@ -62,6 +68,14 @@ public class RecordModel extends Observable {
 
 	private DefaultRecordTransformer transformer;
 
+	private boolean returnsPicaPlus;
+
+	public final void undo() {
+		if (!history.empty())
+			theRecord = history.pop();
+		refresh();
+	}
+
 	public final String getStackTrace() {
 		return stackTrace;
 	}
@@ -69,15 +83,118 @@ public class RecordModel extends Observable {
 	public final void setOldRecord(final String oldRecordS) {
 		RangeCheckUtils.assertReferenceParamNotNull("oldRecordS", oldRecordS);
 		this.oldRecordStr = oldRecordS;
+		transformOldRecordString();
 	}
 
-	public final String getNewRecordString() {
-		return RecordUtils.toPica(newRecord, Format.PICA3, expanded, "\n", '$');
+	public final String getPica() {
+		if (theRecord == null)
+			return "";
+		Format format = returnsPicaPlus ? Format.PICA_PLUS : Format.PICA3;
+		return RecordUtils.toPica(theRecord, format, expanded, "\n", '$');
 	}
 
 	public final void refresh() {
+		GNDTitleUtils.setTotalInstrumentCount(theRecord);
 		setChanged();
 		notifyObservers(null);
+	}
+
+	public final void add(Line line) {
+		try {
+			Record record = theRecord.clone();
+			theRecord.add(line);
+			history.push(record);
+		} catch (OperationNotSupportedException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(),
+					"Fehler im Datensatz", JOptionPane.OK_CANCEL_OPTION);
+		}
+		refresh();
+	}
+
+	/**
+	 * Nimmt den String (aus Textfeld für neuen Datensatz) und wandelt ihn
+	 * in einen Record um.
+	 * 
+	 * @param recordStr	nicht null
+	 */
+	public final void analyzeNewRecordString(final String recordStr) {
+		try {
+			Record record = theRecord.clone();
+			theRecord = parser.parse(recordStr);
+			if (!theRecord.equals(record))
+				history.push(record);
+		} catch (final Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(),
+					"Fehler im Datensatz", JOptionPane.OK_CANCEL_OPTION);
+		}
+		refresh();
+	}
+
+	public final void setExpansion(final boolean expansion) {
+		this.expanded = expansion;
+		refresh();
+	}
+
+	public final void setReturnsPica(final boolean returnsPica) {
+		this.returnsPicaPlus = returnsPica;
+		refresh();
+	}
+
+	private final void transformOldRecordString() {
+		try {
+			Record clone = theRecord.clone();
+			Record oldRecord = parser.parse(oldRecordStr);
+			theRecord = transformer.transform(oldRecord);
+			// dann soll ein neuer Datensatz generiert werden:
+			if (RecordUtils.isEmpty(theRecord)) {
+				transformer.addGeneralNote(theRecord);
+				transformer.addGNDClassification(theRecord);
+			}
+			history.push(clone);
+		} catch (final Exception e) {
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			e.printStackTrace(pw);
+
+			stackTrace =
+				oldRecordStr + "\n\n----------------\n\n" + sw.toString();
+			JOptionPane.showMessageDialog(null, e.getMessage(),
+					"Fehler im Datensatz", JOptionPane.OK_CANCEL_OPTION);
+		}
+		refresh();
+	}
+
+	public final void addComposer(final Composer composer, final String code) {
+		try {
+			Record clone = theRecord.clone();
+			Line line =
+				LineParser.parse("500 " + "!" + composer.idn + "!"
+					+ composer.name + "$4" + code, tagDB);
+			theRecord.add(line);
+			line = LineParser.parse("670 " + composer.sourceAbb, tagDB);
+			theRecord.add(line);
+			line = LineParser.parse("043 " + composer.countrCode, tagDB);
+			theRecord.add(line);
+			history.push(clone);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(),
+					"Fehler im Datensatz", JOptionPane.OK_CANCEL_OPTION);
+		}
+		refresh();
+	}
+
+	private MusicIDFinder finder = new MusicIDFinder();
+
+	public final String getAleph() {
+		if (theRecord == null)
+			return "";
+		try {
+			return GNDUtils.toAleph(theRecord, finder);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(),
+					"Fehler im Datensatz", JOptionPane.OK_CANCEL_OPTION);
+		}
+		return "";
 	}
 
 	/**
@@ -85,7 +202,6 @@ public class RecordModel extends Observable {
 	 */
 	public final Date getCreationDate() {
 		if (creationDate == null) {
-
 			/*
 			 * Die Manifest-Datei der eigenen jar-Datei ist immer aktuell. 
 			 * Daher Zugriff auf deren URL:
@@ -126,117 +242,8 @@ public class RecordModel extends Observable {
 						// nix
 					}
 			}
-
 		}
 		return creationDate;
-	}
-
-	/**
-	 * Nimmt den String (aus Textfeld für neuen Datensatz) und wandelt ihn
-	 * in einen Record um.
-	 * 
-	 * @param recordStr	nicht null
-	 */
-	public final void setNewRecord(final String recordStr) {
-		try {
-			newRecord = parser.parse(recordStr);
-		} catch (final Exception e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(),
-					"Fehler im Datensatz", JOptionPane.OK_CANCEL_OPTION);
-			refresh();
-		}
-
-	}
-
-	public final void changeExpansion() {
-		expanded = !expanded;
-		refresh();
-	}
-
-	public final void analyze() {
-
-		try {
-			Record oldRecord = parser.parse(oldRecordStr);
-			newRecord = transformer.transform(oldRecord);
-			// dann soll ein neuer Datensatz generiert werden:
-			if(RecordUtils.isEmpty(newRecord)) {
-				transformer.addGeneralNote(newRecord);
-				transformer.addGNDClassification(newRecord);
-			}
-		} catch (final Exception e) {
-			StringWriter sw = new StringWriter();
-			PrintWriter pw = new PrintWriter(sw);
-			e.printStackTrace(pw);
-
-			stackTrace =
-				oldRecordStr + "\n\n----------------\n\n" + sw.toString();
-			JOptionPane.showMessageDialog(null, e.getMessage(),
-					"Fehler im Datensatz", JOptionPane.OK_CANCEL_OPTION);
-
-		}
-		refresh();
-
-	}
-
-	public final void addComposer(final Composer composer, final String code) {
-		try {
-			Line line =
-				LineParser.parse("500 " + "!" + composer.idn + "!"
-					+ composer.name + "$4" + code, tagDB);
-			newRecord.add(line);
-			line = LineParser.parse("670 " + composer.sourceAbb, tagDB);
-			newRecord.add(line);
-			line = LineParser.parse("043 " + composer.countrCode, tagDB);
-			newRecord.add(line);
-		} catch (IllFormattedLineException e) {
-			// nix
-		} catch (OperationNotSupportedException e) {
-			// nix
-		}
-		refresh();
-	}
-
-	public final void addInstrument(final Instrument ins) {
-		try {
-			RecordUtils.addLines(newRecord,
-					GNDTitleUtils.get3XXLines(ins, true));
-		} catch (OperationNotSupportedException e) {
-			// nix
-		}
-		refresh();
-	}
-
-	public final void addGenre(final Genre genre) {
-		try {
-			RecordUtils.addLines(newRecord,
-					GNDTitleUtils.get3XXLines(genre, true));
-		} catch (OperationNotSupportedException e) {
-			// nix
-		}
-		refresh();
-	}
-
-	public final void addTitle(final String number, final String titleStr) {
-
-		try {
-			MusicTitle title = ParseMusicTitle.parse(null, titleStr);
-			final boolean forceTotalCount = true;
-			Line line = GNDTitleUtils.getLine(GNDConstants.TAG_130, title);
-			newRecord.add(line);
-			RecordUtils.addLines(newRecord,
-					GNDTitleUtils.get3XXLines(title, forceTotalCount));
-		} catch (Exception e) {
-			StringWriter sw = new StringWriter();
-			PrintWriter pw = new PrintWriter(sw);
-			e.printStackTrace(pw);
-
-			stackTrace =
-				oldRecordStr + "\n\n----------------\n\n" + sw.toString();
-			JOptionPane.showMessageDialog(null, e.getMessage(),
-					"Fehler bei der Eingabe", JOptionPane.OK_CANCEL_OPTION);
-			return;
-		}
-		refresh();
 	}
 
 }

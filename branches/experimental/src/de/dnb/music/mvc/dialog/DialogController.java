@@ -218,34 +218,6 @@ public class DialogController {
 		}
 	}
 
-	class ComposerListener implements ActionListener {
-		@Override
-		public void actionPerformed(final ActionEvent e) {
-			model.addComposer(view.getComposer());
-		}
-	}
-
-	class ExpansionListener implements ActionListener {
-		@Override
-		public void actionPerformed(final ActionEvent e) {
-			model.setExpansion(view.expansionWanted());
-		}
-	}
-
-	class PicaListener implements ActionListener {
-		@Override
-		public void actionPerformed(final ActionEvent e) {
-			model.setReturnsPica(view.picaWanted());
-		}
-	}
-
-	class NumberListener implements ActionListener {
-		@Override
-		public void actionPerformed(final ActionEvent e) {
-			model.setForceTotalCount(view.numberWanted());
-		}
-	}
-
 	class UndoListener implements ActionListener {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
@@ -262,12 +234,15 @@ public class DialogController {
 
 	public DialogController(Frame parent) {
 		super();
+		
 		this.model = new DialogModel();
+		
 		this.view = new DialogView(model, parent);
+		System.out.println("hier");
+		
 		model.addObserver(view);
-
+		
 		view.enableAll();
-		view.addNewListener(new NewListener());
 		view.setUndoVisible(true);
 		view.addUndoListener(new UndoListener());
 
@@ -286,11 +261,7 @@ public class DialogController {
 		view.addKeyListener(new KeyListener());
 		view.addModusListener(new ModusListener());
 		view.addQualiListener(new QualifListener());
-		view.addComposerListener(new ComposerListener());
 
-		view.addExpansionListener(new ExpansionListener());
-		view.addNumberListener(new NumberListener());
-		view.addPicaListener(new PicaListener());
 		view.addInfoListener(new InfoListener());
 
 		view.addVersionString("");
@@ -298,10 +269,10 @@ public class DialogController {
 
 		view.addGenres(GenreDB.getAllGenres());
 		view.addInstruments(InstrumentDB.getAllInstruments());
-		for (int i = 1; i < 10; i++)
-			view.addInstrumentCount(i);
-		view.addComposer(null);
-		view.addComposers(ThematicIndexDB.getAllComposers());
+		
+		for (int i = 1; i < 10; i++){
+			view.addInstrumentCount(i);			
+		}
 
 		view.addIndices(ThematicIndexDB.getThematicIndices());
 		view.addOpera(OpusNumber.getOperaPhrases());
@@ -313,6 +284,7 @@ public class DialogController {
 			view.addModusCount(i);
 
 		view.setTip("Bitte zunächst Individual- oder Formalsachtitel eingeben");
+		view.setModality();
 	}
 
 	/**

@@ -15,34 +15,18 @@ import de.dnb.music.mediumOfPerformance.Instrument;
 public class DialogView implements Observer {
 
 	private DialogGUI theGui;
-	private DialogModel theModel;
+	private DialogModel dialogModel;
 
 	public DialogView(final DialogModel model, final Frame parent) {
-		this.theModel = model;
-		theGui = new DialogGUI(null, true);
+		this.dialogModel = model;
+		theGui = new DialogGUI(parent, false);
 		theGui.setVisible(true);
 	}
 
 	// Listener: -------------------------------
 
-	public final void addExpansionListener(final ActionListener al) {
-		theGui.checkBoxExpansion.addActionListener(al);
-	}
-
-	public final void addPicaListener(final ActionListener al) {
-		theGui.checkBoxPicaPlus.addActionListener(al);
-	}
-
-	public final void addNumberListener(final ActionListener al) {
-		theGui.checkBoxTotalCount.addActionListener(al);
-	}
-
 	public final void addInfoListener(final ActionListener al) {
 		theGui.mntmInfo.addActionListener(al);
-	}
-
-	public final void addNewListener(final ActionListener al) {
-		theGui.btnNew.addActionListener(al);
 	}
 
 	public final void addGenreListener(final ActionListener al) {
@@ -96,9 +80,13 @@ public class DialogView implements Observer {
 	public final void addUndoListener(final ActionListener al) {
 		theGui.btnUndo.addActionListener(al);
 	}
-
-	public final void addComposerListener(final ActionListener al) {
-		theGui.comboBoxComposer.addActionListener(al);
+	
+	public final void addInsertListener(final ActionListener al) {
+		theGui.btnInsertTitle.addActionListener(al);
+	}
+	
+	public final void addAbortListener(final ActionListener al) {
+		theGui.btnAbort.addActionListener(al);
 	}
 
 	// Combos füllen: --------------------------------------
@@ -131,16 +119,6 @@ public class DialogView implements Observer {
 	public final void addVersionStrings(final Collection<String> versions) {
 		for (String version : versions) {
 			addVersionString(version);
-		}
-	}
-
-	public final void addComposer(final Composer composer) {
-		theGui.comboBoxComposer.addItem(composer);
-	}
-
-	public final void addComposers(final Collection<Composer> composers) {
-		for (Composer composer : composers) {
-			addComposer(composer);
 		}
 	}
 
@@ -202,6 +180,16 @@ public class DialogView implements Observer {
 	@SuppressWarnings("boxing")
 	public final void addInstrumentCount(final int c) {
 		theGui.comboBoxCount.addItem(c);
+	}
+	
+	public final void addFieldNumber(final String number) {
+		theGui.comboBoxTag.addItem(number);
+	}
+	
+	public final void addFieldNumbers(final Collection<String> numbers) {
+		for (String number : numbers) {
+			addFieldNumber(number);
+		}
 	}
 
 	// Sichtbarkeit: --------------------------------
@@ -282,12 +270,32 @@ public class DialogView implements Observer {
 		else
 			theGui.lblTip.setText("Tip:");
 	}
+	
+	public final void setRAK(String rak){
+		theGui.textFieldRAK.setText(rak);
+	}
+	
+	public final void setRSWK(String rswk){
+		theGui.textFieldRSWK.setText(rswk);
+	}
+	
+	public final void setGND(String gnd){
+		theGui.textFieldGND.setText(gnd);
+	}
 
 	public final void setUndoVisible(final boolean v) {
 		theGui.btnUndo.setVisible(v);
 	}
+	
+	public final void setModality(){
+		theGui.setModal(true);
+	}
 
 	// Getter: -------------------------------
+	
+	public final String getFieldNumber() {
+		return (String) theGui.comboBoxTag.getSelectedItem();
+	}
 
 	public final Genre getGenre() {
 		return (Genre) theGui.comboBoxGenre.getSelectedItem();
@@ -372,27 +380,12 @@ public class DialogView implements Observer {
 		return qualifier;
 	}
 
-	public final Composer getComposer() {
-		return (Composer) theGui.comboBoxComposer.getSelectedItem();
-	}
-
-	public final boolean expansionWanted() {
-		return theGui.checkBoxExpansion.isSelected();
-	}
-
-	public final boolean picaWanted() {
-		return theGui.checkBoxPicaPlus.isSelected();
-	}
-
-	public final boolean numberWanted() {
-		return theGui.checkBoxTotalCount.isSelected();
-	}
-
 	@Override
 	public final void update(final Observable obs, final Object message) {
-		theGui.textAreaGND.setText(theModel.getGND());
-		theGui.textAreaStruct.setText(theModel.getStructured());
-		theGui.textAreaAleph.setText(theModel.getAleph());
+		theGui.textAreaStruct.setText(dialogModel.getStructured());
+		setRAK(dialogModel.getRAK());
+		setRSWK(dialogModel.getRSWK());
+		setGND(dialogModel.getGND());
 	}
 
 	public final Component getTheGui() {

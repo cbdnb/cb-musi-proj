@@ -31,7 +31,6 @@ public class DialogGUI extends JDialog {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	JButton btnNew;
 	private JMenuBar menuBar;
 	private JMenu mnNewMenu;
 	JMenuItem mntmInfo;
@@ -59,14 +58,12 @@ public class DialogGUI extends JDialog {
 	JTextField textFieldIndivTitle;
 	private JScrollPane scrollPane_1;
 	JTextArea textAreaStruct;
-	private JLabel lblGnd;
 	private JLabel lblStrukturiert;
 	JButton btnAddFormal;
 	JButton btnAddIdx;
 	JButton btnAddKey;
 	JButton btnAddYear;
 	JButton btnVersion;
-	JCheckBox checkBoxTotalCount;
 	JComboBox comboBoxGenreFormal;
 	JPanel panelSerial;
 	JComboBox comboBoxSerial;
@@ -82,20 +79,18 @@ public class DialogGUI extends JDialog {
 	JLabel lblTip;
 	JTextArea textPaneTip;
 	JButton btnUndo;
-	JTabbedPane tabbedPaneSystems;
-	JPanel panelPica;
-	JPanel panelAleph;
-	JCheckBox checkBoxExpansion;
-	JCheckBox checkBoxPicaPlus;
-	JScrollPane scrollPaneGND;
-	JTextArea textAreaGND;
-	JScrollPane scrollPaneAleph;
-	JTextArea textAreaAleph;
 	private JPanel panelQualifier;
 	JTextField textFieldQualifier;
 	JButton btnQualifier;
-	JComboBox comboBoxComposer;
-	JLabel lblKomponist;
+	JLabel lblRak;
+	JLabel lblRswk;
+	JLabel lblGnd;
+	JButton btnInsertTitle;
+	JComboBox comboBoxTag;
+	JTextField textFieldGND;
+	JTextField textFieldRSWK;
+	JTextField textFieldRAK;
+	JButton btnAbort;
 
 	/**
 	 * Create the frame.
@@ -111,7 +106,7 @@ public class DialogGUI extends JDialog {
 				DialogGUI.class.getResource("/resources/Violin_256.png")));
 		setTitle("Baue Werktitel");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 1170, 721);
+		setBounds(100, 100, 1130, 575);
 
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -125,9 +120,6 @@ public class DialogGUI extends JDialog {
 		contentPane.setBackground(new Color(240, 240, 240));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-
-		btnNew = new JButton("Neu ...");
-		btnNew.setBounds(36, 37, 67, 23);
 
 		tabbedPaneNewTitle = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPaneNewTitle.setBounds(205, 5, 773, 69);
@@ -298,7 +290,7 @@ public class DialogGUI extends JDialog {
 		comboBoxVersion.setBounds(377, 107, 321, 22);
 
 		scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(754, 371, 400, 289);
+		scrollPane_1.setBounds(711, 320, 400, 196);
 		contentPane.setLayout(null);
 		contentPane.add(btnAddGenre);
 		contentPane.add(comboBoxGenre);
@@ -322,7 +314,6 @@ public class DialogGUI extends JDialog {
 		btnQualifier.setBounds(231, 11, 120, 20);
 		panelQualifier.add(btnQualifier);
 		contentPane.add(lblFassungsphraseAuswhlen);
-		contentPane.add(btnNew);
 		contentPane.add(tabbedPaneNewTitle);
 		contentPane.add(scrollPane_1);
 
@@ -332,12 +323,8 @@ public class DialogGUI extends JDialog {
 		scrollPane_1.setViewportView(textAreaStruct);
 		contentPane.add(comboBoxVersion);
 
-		lblGnd = new JLabel("GND:");
-		lblGnd.setBounds(117, 362, 46, 23);
-		contentPane.add(lblGnd);
-
 		lblStrukturiert = new JLabel("Strukturiert:");
-		lblStrukturiert.setBounds(754, 350, 90, 14);
+		lblStrukturiert.setBounds(708, 295, 90, 14);
 		contentPane.add(lblStrukturiert);
 
 		btnVersion = new JButton("Fassung hinzufügen");
@@ -356,62 +343,51 @@ public class DialogGUI extends JDialog {
 		textPaneTip.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		textPaneTip.setForeground(SystemColor.menuText);
 		textPaneTip.setBackground(SystemColor.control);
-		textPaneTip.setBounds(754, 127, 368, 114);
+		textPaneTip.setBounds(754, 127, 357, 145);
 		contentPane.add(textPaneTip);
 		
 		btnUndo = new JButton("Rückgängig");
 		btnUndo.setVisible(false);
-		btnUndo.setBounds(36, 102, 134, 23);
+		btnUndo.setBounds(36, 102, 134, 27);
 		contentPane.add(btnUndo);
 		
-		tabbedPaneSystems = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPaneSystems.setBounds(36, 332, 699, 328);
-		contentPane.add(tabbedPaneSystems);
+		lblRak = new JLabel("RAK-Darstellung:");
+		lblRak.setBounds(36, 322, 95, 23);
+		contentPane.add(lblRak);
 		
-		panelPica = new JPanel();
-		tabbedPaneSystems.addTab("Pica", null, panelPica, null);
-		panelPica.setLayout(null);
+		lblRswk = new JLabel("RSWK-Darstellung:");
+		lblRswk.setBounds(36, 353, 107, 14);
+		contentPane.add(lblRswk);
 		
-		scrollPaneGND = new JScrollPane();
-		scrollPaneGND.setLocation(10, 35);
-		scrollPaneGND.setSize(new Dimension(674, 251));
-		scrollPaneGND.setPreferredSize(new Dimension(20, 20));
-		panelPica.add(scrollPaneGND);
+		lblGnd = new JLabel("GND-Darstellung:");
+		lblGnd.setBounds(36, 379, 107, 14);
+		contentPane.add(lblGnd);
 		
-		textAreaGND = new JTextArea();
-		scrollPaneGND.setViewportView(textAreaGND);
+		btnInsertTitle = new JButton("Einfügen als:");
+		btnInsertTitle.setBounds(36, 434, 95, 26);
+		contentPane.add(btnInsertTitle);
 		
-		checkBoxExpansion = new JCheckBox("Expansion");
-		checkBoxExpansion.setBounds(293, 5, 118, 23);
-		panelPica.add(checkBoxExpansion);
+		comboBoxTag = new JComboBox();
+		comboBoxTag.setBounds(142, 434, 80, 26);
+		contentPane.add(comboBoxTag);
 		
-		checkBoxPicaPlus = new JCheckBox("Pica+");
-		checkBoxPicaPlus.setBounds(427, 5, 118, 23);
-		panelPica.add(checkBoxPicaPlus);
+		textFieldGND = new JTextField();
+		textFieldGND.setBounds(142, 376, 535, 20);
+		contentPane.add(textFieldGND);
+		textFieldGND.setColumns(10);
 		
-		panelAleph = new JPanel();
-		tabbedPaneSystems.addTab("Aleph", null, panelAleph, null);
-		panelAleph.setLayout(null);
+		textFieldRSWK = new JTextField();
+		textFieldRSWK.setColumns(10);
+		textFieldRSWK.setBounds(142, 350, 535, 20);
+		contentPane.add(textFieldRSWK);
 		
-		scrollPaneAleph = new JScrollPane();
-		scrollPaneAleph.setLocation(10, 35);
-		scrollPaneAleph.setSize(new Dimension(674, 251));
-		scrollPaneAleph.setPreferredSize(new Dimension(20, 20));
-		panelAleph.add(scrollPaneAleph);
+		textFieldRAK = new JTextField();
+		textFieldRAK.setColumns(10);
+		textFieldRAK.setBounds(142, 323, 535, 20);
+		contentPane.add(textFieldRAK);
 		
-		textAreaAleph = new JTextArea();
-		scrollPaneAleph.setViewportView(textAreaAleph);
-		
-				checkBoxTotalCount = new JCheckBox("Gesamtzahl");
-				checkBoxTotalCount.setBounds(36, 288, 151, 23);
-				contentPane.add(checkBoxTotalCount);
-		
-		comboBoxComposer = new JComboBox();
-		comboBoxComposer.setBounds(754, 288, 385, 22);
-		contentPane.add(comboBoxComposer);
-		
-		lblKomponist = new JLabel("Komponist (wenn in der Werkverzeichnisliste):");
-		lblKomponist.setBounds(754, 263, 385, 14);
-		contentPane.add(lblKomponist);
+		btnAbort = new JButton("Abbruch");
+		btnAbort.setBounds(241, 434, 95, 26);
+		contentPane.add(btnAbort);
 	}
 }

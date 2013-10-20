@@ -19,7 +19,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
 
+import utils.GNDTitleUtils;
+
+import de.dnb.gnd.parser.line.Line;
 import de.dnb.music.additionalInformation.ThematicIndexDB;
+import de.dnb.music.genre.Genre;
 import de.dnb.music.genre.GenreDB;
 import de.dnb.music.mediumOfPerformance.Instrument;
 import de.dnb.music.mediumOfPerformance.InstrumentDB;
@@ -33,41 +37,33 @@ public class RecordController {
 	private static RecordController rc;
 
 	class AnalyzeListener implements ActionListener {
-
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 			model.setOldRecord(view.getOldRecord());
-			model.analyze();
 		}
-
 	}
 
-	class RemoveListener implements ActionListener {
-
+	class ExpansionListener implements ActionListener {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			model.changeExpansion();
-			model.refresh();
+			model.setExpansion(view.expansionWanted());
 		}
-
 	}
 
 	class ComposerListener implements ActionListener {
-
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 			model.addComposer(view.getComposer(), view.getCode());
 		}
-
 	}
 
 	class InstrumentListener implements ActionListener {
-
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 			Instrument ins = view.getInstrument();
 			ins.setCount(view.getCount());
-			model.addInstrument(ins);
+			Line line = GNDTitleUtils.makeLine(ins);
+			model.add(line);
 
 		}
 
@@ -77,8 +73,8 @@ public class RecordController {
 
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-
-			model.addGenre(view.getGenre());
+			Genre genre = view.getGenre();
+			model.add(GNDTitleUtils.makeLine(genre));
 
 		}
 
@@ -97,22 +93,18 @@ public class RecordController {
 			dialog.setSize(500, 500);
 			dialog.setResizable(true);
 			dialog.setVisible(true);
-
 		}
-
 	}
-	
-	class TitleListener implements ActionListener {
+
+	class InsertNewTitleListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			String number = view.getFieldNumber();
-			String titleStr = view.getTitleString();
-			model.addTitle(number, titleStr);
+			new DialogController(view.getGui());
 		}
 
 	}
-	
+
 	class NewRecFocusListener implements FocusListener {
 
 		@Override
@@ -124,9 +116,16 @@ public class RecordController {
 		public void focusLost(FocusEvent e) {
 			// Feld auslesen und in Record verwandeln
 			String newRecStr = view.getNewRecord();
-			model.setNewRecord(newRecStr);
+			model.analyzeNewRecordString(newRecStr);
 		}
-		
+
+	}
+	
+	class UndoListener implements ActionListener {
+		@Override
+		public void actionPerformed(final ActionEvent e) {
+			model.undo();
+		}
 	}
 
 	/**
@@ -207,7 +206,7 @@ public class RecordController {
 		view.addCompListener(new ComposerListener());
 		view.addInstrListener(new InstrumentListener());
 		view.addGenreListener(new GenreListener());
-		view.addRemoveListener(new RemoveListener());
+		view.addExpansionListener(new ExpansionListener());
 
 		view.addComposers(ThematicIndexDB.getAllComposers());
 		view.addGenres(GenreDB.getAllGenres());
@@ -217,10 +216,9 @@ public class RecordController {
 
 		view.addErrorListener(new ShowErrorListener());
 		view.addInfoListener(new InfoListener());
-		view.addTitleListener(new TitleListener());
-		view.addFieldNumber("130");
-		view.addFieldNumber("430");
+		view.addNewTitleListener(new InsertNewTitleListener());
 		view.addNewRecFocusListener(new NewRecFocusListener());
+		view.addUndoListener(new UndoListener());
 	}
 
 	/**

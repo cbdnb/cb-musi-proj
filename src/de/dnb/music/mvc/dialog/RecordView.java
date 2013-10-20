@@ -12,7 +12,6 @@ import de.dnb.music.genre.Genre;
 import de.dnb.music.mediumOfPerformance.Instrument;
 import de.dnb.music.mvc.dialog.RecordController.InfoListener;
 
-
 public class RecordView implements Observer {
 
 	private RecordGUI gui;
@@ -24,10 +23,12 @@ public class RecordView implements Observer {
 		gui.setVisible(true);
 	}
 
-	public final void addAnalyzeListener(final ActionListener al) {
-		gui.btnAnalysieren.addActionListener(al);
-	}
+	// Listener ----------------------------
 
+	public final void addAnalyzeListener(final ActionListener al) {
+		gui.btnAnalyse.addActionListener(al);
+	}
+	
 	public final void addErrorListener(final ActionListener al) {
 		gui.mntmZeigeFehler.addActionListener(al);
 	}
@@ -47,33 +48,28 @@ public class RecordView implements Observer {
 	public final void addCompListener(final ActionListener al) {
 		gui.btnComp.addActionListener(al);
 	}
-	
-	public final void addNewRecFocusListener(final FocusListener fl) {
-		gui.textAreaNew.addFocusListener(fl);
-	}
-	
-	
 
-	public final void addRemoveListener(final ActionListener al) {
-		gui.btnExpansionAendern.addActionListener(al);
+	public final void addNewRecFocusListener(final FocusListener fl) {
+		gui.textAreaPica.addFocusListener(fl);
+	}
+
+	public final void addNewTitleListener(final ActionListener al) {
+		gui.btnAddTitle.addActionListener(al);
+	}
+
+	public final void addPicaListener(final ActionListener al) {
+		gui.chckbxPica.addActionListener(al);
+	}
+
+	public final void addExpansionListener(final ActionListener al) {
+		gui.chckbxExpansion.addActionListener(al);
 	}
 	
-	public final void addTitleListener(final ActionListener al) {
-		gui.btnTitle.addActionListener(al);
-		gui.textFieldTitle.addActionListener(al);
+	public final void addUndoListener(final ActionListener al) {
+		gui.btnUndo.addActionListener(al);
 	}
-	
-	public final void addFieldNumber(final String number) {
-		gui.comboBoxFieldNumber.addItem(number);
-	}
-	
-	public final void addFieldNumbers(final Collection<String> numbers) {
-		for (String number : numbers) {
-			addFieldNumber(number);
-		}
-	}
-	
-	
+
+	// Combos füllen: --------------------------------------
 
 	public final void addGenre(final Genre genre) {
 		gui.comboBoxGenre.addItem(genre);
@@ -105,25 +101,19 @@ public class RecordView implements Observer {
 		}
 	}
 
+	@SuppressWarnings("boxing")
+	public final void addCount(final int c) {
+		gui.comboBoxCount.addItem(c);
+	}
+
+	// getter: -------------------------------
+
 	public final Genre getGenre() {
 		return (Genre) gui.comboBoxGenre.getSelectedItem();
 	}
 
 	public final Instrument getInstrument() {
 		return (Instrument) gui.comboBoxInstru.getSelectedItem();
-	}
-	
-	public final String getFieldNumber() {
-		return (String) gui.comboBoxFieldNumber.getSelectedItem();
-	}
-	
-	public final String getTitleString() {
-		return gui.textFieldTitle.getText();
-	}
-
-	@SuppressWarnings("boxing")
-	public final void addCount(final int c) {
-		gui.comboBoxCount.addItem(c);
 	}
 
 	@SuppressWarnings("boxing")
@@ -139,21 +129,30 @@ public class RecordView implements Observer {
 		return gui.txtCode.getText();
 	}
 
-	@Override
-	public final void update(final Observable obs, final Object message) {
-		gui.textAreaNew.setText(model.getNewRecordString());
+	public final String getOldRecord() {
+		return gui.textAreaOldRecord.getText();
 	}
 
-	public final String getOldRecord() {
-		return gui.textAreaOld.getText();
+	public final String getNewRecord() {
+		return gui.textAreaPica.getText();
+	}
+
+	public final RecordGUI getGui() {
+		return gui;
 	}
 	
-	public final String getNewRecord() {
-		return gui.textAreaNew.getText();
+	public final boolean expansionWanted() {
+		return gui.chckbxExpansion.isSelected();
 	}
 
-	public final Component getGui() {
-		return gui;
+	public final boolean picaWanted() {
+		return gui.chckbxPica.isSelected();
+	}
+
+	@Override
+	public final void update(final Observable obs, final Object message) {
+		gui.textAreaPica.setText(model.getPica());
+		gui.textAreaAleph.setText(model.getAleph());
 	}
 
 }

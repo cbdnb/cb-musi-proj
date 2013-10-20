@@ -32,15 +32,9 @@ public class DialogModel extends Observable {
 
 	private boolean returnsPicaPlus;
 
-	private boolean forceTotalCount = false;
-
 	private boolean expansion = false;
 
-	private Composer theComposer = null;
-
 	private TagDB tagDB = GNDTagDB.getDB();
-
-	private Record theRecord;
 
 	public final void reset() {
 		history.push(CopyObjectUtils.copyObject(theTitle));
@@ -96,43 +90,13 @@ public class DialogModel extends Observable {
 	}
 
 	public final void setForceTotalCount(final boolean forceTotalCount) {
-		this.forceTotalCount = forceTotalCount;
 		refresh();
 	}
 
 	public final String getGND() {
 		if (theTitle == null)
 			return "";
-		buildRecord();
-		Format format = returnsPicaPlus ? Format.PICA_PLUS : Format.PICA3;
-		return RecordUtils.toPica(theRecord, format, expansion, "\n", '$');
-	}
-
-	/**
-	 * @return
-	 */
-	private void buildRecord() {
-		if (theTitle == null){
-			theRecord = null;
-			return;
-		}
-		theRecord = GNDTitleUtils.getRecord(theTitle, forceTotalCount);
-		if (theComposer != null) {
-			try {
-				Line line =
-					LineParser.parse("500 " + "!" + theComposer.idn + "!"
-						+ theComposer.name + "$4kom1", tagDB);
-				theRecord.add(line);
-				line = LineParser.parse("670 " + theComposer.sourceAbb, tagDB);
-				theRecord.add(line);
-				line = LineParser.parse("043 " + theComposer.countrCode, tagDB);
-				theRecord.add(line);
-			} catch (IllFormattedLineException e) {
-				// nix
-			} catch (OperationNotSupportedException e) {
-				// nix
-			}
-		}
+		return TitleUtils.getX30ContentAsString(theTitle);
 	}
 
 	public final String getRAK() {
@@ -155,24 +119,8 @@ public class DialogModel extends Observable {
 	}
 
 	public final void refresh() {
-		buildRecord();
 		setChanged();
 		notifyObservers(null);
-	}
-	
-	private MusicIDFinder finder = new MusicIDFinder();
-
-	public final String getAleph() {
-		if (theTitle == null)
-			return "";
-		return GNDUtils.toAleph(theRecord,finder);
-//		return TitleUtils.getAleph(theTitle, forceTotalCount, theComposer);
-
-	}
-
-	public final void addComposer(final Composer composer) {
-		this.theComposer = composer;
-		refresh();
 	}
 
 }

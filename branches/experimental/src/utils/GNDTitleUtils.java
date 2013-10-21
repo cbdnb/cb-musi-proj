@@ -201,7 +201,7 @@ public final class GNDTitleUtils {
 		Line line = getLine(tag, musicTitle);
 		lines.add(line);
 		lines.addAll(get3XXLines(musicTitle, false));
-		if (musicTitle.containsParts() && tag == GNDConstants.TAG_430) {
+		if (musicTitle.containsParts() && tag != GNDConstants.TAG_430) {
 			try {
 				line =
 					LineParser.parse("430 " + TitleUtils.getRAK(musicTitle)

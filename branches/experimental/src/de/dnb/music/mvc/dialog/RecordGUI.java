@@ -256,6 +256,7 @@ public class RecordGUI extends JFrame {
 		panelPica.setLayout(null);
 		
 		chckbxExpansion = new JCheckBox("Expansion");
+		chckbxExpansion.setSelected(true);
 		chckbxExpansion.setBounds(182, 7, 97, 23);
 		panelPica.add(chckbxExpansion);
 		

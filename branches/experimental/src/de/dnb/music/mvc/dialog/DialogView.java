@@ -7,9 +7,13 @@ import java.util.Collection;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JList;
+
 import de.dnb.music.additionalInformation.Composer;
 import de.dnb.music.additionalInformation.Key;
 import de.dnb.music.genre.Genre;
+import de.dnb.music.genre.GenreDB;
 import de.dnb.music.mediumOfPerformance.Instrument;
 
 public class DialogView implements Observer {
@@ -80,24 +84,24 @@ public class DialogView implements Observer {
 	public final void addUndoListener(final ActionListener al) {
 		theGui.btnUndo.addActionListener(al);
 	}
-	
+
 	public final void addInsertListener(final ActionListener al) {
 		theGui.btnInsertTitle.addActionListener(al);
 	}
-	
-	public final void addAbortListener(final ActionListener al) {
-		theGui.btnAbort.addActionListener(al);
+
+	public final void addCancelListener(final ActionListener al) {
+		theGui.btnCancel.addActionListener(al);
 	}
 
 	// Combos füllen: --------------------------------------
 
-	public final void addGenre(final Genre genre) {
+	public final void addGenre(final String genre) {
 		theGui.comboBoxGenre.addItem(genre);
 		theGui.comboBoxGenreFormal.addItem(genre);
 	}
 
-	public final void addGenres(final Collection<Genre> genres) {
-		for (Genre genre : genres) {
+	public final void addGenres(final Collection<String> genres) {
+		for (String genre : genres) {
 			addGenre(genre);
 		}
 	}
@@ -181,11 +185,11 @@ public class DialogView implements Observer {
 	public final void addInstrumentCount(final int c) {
 		theGui.comboBoxCount.addItem(c);
 	}
-	
+
 	public final void addFieldNumber(final String number) {
 		theGui.comboBoxTag.addItem(number);
 	}
-	
+
 	public final void addFieldNumbers(final Collection<String> numbers) {
 		for (String number : numbers) {
 			addFieldNumber(number);
@@ -270,35 +274,36 @@ public class DialogView implements Observer {
 		else
 			theGui.lblTip.setText("Tip:");
 	}
-	
-	public final void setRAK(String rak){
+
+	public final void setRAK(String rak) {
 		theGui.textFieldRAK.setText(rak);
 	}
-	
-	public final void setRSWK(String rswk){
+
+	public final void setRSWK(String rswk) {
 		theGui.textFieldRSWK.setText(rswk);
 	}
-	
-	public final void setGND(String gnd){
+
+	public final void setGND(String gnd) {
 		theGui.textFieldGND.setText(gnd);
 	}
 
 	public final void setUndoVisible(final boolean v) {
 		theGui.btnUndo.setVisible(v);
 	}
-	
-	public final void setModality(){
+
+	public final void setModality() {
 		theGui.setModal(true);
 	}
 
 	// Getter: -------------------------------
-	
+
 	public final String getFieldNumber() {
 		return (String) theGui.comboBoxTag.getSelectedItem();
 	}
 
 	public final Genre getGenre() {
-		return (Genre) theGui.comboBoxGenre.getSelectedItem();
+		String s = (String) theGui.comboBoxGenre.getSelectedItem();
+		return GenreDB.matchGenre(s);
 	}
 
 	public final Instrument getInstrument() {
@@ -311,7 +316,8 @@ public class DialogView implements Observer {
 	}
 
 	public final Genre getNewTitleGenre() {
-		return (Genre) theGui.comboBoxGenreFormal.getSelectedItem();
+		String s = (String) theGui.comboBoxGenreFormal.getSelectedItem();
+		return GenreDB.matchGenre(s);
 	}
 
 	public final String getNewIndivTitle() {
@@ -388,7 +394,7 @@ public class DialogView implements Observer {
 		setGND(dialogModel.getGND());
 	}
 
-	public final Component getTheGui() {
+	public final DialogGUI getTheGui() {
 		return theGui;
 	}
 

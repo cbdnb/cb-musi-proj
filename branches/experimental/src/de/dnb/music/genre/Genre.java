@@ -75,7 +75,7 @@ public class Genre implements TitleElement, Comparable<Genre>, Serializable {
 	}
 
 	@Override
-	public final String toString() {
+	public String toString() {
 		return swd;
 	}
 
@@ -108,7 +108,7 @@ public class Genre implements TitleElement, Comparable<Genre>, Serializable {
 	}
 
 	@Override
-	public final int compareTo(final Genre o) {
+	public int compareTo(final Genre o) {
 		return this.swd.compareTo(o.swd);
 	}
 

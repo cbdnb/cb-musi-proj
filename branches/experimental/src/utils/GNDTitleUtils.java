@@ -184,6 +184,48 @@ public final class GNDTitleUtils {
 
 	/**
 	 * Liefert die GND-Zeilen, die aus einem Werktitel gewonnen werden
+	 * können. Die Gesamtzahl wird nicht ausgegeben.
+	 * 
+	 * @param tag				130 oder 140
+	 * @param musicTitle		nicht null
+	 * 							
+	 * @return					GND-Informationen als Zeilen.
+	 */
+	public static
+			Collection<Line>
+			getLines(final Tag tag, final MusicTitle musicTitle) {
+		RangeCheckUtils.assertReferenceParamNotNull("musicTitle", musicTitle);
+		if (tag != GNDConstants.TAG_130 && tag != GNDConstants.TAG_430)
+			throw new IllegalArgumentException("Tag ist keiner für Werktitel");
+		Collection<Line> lines = new LinkedList<Line>();
+		Line line = getLine(tag, musicTitle);
+		lines.add(line);
+		lines.addAll(get3XXLines(musicTitle, false));
+		if (musicTitle.containsParts() && tag == GNDConstants.TAG_430) {
+			try {
+				line =
+					LineParser.parse("430 " + TitleUtils.getRAK(musicTitle)
+						+ "$v" + Constants.KOM_PORTAL_430, TAG_DB);
+				lines.add(line);
+			} catch (IllFormattedLineException e) {
+				// nix
+			}
+		}
+		try {
+			if (musicTitle.containsVersion()) {
+				line = LineParser.parse("008 wif", TAG_DB);
+			} else {
+				line = LineParser.parse("008 wim", TAG_DB);
+			}
+		} catch (IllFormattedLineException e) {
+			// nix
+		}
+		lines.add(line);
+		return lines;
+	}
+
+	/**
+	 * Liefert die GND-Zeilen, die aus einem Werktitel gewonnen werden
 	 * können. Der Werktitel kommt in die 130.
 	 * 
 	 * @param musicTitle		nicht null

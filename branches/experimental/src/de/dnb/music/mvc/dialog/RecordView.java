@@ -21,6 +21,7 @@ public class RecordView implements Observer {
 		this.model = model;
 		gui = new RecordGUI();
 		gui.setVisible(true);
+		gui.tabbedPane.setSelectedComponent(gui.panelPica);
 	}
 
 	// Listener ----------------------------

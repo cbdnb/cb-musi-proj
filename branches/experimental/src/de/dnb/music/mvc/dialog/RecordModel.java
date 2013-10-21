@@ -85,6 +85,22 @@ public class RecordModel extends Observable {
 		this.oldRecordStr = oldRecordS;
 		transformOldRecordString();
 	}
+	
+	public final void reset() {
+		Record record = theRecord.clone();
+		theRecord = new Record(null, tagDB);
+		Line line;
+		try {
+			line = LineParser.parse("065 14.4p", tagDB);
+			theRecord.add(line);
+		} catch (IllFormattedLineException e) {
+			//nix
+		} catch (OperationNotSupportedException e) {
+			//nix
+		}
+		history.push(record);
+		refresh();
+	}
 
 	public final String getPica() {
 		if (theRecord == null)

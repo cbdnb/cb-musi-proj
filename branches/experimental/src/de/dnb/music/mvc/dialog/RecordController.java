@@ -32,28 +32,32 @@ public class RecordController {
 
 	RecordView view;
 
-	RecordModel model;
+	RecordModel recordModel;
 
 	private static RecordController rc;
 
 	class AnalyzeListener implements ActionListener {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			model.setOldRecord(view.getOldRecord());
+			String old = view.getOldRecord();
+			if (!old.trim().isEmpty())
+				recordModel.setOldRecord(old);
+			else
+				recordModel.reset();
 		}
 	}
 
 	class ExpansionListener implements ActionListener {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			model.setExpansion(view.expansionWanted());
+			recordModel.setExpansion(view.expansionWanted());
 		}
 	}
 
 	class ComposerListener implements ActionListener {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			model.addComposer(view.getComposer(), view.getCode());
+			recordModel.addComposer(view.getComposer(), view.getCode());
 		}
 	}
 
@@ -63,7 +67,7 @@ public class RecordController {
 			Instrument ins = view.getInstrument();
 			ins.setCount(view.getCount());
 			Line line = GNDTitleUtils.makeLine(ins);
-			model.add(line);
+			recordModel.add(line);
 
 		}
 
@@ -74,7 +78,7 @@ public class RecordController {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 			Genre genre = view.getGenre();
-			model.add(GNDTitleUtils.makeLine(genre));
+			recordModel.add(GNDTitleUtils.makeLine(genre));
 
 		}
 
@@ -84,7 +88,7 @@ public class RecordController {
 
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			String stackTrace = model.getStackTrace();
+			String stackTrace = recordModel.getStackTrace();
 			JTextArea ar = new JTextArea(stackTrace);
 			JScrollPane scrollpane = new JScrollPane(ar);
 			JOptionPane jop =
@@ -100,7 +104,7 @@ public class RecordController {
 
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			new DialogController(view.getGui());
+			new DialogController(view.getGui(), recordModel);
 		}
 
 	}
@@ -116,15 +120,15 @@ public class RecordController {
 		public void focusLost(FocusEvent e) {
 			// Feld auslesen und in Record verwandeln
 			String newRecStr = view.getNewRecord();
-			model.analyzeNewRecordString(newRecStr);
+			recordModel.analyzeNewRecordString(newRecStr);
 		}
 
 	}
-	
+
 	class UndoListener implements ActionListener {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			model.undo();
+			recordModel.undo();
 		}
 	}
 
@@ -169,7 +173,7 @@ public class RecordController {
 		public void actionPerformed(final ActionEvent e) {
 			SimpleDateFormat formatter =
 				new SimpleDateFormat("d. M. yyyy 'um' H:mm 'Uhr'");
-			Date date = model.getCreationDate();
+			Date date = recordModel.getCreationDate();
 			String dateStr = formatter.format(date);
 			String info =
 				"Version 2.00"
@@ -199,9 +203,9 @@ public class RecordController {
 
 	public RecordController() {
 		super();
-		this.model = new RecordModel();
-		this.view = new RecordView(model);
-		model.addObserver(view);
+		this.recordModel = new RecordModel();
+		this.view = new RecordView(recordModel);
+		recordModel.addObserver(view);
 		view.addAnalyzeListener(new AnalyzeListener());
 		view.addCompListener(new ComposerListener());
 		view.addInstrListener(new InstrumentListener());

@@ -117,6 +117,10 @@ public class DialogModel extends Observable {
 		String structured = TitleUtils.getStructured(theTitle);
 		return structured;
 	}
+	
+	public final MusicTitle getTitle() {
+		return theTitle;
+	}
 
 	public final void refresh() {
 		setChanged();

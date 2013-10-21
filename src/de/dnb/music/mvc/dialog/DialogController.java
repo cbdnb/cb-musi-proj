@@ -3,10 +3,19 @@ package de.dnb.music.mvc.dialog;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collection;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import utils.GNDConstants;
+import utils.GNDTitleUtils;
+
+import de.dnb.gnd.exceptions.IllFormattedLineException;
+import de.dnb.gnd.parser.Subfield;
+import de.dnb.gnd.parser.line.Line;
+import de.dnb.gnd.parser.line.LineFactory;
+import de.dnb.gnd.parser.tag.Tag;
 import de.dnb.gnd.utils.Misc;
 import de.dnb.music.additionalInformation.DateOfComposition;
 import de.dnb.music.additionalInformation.Key;
@@ -21,22 +30,25 @@ import de.dnb.music.mediumOfPerformance.Instrument;
 import de.dnb.music.mediumOfPerformance.InstrumentDB;
 import de.dnb.music.title.FormalTitle;
 import de.dnb.music.title.IndividualTitle;
+import de.dnb.music.title.MusicTitle;
 import de.dnb.music.version.ParseVersion;
 import de.dnb.music.version.Version;
 import de.dnb.music.version.VersionDB;
 
 public class DialogController {
 
-	private DialogModel model;
+	private DialogModel dialogModel;
 
 	private DialogView view;
+
+	private RecordModel recordModel;
 
 	class NewListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			view.setTip("Bitte zunächst Individual- "
 				+ "oder Formalsachtitel eingeben");
-			model.reset();
+			dialogModel.reset();
 		}
 	}
 
@@ -46,7 +58,7 @@ public class DialogController {
 			FormalTitle title = new FormalTitle();
 			title.addGenre(view.getNewTitleGenre());
 			view.setTip("");
-			model.addElement(title);
+			dialogModel.addElement(title);
 		}
 	}
 
@@ -57,9 +69,8 @@ public class DialogController {
 				IndividualTitle title =
 					new IndividualTitle(view.getNewIndivTitle());
 				view.setTip("");
-				model.addElement(title);
+				dialogModel.addElement(title);
 			} catch (IllegalArgumentException ex) {
-				//				ex.printStackTrace();
 				JOptionPane.showMessageDialog(null, ex.getMessage(),
 						"Falsche Eingabe", JOptionPane.OK_CANCEL_OPTION);
 			}
@@ -69,7 +80,7 @@ public class DialogController {
 	class NewGenreListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			model.addElement(view.getGenre());
+			dialogModel.addElement(view.getGenre());
 		}
 	}
 
@@ -79,7 +90,7 @@ public class DialogController {
 			try {
 				Instrument instrument = view.getInstrument().clone();
 				instrument.setCount(view.getCount());
-				model.addElement(instrument);
+				dialogModel.addElement(instrument);
 			} catch (CloneNotSupportedException e1) {
 				// nix
 			}
@@ -93,7 +104,7 @@ public class DialogController {
 				String opus = view.getOpus();
 				OpusNumber opusNumber =
 					ParseAdditionalInformation.matchOpus(opus);
-				model.addElement(opusNumber);
+				dialogModel.addElement(opusNumber);
 			} catch (IllegalArgumentException ex) {
 				JOptionPane.showMessageDialog(null, ex.getMessage(),
 						"Falsche Eingabe", JOptionPane.OK_CANCEL_OPTION);
@@ -108,7 +119,7 @@ public class DialogController {
 				String idx = view.getIdx();
 				ThematicIndexNumber idxNumber =
 					ParseAdditionalInformation.matchThematicIndex(null, idx);
-				model.addElement(idxNumber);
+				dialogModel.addElement(idxNumber);
 			} catch (IllegalArgumentException ex) {
 				JOptionPane.showMessageDialog(null, ex.getMessage(),
 						"Falsche Eingabe", JOptionPane.OK_CANCEL_OPTION);
@@ -123,7 +134,7 @@ public class DialogController {
 				String ser = view.getSerial();
 				SerialNumber serNumber =
 					ParseAdditionalInformation.matchSerialNumber(ser, true);
-				model.addElement(serNumber);
+				dialogModel.addElement(serNumber);
 			} catch (IllegalArgumentException ex) {
 				//				ex.printStackTrace();
 				JOptionPane.showMessageDialog(null, ex.getMessage(),
@@ -139,7 +150,7 @@ public class DialogController {
 				String y = view.getYear();
 				DateOfComposition year =
 					ParseAdditionalInformation.matchDate(y);
-				model.addElement(year);
+				dialogModel.addElement(year);
 			} catch (IllegalArgumentException ex) {
 				//				ex.printStackTrace();
 				JOptionPane.showMessageDialog(null, ex.getMessage(),
@@ -154,7 +165,7 @@ public class DialogController {
 			try {
 				String q = view.getQualifier();
 				Qualifier qualif = new Qualifier(q);
-				model.addElement(qualif);
+				dialogModel.addElement(qualif);
 			} catch (IllegalArgumentException ex) {
 				//				ex.printStackTrace();
 				JOptionPane.showMessageDialog(null, ex.getMessage(),
@@ -168,7 +179,7 @@ public class DialogController {
 		public void actionPerformed(ActionEvent e) {
 			String k = view.getKey();
 			Key key = ParseAdditionalInformation.matchKey(k);
-			model.addElement(key);
+			dialogModel.addElement(key);
 		}
 	}
 
@@ -177,7 +188,7 @@ public class DialogController {
 		public void actionPerformed(ActionEvent e) {
 			String k = view.getModus();
 			Key key = ParseAdditionalInformation.matchKey(k);
-			model.addElement(key);
+			dialogModel.addElement(key);
 		}
 	}
 
@@ -212,7 +223,7 @@ public class DialogController {
 							+ "\n\tb) eine Besetzung" + "\neingeben";
 				}
 			}
-			boolean success = model.addElement(version);
+			boolean success = dialogModel.addElement(version);
 			if (success)
 				view.setTip(message);
 		}
@@ -221,7 +232,7 @@ public class DialogController {
 	class UndoListener implements ActionListener {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			model.undo();
+			dialogModel.undo();
 		}
 	}
 
@@ -232,16 +243,43 @@ public class DialogController {
 		}
 	}
 
-	public DialogController(Frame parent) {
+	class CancelListener implements ActionListener {
+		@Override
+		public void actionPerformed(final ActionEvent e) {
+			view.getTheGui().dispose();
+		}
+	}
+
+	class InsertTitleListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(final ActionEvent e) {
+			MusicTitle musicTitle = dialogModel.getTitle();
+			if (musicTitle != null) {
+				String number = view.getFieldNumber();
+				Tag tag = GNDConstants.TAG_130;
+				if (number.charAt(0) == '4')
+					tag = GNDConstants.TAG_430;
+				Collection<Line> lines =
+					GNDTitleUtils.getLines(tag, musicTitle);
+				for (Line line : lines) {
+					recordModel.add(line);
+				}				
+			}
+			view.getTheGui().dispose();
+		}
+
+	}
+
+	public DialogController(Frame parent, RecordModel recordModel) {
 		super();
-		
-		this.model = new DialogModel();
-		
-		this.view = new DialogView(model, parent);
-		System.out.println("hier");
-		
-		model.addObserver(view);
-		
+
+		this.dialogModel = new DialogModel();
+		this.view = new DialogView(dialogModel, parent);
+		this.recordModel = recordModel;
+
+		dialogModel.addObserver(view);
+
 		view.enableAll();
 		view.setUndoVisible(true);
 		view.addUndoListener(new UndoListener());
@@ -267,11 +305,11 @@ public class DialogController {
 		view.addVersionString("");
 		view.addVersionStrings(VersionDB.getAllVersionPhrases());
 
-		view.addGenres(GenreDB.getAllGenres());
+		view.addGenres(GenreDB.getAllRAKGenres());
 		view.addInstruments(InstrumentDB.getAllInstruments());
-		
-		for (int i = 1; i < 10; i++){
-			view.addInstrumentCount(i);			
+
+		for (int i = 1; i < 10; i++) {
+			view.addInstrumentCount(i);
 		}
 
 		view.addIndices(ThematicIndexDB.getThematicIndices());
@@ -282,6 +320,10 @@ public class DialogController {
 		view.addModeNames(Key.getModeNames());
 		for (int i = 1; i <= 13; i++)
 			view.addModusCount(i);
+		view.addFieldNumber("1XX");
+		view.addFieldNumber("4XX");
+		view.addCancelListener(new CancelListener());
+		view.addInsertListener(new InsertTitleListener());
 
 		view.setTip("Bitte zunächst Individual- oder Formalsachtitel eingeben");
 		view.setModality();
@@ -295,7 +337,7 @@ public class DialogController {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBounds(100, 100, 1170, 721);
 		frame.setVisible(true);
-		new DialogController(frame);
+		new DialogController(frame, null);
 
 	}
 

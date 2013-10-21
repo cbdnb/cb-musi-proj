@@ -90,7 +90,7 @@ public class DialogGUI extends JDialog {
 	JTextField textFieldGND;
 	JTextField textFieldRSWK;
 	JTextField textFieldRAK;
-	JButton btnAbort;
+	JButton btnCancel;
 
 	/**
 	 * Create the frame.
@@ -386,8 +386,8 @@ public class DialogGUI extends JDialog {
 		textFieldRAK.setBounds(142, 323, 535, 20);
 		contentPane.add(textFieldRAK);
 		
-		btnAbort = new JButton("Abbruch");
-		btnAbort.setBounds(241, 434, 95, 26);
-		contentPane.add(btnAbort);
+		btnCancel = new JButton("Abbruch");
+		btnCancel.setBounds(241, 434, 95, 26);
+		contentPane.add(btnCancel);
 	}
 }

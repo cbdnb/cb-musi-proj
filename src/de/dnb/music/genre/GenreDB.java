@@ -1,5 +1,9 @@
 package de.dnb.music.genre;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -1242,13 +1246,16 @@ public final class GenreDB {
 	 */
 	private static Genre buildGenre(String[] line) {
 		Genre g = new Genre();
-
+		fillGenre(g, line);
+		return g;
+	}
+	
+	private static void fillGenre(Genre g,String[] line) {
 		g.plural = line[PLUR];
 		g.singular = line[SING];
 		g.nid = line[NID];
 		g.idn = line[IDN];
-		g.swd = line[SWD];
-		return g;
+		g.swd = line[SWD];		
 	}
 	
 	public static Set<Genre> getAllGenres(){
@@ -1257,6 +1264,15 @@ public final class GenreDB {
 			genSet.add(buildGenre(genreS));
 		}
 		return genSet;
+	}
+	
+	public static List<String> getAllRAKGenres(){
+		List<String> genres = new LinkedList<String>();
+		for (String[] genreS : DATA) {			
+			genres.add(genreS[PLUR]);
+		}
+		Collections.sort(genres);
+		return genres;
 	}
 	
 	public static String getGNDIdn(final String idn) {

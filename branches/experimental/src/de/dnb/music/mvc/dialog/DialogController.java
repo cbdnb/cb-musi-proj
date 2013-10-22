@@ -1,5 +1,6 @@
 package de.dnb.music.mvc.dialog;
 
+import java.awt.Component;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -235,13 +236,8 @@ public class DialogController {
 			dialogModel.undo();
 		}
 	}
-
-	class InfoListener implements ActionListener {
-		@Override
-		public void actionPerformed(final ActionEvent e) {
-			Misc.showInfo(this, "1.00", "/resources/helpSynth.txt");
-		}
-	}
+	
+	private Frame parent;
 
 	class CancelListener implements ActionListener {
 		@Override
@@ -273,7 +269,7 @@ public class DialogController {
 
 	public DialogController(Frame parent, RecordModel recordModel) {
 		super();
-
+		this.parent = parent;
 		this.dialogModel = new DialogModel();
 		this.view = new DialogView(dialogModel, parent);
 		this.recordModel = recordModel;
@@ -299,8 +295,6 @@ public class DialogController {
 		view.addKeyListener(new KeyListener());
 		view.addModusListener(new ModusListener());
 		view.addQualiListener(new QualifListener());
-
-		view.addInfoListener(new InfoListener());
 
 		view.addVersionString("");
 		view.addVersionStrings(VersionDB.getAllVersionPhrases());

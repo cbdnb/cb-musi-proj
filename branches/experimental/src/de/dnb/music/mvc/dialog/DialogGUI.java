@@ -31,9 +31,6 @@ public class DialogGUI extends JDialog {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JMenuBar menuBar;
-	private JMenu mnNewMenu;
-	JMenuItem mntmInfo;
 	JButton btnAddGenre;
 	JButton btnAddInstrument;
 	JComboBox comboBoxGenre;
@@ -104,18 +101,9 @@ public class DialogGUI extends JDialog {
 	private void initialize() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(
 				DialogGUI.class.getResource("/resources/Violin_256.png")));
-		setTitle("Baue Werktitel");
+		setTitle("Synthetisiere Werktitel");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1130, 575);
-
-		menuBar = new JMenuBar();
-		setJMenuBar(menuBar);
-
-		mnNewMenu = new JMenu("?");
-		menuBar.add(mnNewMenu);
-
-		mntmInfo = new JMenuItem("Info");
-		mnNewMenu.add(mntmInfo);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(240, 240, 240));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

@@ -19,13 +19,26 @@ Vorgehensweise bei Aufarbeitung von alten Datensaetzen:
 Vorgehensweise bei der Eingabe von neuen Datensaetzen:
 - "Bearbeiten / Neu ..." druecken, ein Basistemplate fuer den neuen Datensatz erscheint rechts.
 - Diesen Vorschlag weiterbearbeiten durch Einfügen von alternativen Titelformulierungen, Gattung, Instrument und Komponist.
-WinIBW:
-	- Die Expansionen durch Entfernen des Haekchens bei "Expansion" entfernen.
-	- Neuen Datensatz markieren (STRG-A) und in Zwischenablage uebernehmen (STRG-C)
-	- In die WinIBW einfuegen (STRG-V). Der alte Datensatz wird damit ueberschrieben.
-	- Den Datensatz-Vorschlag nach den ueblichen Regeln weiterbearbeiten. 
-Aleph:
-	- Die Daten aus dem Tab "Neu Aleph" durch Copy and Paste in das Aleph-Template uebernehmen.
+    WinIBW:
+        - Die Expansionen durch Entfernen des Haekchens bei "Expansion" entfernen.
+        - Neuen Datensatz markieren (STRG-A) und in Zwischenablage uebernehmen (STRG-C)
+        - In die WinIBW einfuegen (STRG-V). Der alte Datensatz wird damit ueberschrieben.
+        - Den Datensatz-Vorschlag nach den ueblichen Regeln weiterbearbeiten. 
+    Aleph:
+        - Die Daten aus dem Tab "Neu Aleph" durch Copy and Paste in das Aleph-Template uebernehmen.
+
+Synthese von Musiktiteln: 
+ - Erstellte Musiktitel werden durch Klick auf "Einfuegen ..." in den Datensatz eingefuegt.
+ - durch das Dropdown-Menue "1XX / 4XX" wird festgelegt, ob der neue Titel Vorzugsbenennung oder Alternativbenennung sein soll.
+ - Zu Beginn muss ein Formal- oder Individualsachtitel angelegt werden
+ - In diesen koennen nun weitere unterscheidende Angaben (Gattung, Instrument, Opus ...) eingefuegt werden
+ - Liegen Werkteile (mit natuerlich eigenem Titel) vor, so koennen diese ueber "Neues Werk / Neuen Werkteil hinzufuegen" hinzugefuegt werden
+ - Auch der letzte eingefuegte Werkteil kann mit unterscheidenden Angaben angereichert werden
+ - Zuletzt kann noch eine Fassung dieses Werkes/Teiles erzeugt werden
+ - Eine leere Fassung muss, eine Fassung mit Fassungsphrase kann mit unterscheidenden Angaben angereichert werden
+ - Alle Aktionen koennen mit "Rueckgaengig" zurueckgenommen werden (Undo-Funktionalitaet)
+ - In den Feldern "RAK-Darstellung", "RSWK-Darstellung" und "GND-Darstellung" wird der bisher erzeugte Titel im entsprechenden Format angezeigt
+ - Im Feld "strukturiert" sehen Sie eine moeglichst weitgehende Analyse der eingegebenen Daten. Alle diese Daten werden zur Gewinnung der 3XX-Felder in der GND herangezogen.
 
 Weitere Bedienelemente:
 
@@ -50,7 +63,5 @@ C. Verarbeitung der 430
 - In der Regel wird das 430-Feld in alle erlaubten Unterfelder zerlegt.
 - Davon ausgenommen sind die mit "R:EST vor RAK-M 2003" markierten 430-Felder. Hier werden nur die Unterfelder $p und $s erzeugt.
 - Für die Zwecke der DNB wird eine Portal-430 erzeugt, sofern ein Werkteil vorliegt. Diese 430 enthaelt die Deskriptionszeichen nach RAK-Musik.
-
-
 
 

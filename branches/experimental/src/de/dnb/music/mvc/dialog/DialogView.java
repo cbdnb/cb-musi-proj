@@ -1,16 +1,11 @@
 package de.dnb.music.mvc.dialog;
 
-import java.awt.Component;
 import java.awt.Frame;
 import java.awt.event.ActionListener;
 import java.util.Collection;
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JList;
-
-import de.dnb.music.additionalInformation.Composer;
 import de.dnb.music.additionalInformation.Key;
 import de.dnb.music.genre.Genre;
 import de.dnb.music.genre.GenreDB;
@@ -28,10 +23,6 @@ public class DialogView implements Observer {
 	}
 
 	// Listener: -------------------------------
-
-	public final void addInfoListener(final ActionListener al) {
-		theGui.mntmInfo.addActionListener(al);
-	}
 
 	public final void addGenreListener(final ActionListener al) {
 		theGui.btnAddGenre.addActionListener(al);

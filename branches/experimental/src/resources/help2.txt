@@ -1,63 +1,56 @@
 Kurzanleitung:
 
+Das Tool hat unten ein durch Tabs dreigeteiltes Fenster zur Aufnahme von Datensatzen. 
+- In das linke Fenster kann der alte, zu bearbeitende Datensatz im Pica- oder Pica+-Format eingefuegt werden. 
+- Angereicherte oder selbsterzeugt Datensaetze werden in den Tabs "Neu Pica" und "Neu Aleph" ausgegeben
+- Der Datensatz in "Neu Pica" kann durch Eingaben ueber die Tastatur weiterverarbeitet werden. Beim Verlassen des Fensters (Klicken anderswohin, "Focus lost") wird der veraenderte Datensatz analysisert und entweder aktualisiert oder aber die Aenderung im Fehlerfalle zurueckgewiesen.
+
 Vorgehensweise bei Aufarbeitung von alten Datensaetzen:
 - In der IBW in den Korrekturmodus gehen
 - Den Datensatz vollstaendig markieren (STRG-A) und in die Zwischenablage uebernehmen (STRG-C)
 - Alten Datensatz in das linke Teilfenster des Tools einfuegen (STRG-V)
-- "Bearbeiten" druecken, ein Vorschlag fuer den neuen Datensatz erscheint rechts.
-- Diesen Vorschlag weiterbearbeiten durch Einfügen von Gattung, Instrument und Komponist.
+- "Bearbeiten / Neu ..." druecken, ein Vorschlag fuer den neuen Datensatz erscheint rechts.
+- Diesen Vorschlag weiterbearbeiten durch Einfügen von weiteren (alternativen) Titelformulierungen, Gattung, Instrument und Komponist.
+- Die Expansionen durch Entfernen des Haekchens bei "Expansion" entfernen.
 - Neuen Datensatz markieren (STRG-A) und in Zwischenablage uebernehmen (STRG-C)
 - In die WinIBW einfuegen (STRG-V). Der alte Datensatz wird damit ueberschrieben.
 - Den Datensatz-Vorschlag nach den ueblichen Regeln weiterbearbeiten. 
 
 Vorgehensweise bei der Eingabe von neuen Datensaetzen:
-- In der IBW in die Eingabemaske aufrufen. (Datenmasken -> Normdaten -> Datenmaske??)
-- Im Feld 130 den Titel nach RAK-M eingeben (auch gerne mit Deskriptionszeichen wie "<>")
-- Die Zeile 130 mit der Maus markieren und in die Zwischenablage uebernehmen (STRG-C)
-- Diese Zeile in das linke Teilfenster des Tools einfuegen (STRG-V)
-- "Bearbeiten" druecken, ein Vorschlag fuer die aus dem Werktitel ableitbaren Bestandteile des neuen Datensatzes erscheint rechts. 
-- Diesen Vorschlag weiterbearbeiten durch Einfügen von Gattung, Instrument und Komponist.
-- Diese Bestandteile markieren (STRG-A) und in Zwischenablage uebernehmen (STRG-C)
-- In die WinIBW einfuegen (STRG-V). Die alte 130 Zeile wird damit ueberschrieben.
-- Den Datensatz-Vorschlag nach den ueblichen Regeln weiterbearbeiten. 
+- "Bearbeiten / Neu ..." druecken, ein Basistemplate fuer den neuen Datensatz erscheint rechts.
+- Diesen Vorschlag weiterbearbeiten durch Einfügen von alternativen Titelformulierungen, Gattung, Instrument und Komponist.
+WinIBW:
+	- Die Expansionen durch Entfernen des Haekchens bei "Expansion" entfernen.
+	- Neuen Datensatz markieren (STRG-A) und in Zwischenablage uebernehmen (STRG-C)
+	- In die WinIBW einfuegen (STRG-V). Der alte Datensatz wird damit ueberschrieben.
+	- Den Datensatz-Vorschlag nach den ueblichen Regeln weiterbearbeiten. 
+Aleph:
+	- Die Daten aus dem Tab "Neu Aleph" durch Copy and Paste in das Aleph-Template uebernehmen.
 
 Weitere Bedienelemente:
 
-- Im Fehlerfalle kann die letzte Fehlermeldung abgefragt werden.
+- Im Fehlerfalle kann die letzte Fehlermeldung ueber das Menue ? -> Zeige Fehler abgefragt werden.
 - Die Fehlermeldung bitte markieren, kopieren und an c.baumann@dnb.de schicken
-- Die Fensterteilung ist verschiebbar und kann, wie auch das ganze Programmfenster in der Groeße angepasst werden
 
-Wie geht das Tool vor? 
-A. Pruefungen
-- Es ueberprueft anhand der 667-Felder, ob eine Bearbeitung zulaessig ist. Das macht er auch, wenn eine "667 MmV" vorliegt. Diese muss daher von Hand entfernt werden.
-- Es ueberprueft, ob in der 130 Kommentare wie "R:Maschinelle Umsetzung GND aus RAK-M 2003" oder "R:Maschinelle Umsetzung GND" vorliegen und bricht die Verarbeitung ab. Auch diese muessen daher entfernt werden.
 
-B. Anreichern des Datensatzes
+Wie geht das Tool bei der Bearbeitung alter Datensaetze vor? 
+
+A. Anreichern des Datensatzes
 - Es ergaenzt Laendercodes, sofern es den Komponisten "kennt".
 - Es ergaenzt GND-Systematik 14.4p.
 - Es "raet" die Quelle nach den ueblichen Werkverzeichnissen.
 - Es ergaenzt die redaktionelle Bemerkung "VPe" (Vollstaengiger Satz Pruefung erfolgt).
 
-C. Verarbeitung der 130
+B. Verarbeitung der 130
 - Es transformiert die 130 in die GND-Unterfelder
 - Es erschließt aus den in der 130 verfuegbaren Informationen die Felder 380, 382, 383, 384, 430, 548 und 550
-- Bei Werkteilen und Fassungen bietet er eine Suchfrage zur Relationierung an. (Dazu spaeter mehr)
 - Der Entitaetencode wird auf wim oder wif gesetzt.
 
-D. Verarbeitung der 430
+C. Verarbeitung der 430
 - In der Regel wird das 430-Feld in alle erlaubten Unterfelder zerlegt.
 - Davon ausgenommen sind die mit "R:EST vor RAK-M 2003" markierten 430-Felder. Hier werden nur die Unterfelder $p und $s erzeugt.
 - Für die Zwecke der DNB wird eine Portal-430 erzeugt, sofern ein Werkteil vorliegt. Diese 430 enthaelt die Deskriptionszeichen nach RAK-Musik.
 
-Besonderheiten der Suchfrage:
-- Der Relationscode wird automatisch erzeugt.
-- Es wird der Phrasenindex sp verwendet.
-- Sollte dieser nicht funktionieren, so kann man eventuell Treffer erzeugen, wenn man "sp" in 
-  "530 sp Quartette M C 3,10 - 15$4obpa" 
-  entfernt.
-- Beide Methoden 
-  "Automatische Suche" + relCodeVergabe
-    GNDLink + GNDLinkCont
-    fuehren zum Ziel.
+
 
 

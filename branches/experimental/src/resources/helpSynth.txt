@@ -1,13 +1,12 @@
-Diese Tool hilft bei der Synthese von Titeln.
- - mit "Neu..." wird alles auf null zurueckgesetzt
- - Dann muss ein Formal- oder Individualsachtitel eingefuegt werden
+Diese Tool synthetisiert Musiktitel und 
+ - fuegt sie durch Klick auf "Einfuegen ..." in den Datensatz ein.
+ - durch das Dropdown-Menue "1XX / 4XX" wird festgelegt, ob der neue Titel Vorzugsbenennung oder Alternativbenennung sein soll.
+ - Zu Beginn muss ein Formal- oder Individualsachtitel angelegt werden
  - In diesen koennen nun weitere unterscheidende Angaben (Gattung, Instrument, Opus ...) eingefuegt werden
  - Liegen Werkteile (mit natuerlich eigenem Titel) vor, so koennen diese ueber "Neues Werk / Neuen Werkteil hinzufuegen" hinzugefuegt werden
  - Auch der letzte eingefuegte Werkteil kann mit unterscheidenden Angaben angereichert werden
  - Zuletzt kann noch eine Fassung dieses Werkes/Teiles erzeugt werden
  - Eine leere Fassung muss, eine Fassung mit Fassungsphrase kann mit unterscheidenden Angaben angereichert werden
- 
- - Im GND-Ausgabefeld sind Instrumente (382) und Gattungen (380) standardmaeßig nicht expandiert, durch Klick auf die Box links neben "Expansion" koennen Sie dies aendern.
- - Das Pica+-Feldformat kann durch Klicken auf die entsprechende Check-Box erzeugt werden.
- - Um eine Ausgabe der Gesamtzahl aller Musizierenden zu erzwingen, koennen Sie die Check-Box "Gesamtzahl" anklicken. Diese Gesamtzahl macht allerdings nur bei Kammermusik Sinn. Ist diese Checkbox nicht markiert, so wird eine Gesamtzahl nur dann ausgegeben, wenn alle Instrumente mit Zahlen versehen sind (also ausgegeben fuer Vl 1 2 Vc 1 2 3; nicht ausgegeben fuer Vl 1 2 Va)
+ - Alle Aktionen koennen mit "Rueckgaengig" zurueckgenommen werden (Undo-Funktionalitaet)
+ - In den Feldern "RAK-Darstellung", "RSWK-Darstellung" und "GND-Darstellung" wird der bisher erzeugte Titel im entsprechenden Format angezeigt
  - Im Feld "strukturiert" sehen Sie eine moeglichst weitgehende Analyse der eingegebenen Daten. Alle diese Daten werden zur Gewinnung der 3XX-Felder in der GND herangezogen.

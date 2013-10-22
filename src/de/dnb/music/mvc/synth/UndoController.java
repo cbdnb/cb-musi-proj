@@ -255,7 +255,7 @@ public class UndoController {
 	class InfoListener implements ActionListener {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			Misc.showInfo(this, "1.00", "/resources/helpSynth.txt");
+			Misc.showInfo(view.getTheGui(), "1.00", "/resources/helpSynth.txt");
 		}
 	}
 

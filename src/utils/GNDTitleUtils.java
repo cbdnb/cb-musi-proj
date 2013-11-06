@@ -244,7 +244,7 @@ public final class GNDTitleUtils {
 
 	public static final GNDTag TAG_382 = TAG_DB.findTag("382");
 
-	private static LineFactory<? extends GNDTag> factory382 = TAG_382
+	private static LineFactory factory382 = TAG_382
 			.getLineFactory();
 
 	private static Indicator dollarS = TAG_382.getIndicator('s');

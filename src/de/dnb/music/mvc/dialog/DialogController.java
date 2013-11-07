@@ -271,7 +271,7 @@ public class DialogController {
 		super();
 		this.parent = parent;
 		this.dialogModel = new DialogModel();
-		this.view = new DialogView(dialogModel, parent);
+		this.view = new DialogView(dialogModel, null);
 		this.recordModel = recordModel;
 
 		dialogModel.addObserver(view);
@@ -320,7 +320,7 @@ public class DialogController {
 		view.addInsertListener(new InsertTitleListener());
 
 		view.setTip("Bitte zunächst Individual- oder Formalsachtitel eingeben");
-		view.setModality();
+//		view.setModality();
 	}
 
 	/**

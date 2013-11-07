@@ -10,17 +10,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.UIManager;
 
 import utils.GNDTitleUtils;
-
 import de.dnb.gnd.parser.line.Line;
 import de.dnb.gnd.utils.Misc;
 import de.dnb.music.additionalInformation.ThematicIndexDB;
@@ -28,6 +24,7 @@ import de.dnb.music.genre.Genre;
 import de.dnb.music.genre.GenreDB;
 import de.dnb.music.mediumOfPerformance.Instrument;
 import de.dnb.music.mediumOfPerformance.InstrumentDB;
+
 
 public class RecordController {
 
@@ -132,6 +129,13 @@ public class RecordController {
 			recordModel.undo();
 		}
 	}
+	
+	class PicaListener implements ActionListener {
+		@Override
+		public void actionPerformed(final ActionEvent e) {
+			recordModel.setReturnsPica(view.picaWanted());
+		}
+	}
 
 	/**
 	 * @return the help text
@@ -215,6 +219,7 @@ public class RecordController {
 		view.addInstrListener(new InstrumentListener());
 		view.addGenreListener(new GenreListener());
 		view.addExpansionListener(new ExpansionListener());
+		view.addPicaListener(new PicaListener());
 
 		view.addComposers(ThematicIndexDB.getAllComposers());
 		view.addGenres(GenreDB.getAllGenres());

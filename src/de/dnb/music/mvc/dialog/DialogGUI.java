@@ -103,9 +103,9 @@ public class DialogGUI extends JDialog {
 				DialogGUI.class.getResource("/resources/Violin_256.png")));
 		setTitle("Synthetisiere Werktitel");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 1130, 575);
+		setBounds(100, 100, 1235, 594);
 		contentPane = new JPanel();
-		contentPane.setBackground(new Color(240, 240, 240));
+		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 
@@ -340,15 +340,15 @@ public class DialogGUI extends JDialog {
 		contentPane.add(btnUndo);
 		
 		lblRak = new JLabel("RAK-Darstellung:");
-		lblRak.setBounds(36, 322, 95, 23);
+		lblRak.setBounds(10, 322, 133, 23);
 		contentPane.add(lblRak);
 		
 		lblRswk = new JLabel("RSWK-Darstellung:");
-		lblRswk.setBounds(36, 353, 107, 14);
+		lblRswk.setBounds(10, 353, 133, 14);
 		contentPane.add(lblRswk);
 		
 		lblGnd = new JLabel("GND-Darstellung:");
-		lblGnd.setBounds(36, 379, 107, 14);
+		lblGnd.setBounds(10, 379, 133, 14);
 		contentPane.add(lblGnd);
 		
 		btnInsertTitle = new JButton("Einfügen als:");

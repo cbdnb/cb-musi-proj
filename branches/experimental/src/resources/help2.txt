@@ -10,7 +10,7 @@ Vorgehensweise bei Aufarbeitung von alten Datensaetzen:
 - Den Datensatz vollstaendig markieren (STRG-A) und in die Zwischenablage uebernehmen (STRG-C)
 - Alten Datensatz in das linke Teilfenster des Tools einfuegen (STRG-V)
 - "Bearbeiten / Neu ..." druecken, ein Vorschlag fuer den neuen Datensatz erscheint rechts.
-- Diesen Vorschlag weiterbearbeiten durch Einfügen von weiteren (alternativen) Titelformulierungen, Gattung, Instrument und Komponist.
+- Diesen Vorschlag weiterbearbeiten durch Einfuegen von weiteren (alternativen) Titelformulierungen, Gattung, Instrument und Komponist.
 - Die Expansionen durch Entfernen des Haekchens bei "Expansion" entfernen.
 - Neuen Datensatz markieren (STRG-A) und in Zwischenablage uebernehmen (STRG-C)
 - In die WinIBW einfuegen (STRG-V). Der alte Datensatz wird damit ueberschrieben.
@@ -18,7 +18,7 @@ Vorgehensweise bei Aufarbeitung von alten Datensaetzen:
 
 Vorgehensweise bei der Eingabe von neuen Datensaetzen:
 - "Bearbeiten / Neu ..." druecken, ein Basistemplate fuer den neuen Datensatz erscheint rechts.
-- Diesen Vorschlag weiterbearbeiten durch Einfügen von alternativen Titelformulierungen, Gattung, Instrument und Komponist.
+- Diesen Vorschlag weiterbearbeiten durch Einfuegen von alternativen Titelformulierungen, Gattung, Instrument und Komponist.
     WinIBW:
         - Die Expansionen durch Entfernen des Haekchens bei "Expansion" entfernen.
         - Neuen Datensatz markieren (STRG-A) und in Zwischenablage uebernehmen (STRG-C)
@@ -56,12 +56,12 @@ A. Anreichern des Datensatzes
 
 B. Verarbeitung der 130
 - Es transformiert die 130 in die GND-Unterfelder
-- Es erschließt aus den in der 130 verfuegbaren Informationen die Felder 380, 382, 383, 384, 430, 548 und 550
+- Es erschliesst aus den in der 130 verfuegbaren Informationen die Felder 380, 382, 383, 384, 430, 548 und 550
 - Der Entitaetencode wird auf wim oder wif gesetzt.
 
 C. Verarbeitung der 430
 - In der Regel wird das 430-Feld in alle erlaubten Unterfelder zerlegt.
 - Davon ausgenommen sind die mit "R:EST vor RAK-M 2003" markierten 430-Felder. Hier werden nur die Unterfelder $p und $s erzeugt.
-- Für die Zwecke der DNB wird eine Portal-430 erzeugt, sofern ein Werkteil vorliegt. Diese 430 enthaelt die Deskriptionszeichen nach RAK-Musik.
+- Fuer die Zwecke der DNB wird eine Portal-430 erzeugt, sofern ein Werkteil vorliegt. Diese 430 enthaelt die Deskriptionszeichen nach RAK-Musik.
 
 

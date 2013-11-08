@@ -26,6 +26,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTabbedPane;
 import javax.swing.JCheckBox;
+import java.awt.BorderLayout;
 
 public class RecordGUI extends JFrame {
 
@@ -273,10 +274,9 @@ public class RecordGUI extends JFrame {
 		
 		panelAleph = new JPanel();
 		tabbedPane.addTab("Neu Aleph", null, panelAleph, null);
-		panelAleph.setLayout(null);
+		panelAleph.setLayout(new BorderLayout(0, 0));
 		
 		scrollPaneAleph = new JScrollPane();
-		scrollPaneAleph.setBounds(0, 0, 1074, 274);
 		panelAleph.add(scrollPaneAleph);
 		
 		textAreaAleph = new JTextArea();

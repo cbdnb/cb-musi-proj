@@ -161,7 +161,8 @@ public class DialogGUI extends JDialog {
 		lblmal.setHorizontalAlignment(SwingConstants.LEFT);
 
 		tabbedPaneAdditional = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPaneAdditional.setBounds(205, 228, 493, 83);
+		tabbedPaneAdditional.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+		tabbedPaneAdditional.setBounds(205, 228, 593, 83);
 
 		panelOpus = new JPanel();
 		tabbedPaneAdditional.addTab("Opus", null, panelOpus, null);
@@ -312,7 +313,7 @@ public class DialogGUI extends JDialog {
 		contentPane.add(comboBoxVersion);
 
 		lblStrukturiert = new JLabel("Strukturiert:");
-		lblStrukturiert.setBounds(708, 295, 90, 14);
+		lblStrukturiert.setBounds(608, 439, 90, 14);
 		contentPane.add(lblStrukturiert);
 
 		btnVersion = new JButton("Fassung hinzufügen");

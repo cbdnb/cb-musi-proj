@@ -242,7 +242,7 @@ public final class GNDTitleUtils {
 		return getLines(title, forceTotalCount);
 	}
 
-	public static final GNDTag TAG_382 = TAG_DB.findTag("382");
+	public static final GNDTag TAG_382 = (GNDTag) TAG_DB.findTag("382");
 
 	private static LineFactory factory382 = TAG_382
 			.getLineFactory();

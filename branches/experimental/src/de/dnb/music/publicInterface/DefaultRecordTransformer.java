@@ -340,9 +340,9 @@ public class DefaultRecordTransformer {
 	 * Diese müssen dann aus {@link #oldRecord} wieder aufgebaut werden.
 	 */
 	protected final void removeHeadings() {
-		Collection<GNDTag> tags1xx = TAG_DB.getTag1XX();
+		Collection<Tag> tags1xx = TAG_DB.getTag1XX();
 		RecordUtils.removeTags(newRecord, tags1xx);
-		Collection<GNDTag> tags4xx = TAG_DB.getTag4XX();
+		Collection<Tag> tags4xx = TAG_DB.getTag4XX();
 		RecordUtils.removeTags(newRecord, tags4xx);
 		RecordUtils.removeTags(newRecord, TAG_DB, "008");
 	}

@@ -136,6 +136,13 @@ public class RecordController {
 			recordModel.setReturnsPica(view.picaWanted());
 		}
 	}
+	
+	class ExplicitListener implements ActionListener {
+		@Override
+		public void actionPerformed(final ActionEvent e) {
+			recordModel.setReturnsExplicit(view.explicitWanted());
+		}
+	}
 
 	/**
 	 * @return the help text
@@ -220,6 +227,7 @@ public class RecordController {
 		view.addGenreListener(new GenreListener());
 		view.addExpansionListener(new ExpansionListener());
 		view.addPicaListener(new PicaListener());
+		view.addExplicitListener(new ExplicitListener());
 
 		view.addComposers(ThematicIndexDB.getAllComposers());
 		view.addGenres(GenreDB.getAllGenres());

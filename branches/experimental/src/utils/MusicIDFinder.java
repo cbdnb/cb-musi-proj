@@ -38,6 +38,6 @@ public class MusicIDFinder extends GNDNumberFinder {
 			IOException {
 
 		Record record = GNDUtils.readFromConsole();
-		System.out.println(GNDUtils.toAleph(record, new MusicIDFinder()));
+		System.out.println(GNDUtils.toAleph(record, new MusicIDFinder(), true));
 	}
 }

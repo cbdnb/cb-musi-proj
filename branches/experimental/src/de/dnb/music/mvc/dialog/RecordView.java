@@ -61,6 +61,10 @@ public class RecordView implements Observer {
 	public final void addPicaListener(final ActionListener al) {
 		gui.chckbxPica.addActionListener(al);
 	}
+	
+	public final void addExplicitListener(final ActionListener al) {
+		gui.chckbxExplicit.addActionListener(al);
+	}
 
 	public final void addExpansionListener(final ActionListener al) {
 		gui.chckbxExpansion.addActionListener(al);
@@ -144,6 +148,10 @@ public class RecordView implements Observer {
 	
 	public final boolean expansionWanted() {
 		return gui.chckbxExpansion.isSelected();
+	}
+	
+	public final boolean explicitWanted() {
+		return gui.chckbxExplicit.isSelected();
 	}
 
 	public final boolean picaWanted() {

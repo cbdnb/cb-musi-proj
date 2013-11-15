@@ -1,6 +1,7 @@
 package de.dnb.music.mvc.dialog;
 
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -27,6 +28,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JTabbedPane;
 import javax.swing.JCheckBox;
 import java.awt.BorderLayout;
+import javax.swing.BoxLayout;
 
 public class RecordGUI extends JFrame {
 
@@ -64,6 +66,8 @@ public class RecordGUI extends JFrame {
 	JButton btnUndo;
 	JLabel label_1;
 	JButton btnAddTitle;
+	JCheckBox chckbxExplicit;
+	private JPanel panelPicaCheck;
 
 	/**
 	 * Launch the application.
@@ -116,40 +120,41 @@ public class RecordGUI extends JFrame {
 		gbl_contentPane.columnWeights =
 			new double[] { 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0,
 				0.0, Double.MIN_VALUE };
-		gbl_contentPane.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0 };
+		gbl_contentPane.rowWeights =
+			new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0 };
 		contentPane.setLayout(gbl_contentPane);
-				
-						btnAnalyse = new JButton("Bearbeiten / Neu ...");
-						
-								GridBagConstraints gbc_btnAnalyse = new GridBagConstraints();
-								gbc_btnAnalyse.fill = GridBagConstraints.HORIZONTAL;
-								gbc_btnAnalyse.insets = new Insets(0, 0, 5, 5);
-								gbc_btnAnalyse.gridx = 2;
-								gbc_btnAnalyse.gridy = 1;
-								contentPane.add(btnAnalyse, gbc_btnAnalyse);
-				
-				label_1 = new JLabel(" Einfügen:");
-				GridBagConstraints gbc_label_1 = new GridBagConstraints();
-				gbc_label_1.insets = new Insets(0, 0, 5, 5);
-				gbc_label_1.gridx = 4;
-				gbc_label_1.gridy = 1;
-				contentPane.add(label_1, gbc_label_1);
-				
-				btnAddTitle = new JButton("Neuer Werktitel in 1XX oder 4XX ...");
-				btnAddTitle.setActionCommand("");
-				GridBagConstraints gbc_btnAddTitle = new GridBagConstraints();
-				gbc_btnAddTitle.insets = new Insets(0, 0, 5, 5);
-				gbc_btnAddTitle.gridx = 5;
-				gbc_btnAddTitle.gridy = 1;
-				contentPane.add(btnAddTitle, gbc_btnAddTitle);
-		
-				btnGenre = new JButton("Gattung");
-				GridBagConstraints gbc_btnGenre = new GridBagConstraints();
-				gbc_btnGenre.fill = GridBagConstraints.HORIZONTAL;
-				gbc_btnGenre.insets = new Insets(0, 0, 5, 5);
-				gbc_btnGenre.gridx = 5;
-				gbc_btnGenre.gridy = 2;
-				contentPane.add(btnGenre, gbc_btnGenre);
+
+		btnAnalyse = new JButton("Bearbeiten / Neu ...");
+
+		GridBagConstraints gbc_btnAnalyse = new GridBagConstraints();
+		gbc_btnAnalyse.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnAnalyse.insets = new Insets(0, 0, 5, 5);
+		gbc_btnAnalyse.gridx = 2;
+		gbc_btnAnalyse.gridy = 1;
+		contentPane.add(btnAnalyse, gbc_btnAnalyse);
+
+		label_1 = new JLabel(" Einfügen:");
+		GridBagConstraints gbc_label_1 = new GridBagConstraints();
+		gbc_label_1.insets = new Insets(0, 0, 5, 5);
+		gbc_label_1.gridx = 4;
+		gbc_label_1.gridy = 1;
+		contentPane.add(label_1, gbc_label_1);
+
+		btnAddTitle = new JButton("Neuer Werktitel in 1XX oder 4XX ...");
+		btnAddTitle.setActionCommand("");
+		GridBagConstraints gbc_btnAddTitle = new GridBagConstraints();
+		gbc_btnAddTitle.insets = new Insets(0, 0, 5, 5);
+		gbc_btnAddTitle.gridx = 5;
+		gbc_btnAddTitle.gridy = 1;
+		contentPane.add(btnAddTitle, gbc_btnAddTitle);
+
+		btnGenre = new JButton("Gattung");
+		GridBagConstraints gbc_btnGenre = new GridBagConstraints();
+		gbc_btnGenre.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnGenre.insets = new Insets(0, 0, 5, 5);
+		gbc_btnGenre.gridx = 5;
+		gbc_btnGenre.gridy = 2;
+		contentPane.add(btnGenre, gbc_btnGenre);
 
 		comboBoxGenre = new JComboBox();
 		GridBagConstraints gbc_comboBoxGenre = new GridBagConstraints();
@@ -158,22 +163,22 @@ public class RecordGUI extends JFrame {
 		gbc_comboBoxGenre.gridx = 6;
 		gbc_comboBoxGenre.gridy = 2;
 		contentPane.add(comboBoxGenre, gbc_comboBoxGenre);
-				
-				btnUndo = new JButton("Letzte Aktion rückgängig");
-				GridBagConstraints gbc_btnUndo = new GridBagConstraints();
-				gbc_btnUndo.fill = GridBagConstraints.HORIZONTAL;
-				gbc_btnUndo.insets = new Insets(0, 0, 5, 5);
-				gbc_btnUndo.gridx = 2;
-				gbc_btnUndo.gridy = 3;
-				contentPane.add(btnUndo, gbc_btnUndo);
-		
-				btnInstrument = new JButton("Instrument");
-				GridBagConstraints gbc_btnInstrument = new GridBagConstraints();
-				gbc_btnInstrument.fill = GridBagConstraints.HORIZONTAL;
-				gbc_btnInstrument.insets = new Insets(0, 0, 5, 5);
-				gbc_btnInstrument.gridx = 5;
-				gbc_btnInstrument.gridy = 3;
-				contentPane.add(btnInstrument, gbc_btnInstrument);
+
+		btnUndo = new JButton("Letzte Aktion rückgängig");
+		GridBagConstraints gbc_btnUndo = new GridBagConstraints();
+		gbc_btnUndo.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnUndo.insets = new Insets(0, 0, 5, 5);
+		gbc_btnUndo.gridx = 2;
+		gbc_btnUndo.gridy = 3;
+		contentPane.add(btnUndo, gbc_btnUndo);
+
+		btnInstrument = new JButton("Instrument");
+		GridBagConstraints gbc_btnInstrument = new GridBagConstraints();
+		gbc_btnInstrument.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnInstrument.insets = new Insets(0, 0, 5, 5);
+		gbc_btnInstrument.gridx = 5;
+		gbc_btnInstrument.gridy = 3;
+		contentPane.add(btnInstrument, gbc_btnInstrument);
 
 		comboBoxInstru = new JComboBox();
 		GridBagConstraints gbc_comboBoxInstru = new GridBagConstraints();
@@ -182,16 +187,16 @@ public class RecordGUI extends JFrame {
 		gbc_comboBoxInstru.gridx = 6;
 		gbc_comboBoxInstru.gridy = 3;
 		contentPane.add(comboBoxInstru, gbc_comboBoxInstru);
-		
-				comboBoxCount = new JComboBox();
-				GridBagConstraints gbc_comboBoxCount = new GridBagConstraints();
-				gbc_comboBoxCount.gridwidth = 2;
-				gbc_comboBoxCount.insets = new Insets(0, 0, 5, 5);
-				gbc_comboBoxCount.fill = GridBagConstraints.HORIZONTAL;
-				gbc_comboBoxCount.gridx = 7;
-				gbc_comboBoxCount.gridy = 3;
-				contentPane.add(comboBoxCount, gbc_comboBoxCount);
-		
+
+		comboBoxCount = new JComboBox();
+		GridBagConstraints gbc_comboBoxCount = new GridBagConstraints();
+		gbc_comboBoxCount.gridwidth = 2;
+		gbc_comboBoxCount.insets = new Insets(0, 0, 5, 5);
+		gbc_comboBoxCount.fill = GridBagConstraints.HORIZONTAL;
+		gbc_comboBoxCount.gridx = 7;
+		gbc_comboBoxCount.gridy = 3;
+		contentPane.add(comboBoxCount, gbc_comboBoxCount);
+
 		lblmal = new JLabel("-mal");
 		lblmal.setHorizontalAlignment(SwingConstants.LEFT);
 		GridBagConstraints gbc_lblmal = new GridBagConstraints();
@@ -200,14 +205,14 @@ public class RecordGUI extends JFrame {
 		gbc_lblmal.gridx = 9;
 		gbc_lblmal.gridy = 3;
 		contentPane.add(lblmal, gbc_lblmal);
-		
-				btnComp = new JButton("Komponist");
-				GridBagConstraints gbc_btnComp = new GridBagConstraints();
-				gbc_btnComp.fill = GridBagConstraints.HORIZONTAL;
-				gbc_btnComp.insets = new Insets(0, 0, 5, 5);
-				gbc_btnComp.gridx = 5;
-				gbc_btnComp.gridy = 4;
-				contentPane.add(btnComp, gbc_btnComp);
+
+		btnComp = new JButton("Komponist");
+		GridBagConstraints gbc_btnComp = new GridBagConstraints();
+		gbc_btnComp.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnComp.insets = new Insets(0, 0, 5, 5);
+		gbc_btnComp.gridx = 5;
+		gbc_btnComp.gridy = 4;
+		contentPane.add(btnComp, gbc_btnComp);
 
 		comboBoxComp = new JComboBox();
 		GridBagConstraints gbc_comboBoxComp = new GridBagConstraints();
@@ -216,7 +221,7 @@ public class RecordGUI extends JFrame {
 		gbc_comboBoxComp.gridx = 6;
 		gbc_comboBoxComp.gridy = 4;
 		contentPane.add(comboBoxComp, gbc_comboBoxComp);
-		
+
 		label = new JLabel("$4");
 		label.setHorizontalAlignment(SwingConstants.LEFT);
 		GridBagConstraints gbc_label = new GridBagConstraints();
@@ -225,7 +230,7 @@ public class RecordGUI extends JFrame {
 		gbc_label.gridx = 7;
 		gbc_label.gridy = 4;
 		contentPane.add(label, gbc_label);
-		
+
 		txtCode = new JTextField();
 		txtCode.setText("kom1");
 		GridBagConstraints gbc_txtCode = new GridBagConstraints();
@@ -236,7 +241,7 @@ public class RecordGUI extends JFrame {
 		gbc_txtCode.gridy = 4;
 		contentPane.add(txtCode, gbc_txtCode);
 		txtCode.setColumns(10);
-		
+
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		GridBagConstraints gbc_tabbedPane = new GridBagConstraints();
 		gbc_tabbedPane.gridwidth = 9;
@@ -245,42 +250,49 @@ public class RecordGUI extends JFrame {
 		gbc_tabbedPane.gridx = 1;
 		gbc_tabbedPane.gridy = 5;
 		contentPane.add(tabbedPane, gbc_tabbedPane);
-		
+
 		scrollPaneOldRecord = new JScrollPane();
 		tabbedPane.addTab("Alter Datensatz", null, scrollPaneOldRecord, null);
-		
+
 		textAreaOldRecord = new JTextArea();
 		scrollPaneOldRecord.setViewportView(textAreaOldRecord);
-		
+
 		panelPica = new JPanel();
 		tabbedPane.addTab("Neu Pica", null, panelPica, null);
-		panelPica.setLayout(null);
+		panelPica.setLayout(new BorderLayout());
 		
+		panelPicaCheck = new JPanel();
+		panelPica.add(panelPicaCheck, BorderLayout.NORTH);
+		panelPicaCheck.setLayout(new BoxLayout(panelPicaCheck, BoxLayout.X_AXIS));
+
 		chckbxExpansion = new JCheckBox("Expansion");
 		chckbxExpansion.setSelected(true);
 		chckbxExpansion.setBounds(182, 7, 97, 23);
-		panelPica.add(chckbxExpansion);
-		
+		panelPicaCheck.add(chckbxExpansion);
+
 		chckbxPica = new JCheckBox("Pica+");
 		chckbxPica.setBounds(332, 7, 97, 23);
-		panelPica.add(chckbxPica);
-		
+		panelPicaCheck.add(chckbxPica);
+
 		scrollPanePica = new JScrollPane();
 		scrollPanePica.setBounds(10, 36, 1054, 238);
 		panelPica.add(scrollPanePica);
-		
+
 		textAreaPica = new JTextArea();
 		scrollPanePica.setViewportView(textAreaPica);
-		
+
 		panelAleph = new JPanel();
 		tabbedPane.addTab("Neu Aleph", null, panelAleph, null);
-		panelAleph.setLayout(new BorderLayout(0, 0));
-		
+		panelAleph.setLayout(new BorderLayout());
+
 		scrollPaneAleph = new JScrollPane();
-		panelAleph.add(scrollPaneAleph);
-		
+		panelAleph.add(scrollPaneAleph, BorderLayout.CENTER);
+
 		textAreaAleph = new JTextArea();
 		textAreaAleph.setTabSize(4);
 		scrollPaneAleph.setViewportView(textAreaAleph);
+		
+		chckbxExplicit = new JCheckBox("Felder und Unterfelder explizit");
+		panelAleph.add(chckbxExplicit, BorderLayout.NORTH);
 	}
 }

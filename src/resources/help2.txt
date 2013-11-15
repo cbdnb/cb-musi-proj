@@ -1,8 +1,8 @@
 Kurzanleitung:
 
-Das Tool hat unten ein durch Tabs dreigeteiltes Fenster zur Aufnahme von Datensatzen. 
-- In das linke Fenster kann der alte, zu bearbeitende Datensatz im Pica- oder Pica+-Format eingefuegt werden. 
-- Angereicherte oder selbsterzeugt Datensaetze werden in den Tabs "Neu Pica" und "Neu Aleph" ausgegeben
+Das Tool hat unten ein durch Reiter dreigeteiltes Fenster zur Aufnahme von Datensatzen. 
+- In das Fenster mit dem Reiter "Alter Datensatz" kann der alte, zu bearbeitende Datensatz im Pica- oder Pica+-Format eingefuegt werden. 
+- Angereicherte oder selbsterzeugt Datensaetze werden in den Reitern "Neu Pica" und "Neu Aleph" ausgegeben
 - Der Datensatz in "Neu Pica" kann durch Eingaben ueber die Tastatur weiterverarbeitet werden. Beim Verlassen des Fensters (Klicken anderswohin, "Focus lost") wird der veraenderte Datensatz analysisert und entweder aktualisiert oder aber die Aenderung im Fehlerfalle zurueckgewiesen.
 
 Vorgehensweise bei Aufarbeitung von alten Datensaetzen:
@@ -25,7 +25,7 @@ Vorgehensweise bei der Eingabe von neuen Datensaetzen:
         - In die WinIBW einfuegen (STRG-V). Der alte Datensatz wird damit ueberschrieben.
         - Den Datensatz-Vorschlag nach den ueblichen Regeln weiterbearbeiten. 
     Aleph:
-        - Die Daten aus dem Tab "Neu Aleph" durch Copy and Paste in das Aleph-Template uebernehmen.
+        - Die Daten aus dem Tab "Neu Aleph" durch Copy and Paste in das Aleph-Template uebernehmen. Dabei kann zu didaktischen Zwecken die Option "Felder und Unterfelder explizit" gewaehlt werden. Dann muessen allerdings alle Unterfelder einzeln uebernommen werden. Besser ist es, diese Option auszuschalten, da dann das Inhalt des gesamten Fensters mit STRG-A und STRG-C auf einnal kopiert und eingefuegt werden kann.
 
 Synthese von Musiktiteln: 
  - Erstellte Musiktitel werden durch Klick auf "Einfuegen ..." in den Datensatz eingefuegt.

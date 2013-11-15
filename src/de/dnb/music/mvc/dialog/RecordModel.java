@@ -48,6 +48,7 @@ public class RecordModel extends Observable {
 		this.expanded = true;
 		this.transformer = new DefaultRecordTransformer();
 		returnsPicaPlus = false;
+		explicitWanted = false;
 	}
 
 	private Stack<Record> history = new Stack<Record>();
@@ -69,6 +70,8 @@ public class RecordModel extends Observable {
 	private DefaultRecordTransformer transformer;
 
 	private boolean returnsPicaPlus;
+	
+	private boolean explicitWanted;
 
 	public final void undo() {
 		if (!history.empty())
@@ -201,11 +204,13 @@ public class RecordModel extends Observable {
 
 	private MusicIDFinder finder = new MusicIDFinder();
 
+
+
 	public final String getAleph() {
 		if (theRecord == null)
 			return "";
 		try {
-			return GNDUtils.toAleph(theRecord, finder);
+			return GNDUtils.toAleph(theRecord, finder, explicitWanted);
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(),
 					"Fehler im Datensatz", JOptionPane.OK_CANCEL_OPTION);
@@ -260,6 +265,12 @@ public class RecordModel extends Observable {
 			}
 		}
 		return creationDate;
+	}
+
+	public void setReturnsExplicit(boolean explicitWanted) {
+		this.explicitWanted = explicitWanted;
+		refresh();
+		
 	}
 
 }

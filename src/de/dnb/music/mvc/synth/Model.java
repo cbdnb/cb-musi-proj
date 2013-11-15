@@ -165,7 +165,7 @@ public class Model extends Observable {
 	public final String getAleph() {
 		if (theTitle == null)
 			return "";
-		return GNDUtils.toAleph(theRecord,finder);
+		return GNDUtils.toAleph(theRecord,finder, true);
 //		return TitleUtils.getAleph(theTitle, forceTotalCount, theComposer);
 
 	}

@@ -335,9 +335,9 @@ public class DialogGUI extends JDialog {
 		textPaneTip.setBounds(754, 127, 357, 145);
 		contentPane.add(textPaneTip);
 		
-		btnUndo = new JButton("Rückgängig");
+		btnUndo = new JButton("Einen Schritt zurück");
 		btnUndo.setVisible(false);
-		btnUndo.setBounds(36, 102, 134, 27);
+		btnUndo.setBounds(10, 102, 185, 27);
 		contentPane.add(btnUndo);
 		
 		lblRak = new JLabel("RAK-Darstellung:");
@@ -376,7 +376,7 @@ public class DialogGUI extends JDialog {
 		contentPane.add(textFieldRAK);
 		
 		btnCancel = new JButton("Abbruch");
-		btnCancel.setBounds(241, 434, 95, 26);
+		btnCancel.setBounds(36, 153, 95, 26);
 		contentPane.add(btnCancel);
 	}
 }

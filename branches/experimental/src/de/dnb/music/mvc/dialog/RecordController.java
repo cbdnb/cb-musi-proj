@@ -25,7 +25,6 @@ import de.dnb.music.genre.GenreDB;
 import de.dnb.music.mediumOfPerformance.Instrument;
 import de.dnb.music.mediumOfPerformance.InstrumentDB;
 
-
 public class RecordController {
 
 	RecordView view;
@@ -129,14 +128,14 @@ public class RecordController {
 			recordModel.undo();
 		}
 	}
-	
+
 	class PicaListener implements ActionListener {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 			recordModel.setReturnsPica(view.picaWanted());
 		}
 	}
-	
+
 	class ExplicitListener implements ActionListener {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
@@ -183,35 +182,7 @@ public class RecordController {
 
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			
-			
-			Misc.showInfo(view.getGui(), "2.00", "/resources/help2.txt");
-//			SimpleDateFormat formatter =
-//				new SimpleDateFormat("d. M. yyyy 'um' H:mm 'Uhr'");
-//			Date date = recordModel.getCreationDate();
-//			String dateStr = formatter.format(date);
-//			String info =
-//				"Version 2.00"
-//					+ "\nErstellt in und für die Deutsche Nationalbibliothek"
-//					+ "\nAutor: Christian Baumann\n" + "Erstellungsdatum: "
-//					+ dateStr;
-//			String help = getHelp();
-//			info += "\n" + help;
-//			JTextArea ar = new JTextArea(info);
-//			ar.setEditable(false);
-//			ar.setLineWrap(true);
-//			ar.setWrapStyleWord(true);
-//			ar.setBackground(UIManager.getColor("Label.background"));
-//			JScrollPane scrollpane = new JScrollPane(ar);
-//			JOptionPane jOpPane =
-//				new JOptionPane(scrollpane, JOptionPane.PLAIN_MESSAGE);
-//			JDialog jDialog =
-//				jOpPane.createDialog(view.getGui(),
-//						"   Info zu \"Bearbeite Titel\"");
-//			jDialog.setSize(700, 700);
-//			jDialog.setLocationRelativeTo(null);
-//			jDialog.setResizable(true);
-//			jDialog.setVisible(true);
+			Misc.showInfo(view.getGui(), "2.00", "/resources/help2.html");
 		}
 
 	}

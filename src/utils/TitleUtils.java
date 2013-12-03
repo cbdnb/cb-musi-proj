@@ -159,7 +159,8 @@ public final class TitleUtils {
 			final boolean forceTotalCount) {
 		return RecordUtils.toPica(
 				GNDTitleUtils.get3XXLines(element, forceTotalCount),
-				Format.PICA3, expansion, Record.LINE_SEPARATOR, '$');
+				Format.PICA3, expansion, de.dnb.gnd.Constants.LINE_SEPARATOR,
+				'$');
 	}
 
 	/**

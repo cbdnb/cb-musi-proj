@@ -2,7 +2,7 @@ package de.dnb.music.title;
 
 import java.io.Serializable;
 
-import applikationsbausteine.RangeCheckUtils;
+import de.dnb.basics.applicationComponents.RangeCheckUtils;
 import de.dnb.music.additionalInformation.AdditionalInformation;
 import de.dnb.music.genre.Genre;
 import de.dnb.music.genre.GenreList;

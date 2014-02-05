@@ -7,8 +7,7 @@ import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.dnb.gnd.utils.Pair;
-
+import de.dnb.basics.applicationComponents.Pair;
 import utils.StringUtils;
 
 public class StringUtilsTest {

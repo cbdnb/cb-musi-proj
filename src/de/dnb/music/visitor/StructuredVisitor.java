@@ -1,6 +1,6 @@
 package de.dnb.music.visitor;
 
-import de.dnb.gnd.utils.MyStringUtils;
+import de.dnb.basics.applicationComponents.MyStringUtils;
 import de.dnb.music.additionalInformation.DateOfComposition;
 import de.dnb.music.additionalInformation.Key;
 import de.dnb.music.additionalInformation.OpusNumber;

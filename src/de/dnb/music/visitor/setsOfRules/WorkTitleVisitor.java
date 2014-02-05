@@ -1,7 +1,7 @@
 package de.dnb.music.visitor.setsOfRules;
 
-import applikationsbausteine.RangeCheckUtils;
 import utils.TitleUtils;
+import de.dnb.basics.applicationComponents.RangeCheckUtils;
 import de.dnb.music.additionalInformation.DateOfComposition;
 import de.dnb.music.additionalInformation.Key;
 import de.dnb.music.additionalInformation.OpusNumber;

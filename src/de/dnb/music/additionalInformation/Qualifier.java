@@ -1,7 +1,7 @@
 package de.dnb.music.additionalInformation;
 
 import utils.TitleUtils;
-import applikationsbausteine.RangeCheckUtils;
+import de.dnb.basics.applicationComponents.RangeCheckUtils;
 import de.dnb.music.title.AugmentableElement;
 import de.dnb.music.title.IndividualTitle;
 import de.dnb.music.title.MusicTitle;

@@ -1,6 +1,6 @@
 package de.dnb.music.version;
 
-import applikationsbausteine.RangeCheckUtils;
+import de.dnb.basics.applicationComponents.RangeCheckUtils;
 import de.dnb.music.additionalInformation.AdditionalInformation;
 import de.dnb.music.additionalInformation.DateOfComposition;
 import de.dnb.music.additionalInformation.Key;

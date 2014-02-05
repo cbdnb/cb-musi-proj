@@ -8,8 +8,8 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import applikationsbausteine.RangeCheckUtils;
-import de.dnb.gnd.utils.Pair;
+import de.dnb.basics.applicationComponents.Pair;
+import de.dnb.basics.applicationComponents.RangeCheckUtils;
 import de.dnb.music.publicInterface.Constants;
 import de.dnb.music.title.MusicTitle;
 

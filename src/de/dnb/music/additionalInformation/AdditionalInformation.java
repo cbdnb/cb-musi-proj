@@ -3,7 +3,7 @@ package de.dnb.music.additionalInformation;
 import java.io.Serializable;
 
 import utils.TitleUtils;
-import applikationsbausteine.RangeCheckUtils;
+import de.dnb.basics.applicationComponents.RangeCheckUtils;
 import de.dnb.music.title.AugmentableElement;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;

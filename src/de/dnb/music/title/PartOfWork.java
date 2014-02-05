@@ -8,7 +8,7 @@ import java.util.List;
 
 import utils.StringUtils;
 import utils.TitleUtils;
-import applikationsbausteine.RangeCheckUtils;
+import de.dnb.basics.applicationComponents.RangeCheckUtils;
 import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.Visitor;
 

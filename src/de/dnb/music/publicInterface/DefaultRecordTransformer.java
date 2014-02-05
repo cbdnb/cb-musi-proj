@@ -15,7 +15,7 @@ import utils.GNDTitleUtils;
 import utils.TitleUtils;
 import de.dnb.basics.applicationComponents.Pair;
 import de.dnb.basics.applicationComponents.RangeCheckUtils;
-import de.dnb.filtering.IPredicate;
+import de.dnb.basics.filtering.IPredicate;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
 import de.dnb.gnd.parser.Indicator;
 import de.dnb.gnd.parser.Record;

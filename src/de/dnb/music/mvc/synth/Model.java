@@ -10,7 +10,7 @@ import utils.MusicIDFinder;
 import utils.GNDTitleUtils;
 import utils.TitleUtils;
 import de.dnb.basics.applicationComponents.RangeCheckUtils;
-import de.dnb.cloneable.CopyObjectUtils;
+import de.dnb.basics.cloneable.CopyObjectUtils;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
 import de.dnb.gnd.parser.Format;
 import de.dnb.gnd.parser.Record;

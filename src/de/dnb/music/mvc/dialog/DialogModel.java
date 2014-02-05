@@ -7,7 +7,7 @@ import javax.swing.JOptionPane;
 
 import utils.TitleUtils;
 import de.dnb.basics.applicationComponents.RangeCheckUtils;
-import de.dnb.cloneable.CopyObjectUtils;
+import de.dnb.basics.cloneable.CopyObjectUtils;
 import de.dnb.gnd.parser.tag.GNDTagDB;
 import de.dnb.gnd.parser.tag.TagDB;
 import de.dnb.music.title.MusicTitle;
@@ -26,7 +26,7 @@ public class DialogModel extends Observable {
 	private TagDB tagDB = GNDTagDB.getDB();
 
 	public final void reset() {
-		history.push(de.dnb.cloneable.CopyObjectUtils.copyObject(theTitle));
+		history.push(de.dnb.basics.cloneable.CopyObjectUtils.copyObject(theTitle));
 		theTitle = null;
 		refresh();
 	}

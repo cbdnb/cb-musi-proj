@@ -3,24 +3,13 @@ package de.dnb.music.mvc.dialog;
 import java.util.Observable;
 import java.util.Stack;
 
-import javax.naming.OperationNotSupportedException;
 import javax.swing.JOptionPane;
 
-import utils.MusicIDFinder;
-import utils.GNDTitleUtils;
 import utils.TitleUtils;
-import applikationsbausteine.RangeCheckUtils;
-import cloneable.CopyObjectUtils;
-import de.dnb.gnd.exceptions.IllFormattedLineException;
-import de.dnb.gnd.parser.Format;
-import de.dnb.gnd.parser.Record;
-import de.dnb.gnd.parser.line.Line;
-import de.dnb.gnd.parser.line.LineParser;
+import de.dnb.basics.applicationComponents.RangeCheckUtils;
+import de.dnb.cloneable.CopyObjectUtils;
 import de.dnb.gnd.parser.tag.GNDTagDB;
 import de.dnb.gnd.parser.tag.TagDB;
-import de.dnb.gnd.utils.GNDUtils;
-import de.dnb.gnd.utils.RecordUtils;
-import de.dnb.music.additionalInformation.Composer;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.visitor.TitleElement;
 
@@ -37,7 +26,7 @@ public class DialogModel extends Observable {
 	private TagDB tagDB = GNDTagDB.getDB();
 
 	public final void reset() {
-		history.push(CopyObjectUtils.copyObject(theTitle));
+		history.push(de.dnb.cloneable.CopyObjectUtils.copyObject(theTitle));
 		theTitle = null;
 		refresh();
 	}

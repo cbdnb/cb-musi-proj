@@ -13,7 +13,9 @@ import javax.naming.OperationNotSupportedException;
 import utils.GNDConstants;
 import utils.GNDTitleUtils;
 import utils.TitleUtils;
-import applikationsbausteine.RangeCheckUtils;
+import de.dnb.basics.applicationComponents.Pair;
+import de.dnb.basics.applicationComponents.RangeCheckUtils;
+import de.dnb.filtering.IPredicate;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
 import de.dnb.gnd.parser.Indicator;
 import de.dnb.gnd.parser.Record;
@@ -21,11 +23,9 @@ import de.dnb.gnd.parser.RecordParser;
 import de.dnb.gnd.parser.Subfield;
 import de.dnb.gnd.parser.line.Line;
 import de.dnb.gnd.parser.line.LineParser;
-import de.dnb.gnd.parser.tag.GNDTag;
 import de.dnb.gnd.parser.tag.GNDTagDB;
 import de.dnb.gnd.parser.tag.Tag;
 import de.dnb.gnd.utils.GNDUtils;
-import de.dnb.gnd.utils.Pair;
 import de.dnb.gnd.utils.RecordUtils;
 import de.dnb.gnd.utils.WorkUtils;
 import de.dnb.music.additionalInformation.ThematicIndexDB;
@@ -33,7 +33,6 @@ import de.dnb.music.publicInterface.Constants.SetOfRules;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
 import de.dnb.music.version.Version;
-import filtering.IPredicate;
 
 /**
  * Template-Klasse. Die Unterklassen überschreiben div. Methoden, um an das

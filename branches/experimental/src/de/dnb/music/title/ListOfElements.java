@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import applikationsbausteine.ListUtils;
-import applikationsbausteine.RangeCheckUtils;
+import de.dnb.basics.applicationComponents.ListUtils;
+import de.dnb.basics.applicationComponents.RangeCheckUtils;
 import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.Visitor;
 

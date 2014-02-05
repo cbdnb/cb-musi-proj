@@ -11,12 +11,10 @@ import java.util.zip.ZipEntry;
 
 import javax.swing.JOptionPane;
 
-import applikationsbausteine.FileUtils;
-
 import utils.GNDTitleUtils;
 import utils.StringUtils;
 import utils.TitleUtils;
-
+import de.dnb.basics.applicationComponents.FileUtils;
 import de.dnb.gnd.parser.Format;
 import de.dnb.gnd.parser.Record;
 import de.dnb.gnd.utils.RecordUtils;

@@ -13,12 +13,11 @@ import java.util.zip.ZipEntry;
 import javax.naming.OperationNotSupportedException;
 import javax.swing.JOptionPane;
 
-import applikationsbausteine.RangeCheckUtils;
-
 import utils.GNDConstants;
 import utils.GNDTitleUtils;
 import utils.MusicIDFinder;
 import utils.TitleUtils;
+import de.dnb.basics.applicationComponents.RangeCheckUtils;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
 import de.dnb.gnd.exceptions.WrappingHandler;
 import de.dnb.gnd.parser.Format;

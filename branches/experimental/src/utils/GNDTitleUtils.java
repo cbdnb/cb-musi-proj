@@ -8,7 +8,7 @@ import java.util.List;
 
 import javax.naming.OperationNotSupportedException;
 
-import applikationsbausteine.RangeCheckUtils;
+import de.dnb.basics.applicationComponents.RangeCheckUtils;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
 import de.dnb.gnd.parser.Field;
 import de.dnb.gnd.parser.Format;

@@ -10,7 +10,8 @@ import java.util.regex.Pattern;
 
 import utils.GNDConstants;
 import utils.StringUtils;
-import applikationsbausteine.RangeCheckUtils;
+import de.dnb.basics.applicationComponents.Pair;
+import de.dnb.basics.applicationComponents.RangeCheckUtils;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
 import de.dnb.gnd.parser.Indicator;
 import de.dnb.gnd.parser.Subfield;
@@ -19,7 +20,6 @@ import de.dnb.gnd.parser.line.LineFactory;
 import de.dnb.gnd.parser.line.LineParser;
 import de.dnb.gnd.parser.tag.GNDTagDB;
 import de.dnb.gnd.parser.tag.Tag;
-import de.dnb.gnd.utils.Pair;
 import de.dnb.music.additionalInformation.AdditionalInformation;
 import de.dnb.music.additionalInformation.Key;
 import de.dnb.music.additionalInformation.ParseAdditionalInformation;

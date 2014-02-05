@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 
-import applikationsbausteine.RangeCheckUtils;
+import de.dnb.basics.applicationComponents.RangeCheckUtils;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
 import de.dnb.gnd.parser.Format;
 import de.dnb.gnd.parser.Record;

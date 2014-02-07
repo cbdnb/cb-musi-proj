@@ -4,9 +4,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import utils.StringUtilsTest;
-import utils.TitleUtilsTest;
-
 import de.dnb.music.additionalInformation.ThematicIndexDBTest;
 import de.dnb.music.additionalInformation.TonartTest;
 import de.dnb.music.additionalInformation.ZusatzangabeTest;
@@ -18,6 +15,8 @@ import de.dnb.music.mediumOfPerformance.ParseInstrumentationTest;
 import de.dnb.music.publicInterface.TransformRecordTest;
 import de.dnb.music.title.ParseMusicTitleTest;
 import de.dnb.music.title.PartOfWorkTest;
+import de.dnb.music.utils.StringUtilsTest;
+import de.dnb.music.utils.TitleUtilsTest;
 import de.dnb.music.version.ParseVersionTest;
 import de.dnb.music.version.VersionTest;
 import de.dnb.music.visitor.AdditionalDataIn3XXVisitorTest;

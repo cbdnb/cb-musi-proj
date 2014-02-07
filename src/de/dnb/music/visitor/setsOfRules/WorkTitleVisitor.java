@@ -1,6 +1,5 @@
 package de.dnb.music.visitor.setsOfRules;
 
-import utils.TitleUtils;
 import de.dnb.basics.applicationComponents.RangeCheckUtils;
 import de.dnb.music.additionalInformation.DateOfComposition;
 import de.dnb.music.additionalInformation.Key;
@@ -18,6 +17,7 @@ import de.dnb.music.title.IndividualTitle;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
 import de.dnb.music.title.PartOfWork;
+import de.dnb.music.utils.TitleUtils;
 import de.dnb.music.version.ParseVersion;
 import de.dnb.music.version.Version;
 import de.dnb.music.version.VersionDB;

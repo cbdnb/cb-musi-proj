@@ -1,6 +1,6 @@
 package de.dnb.music.visitor;
 
-import static utils.GNDConstants.TAG_DB;
+import static de.dnb.music.utils.GNDConstants.TAG_DB;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;

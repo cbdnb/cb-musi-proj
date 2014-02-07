@@ -13,10 +13,6 @@ import java.util.zip.ZipEntry;
 import javax.naming.OperationNotSupportedException;
 import javax.swing.JOptionPane;
 
-import utils.GNDConstants;
-import utils.GNDTitleUtils;
-import utils.MusicIDFinder;
-import utils.TitleUtils;
 import de.dnb.basics.applicationComponents.RangeCheckUtils;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
 import de.dnb.gnd.exceptions.WrappingHandler;
@@ -34,6 +30,10 @@ import de.dnb.music.mediumOfPerformance.Instrument;
 import de.dnb.music.publicInterface.DefaultRecordTransformer;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
+import de.dnb.music.utils.GNDConstants;
+import de.dnb.music.utils.GNDTitleUtils;
+import de.dnb.music.utils.MusicIDFinder;
+import de.dnb.music.utils.TitleUtils;
 
 public class RecordModel extends Observable {
 

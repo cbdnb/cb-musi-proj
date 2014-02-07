@@ -1,6 +1,6 @@
-package utils;
+package de.dnb.music.utils;
 
-import static utils.GNDConstants.TAG_DB;
+import static de.dnb.music.utils.GNDConstants.TAG_DB;
 
 import java.util.Collection;
 import java.util.LinkedList;

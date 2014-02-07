@@ -16,14 +16,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import utils.GNDTitleUtils;
+import de.dnb.basics.Misc;
 import de.dnb.gnd.parser.line.Line;
-import de.dnb.gnd.utils.Misc;
 import de.dnb.music.additionalInformation.ThematicIndexDB;
 import de.dnb.music.genre.Genre;
 import de.dnb.music.genre.GenreDB;
 import de.dnb.music.mediumOfPerformance.Instrument;
 import de.dnb.music.mediumOfPerformance.InstrumentDB;
+import de.dnb.music.utils.GNDTitleUtils;
 
 public class RecordController {
 

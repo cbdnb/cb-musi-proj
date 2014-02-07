@@ -10,9 +10,6 @@ import java.util.List;
 
 import javax.naming.OperationNotSupportedException;
 
-import utils.GNDConstants;
-import utils.GNDTitleUtils;
-import utils.TitleUtils;
 import de.dnb.basics.applicationComponents.Pair;
 import de.dnb.basics.applicationComponents.RangeCheckUtils;
 import de.dnb.basics.filtering.IPredicate;
@@ -32,6 +29,9 @@ import de.dnb.music.additionalInformation.ThematicIndexDB;
 import de.dnb.music.publicInterface.Constants.SetOfRules;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
+import de.dnb.music.utils.GNDConstants;
+import de.dnb.music.utils.GNDTitleUtils;
+import de.dnb.music.utils.TitleUtils;
 import de.dnb.music.version.Version;
 
 /**

@@ -1,4 +1,4 @@
-package utils;
+package de.dnb.music.utils;
 
 import de.dnb.gnd.parser.Indicator;
 import de.dnb.gnd.parser.tag.GNDTagDB;

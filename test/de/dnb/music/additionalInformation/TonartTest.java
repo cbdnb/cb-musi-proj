@@ -5,13 +5,12 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import utils.TestUtils;
-import utils.TitleUtils;
-
 import de.dnb.music.additionalInformation.AdditionalInformation;
 import de.dnb.music.title.AugmentableElement;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
+import de.dnb.music.utils.TestUtils;
+import de.dnb.music.utils.TitleUtils;
 
 public class TonartTest {
 

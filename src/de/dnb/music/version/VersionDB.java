@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.TreeSet;
 
-import utils.StringUtils;
+import de.dnb.music.utils.StringUtils;
 
 public class VersionDB {
 

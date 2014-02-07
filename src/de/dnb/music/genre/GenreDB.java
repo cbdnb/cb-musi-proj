@@ -9,7 +9,7 @@ import java.util.TreeSet;
 
 import de.dnb.basics.applicationComponents.Pair;
 import de.dnb.music.mediumOfPerformance.Instrument;
-import utils.StringUtils;
+import de.dnb.music.utils.StringUtils;
 
 /**
  * Enthält die Gattungen.

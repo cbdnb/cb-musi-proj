@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
 
-import de.dnb.gnd.utils.Misc;
+import de.dnb.basics.Misc;
 import de.dnb.music.additionalInformation.DateOfComposition;
 import de.dnb.music.additionalInformation.Key;
 import de.dnb.music.additionalInformation.OpusNumber;

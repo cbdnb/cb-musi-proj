@@ -1,6 +1,6 @@
 package de.dnb.music.title;
 
-import static utils.GNDConstants.TAG_DB;
+import static de.dnb.music.utils.GNDConstants.TAG_DB;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import utils.GNDConstants;
-import utils.StringUtils;
 import de.dnb.basics.applicationComponents.Pair;
 import de.dnb.basics.applicationComponents.RangeCheckUtils;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
@@ -26,6 +24,8 @@ import de.dnb.music.additionalInformation.ParseAdditionalInformation;
 import de.dnb.music.additionalInformation.Qualifier;
 import de.dnb.music.mediumOfPerformance.InstrumentDB;
 import de.dnb.music.mediumOfPerformance.ParseInstrumentation;
+import de.dnb.music.utils.GNDConstants;
+import de.dnb.music.utils.StringUtils;
 import de.dnb.music.version.ParseVersion;
 import de.dnb.music.version.Version;
 import de.dnb.music.visitor.TitleElement;

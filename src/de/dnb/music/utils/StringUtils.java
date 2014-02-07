@@ -1,4 +1,4 @@
-package utils;
+package de.dnb.music.utils;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -277,31 +277,6 @@ public final class StringUtils {
 		}
 		leadingBlanksAndCommas = "";
 		return s;
-	}
-
-	/**
-	 * Liefert ein Paar von Strings. Der erste String ist der Tag im Pica- oder
-	 * Pica+-Format, der zweite der Inhalt der Zeile.
-	 * 
-	 * @param line	Zeile eines Datensatzes.
-	 * @return	2 Strings oder null, wenn keine Aufspaltung möglich.
-	 */
-	public static Pair<String, String> getTagAndcontent(final String line) {
-		if (line == null)
-			throw new IllegalArgumentException(
-					"Null-String an getTagAndcontent()übergeben");
-		// 3 bis 7 Zeichen am Anfang gefolgt von Blank:
-		final Pattern tagPat = Pattern.compile("^\\S{3,7} ");
-		final Matcher m = tagPat.matcher(line);
-		if (m.find()) {
-			int end = m.end();
-			String tag = line.substring(0, end - 1);
-			String content = line.substring(end);
-			return new Pair<String, String>(tag, content);
-		}
-
-		return null;
-
 	}
 
 	/**

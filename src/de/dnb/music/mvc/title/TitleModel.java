@@ -11,15 +11,15 @@ import java.util.zip.ZipEntry;
 
 import javax.swing.JOptionPane;
 
-import utils.GNDTitleUtils;
-import utils.StringUtils;
-import utils.TitleUtils;
 import de.dnb.basics.applicationComponents.FileUtils;
 import de.dnb.gnd.parser.Format;
 import de.dnb.gnd.parser.Record;
 import de.dnb.gnd.utils.RecordUtils;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
+import de.dnb.music.utils.GNDTitleUtils;
+import de.dnb.music.utils.StringUtils;
+import de.dnb.music.utils.TitleUtils;
 
 public class TitleModel extends Observable {
 

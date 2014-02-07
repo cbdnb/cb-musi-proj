@@ -5,10 +5,9 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import utils.TitleUtils;
-
 import de.dnb.music.title.IndividualTitle;
 import de.dnb.music.title.ParseIndividualTitle;
+import de.dnb.music.utils.TitleUtils;
 
 public class ParseIndividualTitleTest {
 

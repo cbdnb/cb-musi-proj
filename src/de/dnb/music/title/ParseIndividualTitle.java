@@ -3,14 +3,13 @@ package de.dnb.music.title;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import utils.TitleUtils;
-
 import de.dnb.music.additionalInformation.AdditionalInformation;
 import de.dnb.music.additionalInformation.ParseAdditionalInformation;
 import de.dnb.music.genre.GenreList;
 import de.dnb.music.genre.ParseGenre;
 import de.dnb.music.mediumOfPerformance.InstrumentationList;
 import de.dnb.music.mediumOfPerformance.ParseInstrumentation;
+import de.dnb.music.utils.TitleUtils;
 
 public final class ParseIndividualTitle {
 

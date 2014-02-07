@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import utils.StringUtils;
+import de.dnb.music.utils.StringUtils;
 
 public final class ParseInstrumentation {
 

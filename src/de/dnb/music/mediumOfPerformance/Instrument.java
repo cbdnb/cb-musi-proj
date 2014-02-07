@@ -2,11 +2,11 @@ package de.dnb.music.mediumOfPerformance;
 
 import java.io.Serializable;
 
-import utils.TitleUtils;
 import de.dnb.basics.applicationComponents.RangeCheckUtils;
 import de.dnb.music.title.AugmentableElement;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
+import de.dnb.music.utils.TitleUtils;
 import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.Visitor;
 

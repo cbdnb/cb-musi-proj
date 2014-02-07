@@ -99,8 +99,7 @@ public class DialogGUI extends JDialog {
 	}
 
 	private void initialize() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(
-				DialogGUI.class.getResource("/resources/Violin_256.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(DialogGUI.class.getResource("/de/dnb/music/resources/Violin_256.png")));
 		setTitle("Synthetisiere Werktitel");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1235, 594);

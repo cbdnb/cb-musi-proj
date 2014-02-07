@@ -6,9 +6,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import utils.StringUtils;
-import utils.TitleUtils;
 import de.dnb.basics.applicationComponents.RangeCheckUtils;
+import de.dnb.music.utils.StringUtils;
+import de.dnb.music.utils.TitleUtils;
 import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.Visitor;
 

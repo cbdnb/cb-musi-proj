@@ -1,6 +1,6 @@
 package de.dnb.music.additionalInformation;
 
-import utils.StringUtils;
+import de.dnb.music.utils.StringUtils;
 
 public final class ParseAdditionalInformation {
 

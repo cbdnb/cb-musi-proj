@@ -7,7 +7,7 @@ import de.dnb.gnd.parser.tag.TagDB;
 
 public class GNDConstants {
 
-	public static final GNDTagDB TAG_DB = GNDTagDB.getDB();
+	public static final TagDB TAG_DB = GNDTagDB.getDB();
 
 	public static final Tag TAG_130 = TAG_DB.findTag("130");
 

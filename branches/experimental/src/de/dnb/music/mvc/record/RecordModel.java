@@ -21,6 +21,7 @@ import de.dnb.gnd.parser.RecordParser;
 import de.dnb.gnd.parser.line.Line;
 import de.dnb.gnd.parser.line.LineParser;
 import de.dnb.gnd.parser.tag.GNDTagDB;
+import de.dnb.gnd.parser.tag.TagDB;
 import de.dnb.gnd.utils.RecordUtils;
 import de.dnb.music.additionalInformation.Composer;
 import de.dnb.music.genre.Genre;
@@ -47,7 +48,7 @@ public class RecordModel extends Observable {
 
 	private String oldRecordStr;
 
-	private GNDTagDB tagDB;
+	private TagDB tagDB;
 
 	private Record newRecord;;
 

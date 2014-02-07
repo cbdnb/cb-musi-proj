@@ -1,4 +1,4 @@
-package utils;
+package de.dnb.music.utils;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -159,7 +159,7 @@ public final class TitleUtils {
 			final boolean forceTotalCount) {
 		return RecordUtils.toPica(
 				GNDTitleUtils.get3XXLines(element, forceTotalCount),
-				Format.PICA3, expansion, de.dnb.gnd.Constants.LINE_SEPARATOR,
+				Format.PICA3, expansion, de.dnb.basics.Constants.LINE_SEPARATOR,
 				'$');
 	}
 

@@ -6,11 +6,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 
-import utils.TitleUtils;
 import de.dnb.music.genre.Genre.Numeri;
 import de.dnb.music.title.ListOfElements;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
+import de.dnb.music.utils.TitleUtils;
 import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.Visitor;
 

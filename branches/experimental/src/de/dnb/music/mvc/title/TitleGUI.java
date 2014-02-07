@@ -80,7 +80,7 @@ public class TitleGUI extends JFrame {
 		initialize();
 	}
 	private void initialize() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(TitleGUI.class.getResource("/resources/2.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(TitleGUI.class.getResource("/de/dnb/music/resources/2.png")));
 		setTitle("Musiktitelanalysator");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1275, 601);

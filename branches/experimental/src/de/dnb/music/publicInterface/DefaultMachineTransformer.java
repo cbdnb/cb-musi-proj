@@ -1,6 +1,5 @@
 package de.dnb.music.publicInterface;
 
-import utils.TitleUtils;
 import de.dnb.gnd.parser.Record;
 import de.dnb.gnd.parser.RecordParser;
 import de.dnb.gnd.parser.line.Line;
@@ -9,6 +8,7 @@ import de.dnb.gnd.utils.GNDUtils;
 import de.dnb.gnd.utils.RecordUtils;
 import de.dnb.gnd.utils.WorkUtils;
 import de.dnb.music.publicInterface.Constants.SetOfRules;
+import de.dnb.music.utils.TitleUtils;
 
 public class DefaultMachineTransformer extends DefaultRecordTransformer {
 

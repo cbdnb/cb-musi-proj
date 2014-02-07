@@ -1,4 +1,4 @@
-package utils;
+package de.dnb.music.utils;
 
 import java.io.IOException;
 

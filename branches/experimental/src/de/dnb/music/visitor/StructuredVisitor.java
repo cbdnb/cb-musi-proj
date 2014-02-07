@@ -1,6 +1,6 @@
 package de.dnb.music.visitor;
 
-import de.dnb.basics.applicationComponents.MyStringUtils;
+import de.dnb.basics.applicationComponents.StringUtils;
 import de.dnb.music.additionalInformation.DateOfComposition;
 import de.dnb.music.additionalInformation.Key;
 import de.dnb.music.additionalInformation.OpusNumber;
@@ -41,7 +41,7 @@ public class StructuredVisitor extends Visitor {
 
 	private void decreaseIndentation() {
 		tabs--;
-		indentation = "\n" + MyStringUtils.padding(tabs, '\t');
+		indentation = "\n" + StringUtils.padding(tabs, '\t');
 	}
 
 	public boolean visit(IndividualTitle individualTitle) {

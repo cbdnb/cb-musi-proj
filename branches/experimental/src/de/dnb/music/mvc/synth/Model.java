@@ -6,9 +6,6 @@ import java.util.Stack;
 import javax.naming.OperationNotSupportedException;
 import javax.swing.JOptionPane;
 
-import utils.MusicIDFinder;
-import utils.GNDTitleUtils;
-import utils.TitleUtils;
 import de.dnb.basics.applicationComponents.RangeCheckUtils;
 import de.dnb.basics.cloneable.CopyObjectUtils;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
@@ -22,6 +19,9 @@ import de.dnb.gnd.utils.GNDUtils;
 import de.dnb.gnd.utils.RecordUtils;
 import de.dnb.music.additionalInformation.Composer;
 import de.dnb.music.title.MusicTitle;
+import de.dnb.music.utils.GNDTitleUtils;
+import de.dnb.music.utils.MusicIDFinder;
+import de.dnb.music.utils.TitleUtils;
 import de.dnb.music.visitor.TitleElement;
 
 public class Model extends Observable {

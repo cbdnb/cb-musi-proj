@@ -5,7 +5,7 @@ import java.util.TreeSet;
 
 import de.dnb.basics.applicationComponents.Pair;
 import de.dnb.music.genre.Genre;
-import utils.StringUtils;
+import de.dnb.music.utils.StringUtils;
 
 /**
  * Enthält die Instrumente.

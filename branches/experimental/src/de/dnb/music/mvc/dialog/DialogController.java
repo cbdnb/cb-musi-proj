@@ -9,15 +9,12 @@ import java.util.Collection;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import utils.GNDConstants;
-import utils.GNDTitleUtils;
-
+import de.dnb.basics.Misc;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
 import de.dnb.gnd.parser.Subfield;
 import de.dnb.gnd.parser.line.Line;
 import de.dnb.gnd.parser.line.LineFactory;
 import de.dnb.gnd.parser.tag.Tag;
-import de.dnb.gnd.utils.Misc;
 import de.dnb.music.additionalInformation.DateOfComposition;
 import de.dnb.music.additionalInformation.Key;
 import de.dnb.music.additionalInformation.OpusNumber;
@@ -32,6 +29,8 @@ import de.dnb.music.mediumOfPerformance.InstrumentDB;
 import de.dnb.music.title.FormalTitle;
 import de.dnb.music.title.IndividualTitle;
 import de.dnb.music.title.MusicTitle;
+import de.dnb.music.utils.GNDConstants;
+import de.dnb.music.utils.GNDTitleUtils;
 import de.dnb.music.version.ParseVersion;
 import de.dnb.music.version.Version;
 import de.dnb.music.version.VersionDB;

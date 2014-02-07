@@ -1,6 +1,6 @@
-package utils;
+package de.dnb.music.utils;
 
-import utils.TitleUtils;
+import de.dnb.music.utils.TitleUtils;
 import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.setsOfRules.GNDParticleFactory;
 import de.dnb.music.visitor.setsOfRules.WorkTitleVisitor;

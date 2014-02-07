@@ -1,4 +1,4 @@
-package utils;
+package de.dnb.music.utils;
 
 import static org.junit.Assert.*;
 
@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.dnb.basics.applicationComponents.Pair;
-import utils.StringUtils;
+import de.dnb.music.utils.StringUtils;
 
 public class StringUtilsTest {
 

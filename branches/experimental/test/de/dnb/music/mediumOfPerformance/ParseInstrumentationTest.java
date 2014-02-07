@@ -7,14 +7,13 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import utils.TestUtils;
-import utils.TitleUtils;
-
 import de.dnb.music.mediumOfPerformance.Instrument;
 import de.dnb.music.mediumOfPerformance.InstrumentationList;
 import de.dnb.music.mediumOfPerformance.ParseInstrumentation;
 import de.dnb.music.title.AugmentableElement;
 import de.dnb.music.title.ParseMusicTitle;
+import de.dnb.music.utils.TestUtils;
+import de.dnb.music.utils.TitleUtils;
 
 public class ParseInstrumentationTest {
 

@@ -5,10 +5,9 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import utils.TitleUtils;
-
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
+import de.dnb.music.utils.TitleUtils;
 import de.dnb.music.visitor.Visitor;
 
 public class Key extends AdditionalInformation {

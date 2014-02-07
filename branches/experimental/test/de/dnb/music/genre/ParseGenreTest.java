@@ -1,12 +1,11 @@
 package de.dnb.music.genre;
 
 import static org.junit.Assert.*;
+
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import utils.TestUtils;
 
 import de.dnb.music.genre.Genre;
 import de.dnb.music.genre.GenreList;
@@ -14,6 +13,7 @@ import de.dnb.music.genre.ParseGenre;
 import de.dnb.music.genre.Genre.Numeri;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
+import de.dnb.music.utils.TestUtils;
 
 
 public class ParseGenreTest {

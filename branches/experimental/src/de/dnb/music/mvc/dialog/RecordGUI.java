@@ -93,8 +93,7 @@ public class RecordGUI extends JFrame {
 	}
 
 	private void initialize() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(
-				RecordGUI.class.getResource("/resources/Violin_256.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(RecordGUI.class.getResource("/de/dnb/music/resources/Violin_256.png")));
 		setTitle("Bearbeite Datensatz");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1170, 516);

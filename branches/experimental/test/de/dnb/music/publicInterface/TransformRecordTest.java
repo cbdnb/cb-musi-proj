@@ -10,8 +10,7 @@ import de.dnb.gnd.parser.Record;
 import de.dnb.gnd.parser.RecordParser;
 import de.dnb.gnd.parser.tag.GNDTagDB;
 import de.dnb.gnd.utils.RecordUtils;
-
-import utils.StringUtils;
+import de.dnb.music.utils.StringUtils;
 
 public class TransformRecordTest {
 

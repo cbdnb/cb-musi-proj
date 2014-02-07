@@ -1,9 +1,11 @@
-package utils;
+package de.dnb.music.utils;
 
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import de.dnb.music.utils.TitleUtils;
 
 public class TitleUtilsTest {
 

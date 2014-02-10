@@ -24,6 +24,7 @@ import de.dnb.gnd.parser.tag.GNDTagDB;
 import de.dnb.gnd.parser.tag.Tag;
 import de.dnb.gnd.utils.GNDUtils;
 import de.dnb.gnd.utils.RecordUtils;
+import de.dnb.gnd.utils.SubfieldUtils;
 import de.dnb.gnd.utils.WorkUtils;
 import de.dnb.music.additionalInformation.ThematicIndexDB;
 import de.dnb.music.publicInterface.Constants.SetOfRules;
@@ -232,7 +233,7 @@ public class DefaultRecordTransformer {
 			ParseMusicTitle.parseGND(null, actualLine);
 		// globale Variablen setzen:
 		actualTag = actualLine.getTag();
-		actualComment = RecordUtils.getFirstSubfield(actualLine, 'v');
+		actualComment = SubfieldUtils.getFirstSubfield(actualLine, 'v');
 		actualCommentStr = GNDUtils.getFirstComment(actualLine);
 		actualMusicTitle = musicTitleP.first;
 		unusedSubs = new LinkedList<Subfield>(musicTitleP.second);
@@ -307,7 +308,7 @@ public class DefaultRecordTransformer {
 		if (!keepOldComments)
 			unusedSubs =
 				new LinkedList<Subfield>(
-						RecordUtils.removeSubfieldsFromCollection(unusedSubs,
+						SubfieldUtils.removeSubfieldsFromCollection(unusedSubs,
 								'v'));
 
 		// neuen Kommentar einfügen
@@ -364,7 +365,7 @@ public class DefaultRecordTransformer {
 		IPredicate<Line> predicate667 = new IPredicate<Line>() {
 			@Override
 			public boolean accept(final Line line) {
-				Subfield subfield = RecordUtils.getFirstSubfield(line, 'a');
+				Subfield subfield = SubfieldUtils.getFirstSubfield(line, 'a');
 				if (subfield == null)
 					return false;
 				String content = subfield.getContent();

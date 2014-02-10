@@ -21,6 +21,7 @@ import de.dnb.gnd.parser.line.LineParser;
 import de.dnb.gnd.parser.tag.GNDTag;
 import de.dnb.gnd.parser.tag.Tag;
 import de.dnb.gnd.utils.RecordUtils;
+import de.dnb.gnd.utils.SubfieldUtils;
 import de.dnb.music.genre.Genre;
 import de.dnb.music.mediumOfPerformance.Instrument;
 import de.dnb.music.mediumOfPerformance.InstrumentDB;
@@ -262,9 +263,9 @@ public final class GNDTitleUtils {
 			if (line.getTag() != TAG_382)
 				throw new IllegalArgumentException("Kein 382-Feld");
 			// Zeile(n) mit $n überspringen:
-			if (RecordUtils.containsIndicator(line, '9')) {
+			if (SubfieldUtils.containsIndicator(line, '9')) {
 				// Alle Sonderfälle ausschließen:
-				Subfield dollar8 = RecordUtils.getFirstSubfield(line, '8');
+				Subfield dollar8 = SubfieldUtils.getFirstSubfield(line, '8');
 				if (dollar8 != null) {
 					String instr = dollar8.getContent();
 					// Orchester:
@@ -286,7 +287,7 @@ public final class GNDTitleUtils {
 						return null;
 					}
 				}
-				Subfield dollarN = RecordUtils.getFirstSubfield(line, 'n');
+				Subfield dollarN = SubfieldUtils.getFirstSubfield(line, 'n');
 				if (dollarN == null)
 					count++;
 				else {
@@ -342,14 +343,14 @@ public final class GNDTitleUtils {
 		if (line382dollarS.getTag() != TAG_382)
 			throw new IllegalArgumentException("Kein 382-Feld");
 		// Zeile(n) mit $n überspringen:
-		if (!RecordUtils.containsIndicator(line382dollarS, 's'))
+		if (!SubfieldUtils.containsIndicator(line382dollarS, 's'))
 			throw new IllegalArgumentException(
 					"Enthält keine Gesamtbesetzungsstärke");
 		// alte Zeile entfernen:
 		Field field382 = record.getField(TAG_382);
 		if (field382 != null) {
 			for (Line line : field382) {
-				if (RecordUtils.containsIndicator(line, 's'))
+				if (SubfieldUtils.containsIndicator(line, 's'))
 					record.remove(line);
 			}
 		}

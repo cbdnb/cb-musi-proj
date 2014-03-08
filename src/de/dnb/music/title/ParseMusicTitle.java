@@ -447,7 +447,7 @@ public final class ParseMusicTitle {
 				parseString);
 		Line line = null;
 		try {
-			line = LineParser.parse(parseString, TAG_DB);
+			line = LineParser.parse(parseString, TAG_DB, false);
 		} catch (IllFormattedLineException e) {
 			// noch nicht alles verloren: es liegt nur der Inhalt vor.
 		}
@@ -473,7 +473,7 @@ public final class ParseMusicTitle {
 			throws IOException,
 			IllFormattedLineException {
 
-		Line line = LineParser.parse("130 aa$rC-Dur$pbb$rC-Dur", TAG_DB);
+		Line line = LineParser.parse("130 aa$rC-Dur$pbb$rC-Dur", TAG_DB, false);
 
 	}
 

@@ -196,9 +196,9 @@ public class DefaultRecordTransformer {
 		try {
 			if (actualMusicTitle.containsArrangement()
 				|| actualMusicTitle.containsVersion())
-				entit = LineParser.parse("008 wif", TAG_DB);
+				entit = LineParser.parse("008 wif", TAG_DB, false);
 			else
-				entit = LineParser.parse("008 wim", TAG_DB);
+				entit = LineParser.parse("008 wim", TAG_DB, false);
 			newRecord.add(entit);
 		} catch (IllFormattedLineException e) {
 			// nix
@@ -492,10 +492,10 @@ public class DefaultRecordTransformer {
 		if (cc != null) {
 			Line line;
 			try {
-				line = LineParser.parse("043 " + cc, TAG_DB);
+				line = LineParser.parse("043 " + cc, TAG_DB, false);
 				newRecord.add(line);
 				String sourceAbb = ThematicIndexDB.getSourceAbb(idn);
-				line = LineParser.parse("670 " + sourceAbb, TAG_DB);
+				line = LineParser.parse("670 " + sourceAbb, TAG_DB, false);
 				newRecord.add(line);
 			} catch (IllFormattedLineException e) {
 				//nix
@@ -517,7 +517,7 @@ public class DefaultRecordTransformer {
 		RangeCheckUtils.assertReferenceParamNotNull("record", record);
 		Line line;
 		try {
-			line = LineParser.parse("065 14.4p", TAG_DB);
+			line = LineParser.parse("065 14.4p", TAG_DB, false);
 			record.add(line);
 		} catch (IllFormattedLineException e) {
 			//nix
@@ -537,7 +537,7 @@ public class DefaultRecordTransformer {
 		RangeCheckUtils.assertReferenceParamNotNull("record", record);
 		Line line;
 		try {
-			line = LineParser.parse("667 " + SATZ_AUFG, TAG_DB);
+			line = LineParser.parse("667 " + SATZ_AUFG, TAG_DB, false);
 			record.add(line);
 		} catch (IllFormattedLineException e) {
 			//nix
@@ -555,7 +555,7 @@ public class DefaultRecordTransformer {
 			throws IllFormattedLineException,
 			OperationNotSupportedException {
 
-		Line line = LineParser.parse("430 Adagio, 3", TAG_DB);
+		Line line = LineParser.parse("430 Adagio, 3", TAG_DB, false);
 		DefaultRecordTransformer transformer = new DefaultRecordTransformer();
 	}
 

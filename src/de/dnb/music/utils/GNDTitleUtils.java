@@ -57,7 +57,7 @@ public final class GNDTitleUtils {
 		String gnd = TitleUtils.getX30ContentAsString(title);
 		Line line = null;
 		try {
-			line = LineParser.parse(tag, Format.PICA3, gnd);
+			line = LineParser.parse(tag, Format.PICA3, gnd, false);
 		} catch (IllFormattedLineException e) {
 			// OK
 		}
@@ -80,7 +80,7 @@ public final class GNDTitleUtils {
 		RangeCheckUtils.assertStringParamNotNullOrWhitespace("titleStr",
 				titleStr);
 		String gnd = TitleUtils.getX30ContentAsString(titleStr);
-		Line line = LineParser.parse(tag, Format.PICA3, gnd);
+		Line line = LineParser.parse(tag, Format.PICA3, gnd, false);
 		return line;
 	}
 
@@ -164,7 +164,7 @@ public final class GNDTitleUtils {
 			try {
 				line =
 					LineParser.parse("430 " + TitleUtils.getRAK(musicTitle)
-						+ "$v" + Constants.KOM_PORTAL_430, TAG_DB);
+						+ "$v" + Constants.KOM_PORTAL_430, TAG_DB, false);
 				lines.add(line);
 			} catch (IllFormattedLineException e) {
 				// nix
@@ -172,9 +172,9 @@ public final class GNDTitleUtils {
 		}
 		try {
 			if (musicTitle.containsVersion()) {
-				line = LineParser.parse("008 wif", TAG_DB);
+				line = LineParser.parse("008 wif", TAG_DB, false);
 			} else {
-				line = LineParser.parse("008 wim", TAG_DB);
+				line = LineParser.parse("008 wim", TAG_DB, false);
 			}
 		} catch (IllFormattedLineException e) {
 			// nix
@@ -192,9 +192,9 @@ public final class GNDTitleUtils {
 	 * 							
 	 * @return					GND-Informationen als Zeilen.
 	 */
-	public static
-			Collection<Line>
-			getLines(final Tag tag, final MusicTitle musicTitle) {
+	public static Collection<Line> getLines(
+			final Tag tag,
+			final MusicTitle musicTitle) {
 		RangeCheckUtils.assertReferenceParamNotNull("musicTitle", musicTitle);
 		if (tag != GNDConstants.TAG_130 && tag != GNDConstants.TAG_430)
 			throw new IllegalArgumentException("Tag ist keiner für Werktitel");
@@ -206,7 +206,7 @@ public final class GNDTitleUtils {
 			try {
 				line =
 					LineParser.parse("430 " + TitleUtils.getRAK(musicTitle)
-						+ "$v" + Constants.KOM_PORTAL_430, TAG_DB);
+						+ "$v" + Constants.KOM_PORTAL_430, TAG_DB, false);
 				lines.add(line);
 			} catch (IllFormattedLineException e) {
 				// nix
@@ -214,9 +214,9 @@ public final class GNDTitleUtils {
 		}
 		try {
 			if (musicTitle.containsVersion()) {
-				line = LineParser.parse("008 wif", TAG_DB);
+				line = LineParser.parse("008 wif", TAG_DB, false);
 			} else {
-				line = LineParser.parse("008 wim", TAG_DB);
+				line = LineParser.parse("008 wim", TAG_DB, false);
 			}
 		} catch (IllFormattedLineException e) {
 			// nix
@@ -245,8 +245,7 @@ public final class GNDTitleUtils {
 
 	public static final GNDTag TAG_382 = (GNDTag) TAG_DB.findTag("382");
 
-	private static LineFactory factory382 = TAG_382
-			.getLineFactory();
+	private static LineFactory factory382 = TAG_382.getLineFactory();
 
 	private static Indicator dollarS = TAG_382.getIndicator('s');
 
@@ -427,7 +426,7 @@ public final class GNDTitleUtils {
 			instrStr += "$n" + count;
 		}
 		try {
-			return LineParser.parse(instrStr, TAG_DB);
+			return LineParser.parse(instrStr, TAG_DB, false);
 		} catch (IllFormattedLineException e) {
 			return null;
 		}
@@ -445,7 +444,7 @@ public final class GNDTitleUtils {
 
 			String genreStr = "380 !" + genre.getIdn() + "!" + genre.getSwd();
 			try {
-				return LineParser.parse(genreStr, TAG_DB);
+				return LineParser.parse(genreStr, TAG_DB, false);
 			} catch (IllFormattedLineException e) {
 				// nix
 			}

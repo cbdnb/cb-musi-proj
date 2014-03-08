@@ -60,7 +60,7 @@ public class AdditionalDataIn3XXVisitor extends Visitor {
 	public final void visit(final DateOfComposition dateOfComposition) {
 		String dateOfCompositionStr = "548 $c" + dateOfComposition + "$4dats";
 		try {
-			this.dateLine = LineParser.parse(dateOfCompositionStr, TAG_DB);
+			this.dateLine = LineParser.parse(dateOfCompositionStr, TAG_DB, false);
 		} catch (IllFormattedLineException e) {
 			// nix
 		}
@@ -70,7 +70,7 @@ public class AdditionalDataIn3XXVisitor extends Visitor {
 	public final void visit(final Key key) {
 		String keyStr = "384 " + key;
 		try {
-			this.keyLine = LineParser.parse(keyStr, TAG_DB);
+			this.keyLine = LineParser.parse(keyStr, TAG_DB, false);
 		} catch (IllFormattedLineException e) {
 			// nix
 		}
@@ -80,7 +80,7 @@ public class AdditionalDataIn3XXVisitor extends Visitor {
 	public final void visit(final OpusNumber opusNumber) {
 		String opusStr = "383 $b" + opusNumber;
 		try {
-			this.opusLine = LineParser.parse(opusStr, TAG_DB);
+			this.opusLine = LineParser.parse(opusStr, TAG_DB, false);
 		} catch (IllFormattedLineException e) {
 			// nix
 		}
@@ -90,7 +90,7 @@ public class AdditionalDataIn3XXVisitor extends Visitor {
 	public final void visit(final SerialNumber serialNumber) {
 		String serNumbStr = "383 " + serialNumber;
 		try {
-			Line line = LineParser.parse(serNumbStr, TAG_DB);
+			Line line = LineParser.parse(serNumbStr, TAG_DB, false);
 			this.serNumbLine = line;
 		} catch (IllFormattedLineException e) {
 			// nix
@@ -102,7 +102,7 @@ public class AdditionalDataIn3XXVisitor extends Visitor {
 		String thematicIndexStr =
 			"383 $c" + thematicIndexNumber.toStringWithoutBlanks();
 		try {
-			this.indexLine = LineParser.parse(thematicIndexStr, TAG_DB);
+			this.indexLine = LineParser.parse(thematicIndexStr, TAG_DB, false);
 		} catch (IllFormattedLineException e) {
 			// nix
 		}

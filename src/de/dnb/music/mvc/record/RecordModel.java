@@ -159,7 +159,7 @@ public class RecordModel extends Observable {
 			Record oldRecord = parser.parse(oldRecordStr);
 			newRecord = transformer.transform(oldRecord);
 			// dann soll ein neuer Datensatz generiert werden:
-			if(RecordUtils.isEmpty(newRecord)) {
+			if (RecordUtils.isEmpty(newRecord)) {
 				transformer.addGeneralNote(newRecord);
 				transformer.addGNDClassification(newRecord);
 			}
@@ -182,11 +182,11 @@ public class RecordModel extends Observable {
 		try {
 			Line line =
 				LineParser.parse("500 " + "!" + composer.idn + "!"
-					+ composer.name + "$4" + code, tagDB);
+					+ composer.name + "$4" + code, tagDB, false);
 			newRecord.add(line);
-			line = LineParser.parse("670 " + composer.sourceAbb, tagDB);
+			line = LineParser.parse("670 " + composer.sourceAbb, tagDB, false);
 			newRecord.add(line);
-			line = LineParser.parse("043 " + composer.countrCode, tagDB);
+			line = LineParser.parse("043 " + composer.countrCode, tagDB, false);
 			newRecord.add(line);
 		} catch (IllFormattedLineException e) {
 			// nix

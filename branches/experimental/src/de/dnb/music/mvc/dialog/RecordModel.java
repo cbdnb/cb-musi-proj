@@ -70,7 +70,7 @@ public class RecordModel extends Observable {
 	private DefaultRecordTransformer transformer;
 
 	private boolean returnsPicaPlus;
-	
+
 	private boolean explicitWanted;
 
 	public final void undo() {
@@ -88,13 +88,13 @@ public class RecordModel extends Observable {
 		this.oldRecordStr = oldRecordS;
 		transformOldRecordString();
 	}
-	
+
 	public final void reset() {
 		Record record = theRecord.clone();
 		theRecord = new Record(null, tagDB);
 		Line line;
 		try {
-			line = LineParser.parse("065 14.4p", tagDB);
+			line = LineParser.parse("065 14.4p", tagDB, false);
 			theRecord.add(line);
 		} catch (IllFormattedLineException e) {
 			//nix
@@ -188,11 +188,11 @@ public class RecordModel extends Observable {
 			Record clone = theRecord.clone();
 			Line line =
 				LineParser.parse("500 " + "!" + composer.idn + "!"
-					+ composer.name + "$4" + code, tagDB);
+					+ composer.name + "$4" + code, tagDB, false);
 			theRecord.add(line);
-			line = LineParser.parse("670 " + composer.sourceAbb, tagDB);
+			line = LineParser.parse("670 " + composer.sourceAbb, tagDB, false);
 			theRecord.add(line);
-			line = LineParser.parse("043 " + composer.countrCode, tagDB);
+			line = LineParser.parse("043 " + composer.countrCode, tagDB, false);
 			theRecord.add(line);
 			history.push(clone);
 		} catch (Exception e) {
@@ -203,8 +203,6 @@ public class RecordModel extends Observable {
 	}
 
 	private MusicIDFinder finder = new MusicIDFinder();
-
-
 
 	public final String getAleph() {
 		if (theRecord == null)
@@ -270,7 +268,7 @@ public class RecordModel extends Observable {
 	public void setReturnsExplicit(boolean explicitWanted) {
 		this.explicitWanted = explicitWanted;
 		refresh();
-		
+
 	}
 
 }

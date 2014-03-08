@@ -23,8 +23,7 @@ import de.dnb.music.version.Version;
 
 public class AuthorityDataVisitor extends Visitor {
 
-	public AuthorityDataVisitor(
-			final boolean forceTotalCount) {
+	public AuthorityDataVisitor(final boolean forceTotalCount) {
 		this.forceTotalCount = forceTotalCount;
 	}
 
@@ -98,7 +97,7 @@ public class AuthorityDataVisitor extends Visitor {
 				String genreStr =
 					"380 !" + genre.getIdn() + "!" + genre.getSwd();
 				try {
-					Line line = LineParser.parse(genreStr, TAG_DB);
+					Line line = LineParser.parse(genreStr, TAG_DB, false);
 					genres.add(line);
 				} catch (IllFormattedLineException e) {
 					// nix.
@@ -115,7 +114,7 @@ public class AuthorityDataVisitor extends Visitor {
 	public final boolean visit(final Version version) {
 		String obin = "550 !042875420!Fassung$4obin";
 		try {
-			Line line = LineParser.parse(obin, TAG_DB);
+			Line line = LineParser.parse(obin, TAG_DB, false);
 			obins.clear();
 			obins.add(line);
 		} catch (IllFormattedLineException e) {
@@ -131,7 +130,7 @@ public class AuthorityDataVisitor extends Visitor {
 	public final void visit(final Arrangement arrangement) {
 		String obin = "550 !041209818!Bearbeitung$4obin";
 		try {
-			Line line = LineParser.parse(obin, TAG_DB);
+			Line line = LineParser.parse(obin, TAG_DB, false);
 			obins.clear();
 			obins.add(line);
 		} catch (IllFormattedLineException e) {
@@ -168,7 +167,7 @@ public class AuthorityDataVisitor extends Visitor {
 		if (forceTotalCount || count > 1)
 			totalCount += count;
 		try {
-			Line line = LineParser.parse(instrStr, TAG_DB);
+			Line line = LineParser.parse(instrStr, TAG_DB, false);
 			instruments.add(line);
 		} catch (IllFormattedLineException e) {
 			// nix.
@@ -182,7 +181,7 @@ public class AuthorityDataVisitor extends Visitor {
 			if (outputTotalCount || forceTotalCount) {
 				String instrStr = "382 $s" + totalCount;
 				try {
-					Line line = LineParser.parse(instrStr, TAG_DB);
+					Line line = LineParser.parse(instrStr, TAG_DB, false);
 					instruments.add(line);
 				} catch (IllFormattedLineException e) {
 					// nix.
@@ -200,7 +199,7 @@ public class AuthorityDataVisitor extends Visitor {
 		AuthorityDataVisitor vis = new AuthorityDataVisitor();
 		vis.setForceTotalCount(true);
 		vis.setExpansion(false);
-		mt.accept(vis);		
+		mt.accept(vis);
 
 		System.out.println(vis.toString());
 

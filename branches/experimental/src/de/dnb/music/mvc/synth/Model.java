@@ -112,7 +112,7 @@ public class Model extends Observable {
 	 * @return
 	 */
 	private void buildRecord() {
-		if (theTitle == null){
+		if (theTitle == null) {
 			theRecord = null;
 			return;
 		}
@@ -121,11 +121,15 @@ public class Model extends Observable {
 			try {
 				Line line =
 					LineParser.parse("500 " + "!" + theComposer.idn + "!"
-						+ theComposer.name + "$4kom1", tagDB);
+						+ theComposer.name + "$4kom1", tagDB, false);
 				theRecord.add(line);
-				line = LineParser.parse("670 " + theComposer.sourceAbb, tagDB);
+				line =
+					LineParser.parse("670 " + theComposer.sourceAbb, tagDB,
+							false);
 				theRecord.add(line);
-				line = LineParser.parse("043 " + theComposer.countrCode, tagDB);
+				line =
+					LineParser.parse("043 " + theComposer.countrCode, tagDB,
+							false);
 				theRecord.add(line);
 			} catch (IllFormattedLineException e) {
 				// nix
@@ -159,14 +163,14 @@ public class Model extends Observable {
 		setChanged();
 		notifyObservers(null);
 	}
-	
+
 	private MusicIDFinder finder = new MusicIDFinder();
 
 	public final String getAleph() {
 		if (theTitle == null)
 			return "";
-		return GNDUtils.toAleph(theRecord,finder, true);
-//		return TitleUtils.getAleph(theTitle, forceTotalCount, theComposer);
+		return GNDUtils.toAleph(theRecord, finder, true);
+		//		return TitleUtils.getAleph(theTitle, forceTotalCount, theComposer);
 
 	}
 

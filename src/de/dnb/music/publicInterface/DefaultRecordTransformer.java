@@ -571,7 +571,7 @@ public class DefaultRecordTransformer {
 			IOException {
 		DefaultRecordTransformer transformer = new DefaultRecordTransformer();
 		RecordParser parser = new RecordParser();
-		parser.setTagDB(GNDTagDB.getDB());
+		parser.setDefaultTagDB(GNDTagDB.getDB());
 
 		String old =
 			"130 aa\n" + "500 !11862119X!Telemann, Georg Philipp$4kom1";

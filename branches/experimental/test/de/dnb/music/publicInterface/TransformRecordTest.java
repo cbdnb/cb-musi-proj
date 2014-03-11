@@ -23,7 +23,7 @@ public class TransformRecordTest {
 	public String transformIntellect(String old) {
 		DefaultRecordTransformer transformer = new DefaultRecordTransformer();
 		RecordParser parser = new RecordParser();
-		parser.setTagDB(GNDTagDB.getDB());
+		parser.setDefaultTagDB(GNDTagDB.getDB());
 		Record record = parser.parse(old);
 		Record newR = transformer.transform(record);
 		return RecordUtils.toPica(newR);
@@ -38,7 +38,7 @@ public class TransformRecordTest {
 	public String transformMachine(String old) {
 		DefaultRecordTransformer transformer = new DefaultMachineTransformer();
 		RecordParser parser = new RecordParser();
-		parser.setTagDB(GNDTagDB.getDB());
+		parser.setDefaultTagDB(GNDTagDB.getDB());
 		Record record = parser.parse(old);
 		Record newR = transformer.transform(record);
 		return RecordUtils.toPica(newR);

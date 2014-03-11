@@ -111,7 +111,7 @@ public class DefaultMachineTransformer extends DefaultRecordTransformer {
 	public static void main(String[] args) {
 		DefaultRecordTransformer transformer = new DefaultMachineTransformer();
 		RecordParser parser = new RecordParser();
-		parser.setTagDB(GNDTagDB.getDB());
+		parser.setDefaultTagDB(GNDTagDB.getDB());
 		String old =
 				"130 aa\n" + "500 !11862119X!Telemann, Georg Philipp$4kom1";
 		Record record = parser.parse(old);

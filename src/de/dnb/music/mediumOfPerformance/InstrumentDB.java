@@ -32,10 +32,10 @@ public final class InstrumentDB {
 	 * 
 	 * Spaltenname:		Beschreibung:
 	 * -----------------------------------------------------------------------
-	 * ABBR			Bevorzugte Abkürzung nach RAK (Anh.) für Instrumente
+	 * ABBR				Bevorzugte Abkürzung nach RAK (Anh.) für Instrumente
 	 * 					der E-Musik. Gibt es keine Ankürzung, so steht hier
 	 * 					der ausgeschriebene Name
-	 * WR_OUT		Ausgeschrieben nach SWD (für Titel)
+	 * WR_OUT			Ausgeschrieben nach SWD (für Titel)
 	 * NID				die nid
 	 * IDN				die idn (ppn)
 	 * SWD				Die Vorzugsbenennung in der SWD, also mit eventuellen
@@ -254,8 +254,10 @@ public final class InstrumentDB {
 			{ "Bassklarinette", "Bassklarinette", "4414463-5", "947894136",
 				"Bassklarinette", "Bass-Klar", "" },
 			{ "Buk", "Buk", "7744549-1", "1011504286", "Buk <Trommel>", "", "" },
-			{ "Calchedon", "Calchedon", "7662012-8", "994721102", "Calchedon",
+			{ "Calchedon", "Calchedon", "7662012-8", "994721102", "Calichon",
 				"", "" },
+			{ "Calichon", "Calichon", "7662012-8", "994721102", "Calichon", "",
+				"" },
 			{ "Chalumeau", "Chalumeau", "4231682-0", "042316820", "Chalumeau",
 				"", "" },
 			{ "Chitarrone", "Chitarrone", "4147736-4", "041477367",
@@ -461,7 +463,7 @@ public final class InstrumentDB {
 		}
 		return insSet;
 	}
-	
+
 	public static String getGNDIdn(final String idn) {
 		for (String[] line : DATA) {
 			if (line[IDN].equals(idn))
@@ -469,7 +471,6 @@ public final class InstrumentDB {
 		}
 		return null;
 	}
-
 
 	public static void main(String[] args) {
 		Set<Instrument> instruments = getAllInstruments();

@@ -59,6 +59,11 @@ public final class ThematicIndexDB {
 				"Warburton, Ernest: Thematic catalogue. - New York [u.a.] : Garland, 1999. - VIII, 611 S., Noten\nISBN 0-8240-6097-0\nIDN 979295769\n(The collected works of Johann Christian Bach ; vol. 48, p. 1)\nIDN 560846541",
 				"JCBachWV", "118505521", "XA-DE;XA-GB" },
 			{
+				"Bach, Johann Christoph Friedrich",
+				"JCFB",
+				"Ulrich Leisinger: Johann Christoph Friedrich Bach : thematisch-systematisches Verzeichnis der musikalischen Werke (BR-JCFB) / bearb. von Ulrich Leisinger. - Stuttgart : Carus-Verl., 2013. - (Bach-Repertorium ; Bd. 4).",
+				"", "118651471", "XA-DE" },
+			{
 				"Bach, Johann Sebastian",
 				"BWV",
 				"Schmieder, Wolfgang: Thematisch-systematisches Verzeichnis der musikalischen Werke von Johann Sebastian Bach : Bach-Werke-Verzeichnis ; (BWV) / hrsg. von Wolfgang Schmieder. - 2. Überarb. und erw. Ausg. - Wiesbaden : Breitkopf & Härtel, 1990. - XLVI, 1014 S., zahlr. Noten. - 28 cm\nNebent.: J. S. Bach\nISBN 3-7651-00255-5\nIDN 910299250",
@@ -68,6 +73,12 @@ public final class ThematicIndexDB {
 				"F",
 				"Falck, Martin: Wilhelm Friedemann Bach : sein Leben und seine Werke ; mit thematischem Verzeichnis seiner Kompositionen und zwei Bildern / von Martin Falck. - 2. Aufl. - Leipzig : Kahnt, 1919. -\nIV, 170, 31 S. : zahlr. Notenbeisp. \n(Studien zur Musikgeschichte ; 1)\nPPN 310929067",
 				"WFBachWV", "118505548", "XA-DE" },
+
+			{
+				"Bach, Wilhelm Friedemann",
+				"WFB",
+				"Peter Wollny: Wilhelm Friedemann Bach : thematisch-systematisches Verzeichnis der musikalischen Werke (BR-WFB) / bearb. von Peter Wollny. - Stuttgart : Carus-Verl., 2012. - (Bach-Repertorium ; Bd. 2).",
+				"", "118505548", "XA-DE" },
 			{
 				"Bartók, Béla",
 				"Sz",
@@ -378,6 +389,11 @@ public final class ThematicIndexDB {
 				"Holst, Imogen: A thematic catalogue of Gustav Holst's music / Imogen Holst. - London : Faber, 1974. - XXVIII, 285 S., Faks., zahlr. Noten. - 25 cm\nISBN 0-571-10004-X\nIDN 974781304",
 				"HolstWV", "118774794", "XA-GB" },
 			{
+				"Homilius, Gottfried August",
+				"HoWV",
+				"Wolf, Uwe: Gottfried August Homilius (1714 - 1785) : thematisches Verzeichnis der musikalischen Werke (HoWV) / vorgelegt von Uwe Wolf. - Stuttgart : Carus-Verl., 2014. - (Ausgewählte Werke / Gottfried August Homilius ; Reihe 5 : Supplement ; Bd. 2).",
+				"", "118553356", "XA-DE" },
+			{
 				"Hummel, Johann Nepomuk",
 				"op./WoO",
 				"Zimmerschied, Dieter: Thematisches Verzeichnis der Werke von Johann Nepomuk Hummel / von Dieter Zimmerschied. - Hofheim am Taunus : Hofmeister, 1971. - 207 S., zahlr. Noten. - 24 cm\nISBN 3-87350-000-0\nIDN 730068013",
@@ -460,6 +476,11 @@ public final class ThematicIndexDB {
 				"op./WoO",
 				"Fog, Dan: Kompositionen von Fridr. Kuhlau : thematisch-bibliographischer Katalog / Dan Fog. - Kopenhagen : Fog, 1977. - 203 S., Noten. - 21 cm\nISBN 87-87099-09-8\nIDN 790241250",
 				"KuhlauWV", "118567837", "XA-DE;XA-DK" },
+			{
+				"Lanner, Joseph",
+				"op./WV Anh.",
+				"Dörner, Wolfgang: Joseph Lanner : chronologisch-thematisches Werkverzeichnis / Wolfgang Dörner. - Wien [u.a.] : Böhlau, 2012.",
+				"", "118569597", "XA-AT" },
 			{
 				"Liszt, Franz",
 				"R",
@@ -857,7 +878,12 @@ public final class ThematicIndexDB {
 				"Zelenka, Jan Dismas",
 				"ZWV",
 				"Reich, Wolfgang: Jan Dismas Zelenka : thematisch-systematisches Verzeichnis der musikalischen Werke ; (ZWV) / zsgest. von Wolfgang Reich. - Dresden : Sächsische Landesbibliothek. - 21 cm\nIDN 210488247\nNotenteil. - 1985",
-				"ZelenkaWV", "118808370", "XA-CZ" }
+				"ZelenkaWV", "118808370", "XA-CZ" },
+			{
+				"Zimmermann, Bernd Alois",
+				"BAZ",
+				"Henrich, Heribert: Bernd Alois Zimmermann Werkverzeichnis : Verzeichnis der musikalischen Werke von Bernd Alois Zimmermann und ihre Quellen / Heribert Henrich. Erstellt unter Verwendung der Vorarbeiten von Klaus Ebbeke. - Berlin : Akademie der Künste ; Mainz : Schott, 2013.",
+				"", "11863691X", "XA-DE" }
 
 		};
 

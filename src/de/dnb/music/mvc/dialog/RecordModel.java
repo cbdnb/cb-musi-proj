@@ -165,7 +165,7 @@ public class RecordModel extends Observable {
 			Record oldRecord = parser.parse(oldRecordStr);
 			theRecord = transformer.transform(oldRecord);
 			// dann soll ein neuer Datensatz generiert werden:
-			if (RecordUtils.isEmpty(theRecord)) {
+			if (RecordUtils.isNullOrEmpty(theRecord)) {
 				transformer.addGeneralNote(theRecord);
 				transformer.addGNDClassification(theRecord);
 			}

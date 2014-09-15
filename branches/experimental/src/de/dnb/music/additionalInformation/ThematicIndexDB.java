@@ -62,7 +62,7 @@ public final class ThematicIndexDB {
 				"Bach, Johann Christoph Friedrich",
 				"JCFB",
 				"Ulrich Leisinger: Johann Christoph Friedrich Bach : thematisch-systematisches Verzeichnis der musikalischen Werke (BR-JCFB) / bearb. von Ulrich Leisinger. - Stuttgart : Carus-Verl., 2013. - (Bach-Repertorium ; Bd. 4).",
-				"", "118651471", "XA-DE" },
+				"JCFB", "118651471", "XA-DE" },
 			{
 				"Bach, Johann Sebastian",
 				"BWV",
@@ -78,7 +78,7 @@ public final class ThematicIndexDB {
 				"Bach, Wilhelm Friedemann",
 				"WFB",
 				"Peter Wollny: Wilhelm Friedemann Bach : thematisch-systematisches Verzeichnis der musikalischen Werke (BR-WFB) / bearb. von Peter Wollny. - Stuttgart : Carus-Verl., 2012. - (Bach-Repertorium ; Bd. 2).",
-				"", "118505548", "XA-DE" },
+				"WFB", "118505548", "XA-DE" },
 			{
 				"Bartók, Béla",
 				"Sz",
@@ -392,7 +392,7 @@ public final class ThematicIndexDB {
 				"Homilius, Gottfried August",
 				"HoWV",
 				"Wolf, Uwe: Gottfried August Homilius (1714 - 1785) : thematisches Verzeichnis der musikalischen Werke (HoWV) / vorgelegt von Uwe Wolf. - Stuttgart : Carus-Verl., 2014. - (Ausgewählte Werke / Gottfried August Homilius ; Reihe 5 : Supplement ; Bd. 2).",
-				"", "118553356", "XA-DE" },
+				"HoWV", "118553356", "XA-DE" },
 			{
 				"Hummel, Johann Nepomuk",
 				"op./WoO",
@@ -480,7 +480,7 @@ public final class ThematicIndexDB {
 				"Lanner, Joseph",
 				"op./WV Anh.",
 				"Dörner, Wolfgang: Joseph Lanner : chronologisch-thematisches Werkverzeichnis / Wolfgang Dörner. - Wien [u.a.] : Böhlau, 2012.",
-				"", "118569597", "XA-AT" },
+				"LannerWV", "118569597", "XA-AT" },
 			{
 				"Liszt, Franz",
 				"R",
@@ -883,7 +883,7 @@ public final class ThematicIndexDB {
 				"Zimmermann, Bernd Alois",
 				"BAZ",
 				"Henrich, Heribert: Bernd Alois Zimmermann Werkverzeichnis : Verzeichnis der musikalischen Werke von Bernd Alois Zimmermann und ihre Quellen / Heribert Henrich. Erstellt unter Verwendung der Vorarbeiten von Klaus Ebbeke. - Berlin : Akademie der Künste ; Mainz : Schott, 2013.",
-				"", "11863691X", "XA-DE" }
+				"BAZ", "11863691X", "XA-DE" }
 
 		};
 

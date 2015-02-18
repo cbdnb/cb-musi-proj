@@ -843,12 +843,12 @@ public final class ThematicIndexDB {
 				"Wagenseil, Georg Christoph",
 				"WV",
 				"Scholz-Michelitsch, Helga: Das Orchester- und Kammermusikwerk von Georg Christoph Wagenseil : thematischer Katalog / Helga Scholz-Michelitsch. - Wien [u.a.] : Bählau, 1972. - 228 S., Überwiegend Noten. - 24 cm\nISBN 3-205-03175-X\n(Tabulae musicae Austriacae ; 6)\nIDN 730157679\n\nMichelitsch, Helga: Das Klavierwerk von Georg Christoph Wagenseil : thematischer Katalog / Helga Michelitsch. - Wien [u.a.] : Bählau, 1966. - 163 S.\n(Tabulae musicae Austriacae ; 3)\nIDN 457596414",
-				"WagenseilWV Orchester", "118770616", "XA-AT" },
+				"Wagenseil Orchester", "118770616", "XA-AT" },
 			{// alt
 				"Wagenseil, Georg Christoph",
 				"S",
 				"Das Klavierwerk von Georg Christoph Wagenseil : themat. Katalog / Helga Michelitsch. - Wien [u.a.] : Böhlau, 1966. - 163 S. (Tabulae musicae Austriacae ; 3)",
-				"WagenseilWV Klavier", "118770616", "XA-AT" },
+				"Wagenseil Klavier", "118770616", "XA-AT" },
 			{
 				"Wagner, Richard",
 				"WWV",

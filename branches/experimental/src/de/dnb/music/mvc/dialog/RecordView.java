@@ -4,8 +4,14 @@ import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusListener;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
+
+import javax.swing.ComboBoxModel;
+import javax.swing.event.ListDataListener;
 
 import de.dnb.music.additionalInformation.Composer;
 import de.dnb.music.genre.Genre;
@@ -16,6 +22,8 @@ public class RecordView implements Observer {
 
 	private RecordGUI gui;
 	private RecordModel model;
+	private Map<String, Composer> name2Composer =
+		new HashMap<String, Composer>();
 
 	public RecordView(final RecordModel model) {
 		this.model = model;
@@ -29,7 +37,7 @@ public class RecordView implements Observer {
 	public final void addAnalyzeListener(final ActionListener al) {
 		gui.btnAnalyse.addActionListener(al);
 	}
-	
+
 	public final void addErrorListener(final ActionListener al) {
 		gui.mntmZeigeFehler.addActionListener(al);
 	}
@@ -61,7 +69,7 @@ public class RecordView implements Observer {
 	public final void addPicaListener(final ActionListener al) {
 		gui.chckbxPica.addActionListener(al);
 	}
-	
+
 	public final void addExplicitListener(final ActionListener al) {
 		gui.chckbxExplicit.addActionListener(al);
 	}
@@ -69,7 +77,7 @@ public class RecordView implements Observer {
 	public final void addExpansionListener(final ActionListener al) {
 		gui.chckbxExpansion.addActionListener(al);
 	}
-	
+
 	public final void addUndoListener(final ActionListener al) {
 		gui.btnUndo.addActionListener(al);
 	}
@@ -97,10 +105,12 @@ public class RecordView implements Observer {
 	}
 
 	public final void addComposer(final Composer composer) {
-		gui.comboBoxComp.addItem(composer);
+		name2Composer.put(composer.toString(), composer);
+		gui.comboBoxComp.addItem(composer.toString());
 	}
 
-	public final void addComposers(final Collection<Composer> composers) {
+	public final void addComposers(final List<Composer> composers) {
+
 		for (Composer composer : composers) {
 			addComposer(composer);
 		}
@@ -127,7 +137,8 @@ public class RecordView implements Observer {
 	}
 
 	public final Composer getComposer() {
-		return (Composer) gui.comboBoxComp.getSelectedItem();
+		String name = (String) gui.comboBoxComp.getSelectedItem();
+		return name2Composer.get(name);
 	}
 
 	public final String getCode() {
@@ -145,11 +156,11 @@ public class RecordView implements Observer {
 	public final RecordGUI getGui() {
 		return gui;
 	}
-	
+
 	public final boolean expansionWanted() {
 		return gui.chckbxExpansion.isSelected();
 	}
-	
+
 	public final boolean explicitWanted() {
 		return gui.chckbxExplicit.isSelected();
 	}

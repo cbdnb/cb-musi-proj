@@ -1,6 +1,7 @@
 package de.dnb.music.additionalInformation;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -1013,30 +1014,38 @@ public final class ThematicIndexDB {
 
 	//@formatter:on
 
+	/**
+	 * 
+	 * @return	Liefert alle Komponisten, jeden nur einmal (an der idn
+	 * 			erkannt).
+	 */
 	public static Set<Composer> getAllComposers() {
-		Set<Composer> genSet = new TreeSet<Composer>();
-		for (String[] genreS : DATA) {
-			genSet.add(new Composer(genreS[NAME], genreS[THEMATIC_INDEX],
-					genreS[SOURCE_ABB], genreS[IDN], genreS[COUNTRY_CODE]));
+		Set<Composer> compSet = new TreeSet<Composer>();
+		for (String[] compStr : DATA) {
+			compSet.add(new Composer(compStr[NAME], compStr[THEMATIC_INDEX],
+					compStr[SOURCE_ABB], compStr[IDN], compStr[COUNTRY_CODE]));
 		}
-		return genSet;
+		return compSet;
+	}
+
+	/**
+	 * 
+	 * @return	Alle Werkverzeichnisse mit Komponisten.
+	 */
+	public static List<Composer> getAllComposersAndSources() {
+		List<Composer> genList = new LinkedList<Composer>();
+		for (String[] compStrs : DATA) {
+			genList.add(new Composer(compStrs[NAME], compStrs[THEMATIC_INDEX],
+					compStrs[SOURCE_ABB], compStrs[IDN], compStrs[COUNTRY_CODE]));
+		}
+		return genList;
 	}
 
 	/**
 	 * @param args
 	 */
 	public static void main(final String[] args) {
-		HashMap<String, LinkedList<String>> map = komp2ThIdxsMap;
-		Set<String> keyset = map.keySet();
-		for (String composer : keyset) {
-			String idn = getComposerID(composer);
-			String source = getSourceAbb(idn);
-			LinkedList<String> abbs = map.get(composer);
-			for (String abb : abbs) {
-				System.out.println(composer + "\t" + source + "\t" + abb);
-
-			}
-		}
+		System.out.println(getAllComposersAndSources());
 
 	}
 

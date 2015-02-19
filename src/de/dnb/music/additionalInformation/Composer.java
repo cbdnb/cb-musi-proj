@@ -24,7 +24,7 @@ public class Composer implements Comparable<Composer> {
 
 	@Override
 	public final String toString() {
-		return name;
+		return name + " (" + thematicIndexAbb + ", " + sourceAbb + ")";
 	}
 
 	@Override
@@ -36,6 +36,9 @@ public class Composer implements Comparable<Composer> {
 	}
 
 	@Override
+	/**
+	 * überprüft idn auf Gleichheit.
+	 */
 	public final boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
@@ -63,7 +66,7 @@ public class Composer implements Comparable<Composer> {
 	public final int compareTo(final Composer o) {
 		return this.name.compareTo(o.name);
 	}
-	
+
 	@Override
 	protected final void finalize() throws Throwable {
 		System.err.println("Decomposing: Composer " + name);

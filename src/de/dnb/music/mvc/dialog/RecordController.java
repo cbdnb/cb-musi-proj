@@ -200,7 +200,7 @@ public class RecordController {
 		view.addPicaListener(new PicaListener());
 		view.addExplicitListener(new ExplicitListener());
 
-		view.addComposers(ThematicIndexDB.getAllComposers());
+		view.addComposers(ThematicIndexDB.getAllComposersAndSources());
 		view.addGenres(GenreDB.getAllGenres());
 		view.addInstruments(InstrumentDB.getAllInstruments());
 		for (int i = 1; i < 10; i++)

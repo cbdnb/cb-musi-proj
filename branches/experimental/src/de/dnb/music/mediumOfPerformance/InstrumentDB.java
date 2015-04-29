@@ -473,9 +473,6 @@ public final class InstrumentDB {
 	}
 
 	public static void main(String[] args) {
-		Set<Instrument> instruments = getAllInstruments();
-		for (Instrument instr : instruments) {
-			System.out.println(instr.swd + "\t" + instr.nid + "\t" + instr.idn);
-		}
+		System.out.println(matchInstrument("Klavier"));
 	}
 }

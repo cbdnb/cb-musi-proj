@@ -473,7 +473,8 @@ public final class ParseMusicTitle {
 			throws IOException,
 			IllFormattedLineException {
 
-		Line line = LineParser.parse("130 aa$rC-Dur$pbb$rC-Dur", TAG_DB, false);
+		MusicTitle title = parse(null, "Adagio Kl A-Dur");
+		System.out.println(title);
 
 	}
 

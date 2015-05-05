@@ -4,11 +4,13 @@ import java.io.Serializable;
 
 import de.dnb.basics.applicationComponents.RangeCheckUtils;
 import de.dnb.music.title.AugmentableElement;
+import de.dnb.music.title.GNDElement;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.Visitor;
 
-public class Genre implements TitleElement, Comparable<Genre>, Serializable {
+public class Genre implements TitleElement, Comparable<Genre>, Serializable,
+		GNDElement {
 
 	/**
 	 * 

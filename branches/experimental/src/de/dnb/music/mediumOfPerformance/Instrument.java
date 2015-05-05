@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import de.dnb.basics.applicationComponents.RangeCheckUtils;
 import de.dnb.music.title.AugmentableElement;
+import de.dnb.music.title.GNDElement;
 import de.dnb.music.title.MusicTitle;
 import de.dnb.music.title.ParseMusicTitle;
 import de.dnb.music.utils.TitleUtils;
@@ -11,7 +12,7 @@ import de.dnb.music.visitor.TitleElement;
 import de.dnb.music.visitor.Visitor;
 
 public class Instrument implements TitleElement, Comparable<Instrument>,
-		Cloneable, Serializable {
+		Cloneable, Serializable, GNDElement {
 
 	/**
 	 * 
@@ -99,6 +100,10 @@ public class Instrument implements TitleElement, Comparable<Instrument>,
 
 	String idn;
 
+	/* (non-Javadoc)
+	 * @see de.dnb.music.mediumOfPerformance.GNDElement#getSwd()
+	 */
+	@Override
 	public final String getSwd() {
 		return swd;
 	}
@@ -132,6 +137,10 @@ public class Instrument implements TitleElement, Comparable<Instrument>,
 		visitor.visit(this);
 	}
 
+	/* (non-Javadoc)
+	 * @see de.dnb.music.mediumOfPerformance.GNDElement#getIdn()
+	 */
+	@Override
 	public final String getIdn() {
 		return idn;
 	}
@@ -168,6 +177,10 @@ public class Instrument implements TitleElement, Comparable<Instrument>,
 		System.out.println(TitleUtils.getStructured(mt));
 	}
 
+	/* (non-Javadoc)
+	 * @see de.dnb.music.mediumOfPerformance.GNDElement#getNid()
+	 */
+	@Override
 	public String getNid() {
 		return nid;
 	}

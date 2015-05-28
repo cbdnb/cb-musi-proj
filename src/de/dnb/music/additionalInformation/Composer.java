@@ -4,11 +4,13 @@ public class Composer implements Comparable<Composer> {
 	public Composer(
 			String name,
 			String thematicIndexAbb,
+			String source,
 			String sourceAbb,
 			String idn,
 			String countrCode) {
 		this.name = name;
 		this.thematicIndexAbb = thematicIndexAbb;
+		this.source = source;
 		this.sourceAbb = sourceAbb;
 		this.idn = idn;
 		this.countrCode = countrCode;
@@ -17,6 +19,8 @@ public class Composer implements Comparable<Composer> {
 	public final String name;
 
 	public final String thematicIndexAbb;
+
+	public final String source;
 
 	public final String sourceAbb;
 

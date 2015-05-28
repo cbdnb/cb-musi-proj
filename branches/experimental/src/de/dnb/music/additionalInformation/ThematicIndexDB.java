@@ -1023,7 +1023,8 @@ public final class ThematicIndexDB {
 		Set<Composer> compSet = new TreeSet<Composer>();
 		for (String[] compStr : DATA) {
 			compSet.add(new Composer(compStr[NAME], compStr[THEMATIC_INDEX],
-					compStr[SOURCE_ABB], compStr[IDN], compStr[COUNTRY_CODE]));
+					compStr[SOURCE], compStr[SOURCE_ABB], compStr[IDN],
+					compStr[COUNTRY_CODE]));
 		}
 		return compSet;
 	}
@@ -1033,12 +1034,13 @@ public final class ThematicIndexDB {
 	 * @return	Alle Werkverzeichnisse mit Komponisten.
 	 */
 	public static List<Composer> getAllComposersAndSources() {
-		List<Composer> genList = new LinkedList<Composer>();
-		for (String[] compStrs : DATA) {
-			genList.add(new Composer(compStrs[NAME], compStrs[THEMATIC_INDEX],
-					compStrs[SOURCE_ABB], compStrs[IDN], compStrs[COUNTRY_CODE]));
+		List<Composer> compList = new LinkedList<Composer>();
+		for (String[] compStr : DATA) {
+			compList.add(new Composer(compStr[NAME], compStr[THEMATIC_INDEX],
+					compStr[SOURCE], compStr[SOURCE_ABB], compStr[IDN],
+					compStr[COUNTRY_CODE]));
 		}
-		return genList;
+		return compList;
 	}
 
 	/**

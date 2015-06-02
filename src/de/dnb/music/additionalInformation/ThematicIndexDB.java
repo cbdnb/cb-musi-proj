@@ -1047,7 +1047,7 @@ public final class ThematicIndexDB {
 	 * @param args
 	 */
 	public static void main(final String[] args) {
-		System.out.println(getAllComposersAndSources());
+		System.out.println(getThematicIndices());
 
 	}
 
